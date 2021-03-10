@@ -1,2 +1,2 @@
-# Project-Managemen-s-Platform
+# Project-Management-Platform
 Assignment on course Software Technology!
