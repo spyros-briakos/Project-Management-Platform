@@ -5,7 +5,7 @@
 * [Dionysios Taxiarchis Balaskas]("Dionysios Taxiarchis Balaskas") - `1115201700094`
 * [Spyridon Briakos]("Spyridon Briakos") - `1115201700101`
 * [Andreas Giannoutsos]("Andreas Giannoutsos") - `1115201700021`
-* [Meropi Fanou]("") - `1115201700176`
+* [Meropi Fanou]("Meropi Fanou") - `1115201700176`
 * [Alexandra Apostolopoulou]("Alexandra Apostolopoulou") - `1115201700005`
 * [Michail Vourtzoumis]("Michail Vourtzoumis") - `1115201700018`
 
