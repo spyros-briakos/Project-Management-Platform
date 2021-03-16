@@ -1,0 +1,6 @@
+docker-compose.yml
+Dockerfile
+.git/
+back-end/.git/
+front-end/.git/
+cli-app/.git/
