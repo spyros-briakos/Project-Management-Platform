@@ -19,3 +19,4 @@ Open endpoints require no Authentication.
 ### Endpoints that require Authentication
 * (1)
 * (2)
+* (3)
