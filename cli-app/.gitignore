@@ -1,1 +1,3 @@
 .git/
+control-center/package-lock.json
+control-center/node_modules/

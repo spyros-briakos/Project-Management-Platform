@@ -2,5 +2,9 @@ docker-compose.yml
 Dockerfile
 .git/
 back-end/.git/
+back-end/node_modules/
+back-end/package-lock.json
 front-end/.git/
 cli-app/.git/
+cli-app/node_modules/
+cli-app/package-lock.json
