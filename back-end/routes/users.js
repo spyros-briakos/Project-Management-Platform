@@ -2,24 +2,86 @@
 
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
+const multer = require("multer");
+const cloudinary = require("cloudinary");
 
 // Import User model
 const User = require("../models/User");
 
-// Get all users
-router.get("/", async (req, res) => {
+// MULTER CONFIGURATION
+// Whenever a file gets uploaded we create a custom name for that file
+// The name we are giving is gonna have the current time stamp + the original name of the file
+var storage = multer.diskStorage({
+	filename: function(req, file, callback){
+		callback(null, Date.now() + file.originalname);
+	}
+});
+var imageFilter = function(req, file, cb){
+	// Accept image files only
+	if(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)){
+		return cb(new Error("Only image files are allowed!"), false);
+	}
+	cb(null,true);
+};
+// We pass the configuration variables
+var upload = multer({storage: storage, fileFilter: imageFilter});
+
+// CLOUDINARY CONFIGURATION
+cloudinary.config({
+	cloud_name: "meryf",
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+
+// ROUTES
+
+// // Get all users
+// router.get("/", async (req, res) => {
+//   try {
+//     const users = await User.find();
+//     res.json(users);
+//   } catch (error) {
+//     res.status(400).json({ message: error });
+//   }
+// })
+
+// Show sign up form
+router.get("/signup", async (req, res) => {
   try {
-    const users = await User.find();
-    res.json(users);
+    // res.render("signup");
   } catch (error) {
     res.status(400).json({ message: error });
   }
 })
 
-// Create user
-router.post("/", async (req, res) => {
+// Sign up user
+router.post("/signup", upload.single("image"), async (req, res) => {
   try {
     const user = new User(req.body);
+
+    user.picture = [];
+
+    // If an image file was uploaded
+    if(req.file){
+      cloudinary.uploader.upload(req.file.path, async (result) => {
+        try {
+          // We want to store the image's secure_url (https://)
+          user["picture"] = {
+            url: result.secure_url,
+            public_id: result.public_id
+          }
+        } catch (err) {
+          res.status(400).json({ message: err });
+        }
+      })
+    } else {
+      // Keep the default profile image
+      const tempUser = new User({});
+      user.picture = User.picture;
+    }
+
     const savedUser = await user.save();
     res.json(savedUser);
   } catch (error) {

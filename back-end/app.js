@@ -3,26 +3,38 @@
 // IMPORT PACKAGED
 const express = require("express");             // Basic Package for API structure
 const mongoose = require("mongoose");           // MongoDB
-const cors = require("cors");                   // ...
+// const cors = require("cors");                   // ...
 const logger = require('./middlewares/logger'); // Print logger on requests
 // const bodyParser = require('body-parser');   // ...
+const passport = require("passport");           // For user authentication
+const localStradegy = require("passport-local");// For user authentication
+
 require("dotenv/config");                       // Protect sensitive information
 
 // DEFINE APP
 const app = express();
 
 // MIDDLEWARES
-app.use(cors());
+// app.use(cors());
 // app.use(bodyParser.json());
 app.use(express.json());
 app.use(logger);
+// Use the passport package (with next 2 lines)
+app.use(passport.initialize());
+app.use(passport.session());
 
+// Import User model
+const User = require("./models/User");
+// Used for User authentication
+passport.use(new localStradegy(User.authenticate()));
+passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(User.serializeUser());
 
 // ROUTES
 const userRoutes = require('./routes/users');
 const projectRoutes = require('./routes/projects');
-app.use('api-control/users', userRoutes);
-app.use('api-control/projects', projectRoutes);
+app.use('/api-control/users', userRoutes);
+app.use('/api-control/projects', projectRoutes);
 
 // // DECLARE VARS
 // const options = {
