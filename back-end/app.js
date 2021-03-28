@@ -49,15 +49,25 @@ app.get("/", (req, res) => {
   res.send("GET/ Request");
 });
 
+// SERVER CONFIG
+const PORT = process.env.PORT || 5000
+const DB_URL = process.env.DB_CONNECTION || "mongodb://localhost/scrub";
+// const DB_URL = "mongodb://localhost/scrub";
+
 // SERVER CONNECTS TO DATABASE
 mongoose.connect(
-  process.env.DB_CONNECTION, 
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => { console.log('Server connected to MongoDB.') }
-);
+  DB_URL, 
+  { 
+  	useNewUrlParser: true, 
+  	useUnifiedTopology: true,
+  	// useFindAndModify: false,
+	  // useCreateIndex: true
+  }
+)
+.then( () => console.log("Server connected to MongoDB.") )
+.catch( error => console.log(error.message) );
 
 // SERVER STARTS LISTENING
-const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
   console.log(`Server listening at http://${process.env.HOSTNAME}:${PORT}/`);
 });

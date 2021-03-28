@@ -64,6 +64,7 @@ router.get("/signup", async (req, res) => {
 // Sign up user
 router.post("/signup", upload.single("image"), async (req, res) => {
   try {
+    console.log("USER START")
     const user = new User(req.body);
 
     user.picture = [];
@@ -87,7 +88,9 @@ router.post("/signup", upload.single("image"), async (req, res) => {
       user.picture = User.picture;
     }
 
+    console.log("USER PASSED")
     const savedUser = await user.save();
+    console.log("USER SAVED")
     res.json(savedUser);
   } catch (error) {
     res.status(400).json({ message: error });
