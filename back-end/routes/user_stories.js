@@ -4,4 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 // Import User Story model
-const Project = require("../models/UserStory");
+const UserStory = require("../models/UserStory");
+
+// Export router
+module.exports = router;

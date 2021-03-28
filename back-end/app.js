@@ -32,8 +32,10 @@ passport.serializeUser(User.serializeUser());
 
 // ROUTES
 const userRoutes = require('./routes/users');
+const user_storyRoutes = require('./routes/user_stories');
 const projectRoutes = require('./routes/projects');
 app.use('/api-control/users', userRoutes);
+app.use('/api-control/user_stories', user_storyRoutes);
 app.use('/api-control/projects', projectRoutes);
 
 // // DECLARE VARS
