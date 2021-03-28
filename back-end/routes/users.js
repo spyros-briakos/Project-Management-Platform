@@ -19,8 +19,11 @@ router.get("/", async (req, res) => {
 // Create user
 router.post("/", async (req, res) => {
   try {
+    console.log("USER START")
     const user = new User(req.body);
+    console.log("USER PASSED")
     const savedUser = await user.save();
+    console.log("USER SAVED")
     res.json(savedUser);
   } catch (error) {
     res.status(400).json({ message: error });
