@@ -9,6 +9,9 @@ const cloudinary = require("cloudinary");
 // Import User model
 const User = require("../models/User");
 
+
+// --------------------- Image upload handling ---------------------
+
 // MULTER CONFIGURATION
 // Whenever a file gets uploaded we create a custom name for that file
 // The name we are giving is gonna have the current time stamp + the original name of the file
@@ -34,6 +37,8 @@ cloudinary.config({
 	api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+//------------------------------------------------------------------
+
 
 // ROUTES
 
@@ -50,7 +55,7 @@ router.get("/", async (req, res) => {
 // Show sign up form
 router.get("/signup", async (req, res) => {
   try {
-    // res.render("signup");
+    // res.render("../../front-end/users/signup.ejs");
   } catch (error) {
     res.status(400).json({ message: error });
   }
