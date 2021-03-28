@@ -37,15 +37,15 @@ cloudinary.config({
 
 // ROUTES
 
-// // Get all users
-// router.get("/", async (req, res) => {
-//   try {
-//     const users = await User.find();
-//     res.json(users);
-//   } catch (error) {
-//     res.status(400).json({ message: error });
-//   }
-// })
+// Get all users
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
 
 // Show sign up form
 router.get("/signup", async (req, res) => {
