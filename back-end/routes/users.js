@@ -52,22 +52,11 @@ router.get("/", async (req, res) => {
   }
 })
 
-// Show sign up form
-router.get("/signup", async (req, res) => {
-  try {
-    // res.render("../../front-end/users/signup.ejs");
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
 // Sign up user
 router.post("/signup", upload.single("image"), async (req, res) => {
   try {
     console.log("USER START")
     const user = new User(req.body);
-
-    user.picture = [];
 
     // If an image file was uploaded
     if(req.file){
@@ -82,10 +71,6 @@ router.post("/signup", upload.single("image"), async (req, res) => {
           res.status(400).json({ message: err });
         }
       })
-    } else {
-      // Keep the default profile image
-      const tempUser = new User({});
-      user.picture = User.picture;
     }
 
     console.log("USER PASSED")

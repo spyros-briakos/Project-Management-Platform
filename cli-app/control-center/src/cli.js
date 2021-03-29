@@ -16,7 +16,7 @@ export function cli(args) {
                 .action(function (command) {
                         axios.get(`${apiUrl}/users/`)
                         .then(function(response) {
-                                console.log(response);
+                                console.log(response.data);
                         })
                         .catch(function(error) {
                                 console.log(error);

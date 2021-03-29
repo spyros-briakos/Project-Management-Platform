@@ -18,7 +18,7 @@ const ProjectSchema = new mongoose.Schema({
   },
   scrumMaster: {
     type: String,
-    required: true,
+    required: true
   },
   sprints: [
     {
@@ -29,7 +29,7 @@ const ProjectSchema = new mongoose.Schema({
   members: [
     {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "Member"
+			ref: "User"
 		}
   ],
   status: {

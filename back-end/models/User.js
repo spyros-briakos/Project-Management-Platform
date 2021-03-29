@@ -47,8 +47,7 @@ const UserSchema = new mongoose.Schema({
   plan_in_use: {
     type: String,
     enum: ['standard', 'premium'],
-    default: 'standard',
-    required: true
+    default: 'standard'
   },
   premium_ending_date: Date
 });

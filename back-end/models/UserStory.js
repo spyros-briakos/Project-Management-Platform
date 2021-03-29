@@ -26,8 +26,7 @@ const UserStorySchema = new mongoose.Schema({
   status: {
       type: String,
       enum: ['toDo', 'inProgress', 'done'],
-      default: 'toDo',
-      required: true
+      default: 'toDo'
   },
   starting_date: Date,
   estimated_duration: {
