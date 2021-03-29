@@ -20,8 +20,8 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const project = new Project(req.body);
-    const savedUser = await project.save();
-    res.json(savedUser);
+    const savedProject = await project.save();
+    res.json(savedProject);
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -50,7 +50,7 @@ router.delete('/:projectId', async (req, res) => {
 // Update specific project
 router.patch('/:projectId', async (req, res) => {
   try {
-    const updatedUser = await Project.updateOne({ _id: req.params.projectId }, { $set: req.body });
+    const updatedProject = await Project.updateOne({ _id: req.params.projectId }, { $set: req.body });
     res.json(updatedProject);
   } catch (error) {
     res.status(400).json({ message: error });

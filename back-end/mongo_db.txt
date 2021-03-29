@@ -1,0 +1,5 @@
+# Install MongoDB
+sudo apt install mongodb
+sudo mkdir -p /data/db
+sudo chown `id -u` /data/db
+mongod

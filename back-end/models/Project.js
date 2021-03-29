@@ -2,9 +2,6 @@
 
 const mongoose = require("mongoose");
 
-const IN_PROGRESS = "In Progress"
-const DONE = "Done"
-
 // Project schema
 const ProjectSchema = new mongoose.Schema({
   name: {
@@ -13,12 +10,13 @@ const ProjectSchema = new mongoose.Schema({
   },
   description: String,
   productOwner: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   scrumMaster: {
-    type: String,
-    required: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
   },
   sprints: [
     {
@@ -34,12 +32,11 @@ const ProjectSchema = new mongoose.Schema({
   ],
   status: {
     type: String,
-    required: true,
-    default: IN_PROGRESS
+    enum: ['inProgress', 'done'],
+    default: 'inProgress',
   },
   startingDate: {
     type: Date,
-    required: true,
     default: Date.now
   },
   endingDate: Date,
