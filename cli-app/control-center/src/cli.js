@@ -19,7 +19,7 @@ export function cli(args) {
                                 console.log(response);
                         })
                         .catch(function(error) {
-                                console.log('{ status: \'error\' }');
+                                console.log(error);
                         })
                 });
 
@@ -32,7 +32,7 @@ export function cli(args) {
 				console.log(response.data);
 			})
 			.catch(function(error) {
-				console.log('{ status: \'error\' }');
+				console.log(error);
 			})
 		});
 
