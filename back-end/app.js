@@ -53,8 +53,8 @@ app.get("/", (req, res) => {
 
 // SERVER CONFIG
 const PORT = process.env.PORT || 5000
-const DB_URL = process.env.DB_CONNECTION || "mongodb://localhost/scrub";
-// const DB_URL = "mongodb://localhost/scrub";
+// const DB_URL = process.env.DB_CONNECTION || "mongodb://localhost/scrub";
+const DB_URL = "mongodb://localhost/scrub";
 
 // SERVER CONNECTS TO DATABASE
 mongoose.connect(

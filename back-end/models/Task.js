@@ -2,23 +2,21 @@
 
 const mongoose = require("mongoose");
 
-// User Story Schema
-const UserStorySchema = new mongoose.Schema({
+// Task Schema
+const TaskSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
   },
   description: String,
-  label: {
-    type: String,
-    enum: ['issue', 'epic']
+  userStory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserStory"
   },
-  tasks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Task"
-    }
-  ],
+  Sprint: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Sprint"
+  },
 //   creator: {     // Project's Product Owner
 //       type: mongoose.Schema.Types.ObjectId,
 //       ref: "User"
@@ -30,17 +28,14 @@ const UserStorySchema = new mongoose.Schema({
   },
   starting_date: Date,
   ending_date: Date,
-  estimated_duration: {
-    type: Number,
-    // required: true
-  },
-  sprints: [
+  estimated_duration:  Number,
+  members: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Sprint"
+      ref: "User"
     }
   ]
 });
 
-// User Story model
-module.exports = mongoose.model('UserStory', UserStorySchema);
+// Task model
+module.exports = mongoose.model('Task', TaskSchema);

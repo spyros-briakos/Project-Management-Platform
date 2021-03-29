@@ -12,22 +12,58 @@ const agent = new https.Agent({
 export function cli(args) {
 
 	program
-                .command('users')
-                .action(function (command) {
-                        axios.get(`${apiUrl}/users/`)
-                        .then(function(response) {
-                                console.log(response);
-                        })
-                        .catch(function(error) {
-                                console.log(error);
-                        })
-                });
+    .command('users')
+    .action(function (command) {
+      axios.get(`${apiUrl}/users/`)
+      .then(function(response) {
+        console.log(response.data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      })
+    });
 
 
 	program
 		.command('projects')
 		.action(function (command) {
 			axios.get(`${apiUrl}/projects/`)
+			.then(function(response) {
+				console.log(response.data);
+			})
+			.catch(function(error) {
+				console.log(error);
+			})
+		});
+
+	program
+		.command('sprints')
+		.action(function (command) {
+			axios.get(`${apiUrl}/sprints/`)
+			.then(function(response) {
+				console.log(response.data);
+			})
+			.catch(function(error) {
+				console.log(error);
+			})
+		});
+
+	program
+		.command('tasks')
+		.action(function (command) {
+			axios.get(`${apiUrl}/tasks/`)
+			.then(function(response) {
+				console.log(response.data);
+			})
+			.catch(function(error) {
+				console.log(error);
+			})
+		});
+
+	program
+		.command('user-stories')
+		.action(function (command) {
+			axios.get(`${apiUrl}/user_stories/`)
 			.then(function(response) {
 				console.log(response.data);
 			})

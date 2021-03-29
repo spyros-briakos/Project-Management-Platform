@@ -2,17 +2,13 @@
 
 const mongoose = require("mongoose");
 
-// User Story Schema
-const UserStorySchema = new mongoose.Schema({
+// Sprint Schema
+const SprintSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
   },
   description: String,
-  label: {
-    type: String,
-    enum: ['issue', 'epic']
-  },
   tasks: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -32,15 +28,15 @@ const UserStorySchema = new mongoose.Schema({
   ending_date: Date,
   estimated_duration: {
     type: Number,
-    // required: true
+    default: 14
   },
-  sprints: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Sprint"
-    }
-  ]
+  // members: [
+  //     {
+  //         type: mongoose.Schema.Types.ObjectId,
+  //         ref: "User"
+  //     }
+  // ]
 });
 
-// User Story model
-module.exports = mongoose.model('UserStory', UserStorySchema);
+// Sprint model
+module.exports = mongoose.model('Sprint', SprintSchema);
