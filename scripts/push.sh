@@ -1,4 +1,5 @@
-msg="'$*'"
+# msg=$*
+
 git add .
-git commit -m msg
+git commit -m $*
 git push origin main
