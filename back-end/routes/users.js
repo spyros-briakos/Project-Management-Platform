@@ -58,6 +58,10 @@ router.post("/signup", upload.single("image"), async (req, res) => {
     console.log("USER START")
     const user = new User(req.body);
 
+    // if(user.password != req.body.confirm_psw){
+      // handle wrong password confirmation
+    // }
+
     // If an image file was uploaded
     if(req.file){
       cloudinary.uploader.upload(req.file.path, async (result) => {
@@ -73,11 +77,45 @@ router.post("/signup", upload.single("image"), async (req, res) => {
       })
     }
 
-    console.log("USER PASSED")
-    const savedUser = await user.save();
-    console.log("USER SAVED")
-    res.json(savedUser);
+    // Register the new user
+    User.register(user, user.password, async(registeredUser) => {
+      try {
+        console.log("USER PASSED")
+        const savedUser = await user.save();
+        console.log(savedUser);
+
+        passport.authenticate("local")(req, res, function() {
+          console.log("USER SAVED");
+          res.json(savedUser);
+        })
+      } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: err });
+      }
+    });
+
+    console.log("HERE");
+    res.status(400).json({ message: 'error' });
   } catch (error) {
+    console.log("here");
+    res.status(400).json({ message: error });
+  }
+})
+
+// Login user
+router.post("/login", passport.authenticate("local", 
+  {
+  //   failureRedirect: "",
+  //   failureFlash: true
+  }), async (req, res) => {
+  try {
+    // Connected user: req.user
+    console.log('Hi' + req.user.firstName + ' ' + req.user.lastName);
+    // if(req.user.plan_in_use == 'standard'){
+    // } else {
+    // }
+    res.json(req.user);
+  } catch(error) {
     res.status(400).json({ message: error });
   }
 })
