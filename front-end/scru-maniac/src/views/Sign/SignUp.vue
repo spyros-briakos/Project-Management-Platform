@@ -1,5 +1,5 @@
 <template>
-    <div class="vue-tempalte">
+    <div class="vue-template">
         <form>
             <h3>Δημιούργησε τον λογαριασμό σου!</h3>
 
@@ -37,8 +37,6 @@
 </template>
 
 <script>
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '@/assets/css/main.css'
 
     export default {
         data() {

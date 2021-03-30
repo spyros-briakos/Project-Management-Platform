@@ -34,7 +34,7 @@ export default {
             items: [
                 { title: 'Πώς δουλεύει', url: '/how_it_works' },
                 { title: 'Τιμές', url: '/prices' },
-                { title: 'Σύνδεση', url: '/signin'}
+                { title: 'Σύνδεση', url: '/sign/in'}
             ]
         };
     }
@@ -42,10 +42,10 @@ export default {
 </script>
 
 <style>
-a {
+/* a {
     color: white;
     text-decoration: none;
-}
+} */
 .v-btn {
   text-transform:none !important;
 }
