@@ -2,7 +2,7 @@
     <span>
         <v-toolbar app color="#7dc2ad" dark>
             <router-link to="/">
-                <v-toolbar-title class= "purple--text" data-cy="titleBtn">{{
+                <v-toolbar-title :to="appurl" class= "purple--text" data-cy="titleBtn">{{
                     appTitle
                 }}</v-toolbar-title>
             </router-link>
@@ -24,6 +24,7 @@ export default {
     data() {
         return {
             appTitle: 'ScruManiac',
+            appurl: '/',
             drawer: false,
             outlined: true,
             plain: true,
@@ -31,7 +32,7 @@ export default {
             right:true,
             
             items: [
-                { title: 'Πώς δουλέυει', url: '/how_it_works' },
+                { title: 'Πώς δουλεύει', url: '/how_it_works' },
                 { title: 'Τιμές', url: '/prices' },
                 { title: 'Σύνδεση', url: '/signin'}
             ]
