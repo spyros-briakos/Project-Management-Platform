@@ -3,7 +3,10 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Prices from '../views/Prices.vue'
 import How_it_works from '../views/How_it_works.vue'
-import Signin from '../views/Signin.vue'
+
+import SignIn from '../components/Sign/SignIn.vue'
+import SignUp from '../components/Sign/SignUp.vue'
+import ForgotPassword from '../components/Sign/ForgotPassword.vue'
 
 Vue.use(VueRouter)
 
@@ -24,9 +27,19 @@ const routes = [
     component: Prices
   },
   {
-    path: '/signin',
-    name: 'Signin',
-    component: Signin
+    path: '/sign/in',
+    name: 'SignIn',
+    component: SignIn
+  },
+  {
+    path: '/sign/up',
+    name: 'SignUp',
+    component: SignUp
+  },
+  {
+    path: '/sign/forgot',
+    name: 'ForgotPassword',
+    component: ForgotPassword
   }
 ]
 
