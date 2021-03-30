@@ -1,6 +1,5 @@
 # Project-Management-Platform
 #### Assignment on course `Software Technology` (Team 0)
-ss
 
 ## Members
 * [Dionysios Taxiarchis Balaskas](https://github.com/dbalaskas) - `1115201700094`
