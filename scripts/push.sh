@@ -1,3 +1,3 @@
 git add .
-git commit -m "next"
+git commit -m $1
 git push origin main
