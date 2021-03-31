@@ -91,7 +91,7 @@ router.delete('/:userId', async (req, res) => {
 // Update specific user
 router.patch('/:userId', async (req, res) => {
   try {
-    const updatedUser = await User.updateOne({ _id: req.params.userId }, { $set: req.body });
+    const updatedUser = await User.updateOne({ _id: req.params.userId }, { $set: req.body }, { runValidators: true });
     res.json(updatedUser);
   } catch (error) {
     res.status(400).json({ message: error });
