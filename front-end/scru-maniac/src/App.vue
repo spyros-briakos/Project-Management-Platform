@@ -2,7 +2,7 @@
   <v-app id="app">
     <app-navigation></app-navigation>
 
-    <v-content transition="slide-x-transition">
+    <v-content transition="slide-x-transition"> 
       <router-view></router-view>
     </v-content>
   </v-app>  
