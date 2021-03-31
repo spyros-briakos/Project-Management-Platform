@@ -1,11 +1,16 @@
 <template>
-  <v-app id="app">
-    <app-navigation></app-navigation>
+  <div>
+    <v-app id="app">
+      <app-navigation></app-navigation>
 
-    <v-content transition="slide-x-transition"> 
-      <router-view></router-view>
-    </v-content>
-  </v-app>  
+      <v-content transition="slide-x-transition"> 
+        <router-view></router-view>
+      </v-content>
+
+    </v-app>  
+
+   
+  </div>
 </template>
 
 <script>
