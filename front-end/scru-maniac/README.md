@@ -1,5 +1,11 @@
 # scru-maniac
 
+## Install libraries
+```
+npm install bootstrap
+vue add vuetify
+```
+
 ## Project setup
 ```
 npm install
