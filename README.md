@@ -24,7 +24,7 @@ Development of an online collaborative management platform for software projects
 ## Installation & Run
 
 ### Download project
-```bash
+```bash 
 git clone https://github.com/spympr/Project-Management-Platform.git
 cd Project-Management-Platform
 ```
@@ -33,7 +33,6 @@ cd Project-Management-Platform
 ```bash
 npm install
 npm start
-```
 
 ### Frontend Installation
 ```bash
