@@ -1,6 +1,5 @@
 #!/bin/sh
 msg="$*"
-echo "$msg"
 
 git add .
 git commit -m "$msg"
