@@ -24,3 +24,7 @@
         }
     }
 </script>
+
+<style scoped>
+
+</style>

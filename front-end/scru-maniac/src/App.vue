@@ -1,5 +1,4 @@
 <template>
-  <div>
     <v-app id="app">
       <app-navigation></app-navigation>
 
@@ -8,9 +7,6 @@
       </v-content>
 
     </v-app>  
-
-   
-  </div>
 </template>
 
 <script>
