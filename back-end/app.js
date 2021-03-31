@@ -8,6 +8,7 @@ const logger = require('./middlewares/logger'); // Print logger on requests
 // const bodyParser = require('body-parser');   // ...
 const passport = require("passport");           // For user authentication
 const localStradegy = require("passport-local");// For user authentication
+const multer = require("multer");               // For handling image uploads
 
 require("dotenv/config");                       // Protect sensitive information
 require('./auth/auth');                         // For user authentication

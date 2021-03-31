@@ -4,59 +4,24 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const jwt = require('jsonwebtoken');
-// const multer = require("multer");
-// const cloudinary = require("cloudinary");
+const multer = require("multer");
 
 // Import User model
 const User = require("../models/User");
 
 
-// --------------------- Image upload handling ---------------------
-
-// // MULTER CONFIGURATION
-// // Whenever a file gets uploaded we create a custom name for that file
-// // The name we are giving is gonna have the current time stamp + the original name of the file
-// var storage = multer.diskStorage({
-// 	filename: function(req, file, callback){
-// 		callback(null, Date.now() + file.originalname);
-// 	}
-// });
-// var imageFilter = function(req, file, cb){
-// 	// Accept image files only
-// 	if(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)){
-// 		return cb(new Error("Only image files are allowed!"), false);
-// 	}
-// 	cb(null,true);
-// };
-// // We pass the configuration variables
-// var upload = multer({storage: storage, fileFilter: imageFilter});
-
-// // CLOUDINARY CONFIGURATION
-// cloudinary.config({
-// 	cloud_name: "meryf",
-// 	api_key: process.env.CLOUDINARY_API_KEY,
-// 	api_secret: process.env.CLOUDINARY_API_SECRET
-// });
-
-// USAGE
-// add middleware: upload.single("image")
-// and inside function add:
-// // If an image file was uploaded
-// if(req.file){
-//   cloudinary.uploader.upload(req.file.path, async (result) => {
-//     try {
-//       // We want to store the image's secure_url (https://)
-//       user["picture"] = {
-//         url: result.secure_url,
-//         public_id: result.public_id
-//       }
-//     } catch (err) {
-//       res.status(400).json({ message: err });
-//     }
-//   })
-// }
-
-//------------------------------------------------------------------
+// Handling of image upload
+ 
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, '../uploads')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+ 
+var upload = multer({ storage: storage });
 
 
 // ROUTES
@@ -72,7 +37,7 @@ router.get("/", async (req, res) => {
 })
 
 // Sign up user
-router.post('/signup', passport.authenticate('signup', { session: false }),
+router.post('/signup', [upload.single('image'), passport.authenticate('signup', { session: false })],
   async (req, res, next) => {
     res.json({
       message: 'Signup successful',
@@ -102,23 +67,6 @@ router.post('/login', async (req, res, next) => {
     }
   })(req, res, next);
 });
-
-// router.post("/login", passport.authenticate("local", 
-//   {
-//   //   failureRedirect: "",
-//   //   failureFlash: true
-//   }), async (req, res) => {
-//   try {
-//     // Connected user: req.user
-//     console.log('Hi' + req.user.firstName + ' ' + req.user.lastName);
-//     // if(req.user.plan_in_use == 'standard'){
-//     // } else {
-//     // }
-//     res.json(req.user);
-//   } catch(error) {
-//     res.status(400).json({ message: error });
-//   }
-// })
 
 // Get specific user
 router.get('/:userId', async (req, res) => {

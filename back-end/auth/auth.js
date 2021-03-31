@@ -2,6 +2,7 @@ const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
+const fs = require('fs');
 
 const User = require('../models/User');
 
@@ -14,6 +15,12 @@ passport.use('signup', new localStrategy(
   }, async (req, username, password, done) => {
     try {
       const user = new User(req.body);
+
+      if(req.file) {
+        user.image.data = fs.readFileSync(path.join(__dirname + '../uploads' + req.file.filename)),
+        user.image.contentType = 'image/png'
+      }
+
       const savedUser = await user.save();
 
       done(null, user);

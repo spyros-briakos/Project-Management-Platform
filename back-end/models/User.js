@@ -1,7 +1,6 @@
 'use strict'
 
 const mongoose = require("mongoose");
-// const passportLocalMongoose = require("passport-local-mongoose");
 const bcrypt = require('bcrypt');
 
 // Check email type
@@ -33,16 +32,14 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-	picture: {
+  image: {
+    data: Buffer,
+    contentType: String,
 		url: {
 			type: String,
 			default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZL12v4NCVMfrCwtG1huVb4zXxrVIu-ibumA&usqp=CAU"
-		},
-		public_id: {
-			type: String,
-			default: "Default"
 		}
-	},
+  },
   projects: [
     {
       type: mongoose.Schema.Types.ObjectId,
