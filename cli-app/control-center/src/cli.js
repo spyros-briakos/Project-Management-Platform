@@ -110,7 +110,7 @@ export function cli(args) {
 	  password: command.password
 	}, { httpsAgent: agent })
 	.then(function (response) {
-	  // console.log(response.data);
+	  console.log(response.data);
 	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data), function(err) {
 		if(err) {
 		  return console.log('Writing token failed:', err);
@@ -124,7 +124,7 @@ export function cli(args) {
   });
 
   program
-  .command('sign-up')
+  .command('signup')
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('--username <value>', 'User\'s username')
   .requiredOption('--password <value>', 'User\'s password')
@@ -152,7 +152,7 @@ export function cli(args) {
 	  });
 	})
 	.catch(function (error) {
-	  console.log('Sign up failed: ', error.response.data.message);
+	  console.log('Sign up failed');
 	});
   });
 
