@@ -1,5 +1,7 @@
-# args = "$@"
+#!/bin/sh
+msg="$*"
+echo "$msg"
 
 git add .
-git commit -m "update"
+git commit -m "$msg"
 git push origin main
