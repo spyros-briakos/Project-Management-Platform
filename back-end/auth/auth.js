@@ -61,12 +61,18 @@ passport.use('login', new localStrategy(
 passport.use(new JWTstrategy(
   {
     secretOrKey: 'TOP_SECRET',
-    jwtFromRequest: ExtractJWT.fromUrlQueryParameter('secret_token')
-  }, async (token, done) => {
-    try {
-      return done(null, token.user);
-    } catch (error) {
-      done(error);
-    }
+    // jwtFromRequest: ExtractJWT.fromUrlQueryParameter('secret_token')
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    algorithms: ['HS256']
+  }, async (payload, done) => {
+    User.findOne({ _id: payload.sub })
+      .then((user) => {
+        if(user) {
+          return done(null, user);
+        } else {
+          return done(null, false);
+        }
+      })
+      .catch(error => done(error, null));
   })
 );
