@@ -1,52 +1,52 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Prices from '../views/Prices.vue'
-import How_it_works from '../views/How_it_works.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import Prices from "../views/Prices.vue";
+import How_it_works from "../views/How_it_works.vue";
 
-import SignIn from '../views/Sign/SignIn.vue'
-import SignUp from '../views/Sign/SignUp.vue'
-import ForgotPassword from '../views/Sign/ForgotPassword.vue'
+import SignIn from "../views/Sign/SignIn.vue";
+import SignUp from "../views/Sign/SignUp.vue";
+import ForgotPassword from "../views/Sign/ForgotPassword.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
   },
   {
-    path: '/how_it_works',
-    name: 'How it works',
-    component: How_it_works
+    path: "/how_it_works",
+    name: "How it works",
+    component: How_it_works,
   },
   {
-    path: '/prices',
-    name: 'Prices',
-    component: Prices
+    path: "/prices",
+    name: "Prices",
+    component: Prices,
   },
   {
-    path: '/sign/in',
-    name: 'SignIn',
-    component: SignIn
+    path: "/sign/in",
+    name: "SignIn",
+    component: SignIn,
   },
   {
-    path: '/sign/up',
-    name: 'SignUp',
-    component: SignUp
+    path: "/sign/up",
+    name: "SignUp",
+    component: SignUp,
   },
   {
-    path: '/sign/forgot',
-    name: 'ForgotPassword',
-    component: ForgotPassword
-  }
-]
+    path: "/sign/forgot",
+    name: "ForgotPassword",
+    component: ForgotPassword,
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

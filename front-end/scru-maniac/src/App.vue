@@ -3,13 +3,10 @@
     <v-app id="app">
       <app-navigation></app-navigation>
 
-      <v-content transition="slide-x-transition"> 
+      <v-content transition="slide-x-transition">
         <router-view></router-view>
       </v-content>
-
-    </v-app>  
-
-   
+    </v-app>
   </div>
 </template>
 
@@ -17,12 +14,11 @@
 import AppNavigation from "@/components/AppNavigation.vue";
 
 export default {
-    name: "App",
-    components: {
-        AppNavigation
-    }
+  name: "App",
+  components: {
+    AppNavigation,
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>
