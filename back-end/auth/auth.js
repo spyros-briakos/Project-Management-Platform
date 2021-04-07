@@ -4,7 +4,7 @@ const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 const fs = require('fs');
 
-const User = require('../models/User');
+const { User } = require('../models/User');
 
 // Signup middleware
 passport.use('signup', new localStrategy(
@@ -16,6 +16,7 @@ passport.use('signup', new localStrategy(
     try {
       const user = new User(req.body);
 
+      // If an image was uploaded, save it locally
       if(req.file) {
         user.image.data = fs.readFileSync(path.join(__dirname + '../uploads' + req.file.filename)),
         user.image.contentType = 'image/png'
@@ -52,16 +53,15 @@ passport.use('login', new localStrategy(
 
       return done(null, user, { message: 'Logged in Successfully' });
     } catch (error) {
-      console.log(error);
       return done(error);
     }
   })
 );
 
+// Passport-jwt authentication strategy
 passport.use(new JWTstrategy(
   {
     secretOrKey: 'TOP_SECRET',
-    // jwtFromRequest: ExtractJWT.fromUrlQueryParameter('secret_token')
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     algorithms: ['HS256']
   }, async (payload, done) => {

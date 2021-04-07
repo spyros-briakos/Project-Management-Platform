@@ -88,16 +88,16 @@ export function cli(args) {
 	})
   });
 
-  program
-  .command('logout')
-  .action(function (command) {
-	fs.unlink('/tmp/user.json', function(err) {
-	  if(err) {
-		return console.log('Removing token failed:', err);
-	  }
-	  console.log('Logout successful. Token removed');
-	});
-  });
+//   program
+//   .command('logout')
+//   .action(function (command) {
+// 	fs.unlink('/tmp/user.json', function(err) {
+// 	  if(err) {
+// 		return console.log('Removing token failed:', err);
+// 	  }
+// 	  console.log('Logout successful. Token removed');
+// 	});
+//   });
 
   program
   .command('login')
@@ -115,12 +115,42 @@ export function cli(args) {
 		if(err) {
 		  return console.log('Writing token failed:', err);
 		}
-		console.log('Login successful. Token saved');
+		console.log(response.data.message);
 	  });
 	})
 	.catch(function (error) {
-	  console.log('Login failed: ', error.response.data.message);
+	  console.log('Login failed: ', error.message);
 	});
+  });
+
+  program
+  .command('logout')
+  .option('--format <value>', 'Give format', 'json')
+  .action(function(command) {
+	axios.get(`${apiUrl}/secure-routes/logout`, { }, { httpsAgent: agent })
+	.then(function(response){
+	  fs.unlink('/tmp/user.json', function(err) {
+		if(err) {
+		  return console.log('Removing user failed:', err);
+		}
+	    console.log(response.message);
+	  });
+	})
+	.catch(function(error) {
+	  console.log('Couldn\'t log out',error.message);
+	});
+  })
+
+  program
+  .command('tokens')
+  .action(function (command) {
+    axios.get(`${apiUrl}/secure-routes/tokens`)
+    .then(function(response) {
+      console.log(response.data);
+    })
+    .catch(function(error) {
+      console.log(error);
+    })
   });
 
   program
@@ -200,40 +230,14 @@ export function cli(args) {
 
   program
   .command('profile')
-  .requiredOption('--secret_token <value>', 'token obtained from login')
   .action(function(command) {
-	  axios.get(`${apiUrl}/profile/profile`, { secret_token: command.secret_token }, { httpsAgent: agent })
+	  axios.get(`${apiUrl}/secure-routes/profile`, { }, { httpsAgent: agent })
 	  .then(function(response){
 		  console.log(response.message);
 	  })
 	  .catch(function(error) {
 		console.log('Could not reach profile secure route\n', error.message);
 	  });
-  })
-
-  program
-  .command('isAuth')
-  .action(function(command) {
-	axios.get(`${apiUrl}/users/isAuth`, { }, { httpsAgent: agent })
-	.then(function(response){
-		console.log(response.message);
-	})
-	.catch(function(error) {
-	  console.log(error.message);
-	});
-  })
-
-  program
-  .command('logout')
-  .option('--format <value>', 'Give format', 'json')
-  .action(function(command) {
-	axios.get(`${apiUrl}/users/logout`, { }, { httpsAgent: agent })
-	.then(function(response){
-	  console.log(response.message);
-	})
-	.catch(function(error) {
-	  console.log('Couldn\'t log out',error.message);
-	});
   })
 
 
