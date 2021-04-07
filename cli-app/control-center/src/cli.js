@@ -110,7 +110,7 @@ export function cli(args) {
 	  password: command.password
 	}, { httpsAgent: agent })
 	.then(function (response) {
-	  // console.log(response.data);
+	  console.log(response.data);
 	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data), function(err) {
 		if(err) {
 		  return console.log('Writing token failed:', err);
@@ -124,7 +124,7 @@ export function cli(args) {
   });
 
   program
-  .command('sign-up')
+  .command('signup')
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('--username <value>', 'User\'s username')
   .requiredOption('--password <value>', 'User\'s password')
@@ -140,7 +140,7 @@ export function cli(args) {
 		firstName: command.firstName,
 		lastName: command.lastName,
 		email: command.email,
-		plan: command.plan
+		plan_in_use: command.plan
 	}, { httpsAgent: agent })
 	.then(function (response) {
 	  console.log(response.data);
@@ -152,9 +152,37 @@ export function cli(args) {
 	  });
 	})
 	.catch(function (error) {
-	  console.log('Sign up failed: ', error.response.data.message);
+	  console.log('Sign up failed');
 	});
   });
+
+  program
+  .command('update-user')
+  .option('--format <value>', 'Give format', 'json')
+  .requiredOption('--id <value>', 'User\'s id')
+  .option('--username <value>', 'User\'s username')
+  .option('--password <value>', 'User\'s password')
+  .option('--firstName <value>', 'User\'s firstName')
+  .option('--lastName <value>', 'User\'s lastName')
+  .option('--email <value>', 'User\'s email')
+  .option('--plan <value>', 'User\'s plan (standard or premium)')
+  .action(function(command) {
+	axios.patch(`${apiUrl}/users/${command.id}?format=${command.format}/`, {
+	  username: command.username,
+	  password: command.password,
+	  firstName: command.firstName,
+	  lastName: command.lastName,
+	  email: command.email,
+	  plan_in_use: command.plan
+	}, { httpsAgent: agent })
+	.then(function (response) {
+	  console.log(response.data);
+	  console.log('User\'s update successful. Token saved');
+	})
+	.catch(function (error) {
+	  console.log('User\'s update failed');
+	});
+})
 
   program
   .command('delete-user')

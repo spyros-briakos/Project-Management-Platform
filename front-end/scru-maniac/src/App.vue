@@ -1,13 +1,12 @@
 <template>
-  <div>
     <v-app id="app">
       <app-navigation></app-navigation>
 
       <v-content transition="slide-x-transition">
         <router-view></router-view>
       </v-content>
-    </v-app>
-  </div>
+
+    </v-app>  
 </template>
 
 <script>

@@ -8,8 +8,10 @@ const logger = require('./middlewares/logger'); // Print logger on requests
 // const bodyParser = require('body-parser');   // ...
 const passport = require("passport");           // For user authentication
 const localStradegy = require("passport-local");// For user authentication
+const multer = require("multer");               // For handling image uploads
 
 require("dotenv/config");                       // Protect sensitive information
+require('./auth/auth');                         // For user authentication
 
 // DEFINE APP
 const app = express();
@@ -25,10 +27,6 @@ app.use(passport.session());
 
 // Import User model
 const User = require("./models/User");
-// Used for User authentication
-passport.use(new localStradegy(User.authenticate()));
-passport.deserializeUser(User.deserializeUser());
-passport.serializeUser(User.serializeUser());
 
 // ROUTES
 const userRoutes = require('./routes/users');
@@ -37,6 +35,10 @@ const projectRoutes = require('./routes/projects');
 app.use('/api-control/users', userRoutes);
 app.use('/api-control/user_stories', user_storyRoutes);
 app.use('/api-control/projects', projectRoutes);
+
+const secureRoute = require('./routes/secure-routes');
+// Plug in the JWT strategy as a middleware so only verified users can access this route.
+app.use('/user', passport.authenticate('jwt', { session: false }), secureRoute);
 
 // // DECLARE VARS
 // const options = {

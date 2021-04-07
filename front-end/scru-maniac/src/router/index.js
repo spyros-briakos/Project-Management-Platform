@@ -1,12 +1,11 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import Prices from "../views/Prices.vue";
-import How_it_works from "../views/How_it_works.vue";
-
-import SignIn from "../views/Sign/SignIn.vue";
-import SignUp from "../views/Sign/SignUp.vue";
-import ForgotPassword from "../views/Sign/ForgotPassword.vue";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Home from '../components/Home.vue'
+import Prices from '../components/Prices.vue'
+import How_it_works from '../components/How_it_works.vue'
+import SignIn from '../components/Sign/SignIn.vue'
+import SignUp from '../components/Sign/SignUp.vue'
+import ForgotPassword from '../components/Sign/ForgotPassword.vue'
 
 Vue.use(VueRouter);
 

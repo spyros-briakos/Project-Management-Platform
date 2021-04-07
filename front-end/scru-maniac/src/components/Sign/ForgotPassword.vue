@@ -22,11 +22,16 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      email: "",
-    };
-  },
-};
+
+    export default {
+        data() {
+            return {
+                email: ''
+            }
+        }
+    }
 </script>
+
+<style scoped>
+
+</style>
