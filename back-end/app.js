@@ -12,8 +12,8 @@ const multer = require("multer");               // For handling image uploads
 
 require("dotenv/config");                       // Protect sensitive information
 require('./auth/auth');                         // For user authentication
-const utils = require("./auth/utils");
-
+// const utils = require("./auth/utils");
+const authenticate = require("./middlewares/authenticate");
 // DEFINE APP
 const app = express();
 
@@ -47,7 +47,7 @@ app.use('/api-control/projects', projectRoutes);
 
 const secureRoute = require('./routes/secure-routes');
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
-app.use('/api-control/secure-routes', utils.authenticateUser, secureRoute);
+app.use('/api-control/secure-routes', authenticate, secureRoute);
 
 // // DECLARE VARS
 // const options = {

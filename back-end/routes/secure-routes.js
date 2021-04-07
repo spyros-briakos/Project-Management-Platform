@@ -7,7 +7,6 @@ const { InvalidToken } = require("../models/User");
 
 
 router.get('/profile', (req, res) => {
-  console.log(req);
   res.json({
     message: 'You made it to the secure route',
   })

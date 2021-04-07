@@ -63,11 +63,12 @@ passport.use(new JWTstrategy(
   {
     secretOrKey: 'TOP_SECRET',
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    algorithms: ['HS256']
-  }, async (payload, done) => {
+    passReqToCallback: true
+  }, async (req, payload, done) => {
     User.findOne({ _id: payload.sub })
       .then((user) => {
         if(user) {
+          req.user = user;
           return done(null, user);
         } else {
           return done(null, false);

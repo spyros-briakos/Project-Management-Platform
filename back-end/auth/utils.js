@@ -1,9 +1,6 @@
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
-// Import InvalidToken model (created after a user logs out)
-const { InvalidToken } = require("../models/User");
-
 // Create an authentication token for the logged in user
 function issueJWT(user) {
   const _id = user._id;
@@ -14,7 +11,7 @@ function issueJWT(user) {
     iat: Date.now()
   };
 
-  const signedToken = jwt.sign(payload, 'TOP_SECRET', { expiresIn: expiresIn, algorithm: 'HS256' });
+  const signedToken = jwt.sign(payload, 'TOP_SECRET', { expiresIn: expiresIn });
 
   return {
     token: "Bearer " + signedToken,
@@ -30,24 +27,5 @@ function extractToken(req) {
   return null;
 }
 
-// Authenticate a user that requested a secure route
-const authenticateUser = async (req, res, next) => {
-  // Passport authentication
-  passport.authenticate('jwt', { session: false });
-
-  // Get user's token
-  const currentToken = extractToken(req);
-  // Check if it is an invalid token
-  const token = await InvalidToken.findOne({ value: currentToken }).exec();
-
-  // If the token is valid, continue
-  if(token === null) {
-    return next();
-  }
-
-  res.json({ message: 'Error: Invalid authentication token used' });
-}
-
 module.exports.issueJWT = issueJWT;
 module.exports.extractToken = extractToken;
-module.exports.authenticateUser = authenticateUser;

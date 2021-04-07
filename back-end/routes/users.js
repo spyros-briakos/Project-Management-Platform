@@ -59,7 +59,7 @@ router.post('/login', async (req, res, next) => {
         const error = new Error(info.message);
         return next(error);
       }
-
+      console.log(req.user);
       // Create user's authentication token
       const tokenObject = utils.issueJWT(user);
 
