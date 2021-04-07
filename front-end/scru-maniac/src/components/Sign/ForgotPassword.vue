@@ -1,17 +1,24 @@
 <template>
-    <div class="vue-tempalte">
-        <form>
-            <h5>Ανάκτησε τον κωδικό σου!</h5>
+  <div class="vue-tempalte">
+    <form>
+      <h5>Ανάκτησε τον κωδικό σου!</h5>
 
-            <div class="form-group">
-                <!-- <label>Email</label> -->
-                <input type="email" required v-model="email" class="form-control form-control-lg" placeholder="Email" />
-            </div>
+      <div class="form-group">
+        <!-- <label>Email</label> -->
+        <input
+          type="email"
+          required
+          v-model="email"
+          class="form-control form-control-lg"
+          placeholder="Email"
+        />
+      </div>
 
-            <button type="submit" class="btn btn-dark btn-lg btn-block">Reset password</button>
-
-        </form>
-    </div>
+      <button type="submit" class="btn btn-dark btn-lg btn-block">
+        Reset password
+      </button>
+    </form>
+  </div>
 </template>
 
 <script>

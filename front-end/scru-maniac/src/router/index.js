@@ -7,45 +7,45 @@ import SignIn from '../components/Sign/SignIn.vue'
 import SignUp from '../components/Sign/SignUp.vue'
 import ForgotPassword from '../components/Sign/ForgotPassword.vue'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
   },
   {
-    path: '/how_it_works',
-    name: 'How it works',
-    component: How_it_works
+    path: "/how_it_works",
+    name: "How it works",
+    component: How_it_works,
   },
   {
-    path: '/prices',
-    name: 'Prices',
-    component: Prices
+    path: "/prices",
+    name: "Prices",
+    component: Prices,
   },
   {
-    path: '/sign/in',
-    name: 'SignIn',
-    component: SignIn
+    path: "/sign/in",
+    name: "SignIn",
+    component: SignIn,
   },
   {
-    path: '/sign/up',
-    name: 'SignUp',
-    component: SignUp
+    path: "/sign/up",
+    name: "SignUp",
+    component: SignUp,
   },
   {
-    path: '/sign/forgot',
-    name: 'ForgotPassword',
-    component: ForgotPassword
-  }
-]
+    path: "/sign/forgot",
+    name: "ForgotPassword",
+    component: ForgotPassword,
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
