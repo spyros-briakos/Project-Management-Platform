@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const utils = require("../auth/utils");
 
+// Import User model
+const { User } = require("../models/User");
 // Import InvalidToken model (created after a user logs out)
 const { InvalidToken } = require("../models/User");
 
@@ -28,6 +30,7 @@ router.get('/logout', async(req, res) => {
   }
 });
 
+// Get all invalid tokens
 router.get('/tokens', async(req, res) => {
   try {
     const tokens = await InvalidToken.find({});
@@ -36,5 +39,50 @@ router.get('/tokens', async(req, res) => {
     res.status(400).json({ message: error });
   }
 });
+
+// Get specific user
+router.get('/user', async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// Update specific user
+router.patch('/edit-user', async (req, res) => {
+  try {
+    const updatedUser = await User.updateOne({ _id: req.user._id }, { $set: req.body }, { runValidators: true });
+
+    res.json({
+      result: updatedUser,
+      message: 'Updated user successfully'
+    });
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// Delete specific user
+router.delete('/delete-user', async (req, res) => {
+  try {
+    // Delete user from db
+    const removedUser = await User.deleteOne({ _id: req.user._id });
+
+    // Mark user's auth token as invalid
+    const token = new InvalidToken({ value: utils.extractToken(req) });
+    await token.save();
+    // Log out user
+    req.logout();
+
+    res.json({
+      result: removedUser,
+      message: 'Deleted user successfully'
+    });
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
 
 module.exports = router;

@@ -74,35 +74,5 @@ router.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
-// Get specific user
-router.get('/:userId', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.userId);
-    res.json(user);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-// Delete specific user
-router.delete('/:userId', async (req, res) => {
-  try {
-    const removedUser = await User.remove({ _id: req.params.userId });    // User.remove is deprecated!!!!!!!
-    res.json(removedUser);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-// Update specific user
-router.patch('/:userId', async (req, res) => {
-  try {
-    const updatedUser = await User.updateOne({ _id: req.params.userId }, { $set: req.body }, { runValidators: true });
-    res.json(updatedUser);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
 // Export router
 module.exports = router;
