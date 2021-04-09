@@ -69,11 +69,11 @@ passport.use(new JWTstrategy(
       .then((user) => {
         if(user) {
           req.user = user;
-          return done(null, user);
+          return done(null, user, { message: 'User authenticated successfully' });
         } else {
-          return done(null, false);
+          return done(null, false, { message: 'Could not find user' });
         }
       })
-      .catch(error => done(error, null));
+      .catch(error => done(error, null, { message: 'An error occurred' }));
   })
 );

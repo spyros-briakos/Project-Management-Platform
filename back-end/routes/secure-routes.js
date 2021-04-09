@@ -8,11 +8,15 @@ const { User } = require("../models/User");
 const { InvalidToken } = require("../models/User");
 
 
-router.get('/profile', (req, res) => {
-  res.json({
-    message: 'You made it to the secure route',
-  })
-});
+// Get specific user
+router.get('/user', async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
 
 // Log out user
 router.get('/logout', async(req, res) => {
@@ -39,16 +43,6 @@ router.get('/tokens', async(req, res) => {
     res.status(400).json({ message: error });
   }
 });
-
-// Get specific user
-router.get('/user', async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
-    res.json(user);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
 
 // Update specific user
 router.patch('/edit-user', async (req, res) => {

@@ -8,11 +8,11 @@ const logger = require('./middlewares/logger'); // Print logger on requests
 const session = require("express-session");
 const passport = require("passport");           // For user authentication
 const localStradegy = require("passport-local");// For user authentication
-const multer = require("multer");               // For handling image uploads
 
 require("dotenv/config");                       // Protect sensitive information
 require('./auth/auth');                         // For user authentication
-// const utils = require("./auth/utils");
+
+// Authentication middleware (for user's secure routes)
 const authenticate = require("./middlewares/authenticate");
 // DEFINE APP
 const app = express();

@@ -88,17 +88,6 @@ export function cli(args) {
 	})
   });
 
-//   program
-//   .command('logout')
-//   .action(function (command) {
-// 	fs.unlink('/tmp/user.json', function(err) {
-// 	  if(err) {
-// 		return console.log('Removing token failed:', err);
-// 	  }
-// 	  console.log('Logout successful. Token removed');
-// 	});
-//   });
-
   program
   .command('login')
   .option('--format <value>', 'Give format', 'json')
@@ -126,8 +115,11 @@ export function cli(args) {
   program
   .command('logout')
   .option('--format <value>', 'Give format', 'json')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .action(function(command) {
-	axios.get(`${apiUrl}/secure-routes/logout`, { }, { httpsAgent: agent })
+	axios.get(`${apiUrl}/secure-routes/logout`, {
+		headers: { "Authorization": `Bearer ${command.token}` }
+	}, { httpsAgent: agent })
 	.then(function(response){
 	  fs.unlink('/tmp/user.json', function(err) {
 		if(err) {
@@ -143,8 +135,11 @@ export function cli(args) {
 
   program
   .command('tokens')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .action(function (command) {
-    axios.get(`${apiUrl}/secure-routes/tokens`)
+    axios.get(`${apiUrl}/secure-routes/tokens`, {
+		headers: { "Authorization": `Bearer ${command.token}` }
+	}, { httpsAgent: agent })
     .then(function(response) {
       console.log(response.data);
     })
@@ -178,7 +173,7 @@ export function cli(args) {
 		if(err) {
 		  return console.log('Writing token failed:', err);
 	    }
-	    console.log('Login successful. Token saved');
+	    console.log('Sign up successful.');
 	  });
 	})
 	.catch(function (error) {
@@ -189,7 +184,7 @@ export function cli(args) {
   program
   .command('update-user')
   .option('--format <value>', 'Give format', 'json')
-  .requiredOption('--id <value>', 'User\'s id')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .option('--username <value>', 'User\'s username')
   .option('--password <value>', 'User\'s password')
   .option('--firstName <value>', 'User\'s firstName')
@@ -197,46 +192,57 @@ export function cli(args) {
   .option('--email <value>', 'User\'s email')
   .option('--plan <value>', 'User\'s plan (standard or premium)')
   .action(function(command) {
-	axios.patch(`${apiUrl}/users/${command.id}?format=${command.format}/`, {
+	axios.patch(`${apiUrl}/secure-routes/edit-user?format=${command.format}/`, {
 	  username: command.username,
 	  password: command.password,
 	  firstName: command.firstName,
 	  lastName: command.lastName,
 	  email: command.email,
-	  plan_in_use: command.plan
+	  plan_in_use: command.plan,
+	}, { headers: { "Authorization": `Bearer ${command.token}` }
 	}, { httpsAgent: agent })
 	.then(function (response) {
 	  console.log(response.data);
-	  console.log('User\'s update successful. Token saved');
+	  console.log('User\'s update successful.');
 	})
 	.catch(function (error) {
-	  console.log('User\'s update failed');
+	  console.log('User\'s update failed', error.response.data.message);
 	});
 })
 
   program
   .command('delete-user')
   .option('--format <value>', 'Give format', 'json')
-  .requiredOption('--id <value>', 'User\'s id')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .action(function(command) {
-	axios.delete(`${apiUrl}/users/${command.id}?format=${command.format}/`, {}, { httpsAgent: agent })
+	axios.delete(`${apiUrl}/secure-routes/delete-user?format=${command.format}/`, {
+	  headers: { "Authorization": `Bearer ${command.token}` }
+	}, { httpsAgent: agent })
 	.then(function(response) {
+	  fs.unlink('/tmp/user.json', function(err) {
+	    if(err) {
+		  return console.log('Removing user failed:', err);
+		}
 		console.log(response.data);
+	  });
 	})
 	.catch(function (error) {
-	  console.log('Sign up failed: ', error.response.data.message);
+	  console.log('Deleting user failed: ', error.response.data.message);
 	});
   })
 
   program
-  .command('profile')
+  .command('get-user')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .action(function(command) {
-	  axios.get(`${apiUrl}/secure-routes/profile`, { }, { httpsAgent: agent })
+	  axios.get(`${apiUrl}/secure-routes/user`, {
+	    headers: { "Authorization": `Bearer ${command.token}` }
+	  }, { httpsAgent: agent })
 	  .then(function(response){
-		  console.log(response.message);
+		  console.log(response.data);
 	  })
 	  .catch(function(error) {
-		console.log('Could not reach profile secure route\n', error.message);
+		console.log('Could not reach user\'s info\n', error.message);
 	  });
   })
 
