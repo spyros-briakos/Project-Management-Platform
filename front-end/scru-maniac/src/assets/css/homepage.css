@@ -1,0 +1,87 @@
+:root{
+    --green: rgb(72, 170, 124);
+    --blue_grey: rgb(61, 173, 155);
+    --def_back: rgb(231, 228, 216);
+}
+
+:root{
+    --green: rgb(72, 170, 124);
+    --blue_grey: rgb(61, 173, 155);
+    --def_back: rgb(231, 228, 216);
+    --page_beneath:  rgb(241, 227, 227);
+}
+
+head{
+    margin: 0;
+    padding: 0;
+    min-height: 180px;
+}
+
+html, body{
+    max-width: 100%;
+    /* margin: 0 180px 0 0; */
+    margin:0;
+    padding: 0;
+    background-color: var(--page_beneath);
+}
+
+.box{
+    position: static;
+    display: flex;
+    max-width: 100%;
+    padding: 8% 8% 4% 8%;
+}
+
+.text_box_flex{
+    position: static;
+    display: flex;
+    flex-flow: column wrap;
+    width: auto;
+    justify-content: center;
+    align-items: center;
+    /* break-after: always; */
+}
+
+.mytitle{
+    position: static;
+    display: flex;
+    font-size: 200%;
+    align-self: flex-start;
+    break-after: always;
+    margin-bottom: 3%;
+    /* border: 2px solid red; */
+    font-weight: bold;
+}
+
+.box .title, .box .subtitle{
+    color: black;
+}
+
+.title .left{
+    align-self: flex-start;
+}
+
+.subtitle{
+    position: static;
+    display: flex;
+    font-size: 160%;
+    align-content: flex-end;
+    justify-content: flex-end;
+    bottom: 0;
+    /* break-after: always; */
+    margin-bottom: 3%;
+    font-weight: bold;
+}
+
+.comment{
+    display: block;
+    font-size: 130%;
+    color: black;
+}
+
+.master_center{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    text-align:center;
+}
