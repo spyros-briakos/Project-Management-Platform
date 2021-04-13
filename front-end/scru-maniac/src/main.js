@@ -14,6 +14,7 @@ new Vue({
   vuetify,
   render: (h) => h(App),
 }).$mount("#app");
+<<<<<<< HEAD
 
 window.onscroll = function () {
   sticky_header();
@@ -34,3 +35,5 @@ function sticky_header() {
     holder.style.display = "none";
   }
 }
+=======
+>>>>>>> 9e23eaae4a2510c0a754aae98b929fb943051001

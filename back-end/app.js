@@ -3,16 +3,17 @@
 // IMPORT PACKAGED
 const express = require("express");             // Basic Package for API structure
 const mongoose = require("mongoose");           // MongoDB
-// const cors = require("cors");                   // ...
 const logger = require('./middlewares/logger'); // Print logger on requests
 // const bodyParser = require('body-parser');   // ...
+const session = require("express-session");
 const passport = require("passport");           // For user authentication
 const localStradegy = require("passport-local");// For user authentication
-const multer = require("multer");               // For handling image uploads
 
 require("dotenv/config");                       // Protect sensitive information
 require('./auth/auth');                         // For user authentication
 
+// Authentication middleware (for user's secure routes)
+const authenticate = require("./middlewares/authenticate");
 // DEFINE APP
 const app = express();
 
@@ -20,25 +21,33 @@ const app = express();
 // app.use(cors());
 // app.use(bodyParser.json());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));  // Instead of bodyParser
 app.use(logger);
-// Use the passport package (with next 2 lines)
+
+app.use(session({
+  secret: 'could_be_anything',
+  resave: false,
+  saveUninitialized: true
+}));
+
+// Use the passport package
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Import User model
-const User = require("./models/User");
+const { User } = require("./models/User");
 
 // ROUTES
 const userRoutes = require('./routes/users');
 const user_storyRoutes = require('./routes/user_stories');
 const projectRoutes = require('./routes/projects');
 app.use('/api-control/users', userRoutes);
-app.use('/api-control/user_stories', user_storyRoutes);
+app.use('/api-control/user-stories', user_storyRoutes);
 app.use('/api-control/projects', projectRoutes);
 
 const secureRoute = require('./routes/secure-routes');
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
-app.use('/user', passport.authenticate('jwt', { session: false }), secureRoute);
+app.use('/api-control/secure-routes', authenticate, secureRoute);
 
 // // DECLARE VARS
 // const options = {

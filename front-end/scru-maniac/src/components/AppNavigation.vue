@@ -8,9 +8,7 @@
       </router-link>
       <template v-for="(item, index) in items">
         <template v-if="index <= 1">
-          <v-btn :key="index" :to="item.url" plain
-            :style="{color: 'black'}"
-          > {{ item.title }} </v-btn>
+          <v-btn :key="index" :to="item.url" plain> {{ item.title }} </v-btn>
         </template>
         <template v-else>
           <v-btn :key="index" :to="item.url" fixed right color="#FF914D">

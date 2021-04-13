@@ -3,11 +3,12 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const multer = require("multer");
+const utils = require("../auth/utils");
 
 // Import User model
-const User = require("../models/User");
+const { User } = require("../models/User");
 
 
 // Handling of image upload
@@ -38,65 +39,40 @@ router.get("/", async (req, res) => {
 
 // Sign up user
 router.post('/signup', [upload.single('image'), passport.authenticate('signup', { session: false })],
-  async (req, res, next) => {
+  async (req, res) => {
+    // Create user's authentication token (to log in user)
+    const jwt = utils.issueJWT(req.user);
+
     res.json({
       message: 'Signup successful',
-      user: req.user
+      user: req.user,
+      token: jwt.token,
+      expiresIn: jwt.expires
     });
 });
 
-// Login user
+// Log in user
 router.post('/login', async (req, res, next) => {
   passport.authenticate('login', async (err, user, info) => {
     try {
       if (err || !user) {
-        const error = new Error('An error occurred.');
+        const error = new Error(info.message);
         return next(error);
       }
 
-      req.login(user, { session: false }, async (error) => {
-        if (error) return next(error);
+      // Create user's authentication token
+      const tokenObject = utils.issueJWT(user);
 
-          const body = { _id: user._id, email: user.email };
-          const token = jwt.sign({ user: body }, 'TOP_SECRET');
-
-          return res.json({ token });
+      return res.json({
+        message: info.message,
+        user: user,
+        token: tokenObject
       });
     } catch (error) {
       return next(error);
     }
   })(req, res, next);
 });
-
-// Get specific user
-router.get('/:userId', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.userId);
-    res.json(user);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-// Delete specific user
-router.delete('/:userId', async (req, res) => {
-  try {
-    const removedUser = await User.remove({ _id: req.params.userId });    // User.remove is deprecated!!!!!!!
-    res.json(removedUser);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-// Update specific user
-router.patch('/:userId', async (req, res) => {
-  try {
-    const updatedUser = await User.updateOne({ _id: req.params.userId }, { $set: req.body }, { runValidators: true });
-    res.json(updatedUser);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
 
 // Export router
 module.exports = router;
