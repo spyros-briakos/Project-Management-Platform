@@ -35,7 +35,9 @@ npm install
 npm start
 
 ### Frontend Installation
-```bash
+```
+quasar 
+vuetify 
 
 ```
 
@@ -50,7 +52,7 @@ npm start
 ```
 
 ### CLI Installation and Run
-```bash
+```
 npm install -g
 npm link
 control-center
