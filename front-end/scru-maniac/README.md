@@ -4,7 +4,11 @@
 ```
 npm install bootstrap
 vue add vuetify
+
+npm install -g @quasar/cli
+vue add quasar
 ```
+
 
 ## Project setup
 ```
