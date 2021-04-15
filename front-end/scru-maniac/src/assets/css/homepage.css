@@ -47,7 +47,6 @@ html, body{
     display: flex;
     font-size: 200%;
     align-self: flex-start;
-    break-after: always;
     margin-bottom: 3%;
     /* border: 2px solid red; */
     font-weight: bold;
