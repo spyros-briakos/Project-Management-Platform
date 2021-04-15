@@ -33,6 +33,7 @@ cd Project-Management-Platform
 ```bash
 npm install
 npm start
+```
 
 ### Frontend Installation
 ```
