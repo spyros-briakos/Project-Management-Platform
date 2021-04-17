@@ -1,6 +1,7 @@
 ## Wireframes 
 
 ### Αρχική Σελίδα 
+
 #### 1 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.1.png)
 #### 2 
@@ -14,12 +15,23 @@
 #### 6 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.6.png)
 #### How it works 
-![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/How it works.png)
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/How_it_works.png)
 
 ### Προφίλ
-![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Σύνδεση.png)
+
+#### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Settings.png)
+#### 2
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Projects.png)
+#### 3
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Upgrade.png)
+#### 4
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Logout.png)
+
 
 ### Project 
+
+#### 1
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Σύνδεση.png)
 
 ### Σύνδεση-Εγγραφή
