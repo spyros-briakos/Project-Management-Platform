@@ -1,5 +1,0 @@
-# Front-End
-
-## Requirements
-
-## Implementation
