@@ -9,7 +9,7 @@
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.5.png)
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.6.png)
 ### Πως δουλεύει
-Η σκοπός της σελίδας "Πως δουλεύει" είναι να εξηγήσει αναλυτικά πως μπορούν μια ομάδα να εκμεταλλευτεί τα Scrum εργαλεία της πλατφόρμας, ούτως ώστε να βελτιωθούν οι διεργασίες κάθε Sprint. 
+Η σκοπός της σελίδας "Πως δουλεύει" είναι να εξηγήσει αναλυτικά (σε μορφή tutorial) πως μπορεί μια ομάδα να εκμεταλλευτεί τα Scrum εργαλεία της πλατφόρμας, ούτως ώστε να βελτιωθούν οι διεργασίες κάθε Sprint. Προφανώς, δεν έχει αποτυπωθεί όλη η πληροφορία που θα περίεχεται στην τελική έκδοση, όπου θα υπάρχουν αναλυτικές οδηγίες.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/How_it_works.png)
 
 ## Σύνδεση-Εγγραφή
