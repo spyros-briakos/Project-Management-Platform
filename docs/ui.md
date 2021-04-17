@@ -45,9 +45,10 @@
 Στον Πίνακα Scrum παρουσιάζεται το Backlog στο οποίο έχει προσθέσει ο Product Owner τα User Stories, αλλά και τα Sprints, όπου σε καθένα ξεχωριστά φαίνεται η κατανομή των Tasks. Ο χρήστης έχει την δυνατότητα στο δεξιά πάνω μέρος να αναζητήσει ένα συγκεκριμένο Task, μέσω μιας μπάρας αναζήτησης. Ο χρήστης επιλέγει να τοποθετήσει τον κέρσορα στο User Story "Εισαγωγή". 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Selection.png)
 #### Ποια Tasks εμπερίεχονται σε αυτό το User Story;
-Ο χρήστης πληροφορείται ποια Tasks εμπεριέχονται στο User Story "Εισαγωγή". 
+Ο χρήστης πληροφορείται ποια Tasks εμπεριέχονται στο User Story "Εισαγωγή", με το πάτημα του εικονιδίου του sublist. 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_SubTasks.png)
 #### Επεξεργασία User Story 
+Ο χρήστης έχει την δυνατότητα να δει περισσότερες πληροφορίες για ένα User Story, με το πάτημα του εικονιδίου της επεξεργασίας. 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Edit.1.png)
 #### Προβολή λεπτομερειών σχετικά με το User Story
 Έχοντας επιλέξει ο χρήστης να επεξεργαστεί το User Story, παρατηρεί πληροφορίες που έχει ορίσει για αυτό ο Product Owner, όπως μια περιγραφή, πότε δημιουργήθηκε αλλά και αν έχει οριστεί ως Epic ή Issue.
