@@ -1,7 +1,7 @@
 # Wireframes 
 
 ## Αρχική Σελίδα 
-
+Απεικονίζεται η διεπαφή, που έχει ένας καινούριος χρήστης, με την αρχική σελίδα, κάνοντας scroll down. Παρουσίαζονται συνοπτικά οι δυνατότητες της πλατφόρμας ScruManiac, ενώ ταυτόχρονα δίνεται πληροφορία σχετικά με τις τιμές των δύο διαθέσιμων πακέτων. 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.1.png)
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.2.png)
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.3.png)
@@ -9,6 +9,7 @@
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.5.png)
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.6.png)
 ### Πως δουλεύει
+Η σκοπός της σελίδας Πως δουλεύει είναι να εξηγήσει αναλυτικά πως μπορούν μια ομάδα να εκμεταλλευτεί τα Scrum εργαλεία της πλατφόρμας, ούτως ώστε να βελτιωθούν οι διεργασίες κάθε Sprint. 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/How_it_works.png)
 
 ## Σύνδεση-Εγγραφή
