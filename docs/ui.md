@@ -13,7 +13,7 @@
 
 ## Προφίλ
 
-### Ρυθμίσεις Προφίλ 
+### Ρυθμίσεις Λογαριασμού 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Settings.png)
 ### Projects Χρήστη
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Projects.png)
