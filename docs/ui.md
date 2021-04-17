@@ -22,10 +22,13 @@
 ## Προφίλ
 
 ### Ρυθμίσεις Λογαριασμού 
+Εδώ δίνεται η δυνατότητα στον συνδεδεμένο χρήστη να τροποποιήσει προσωπικά στοιχεία του λογαριασμού του.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Settings.png)
 ### Projects Χρήστη
+Εμφάνιση όλων των Projects του χρήστη, συνοδευόμενα από τα μέλη του εκάστοτε Project. Ο χρήστης αν το επιθυμεί, επιλέγει ένα Project για να δει αναλυτικά πληροφορίες γι' αυτό.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Projects.png)
 ### Αναβάθμιση λογαριασμού 
+Με την εγγραφή του ένας χρήστης κατοχυρώνει το Δωρέαν πακέτο και αν το επιθυμεί, μπορεί να αναβαθμίσει τον λογαριασμό του με σκοπό να έχει περισσότερα προνόμια.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Upgrade.png)
 ### Αποσύνδεση λογαριασμού
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Profile/Profile.Logout.png)
@@ -34,22 +37,27 @@
 ## Project 
 
 ### Επιλογή ενός Project
+Επιλέγοντας Projects από την κεντρική μπάρα, ο χρήστης επιθυμεί να επιθεωρήσει ένα συγκεκριμένο Project, ενώ παράλληλα παρατηρεί πως μπορεί να δημιουργήσει ένα καινούριο Project ή να δει συγκεντρωμένα όλα του τα Projects. Ταυτόχρονα, μπορεί οποιαδήποτε στιγμή να μεταβεί στο προφίλ ή να αποσυνδεθεί του πατώντας το όνομα του στο δεξιά πάνω μέρος της σελίδας.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Projects_Selection.png)
 
 ### Πίνακας Scrum
 #### Επιλογή User Story
+Στον Πίνακα Scrum παρουσιάζεται το Backlog στο οποίο έχει προσθέσει ο Product Owner τα User Stories, αλλά και τα Sprints όπου σε καθένα ξεχωριστά φαίνεται η κατανομή των Tasks. Ο χρήστης έχει την δυνατότητα στο δεξιά πάνω μέρος να αναζητήσει ένα συγκεκριμένο Task, μέσω μιας μπάρας αναζήτησης. Ο χρήστης επιλέγει να σύρει τον κέρσορα στο User Story "Εισαγωγή". 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Selection.png)
 #### Ποια Tasks εμπερίεχονται σε αυτό το User Story;
+Ο χρήστης πληροφορείται ποια Tasks εμπεριέχονται στο User Story "Εισαγωγή". 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_SubTasks.png)
 #### Επεξεργασία User Story 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Edit.1.png)
 #### Προβολή λεπτομερειών σχετικά με το User Story
+Έχοντας επιλέξει ο χρήστης να επεξεργαστεί το User Story, παρατηρεί πληροφορίες που έχει ορίσει για αυτό ο Product Owner, όπως μια περιγραφή, πότε δημιουργήθηκε αλλά και αν έχει οριστεί ως Epic ή Issue.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Edit.2.png)
 #### Επιλογή Task
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Selection.png)
 #### Επεξεργασία Task
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Edit.1.png)
 #### Προβολή λεπτομερειών σχετικά με το Task
+Αντίστοιχα, ο χρήστης έχοντας επιλέξει να επεξεργαστεί το Task "Ιεράρχηση Αναγκών", λαμβάνει πληροφορίες για το εν λόγω Task, όπως ποια μέλη συνεισφέρουν σ' αυτό, εκτιμώμενη διάρκεια, σε ποιο User Story ανήκει, αλλά και σε ποια από τις τρεις κατηγορίες (Εκκρεμεί, Σε εξέλιξη, Ολοκληρώθηκε) ανήκει.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Edit.2.png)
 
 ### Roadmap
