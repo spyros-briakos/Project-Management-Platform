@@ -11,6 +11,13 @@
 ### Πως δουλεύει
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/How_it_works.png)
 
+## Σύνδεση-Εγγραφή
+
+### Σύνδεση Χρήστη
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/SignInUp/Σύνδεση.png)
+### Εγγραφή Χρήστη
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/SignInUp/Εγγραφή.png)
+
 ## Προφίλ
 
 ### Ρυθμίσεις Λογαριασμού 
@@ -28,9 +35,4 @@
 ### 1
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Σύνδεση.png)
 
-## Σύνδεση-Εγγραφή
 
-### Σύνδεση Χρήστη
-![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/SignInUp/Σύνδεση.png)
-### Εγγραφή Χρήστη
-![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/SignInUp/Εγγραφή.png)
