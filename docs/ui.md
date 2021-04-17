@@ -8,7 +8,7 @@
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.4.png)
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.5.png)
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.6.png)
-### How it works 
+### Πως δουλεύει
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/How_it_works.png)
 
 ## Προφίλ
