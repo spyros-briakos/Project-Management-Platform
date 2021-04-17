@@ -32,36 +32,42 @@
 
 ## Project 
 
-### 1
+### Επιλογή ενός Project
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Projects_Selection.png)
-### 1
+
+### Πίνακας Scrum
+#### Επιλογή User Story
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Selection.png)
-### 1
+#### Ποια Tasks εμπερίεχονται σε αυτό το User Story;
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_SubTasks.png)
-### 1
+#### Επεξεργασία User Story 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Edit.1.png)
-### 1
+#### Προβολή λεπτομερειών σχετικά με το User Story
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Edit.2.png)
-### 1
+#### Επιλογή Task
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Selection.png)
-### 1
+#### Επεξεργασία Task
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Edit.1.png)
-### 1
+#### Προβολή λεπτομερειών σχετικά με το Task
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Edit.2.png)
-### 1
+
+### Roadmap
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Χάρτης_Πορείας.png)
-### 1
+
+### Πίνακας Kanban 
+#### Επιλογή ενός Task που εκκρεμεί
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/KanBan_Πίνακας.1.png)
-### 1
+#### Προβολή λεπτομερειών σχετικά με το Task
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/KanBan_Πίνακας.2.png)
-### 1
+
+### Διάγραμμα BurnDown
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Διάγραμμα_BurnDown.png)
-### 1
+
+### Αναφορές Μελών
+#### Επιλογή μιας Αναφοράς 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Αναφορές_Μελών.1.png)
-### 1
-![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Αναφορές_Μελών.1.png)
-### 1
+#### Προβολή λεπτομερειών σχετικά με την αναφορά
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Αναφορές_Μελών.2.png)
+
+### Ιστορικό
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Ιστορικό.png)
-
-
-
