@@ -13,8 +13,8 @@
 Development of an online collaborative management platform for software projects. The platform will allow teams to implement multiple software projects based on Scrum methodology, supporting the basic concepts of Backlogs, Sprints, Epics and Issues as well as and related reports. The platform will be provided to users with the model "Software as a Service" (SaaS), where users will register and select the plan, in which they will join. User will be able to participates in project teams and contribute to the project.
 
 ## Documentation Files
-* [Software Requirements Specification](./docs/SRS.md)
-* [Wireframes](./docs/UI.md)
+* [Software Requirements Specification](./docs/srs.md)
+* [Wireframes](./docs/ui.md)
 * [UML Diagrams](./docs/uml)
 
 ## System Requirements
