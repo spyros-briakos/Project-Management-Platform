@@ -9,7 +9,7 @@
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.5.png)
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/Αρχική.6.png)
 ### Πως δουλεύει
-Η σκοπός της σελίδας Πως δουλεύει είναι να εξηγήσει αναλυτικά πως μπορούν μια ομάδα να εκμεταλλευτεί τα Scrum εργαλεία της πλατφόρμας, ούτως ώστε να βελτιωθούν οι διεργασίες κάθε Sprint. 
+Η σκοπός της σελίδας "Πως δουλεύει" είναι να εξηγήσει αναλυτικά πως μπορούν μια ομάδα να εκμεταλλευτεί τα Scrum εργαλεία της πλατφόρμας, ούτως ώστε να βελτιωθούν οι διεργασίες κάθε Sprint. 
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/HomePage/How_it_works.png)
 
 ## Σύνδεση-Εγγραφή
@@ -61,22 +61,28 @@
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Edit.2.png)
 
 ### Roadmap
+Με το συγκεκριμένο εργαλείο κάθε μέλος της ομάδας μπορεί να παρατηρεί ανά πάσα στιγμή την εξάρτηση μεταξύ των Tasks (για παράδειγμα αν κάποιο προυποθέτει να έχει ολοκληρωθεί ένα άλλο) που πραγματοποιούνται μέσα σε ένα συγκεκριμένο Sprint.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Χάρτης_Πορείας.png)
 
 ### Πίνακας Kanban 
-#### Επιλογή ενός Task που εκκρεμεί
+#### Επιλογή ενός Task
+Με τον Πίνακα Kanban όλη η ομάδα, έχει ξεκάθαρη εικόνα σε τι κατάσταση βρίσκεται κάθε Task. Ο χρήστης στο παράδειγμα επιλέγει να ενημερωθεί περαιτέρω για ένα Task που εκκρεμεί.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/KanBan_Πίνακας.1.png)
 #### Προβολή λεπτομερειών σχετικά με το Task
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/KanBan_Πίνακας.2.png)
 
 ### Διάγραμμα BurnDown
+Μέσω του συγκεκριμένου διαγράμματος, μπορούν να γίνουν προβλέψεις σχετικά με τον χρόνο περάτωσης ενός συγκεκριμένου Sprint. Αυτές οι προβλέψεις μπορούν να γίνουν έχοντας ως γνώμονα μια αρκετά παραγωγική ημέρα ή αντίθετα μια ημέρα στην οποία η δουλειά αυξήθηκε και η ομάδα βρέθηκε πίσω από το πρόγραμμα της. Έτσι, λοιπόν, η ομάδα μπορεί να επιβεβαιώνει, καθημερινά, ρεαλιστικά στο τέλος μιας ημέρας αν ο ρυθμός της ομάδας είναι ανάλογος ή όχι σε σχέση με τους στόχους που είχε ή ίδια θέσει στην αρχή του Sprint!
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Διάγραμμα_BurnDown.png)
 
 ### Αναφορές Μελών
 #### Επιλογή μιας Αναφοράς 
+Σε αυτό το εργαλείο δίνεται η δυνατότητα ένα κάθε μέλος της ομάδας να δημιουργήσει μια καινούρια αναφορά (για παράδειγμα μια ενημέρωση για κάποιο πιθανό πρόβλημα), αλλά ταυτόχρονα να αναζητήσει, μέσω της μπάρας αναζήτησης, μια συγκεκριμένη αναφορά, την οποία αν επιθυμεί επιλέγει για να δει περαιτέρω πληροφορίες.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Αναφορές_Μελών.1.png)
 #### Προβολή λεπτομερειών σχετικά με την αναφορά
+Έχοντας επιλέξει να δει λεπτομέρειες σχετικά με μια αναφορά, ενηρώνεται ποιο Sprint αλλά και ποιο Task αφορά η συγκεκριμένη αναφορά και παράλληλα διαβάζει σχόλια που πιθανώς υπάρχουν από μέλη της ομάδας. Σε κάθε περίπτωση το κάθε μέλος επιτρέπεται να σχολιάσει, ούτως ώστε, μέσω της επικοινωνίας που παρέχει η πλατφόρμα ScruManiac, να ξεπεραστεί οποιοδήποτε πρόβλημα.
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Αναφορές_Μελών.2.png)
 
 ### Ιστορικό
+Αυτό το εργαλείο παρέχει την δυνατότητα στην ομάδα να παρακολουθεί πληροφορίες κάθε Sprint. Πιο συγκεκριμένα ενημερώνεται για την ημερομηνία έναρξης και ολοκλήρωσης (αν έχει οριστεί ήδη) του Sprint, αλλά και μια περιγραφή, η οποία περιέχει ό,τι θεωρεί αξιοσημείωτο, λάθη,δυσκολίες ή έξυπνες ιδέες, με σκοπό την εξέλιξη της ομάδας!
 ![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Ιστορικό.png)
