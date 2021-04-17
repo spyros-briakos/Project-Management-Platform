@@ -33,6 +33,35 @@
 ## Project 
 
 ### 1
-![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Σύνδεση.png)
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Projects_Selection.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Selection.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_SubTasks.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Edit.1.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.User_Story_Edit.2.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Selection.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Edit.1.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Scrum_Πίνακας.Task_Edit.2.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Χάρτης_Πορείας.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/KanBan_Πίνακας.1.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/KanBan_Πίνακας.2.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Διάγραμμα_BurnDown.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Αναφορές_Μελών.1.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Αναφορές_Μελών.1.png)
+### 1
+![alt text](https://github.com/spympr/Project-Management-Platform/blob/main/docs/wireframes/Project/Ιστορικό.png)
+
 
 
