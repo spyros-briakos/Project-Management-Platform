@@ -1,3 +1,5 @@
+package-lock.json
+package.json
 docker-compose.yml
 Dockerfile
 .git/
