@@ -39,17 +39,16 @@ npm start
 ```
 quasar 
 vuetify 
-
 ```
 
 ### Test project
-```bash
-
+```
+bash
 ```
 
 ### Run Backend & Frontend
-```bash
-
+```
+bash
 ```
 
 ### CLI Installation and Run
@@ -62,6 +61,3 @@ control-center
 ## External links
 * [Install docker-compose](https://docs.docker.com/compose/install/)
 * [Using Docker Compose for NodeJS Development](https://www.cloudbees.com/blog/using-docker-compose-for-nodejs-development/)
-* []()
-* []()
-
