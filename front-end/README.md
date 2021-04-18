@@ -1,14 +1,12 @@
-# scru-maniac
+# front-end
 
 ## Install libraries
 ```
 npm install bootstrap
-vue add vuetify
-
 npm install -g @quasar/cli
 vue add quasar
+vue add vuetify
 ```
-
 
 ## Project setup
 ```
