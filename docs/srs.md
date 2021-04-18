@@ -61,7 +61,7 @@ Prepared by
 #### Πίνακας Scrum
   * [Προβολή και επεξεργασία του συνολικού Product Backlog](#προβολή-και-επεξεργασία-του-συνολικού-product-backlog)
   * [Δημιουργία User Story στο Backlog(μόνο για τον Product Owner)](#δημιουργία-user-story-στο-backlog)
-    * Διαχωρισμός User Story σε Issue και Epic
+    * Προεραιτικός διαχωρισμός User Story σε Issue και Epic
     * Ορισμός Ονόματος, Περιγραφής
   * [Δημιουργία Tasks](#δημιουργία-tasks)
     * Δυνατότητα δημιουργίας Tasks μέσα σε σε User Story
