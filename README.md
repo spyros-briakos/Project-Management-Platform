@@ -43,12 +43,12 @@ vuetify
 
 ### Test project
 ```
-bash
+
 ```
 
 ### Run Backend & Frontend
 ```
-bash
+
 ```
 
 ### CLI Installation and Run
