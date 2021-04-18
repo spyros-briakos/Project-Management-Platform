@@ -5,10 +5,10 @@ Version 1.0 approved
 Prepared by
 * [Dionysios Taxiarchis Balaskas](https://github.com/dbalaskas) - `1115201700094`
 * [Spyridon Briakos](https://github.com/spympr) - `1115201700101`
-* [Andreas Giannoutsos](https://github.com/AGiannoutsos) - `1115201700021`
 * [Meropi Fanou](https://github.com/meryfanou) - `1115201700176`
 * [Alexandra Apostolopoulou](https://github.com/alexaapo) - `1115201700005`
-* [Michail Vourtzoumis](https://github.com/MVour) - `1115201700018` 
+* [Michail Vourtzoumis](https://github.com/MVour) - `1115201700018`
+* [Andreas Giannoutsos](https://github.com/AGiannoutsos) - `1115201700021` 
 
 
 ## Στόχος του συστήματος 
