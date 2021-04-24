@@ -107,25 +107,25 @@ router.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
-router.delete('/delete-user', async (req, res) => {
-  try {
-    // Delete user from db
-    const removedUser = await User.deleteOne({ id: req.params.id });
+// router.delete('/delete-user', async (req, res) => {
+//   try {
+//     // Delete user from db
+//     const removedUser = await User.deleteOne({ id: req.params.id });
 
-    // // Mark user's auth token as invalid
-    // const token = new InvalidToken({ value: utils.extractToken(req) });
-    // await token.save();
-    // Log out user
-    req.logout();
+//     // // Mark user's auth token as invalid
+//     // const token = new InvalidToken({ value: utils.extractToken(req) });
+//     // await token.save();
+//     // Log out user
+//     req.logout();
 
-    res.json({
-      result: removedUser,
-      message: 'Deleted user successfully'
-    });
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
+//     res.json({
+//       result: removedUser,
+//       message: 'Deleted user successfully'
+//     });
+//   } catch (error) {
+//     res.status(400).json({ message: error });
+//   }
+// })
 
 // Export router
 module.exports = router;

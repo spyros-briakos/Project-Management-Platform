@@ -211,47 +211,47 @@ export function cli(args) {
 	});
 })
 
-program
-.command('delete-user')
-.option('--format <value>', 'Give format', 'json')
-.requiredOption('--id <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-.action(function(command) {
-  axios.delete(`${apiUrl}/users/delete-user?format=${command.format}/`, {
-	  id: command.id
-  }, { httpsAgent: agent })
-  .then(function(response) {
-	fs.unlink('/tmp/user.json', function(err) {
-	  if(err) {
-		return console.log('Removing user failed:', err);
-	  }
-	  console.log(response.data);
-	});
-  })
-  .catch(function (error) {
-	console.log('Deleting user failed: ', error.response.data.message);
-  });
-})
-
-//   program
-//   .command('delete-user')
-//   .option('--format <value>', 'Give format', 'json')
-//   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-//   .action(function(command) {
-// 	axios.delete(`${apiUrl}/secure-routes/delete-user?format=${command.format}/`, {
-// 	  headers: { "Authorization": `Bearer ${command.token}` }
-// 	}, { httpsAgent: agent })
-// 	.then(function(response) {
-// 	  fs.unlink('/tmp/user.json', function(err) {
-// 	    if(err) {
-// 		  return console.log('Removing user failed:', err);
-// 		}
-// 		console.log(response.data);
-// 	  });
-// 	})
-// 	.catch(function (error) {
-// 	  console.log('Deleting user failed: ', error.response.data.message);
+// program
+// .command('delete-user')
+// .option('--format <value>', 'Give format', 'json')
+// .requiredOption('--id <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+// .action(function(command) {
+//   axios.delete(`${apiUrl}/users/delete-user?format=${command.format}/`, {
+// 	  id: command.id
+//   }, { httpsAgent: agent })
+//   .then(function(response) {
+// 	fs.unlink('/tmp/user.json', function(err) {
+// 	  if(err) {
+// 		return console.log('Removing user failed:', err);
+// 	  }
+// 	  console.log(response.data);
 // 	});
 //   })
+//   .catch(function (error) {
+// 	console.log('Deleting user failed: ', error.response.data.message);
+//   });
+// })
+
+  program
+  .command('delete-user')
+  .option('--format <value>', 'Give format', 'json')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action(function(command) {
+	axios.delete(`${apiUrl}/secure-routes/delete-user?format=${command.format}/`, {
+	  headers: { "Authorization": `Bearer ${command.token}` }
+	}, { httpsAgent: agent })
+	.then(function(response) {
+	  fs.unlink('/tmp/user.json', function(err) {
+	    if(err) {
+		  return console.log('Removing user failed:', err);
+		}
+		console.log(response.data);
+	  });
+	})
+	.catch(function (error) {
+	  console.log('Deleting user failed: ', error.response.data.message);
+	});
+  })
 
   program
   .command('get-user')
