@@ -2,6 +2,7 @@ const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
+const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
 const { User } = require('../models/User');
@@ -21,6 +22,8 @@ passport.use('signup', new localStrategy(
         user.image.data = fs.readFileSync(path.join(__dirname + '../uploads' + req.file.filename)),
         user.image.contentType = 'image/png'
       }
+
+      user.verificationCode = jwt.sign({ email: user.email }, 'EMAIL_SECRET');
 
       const savedUser = await user.save();
 
@@ -49,6 +52,10 @@ passport.use('login', new localStrategy(
   
       if (!validate) {
         return done(null, false, { message: 'Wrong Password' });
+      }
+
+      if (user.status != 'Active') {
+        return done(null, false, { message: 'Pending Account. Please verify your email!' });
       }
 
       return done(null, user, { message: 'Logged in Successfully' });

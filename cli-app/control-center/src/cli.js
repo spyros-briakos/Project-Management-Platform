@@ -173,7 +173,8 @@ export function cli(args) {
 		if(err) {
 		  return console.log('Writing token failed:', err);
 	    }
-	    console.log('Sign up successful.');
+	    console.log(response.data.message);
+	    // console.log('Sign up successful.');
 	  });
 	})
 	.catch(function (error) {
@@ -209,6 +210,27 @@ export function cli(args) {
 	  console.log('User\'s update failed', error.response.data.message);
 	});
 })
+
+// program
+// .command('delete-user')
+// .option('--format <value>', 'Give format', 'json')
+// .requiredOption('--id <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+// .action(function(command) {
+//   axios.delete(`${apiUrl}/users/delete-user?format=${command.format}/`, {
+// 	  id: command.id
+//   }, { httpsAgent: agent })
+//   .then(function(response) {
+// 	fs.unlink('/tmp/user.json', function(err) {
+// 	  if(err) {
+// 		return console.log('Removing user failed:', err);
+// 	  }
+// 	  console.log(response.data);
+// 	});
+//   })
+//   .catch(function (error) {
+// 	console.log('Deleting user failed: ', error.response.data.message);
+//   });
+// })
 
   program
   .command('delete-user')
