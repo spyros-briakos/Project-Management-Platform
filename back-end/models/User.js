@@ -32,6 +32,15 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  status: {
+    type: String,
+    enum: ['Pending', 'Active'],
+    default: 'Pending'
+  },
+  verificationCode: {
+    type: String,
+    unique: true
+  },
   image: {
     data: Buffer,
     contentType: String,
