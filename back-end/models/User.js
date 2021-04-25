@@ -65,8 +65,8 @@ const UserSchema = new mongoose.Schema({
 
 // Hash the user's password before saving the user in the db
 UserSchema.pre('save', async function(next) {
-    const user = this;
-    const hash = await bcrypt.hash(this.password, 10);
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(this.password, salt);
 
     this.password = hash;
     next();
@@ -75,8 +75,7 @@ UserSchema.pre('save', async function(next) {
 
 // Hash given password to check if it is valid
 UserSchema.methods.isValidPassword = async function(password) {
-  const user = this;
-  const compare = await bcrypt.compare(password, user.password);
+  const compare = await bcrypt.compare(password, this.password);
 
   return compare;
 }

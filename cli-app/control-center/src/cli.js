@@ -125,11 +125,11 @@ export function cli(args) {
 		if(err) {
 		  return console.log('Removing user failed:', err);
 		}
-	    console.log(response.message);
+	    console.log(response.data.message);
 	  });
 	})
 	.catch(function(error) {
-	  console.log('Couldn\'t log out',error.message);
+	  console.log('Couldn\'t log out',error);
 	});
   })
 
@@ -232,7 +232,7 @@ export function cli(args) {
 //   });
 // })
 
-  program
+program
   .command('delete-user')
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')

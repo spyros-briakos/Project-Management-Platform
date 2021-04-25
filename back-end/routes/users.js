@@ -63,8 +63,7 @@ router.get('/verify/:verificationCode', async (req, res, next) => {
       }
 
       // Update user's status
-      user.status = "Active";
-      const savedUser = await user.save();
+      const updatedUser = await User.updateOne({ _id: user._id }, { $set: { status: 'Active' } }, { runValidators: true });
 
       // Create user's authentication token (to log in user)
       const jwt = utils.issueJWT(user);
@@ -73,7 +72,7 @@ router.get('/verify/:verificationCode', async (req, res, next) => {
 
       res.json({
         message: 'Your Account was created successfully! You are now logged in.'
-        // user: user,
+        // user: updatedUser,
         // token: jwt.token,
         // expiresIn: jwt.expires
       });
