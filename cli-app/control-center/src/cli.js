@@ -15,62 +15,79 @@ export function cli(args) {
 
   program
   .command('users')
-  .action(function (command) {
+  .action(() => {
     axios.get(`${apiUrl}/users/`)
-    .then(function(response) {
+    .then((response) => {
       console.log(response.data);
     })
-    .catch(function(error) {
-      console.log(error);
+    .catch(() => {
+      // console.log(error);
+			console.log('An error occurred');
     })
   });
 
   program
   .command('projects')
-  .action(function (command) {
+  .action(() => {
     axios.get(`${apiUrl}/projects/`)
-	.then(function(response) {
-	  console.log(response.data);
-	})
-	.catch(function(error) {
-  	  console.log(error);
-	})
+		.then((response) => {
+			console.log(response.data);
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
   });
 
   program
   .command('sprints')
-  .action(function (command) {
+  .action(() => {
     axios.get(`${apiUrl}/sprints/`)
-	.then(function(response) {
-	  console.log(response.data);
-	})
-	.catch(function(error) {
-	  console.log(error);
-	})
+		.then((response) => {
+			console.log(response.data);
+		})
+		.catch(() => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
   });
 
   program
   .command('tasks')
   .action(function (command) {
-	axios.get(`${apiUrl}/tasks/`)
-	.then(function(response) {
-	  console.log(response.data);
-	})
-	.catch(function(error) {
-	  console.log(error);
-	})
+		axios.get(`${apiUrl}/tasks/`)
+		.then(function(response) {
+			console.log(response.data);
+		})
+		.catch(() => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
   });
 
   program
-  .command('user-stories')
-  .action(function (command) {
-	axios.get(`${apiUrl}/user_stories/`)
-	.then(function(response) {
-	  console.log(response.data);
-	})
-	.catch(function(error) {
-	  console.log(error);
-	})
+	.command('user-stories')
+	.action(function (command) {
+		axios.get(`${apiUrl}/user_stories/`)
+		.then(function(response) {
+			console.log(response.data);
+		})
+		.catch(() => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
   });
 
   program
