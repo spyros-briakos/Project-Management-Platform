@@ -10,7 +10,6 @@ const agent = new https.Agent({
   rejectUnauthorized: false,
 });
 
-
 export function cli(args) {
 
   program
@@ -28,8 +27,106 @@ export function cli(args) {
 
   program
   .command('projects')
-  .action(() => {
-    axios.get(`${apiUrl}/projects/`)
+  .action((command) => {
+		let token = ''
+		try {
+			const data = fs.readFileSync('/tmp/token.json', 'utf8')
+			token = JSON.parse(data).token
+		} catch (err) {
+			return console.log('Login required!')
+		}
+    axios.get(`${apiUrl}/projects/`, {
+			headers: { "Authorization": token }
+		})
+		.then((response) => {
+			console.log(response.data);
+			try {
+				const data = fs.readFileSync('/tmp/user.json', 'utf8')
+				data = JSON.parse(data)
+				data.projects = response.data
+				fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+					if(err) return console.log('Writing token failed', err);
+				});
+			} catch (err) {
+				return console.log('Error on saving data');
+			}
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
+  });
+
+	program
+  .command('create-project')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action((command) => {
+    axios.get(`${apiUrl}/projects/`, {
+			headers: { "Authorization": `Bearer ${command.token}` }
+		})
+		.then((response) => {
+			console.log(response.data);
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
+  });
+
+	program
+  .command('choose-project')
+  .requiredOption('--project -p <value>', 'User\'s project name')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action((command) => {
+    axios.get(`${apiUrl}/projects/`, {
+			headers: { "Authorization": `Bearer ${command.token}` },
+			project: command.project
+		})
+		.then((response) => {
+			console.log(response.data);
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
+  });
+
+	program
+  .command('delete-project')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action((command) => {
+    axios.get(`${apiUrl}/projects/`, {
+			headers: { "Authorization": `Bearer ${command.token}` }
+		})
+		.then((response) => {
+			console.log(response.data);
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
+  });
+
+	program
+  .command('finish-project')
+  .requiredOption('--project <value>', 'User\'s project name')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action((command) => {
+    axios.get(`${apiUrl}/projects/`, {
+			headers: { "Authorization": `Bearer ${command.token}` }
+		})
 		.then((response) => {
 			console.log(response.data);
 		})
@@ -44,8 +141,11 @@ export function cli(args) {
 
   program
   .command('sprints')
-  .action(() => {
-    axios.get(`${apiUrl}/sprints/`)
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action((command) => {
+    axios.get(`${apiUrl}/sprints/`, {
+			headers: { "Authorization": `Bearer ${command.token}` }
+		})
 		.then((response) => {
 			console.log(response.data);
 		})
@@ -60,8 +160,11 @@ export function cli(args) {
 
   program
   .command('tasks')
-  .action(function (command) {
-		axios.get(`${apiUrl}/tasks/`)
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action((command) => {
+		axios.get(`${apiUrl}/tasks/`, {
+			headers: { "Authorization": `Bearer ${command.token}` }
+		})
 		.then(function(response) {
 			console.log(response.data);
 		})
@@ -76,8 +179,11 @@ export function cli(args) {
 
   program
 	.command('user-stories')
-	.action(function (command) {
-		axios.get(`${apiUrl}/user_stories/`)
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+	.action((command) => {
+		axios.get(`${apiUrl}/user_stories/`, {
+			headers: { "Authorization": `Bearer ${command.token}` }
+		})
 		.then(function(response) {
 			console.log(response.data);
 		})
@@ -111,22 +217,23 @@ export function cli(args) {
   .requiredOption('--username <value>', 'User\'s username')
   .requiredOption('--password <value>', 'User\'s password')
   .action(function (command) {
-	axios.post(`${apiUrl}/users/login?format=${command.format}`, {
-	  username: command.username,
-	  password: command.password
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  console.log(response.data);
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data), function(err) {
-		if(err) {
-		  return console.log('Writing token failed:', err);
-		}
-		console.log(response.data.message);
-	  });
-	})
-	.catch(function (error) {
-	  console.log('Login failed: ', error.message);
-	});
+		axios.post(`${apiUrl}/users/login?format=${command.format}`, {
+			username: command.username,
+			password: command.password
+		}, { httpsAgent: agent })
+		.then(function (response) {
+			console.log(response.data);
+			fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+				if(err) return console.log('Writing token failed:', err);
+			});
+			fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
+				if(err) return console.log('Writing token failed:', err);
+			});
+			console.log(response.data.message);
+		})
+		.catch(function (error) {
+			console.log('Login failed: ', error.message);
+		});
   });
 
   program
