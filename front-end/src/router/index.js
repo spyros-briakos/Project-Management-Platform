@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeBody from "../components/Home.vue";
+import Home from "../components/Home.vue";
 import Prices from "../components/pricing/Prices.vue";
 import How_it_works from "../components/How_it_works.vue";
 import SignIn from "../components/Sign/SignIn.vue";
@@ -13,33 +13,33 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: HomeBody,
+    component: Home 
   },
   {
     path: "/how_it_works",
-    name: "How it works",
-    component: How_it_works,
+    name: "How_it_works",
+    component: How_it_works
   },
   {
-    path: "/Prices",
+    path: "/prices",
     name: "Prices",
-    component: Prices,
+    component: Prices
   },
   {
     path: "/sign/in",
     name: "SignIn",
-    component: SignIn,
+    component: SignIn
   },
   {
     path: "/sign/up",
     name: "SignUp",
-    component: SignUp,
+    component: SignUp
   },
   {
     path: "/sign/forgot",
     name: "ForgotPassword",
-    component: ForgotPassword,
-  },
+    component: ForgotPassword
+  }
 ];
 
 const router = new VueRouter({
