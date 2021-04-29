@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../components/Home.vue";
 import Prices from "../components/pricing/Prices.vue";
-import How_it_works from "../components/How_it_works.vue";
+import HowItWorks from "../components/HowItWorks/howItWorks.vue";
 import SignIn from "../components/Sign/SignIn.vue";
 import SignUp from "../components/Sign/SignUp.vue";
 import ForgotPassword from "../components/Sign/ForgotPassword.vue";
@@ -17,8 +17,8 @@ const routes = [
   },
   {
     path: "/how_it_works",
-    name: "How_it_works",
-    component: How_it_works
+    name: "How_It_Works",
+    component: HowItWorks
   },
   {
     path: "/prices",
