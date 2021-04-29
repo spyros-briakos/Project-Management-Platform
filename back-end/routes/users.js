@@ -38,6 +38,16 @@ router.get("/", async (req, res) => {
   }
 })
 
+// Delete specific user
+router.delete('/:projectId', async (req, res) => {
+  try {
+    const removedProject = await User.remove({ _id: req.params.projectId });
+    res.json(removedProject);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
 // Sign up user
 router.post('/signup', [upload.single('image'), passport.authenticate('signup', { session: false })],
   async (req, res) => {
@@ -63,8 +73,7 @@ router.get('/verify/:verificationCode', async (req, res, next) => {
       }
 
       // Update user's status
-      user.status = "Active";
-      const savedUser = await user.save();
+      const updatedUser = await User.updateOne({ _id: user._id }, { $set: { status: 'Active' } }, { runValidators: true });
 
       // Create user's authentication token (to log in user)
       const jwt = utils.issueJWT(user);
@@ -89,8 +98,10 @@ router.post('/login', async (req, res, next) => {
   passport.authenticate('login', async (err, user, info) => {
     try {
       if (err || !user) {
-        const error = new Error(info.message);
-        return next(error);
+        res.statusCode = 500
+        return res.json({
+          message: info.message
+        });
       }
 
       // Create user's authentication token
