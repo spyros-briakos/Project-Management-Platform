@@ -377,21 +377,32 @@ program
 	});
   })
 
-  program
+program
   .command('get-user')
   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .action(function(command) {
-	  axios.get(`${apiUrl}/secure-routes/user`, {
-	    headers: { "Authorization": `Bearer ${command.token}` }
-	  }, { httpsAgent: agent })
-	  .then(function(response){
-		  console.log(response.data);
-	  })
-	  .catch(function(error) {
-		console.log('Could not reach user\'s info\n', error.message);
-	  });
+    axios.get(`${apiUrl}/secure-routes/user`, {
+      headers: { "Authorization": `Bearer ${command.token}` }
+    }, { httpsAgent: agent })
+    .then(function(response){
+	  console.log(response.data);
+    })
+    .catch(function(error) {
+	  console.log('Could not reach user\'s info\n', error.message);
+    });
   })
 
+program
+  .command('google-url')
+  .action(function(command) {
+	axios.get(`${apiUrl}/users/google-url`, {}, { httpsAgent: agent })
+	.then(function(response){
+	  console.log(response.data.url);
+	})
+	.catch(function(error){
+	  console.log(error);
+	});
+  })
 
 //   program
 //   .command('list-users')

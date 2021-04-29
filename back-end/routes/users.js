@@ -3,10 +3,11 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-// const jwt = require('jsonwebtoken');
 const multer = require("multer");
 const utils = require("../auth/utils");
 const verify = require("../auth/verify_email");
+const googleUtil = require("../auth/google-util");
+const queryString = require("query-string");
 
 // Import User model
 const { User } = require("../models/User");
@@ -41,21 +42,18 @@ router.get("/", async (req, res) => {
 // Sign up user
 router.post('/signup', [upload.single('image'), passport.authenticate('signup', { session: false })],
   async (req, res) => {
-    // // Create user's authentication token (to log in user)
-    // const jwt = utils.issueJWT(req.user);
-
+    // Send verification to the user's email
     verify.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
 
     res.json({
       message: 'Signup successful!\n We sent you a verification email. Please check your gmail!',
       user: req.user
-      // token: jwt.token,
-      // expiresIn: jwt.expires
     });
 });
 
 // Verified user via email
 router.get('/verify/:verificationCode', async (req, res, next) => {
+  // Find the user in db with the passed verification code
   User.findOne({ verificationCode: req.params.verificationCode })
     .then(async (user) => {
       if(!user) {
@@ -104,6 +102,26 @@ router.post('/login', async (req, res, next) => {
       return next(error);
     }
   })(req, res, next);
+});
+
+router.get('/google-url', async(req, res) => {
+  var url = googleUtil.getConnectionUrl();
+  res.json({ url: url });
+});
+
+router.get('/oauth2callback', async(req, res) => {
+  const urlParams = queryString.parse(req._parsedUrl.search);
+
+  if (urlParams.error) {
+    console.log(`An error occurred: ${urlParams.error}`);
+  } else {
+    const code = urlParams.code;
+    console.log(`The code is: ${code}`);
+
+    const userInfo = await googleUtil.getUserDetails(code);
+    console.log(`User info: ${userInfo}`);
+    res.json({ code: code, userInfo: userInfo });
+  }
 });
 
 // router.delete('/delete-user', async (req, res) => {
