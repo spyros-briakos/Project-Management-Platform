@@ -29,6 +29,7 @@
                     </button>
                 </div>
             </div>
+            
             <div class="price" v-if="plan.active_plan != -1">{{ active_price(plan) }}&#8364;</div>
 
             <div class="mybutton_wrapper">

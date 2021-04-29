@@ -86,8 +86,10 @@ router.post('/login', async (req, res, next) => {
   passport.authenticate('login', async (err, user, info) => {
     try {
       if (err || !user) {
-        const error = new Error(info.message);
-        return next(error);
+        res.statusCode = 500
+        return res.json({
+          message: info.message
+        });
       }
 
       // Create user's authentication token
