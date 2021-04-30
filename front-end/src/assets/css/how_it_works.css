@@ -153,7 +153,7 @@
 
 
 .txt_wrap .pict{
-    /* content: url(../img/right_orange_arrow_2.svg); */
+    content: url(../img/right_orange_arrow.svg);
     display: inline-block;
     margin-right: 5px;
     height: 25px;
