@@ -1,0 +1,14 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with UXWing SVG Editor - https://uxwing.com/svg-icon-editor/ -->
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="514" width="514" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_1" d="m378.120126,89.363957l-44.21578,-26.038425c-11.155782,-6.563131 -25.855462,-3.404297 -32.884759,7.050197l-17.427939,25.989839l84.586659,49.776885l17.441684,-25.977775c7.00262,-10.466938 3.660527,-24.252213 -7.499865,-30.80072l0,0zm-245.050731,231.542006l84.591269,49.776373l137.869745,-205.637602l-84.631537,-49.789369l-137.829491,205.650585l0.000014,0.000013zm-12.9213,63.242736l-1.868318,46.754093l44.147952,-21.878785l41.02599,-20.295659l-81.607907,-48.051231l-1.697703,43.471595l0,0l-0.000014,-0.000013z" stroke-width="0.001" fill="#FF0000"/>
+ </g>
+</svg>
