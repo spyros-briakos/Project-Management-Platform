@@ -43,7 +43,7 @@ const user_storyRoutes = require('./routes/user_stories');
 const projectRoutes = require('./routes/projects');
 app.use('/api-control/users', userRoutes);
 app.use('/api-control/user-stories', user_storyRoutes);
-app.use('/api-control/projects', projectRoutes);
+app.use('/api-control/projects', authenticate, projectRoutes);
 
 const secureRoute = require('./routes/secure-routes');
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
