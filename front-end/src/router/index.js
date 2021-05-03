@@ -6,7 +6,7 @@ import HowItWorks from "../components/HowItWorks/howItWorks.vue";
 import SignIn from "../components/Sign/SignIn.vue";
 import SignUp from "../components/Sign/SignUp.vue";
 import ForgotPassword from "../components/Sign/ForgotPassword.vue";
-import Prof_opts from "../components/profile/prof_opts.vue";
+import ProfOpts from "../components/profile/prof_opts.vue";
 
 Vue.use(VueRouter);
 
@@ -43,8 +43,8 @@ const routes = [
   },
   {
     path: "/Profile",
-    name: "Prof_opts",
-    component: Prof_opts,
+    name: "ProfOpts",
+    component: ProfOpts,
   },
 ];
 

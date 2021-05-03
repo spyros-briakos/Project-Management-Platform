@@ -1,0 +1,100 @@
+
+.prof_set_wrap{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    width: 100%;
+    padding: 30px 20px 30px 20px;
+    background-color: honeydew;
+}
+
+
+.prof_set_wrap .isbutton{
+    background-color:rgb(176, 219, 176);
+    background-size: 100% 100%;
+    width: auto;
+}
+
+.settings_list{
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+.settings_list li{
+    display: flex;
+    flex-flow: row;
+    border-bottom: 1px solid green;
+    padding: 5px 0 5px 20px;
+}
+
+.settings_list li .val{
+    display: flex;
+    width: 100%;
+    height: auto;
+    color: black;
+    overflow: visible;
+}
+
+.settings_list li .val::placeholder{
+    font-weight: 200;
+}
+
+.settings_list .title{
+    background-image: linear-gradient(to right, rgb(176, 219, 176), transparent);
+    margin-bottom: 0;
+    font-size: 50%;
+    color: rgb(82, 146, 82);
+    /* color: black; */
+    font-weight: 100;
+}
+
+.settings_list li .title{
+    background-image: none;
+    background-color: transparent;
+    color: grey;
+    font-weight: 300;
+    /* font-size: 50% !important; */
+}
+
+.settings_list li .btn_wrap .update_btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(253, 195, 148);
+    background-size: 100% 100%;
+    height: 70%;
+    width: 90%;
+    /* min-width: 16%; */
+    border-radius: 10px;
+}
+
+.settings_list li .btn_wrap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 16%;
+    margin-left: auto;
+}
+
+.display_val{
+    display: flex;
+    flex-flow: column;
+    width: 82%;
+    padding-left: 3px;
+}
+
+.display_val .mywarning{
+    display: flex;
+    max-width: 60%;
+    background-color: rgba(238, 88, 68, 0.6);
+}
+
+.warn_btn_wrap{
+    /* width: 30%;  */
+}
+
+.warn_btn_wrap .update_btn{
+    color: white !important;
+    background-color: red !important;
+}

@@ -22,17 +22,22 @@
                     </div>
                 </div>
             </div>
+            <div class="prof_display">
+                <profSettings v-if="selected_id == 3" />            
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+    import profSettings from "./prof_settings.vue";
+    
     export default {
-    name: "Prof_opts",
+    name: "ProfOpts",
     data() {
         return{
             def: 'prof_default.svg',
-            selected_id: 1,
+            selected_id: 3,
             name: "Vasilis Goulas",
             opts:[
                 {id: 1, title: "Τα Projects μου"},
@@ -43,7 +48,8 @@
             ],
         }
     },
-    props:{
+    components:{
+        profSettings,
     }
 };
 </script>
