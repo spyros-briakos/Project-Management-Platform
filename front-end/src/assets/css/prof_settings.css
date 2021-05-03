@@ -2,10 +2,9 @@
 .prof_set_wrap{
     display: flex;
     flex-flow: column;
+    justify-content: space-between;
     height: 100%;
     width: 100%;
-    padding: 30px 20px 30px 20px;
-    background-color: honeydew;
 }
 
 
@@ -40,16 +39,17 @@
     font-weight: 200;
 }
 
-.settings_list .title{
-    background-image: linear-gradient(to right, rgb(176, 219, 176), transparent);
+.settings_list .mytitle{
+    /* background-image: linear-gradient(to right, rgb(176, 219, 176), transparent); */
     margin-bottom: 0;
-    font-size: 50%;
+    font-size: 120%;
+    width: 100%;
     color: rgb(82, 146, 82);
     /* color: black; */
-    font-weight: 100;
+    /* font-weight: 100; */
 }
 
-.settings_list li .title{
+.settings_list li .mytitle{
     background-image: none;
     background-color: transparent;
     color: grey;

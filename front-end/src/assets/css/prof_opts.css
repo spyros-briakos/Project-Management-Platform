@@ -1,34 +1,43 @@
+:root{
+    --pict_size: 200px;
+    --back_clr: rgba(234, 238, 234, 0.753);
+}
 
 .wrap{
     width: 100%;
+    /* font-size: 15px; */
     display: flex;
     justify-content: space-between;
-    height: auto;
-    padding: 120px 20px 30px 20px;
-    overflow: visible;
-    background-color: rgb(88, 158, 137);
-    /* background-color: rgb(207, 241, 207); */
+    height: 650px;
+    padding: 10px 20px 20px 20px;
+    /* background-color: rgb(88, 158, 137); */
+    background-color: white;
 }
 
 .opts_wrap{
     display: flex;
     flex-flow: column;
-    width: 25%;
-    background-color: honeydew;
+    height: auto;
+    width: calc(1.5 * var(--pict_size));
+    max-width: 25%;
+    /* height: 560px; */
+    background-color: var(--back_clr);
     align-items: center;
-    padding: 0px 0 10px 0;
+    margin-top: calc(var(--pict_size) / 2);
+    /* padding: 0px 0 10px 0; */
+    /* border: 2px solid red; */
 }
 
 .pict_wrap{
     height: auto;
     display: flex;
     justify-content: center;
-    margin-top: -100px;
+    margin-top: calc(var(--pict_size) / -2);  
 }
 
 .prof_pict{
-    height: 200px;
-    width: 200px;
+    height: var(--pict_size);
+    width: var(--pict_size);
     border: 5px solid black;
     border-radius: 50%;
     background-color: pink;
@@ -46,27 +55,35 @@
 .prof_opts{
     display: flex;
     flex-flow: column;
-    width:90%;
-    align-items: center;
+    width:100%;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 100%;
     padding: 20px 10px 20px 10px;
+    /* border: 2px solid red; */
 }
 
 .prof_opts .opt{
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
-    padding: 15px 5px 15px 5px;
+    border: 1px solid blue;
+    /* padding: 15px 5px 15px 5px; */
 }
 
-.opt .opt_btn{
+.prof_opts .opt_btn{
     display: flex;
     width: 100%;
-    justify-content: center;
+    color: black;
+    justify-content: flex-start;
     padding: 10px 5px 10px 5px;
-    background-color: rgb(129, 107, 111);
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgb(92, 116, 102);
+    /* background-color: rgb(129, 107, 111); */
+    /* border-radius: 10px; */
+    /* border: 1px solid black; */
+    border-bottom: 1px solid green;
+    /* box-shadow: 0px 0px 10px rgb(92, 116, 102); */
 }
 
 .opt .opt_btn:hover{
@@ -83,5 +100,10 @@
 
 .prof_display{
     display: flex;
-    width: 70%;
+    padding: 30px 20px 30px 20px;
+    font-size: 17px;
+    height: 100%;
+    background-color: var(--back_clr);
+    width: calc(100% - calc(1.5 * var(--pict_size)px));
+    max-width: 75%;
 }

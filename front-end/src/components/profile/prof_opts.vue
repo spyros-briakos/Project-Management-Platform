@@ -10,16 +10,14 @@
                     {{name}}
                 </div>
                 <div class="prof_opts">
-                    <div class="opt" v-for="opt in this.opts" :key="opt.id">
-                        <button class="opt_btn"
-                            v-on:click="selected_id=opt.id"
-                            :style="{
-                                'border': selected_id == opt.id ? '2px solid black' : 'none',
-                                'font-weight': selected_id == opt.id ? '600' : '400',
-                            }">
-                            {{opt.title}}
-                        </button>
-                    </div>
+                    <button v-for="opt in this.opts" :key="opt.id" class="opt_btn"
+                        v-on:click="selected_id=opt.id"
+                        :style="{
+                            'background-image': selected_id == opt.id ? 'linear-gradient(to right,transparent, lightpink, transparent)' : '',
+                            'font-weight': selected_id == opt.id ? '600' : '400',
+                        }">
+                        {{opt.title}}
+                    </button>
                 </div>
             </div>
             <div class="prof_display">
