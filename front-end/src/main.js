@@ -7,6 +7,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@/assets/css/main.css";
 // import "./quasar";
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Highcharts from "highcharts";
+import HighchartsVue from "highcharts-vue";
+import Gantt from "highcharts/modules/gantt";
+
+Gantt(Highcharts);
+Vue.use(HighchartsVue);
+
+library.add(faUserSecret)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 Vue.config.productionTip = false;
 
 new Vue({
