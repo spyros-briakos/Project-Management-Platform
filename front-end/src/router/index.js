@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeBody from "../components/Home.vue";
+import Home from "../components/Home.vue";
 import Prices from "../components/pricing/Prices.vue";
 import Projects from "../components/Project/Projects.vue";
 import Roadmap from "../components/Project/Roadmap.vue";
@@ -17,6 +17,11 @@ import VueSidebarMenu from "vue-sidebar-menu";
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import "../assets/scss/vue-sidebar-menu.scss";
 // import "custom-var.scss"
+import HowItWorks from "../components/HowItWorks/howItWorks.vue";
+import SignIn from "../components/Sign/SignIn.vue";
+import SignUp from "../components/Sign/SignUp.vue";
+import ForgotPassword from "../components/Sign/ForgotPassword.vue";
+import ProfOpts from "../components/profile/prof_opts.vue";
 
 Vue.use(VueRouter);
 Vue.use(VueSidebarMenu);
@@ -25,15 +30,15 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: HomeBody,
+    component: Home,
   },
   {
     path: "/how_it_works",
-    name: "How it works",
-    component: How_it_works,
+    name: "How_It_Works",
+    component: HowItWorks,
   },
   {
-    path: "/Prices",
+    path: "/prices",
     name: "Prices",
     component: Prices,
   },
@@ -88,6 +93,11 @@ const routes = [
     path: "/sign/forgot",
     name: "ForgotPassword",
     component: ForgotPassword,
+  },
+  {
+    path: "/Profile",
+    name: "ProfOpts",
+    component: ProfOpts,
   },
 ];
 

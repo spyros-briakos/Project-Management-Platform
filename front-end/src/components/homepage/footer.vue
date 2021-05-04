@@ -57,6 +57,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
   @import "../../assets/css/foot_style.css";
 </style>

@@ -101,14 +101,14 @@
 </template>
 
 <script>
-import Box from "./homepage/box.vue";
-import Prices from "./pricing/Prices.vue";
+  import Box from "./homepage/box.vue";
+  import Prices from "./pricing/Prices.vue";
 
-export default {
-  name: "HomeBody",
-  components: {
-    Box,
-    Prices,
-  },
-};
+  export default {
+    name: "HomeBody",
+    components: {
+      Box,
+      Prices,
+    },
+  };
 </script>

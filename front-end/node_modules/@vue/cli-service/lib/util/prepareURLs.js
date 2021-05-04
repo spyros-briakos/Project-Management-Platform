@@ -7,7 +7,7 @@
  */
 
 const url = require('url')
-const { chalk } = require('@vue/cli-shared-utils')
+const chalk = require('chalk')
 const address = require('address')
 const defaultGateway = require('default-gateway')
 

@@ -10,67 +10,310 @@ const agent = new https.Agent({
   rejectUnauthorized: false,
 });
 
-
 export function cli(args) {
 
   program
   .command('users')
-  .action(function (command) {
+  .action(() => {
     axios.get(`${apiUrl}/users/`)
-    .then(function(response) {
+    .then((response) => {
       console.log(response.data);
     })
-    .catch(function(error) {
-      console.log(error);
+    .catch(() => {
+      // console.log(error);
+			console.log('An error occurred');
     })
   });
 
   program
   .command('projects')
-  .action(function (command) {
-    axios.get(`${apiUrl}/projects/`)
-	.then(function(response) {
-	  console.log(response.data);
-	})
-	.catch(function(error) {
-  	  console.log(error);
-	})
+  .action((command) => {
+		let token = ''
+		try {
+			const data = fs.readFileSync('/tmp/token.json', 'utf8')
+			token = JSON.parse(data).token
+		} catch (err) {
+				return console.log('Reading token failed:', err);
+		}
+    axios.get(`${apiUrl}/projects/`, { headers: { "Authorization": token } })
+		.then((response) => {
+			console.log(response.data);
+
+			let data = fs.readFileSync('/tmp/user.json', 'utf8')
+			data = JSON.parse(data)
+			data.projects = response.data
+			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+				if(err) return console.log('Writing data failed:', err);
+			});
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
+			}
+		})
+  });
+
+	program
+  .command('create-project')
+  .requiredOption('-p, --project <value>', 'Project\'s name')
+  .option('-d, --description <value>', 'Project\'s description')
+  .action((command) => {
+		let data
+		let token = ''
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
+			token = data.token
+		} catch (err) {
+				return console.log('Reading token failed:', err);
+		}
+    axios.post(`${apiUrl}/projects/`, {
+			name: command.project,
+			description: command.description
+		}, { headers: { "Authorization": token } })
+		.then((response) => {
+			console.log(response.data);
+
+			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
+			data.projects.push(response.data)
+			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+				if(err) return console.log('Writing data failed:', err);
+			});
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
+			}
+		})
+  });
+
+	// program
+  // .command('choose-project')
+  // .requiredOption('-p, --project <value>', 'User\'s project name')
+  // .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  // .action((command) => {
+	// 	let token = ''
+	// 	try {
+	// 		const data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
+	// 		token = data.token
+	// 	} catch (err) {
+	// 			return console.log('Reading token failed:', err);
+	// 	}
+  //   axios.get(`${apiUrl}/projects/`, {
+	// 		project: command.project
+	// 	}, { headers: { "Authorization": token } })
+	// 	.then((response) => {
+	// 		console.log(response.data);
+	// 	})
+	// 	.catch((err) => {
+	// 		if (err.code === 'ECONNREFUSED') {
+	// 			console.log('Unable to connect to server.')
+	// 		} else if (err.response && err.response.status === 500){
+	// 			console.log('Login required!')
+	// 		} else {
+	// 			console.log('Internal Error')
+	// 		}
+	// 	})
+  // });
+
+	program
+  .command('delete-project')
+  .requiredOption('-p, --project <value>', 'User\'s project name')
+  .action((command) => {
+		let data
+		let token = ''
+		let project = {}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
+			token = data.token
+		} catch (err) {
+				return console.log('Reading token failed:', err);
+		}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
+			let projects = data.projects.filter(p => p.name == command.project)
+			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
+			project = projects[0]
+		} catch (err) {
+				return console.log('Reading projects failed:', err);
+		}
+    axios.delete(`${apiUrl}/projects/${project._id}`, { headers: { "Authorization": token } })
+		.then((response) => {
+			console.log(response);
+
+			data.projects = data.projects.filter(p => p.name != command.project)
+			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+				if(err) return console.log('Writing data failed:', err);
+			});
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
+			}
+		})
+  });
+
+	program
+  .command('finish-project')
+  .requiredOption('-p, --project <value>', 'User\'s project name')
+  .action((command) => {
+    let data
+		let token = ''
+		let project = {}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
+			token = data.token
+		} catch (err) {
+				return console.log('Reading token failed:', err);
+		}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
+			let projects = data.projects.filter(p => p.name == command.project)
+			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
+			project = projects[0]
+		} catch (err) {
+				return console.log('Reading projects failed:', err);
+		}
+    axios.PATCH(`${apiUrl}/projects/${project._id}`, {status: 'done'}, { headers: { "Authorization": token } })
+		.then((response) => {
+			console.log(response);
+
+			let project = data.projects.filter(p => p.name != command.project)[0]
+			project.status = 'done'
+			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+				if(err) return console.log('Writing data failed:', err);
+			});
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
+			}
+		})
+  });
+
+	program
+  .command('edit-project')
+  .requiredOption('-p, --project <value>', 'User\'s project name')
+  .option('-n, --name <value>', 'User\'s new project name')
+  .option('-d, --description <value>', 'User\'s new project description')
+  .option('-po, --productOwner <value>', 'User\'s new project productOwner')
+  .option('-sm, --scrumMaster <value>', 'User\'s new project scrumMaster')
+  .action((command) => {
+    let data
+		let token = ''
+		let project = {}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
+			token = data.token
+		} catch (err) {
+				return console.log('Reading token failed:', err);
+		}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
+			let projects = data.projects.filter(p => p.name == command.project)
+			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
+			project = projects[0]
+		} catch (err) {
+				return console.log('Reading projects failed:', err);
+		}
+    axios.PATCH(`${apiUrl}/projects/${project._id}`, {
+			name: command.name ? command.name : project.name,
+			description: command.description ? command.description : project.description,
+			productOwner: command.productOwner ? command.productOwner : project.productOwner,
+			scrumMaster: command.scrumMaster ? command.scrumMaster : project.scrumMaster,
+		}, { headers: { "Authorization": token } })
+		.then((response) => {
+			console.log(response);
+
+			project.name = command.name
+			project.description = command.description
+			project.productOwner = command.productOwner
+			project.scrumMaster = command.scrumMaster
+			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+				if(err) return console.log('Writing data failed:', err);
+			});
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
+			}
+		})
   });
 
   program
   .command('sprints')
-  .action(function (command) {
-    axios.get(`${apiUrl}/sprints/`)
-	.then(function(response) {
-	  console.log(response.data);
-	})
-	.catch(function(error) {
-	  console.log(error);
-	})
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action((command) => {
+    axios.get(`${apiUrl}/sprints/`, {
+			headers: { "Authorization": `Bearer ${command.token}` }
+		})
+		.then((response) => {
+			console.log(response.data);
+		})
+		.catch(() => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
   });
 
   program
   .command('tasks')
-  .action(function (command) {
-	axios.get(`${apiUrl}/tasks/`)
-	.then(function(response) {
-	  console.log(response.data);
-	})
-	.catch(function(error) {
-	  console.log(error);
-	})
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action((command) => {
+		axios.get(`${apiUrl}/tasks/`, {
+			headers: { "Authorization": `Bearer ${command.token}` }
+		})
+		.then(function(response) {
+			console.log(response.data);
+		})
+		.catch(() => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
   });
 
   program
-  .command('user-stories')
-  .action(function (command) {
-	axios.get(`${apiUrl}/user_stories/`)
-	.then(function(response) {
-	  console.log(response.data);
-	})
-	.catch(function(error) {
-	  console.log(error);
-	})
+	.command('user-stories')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+	.action((command) => {
+		axios.get(`${apiUrl}/user_stories/`, {
+			headers: { "Authorization": `Bearer ${command.token}` }
+		})
+		.then(function(response) {
+			console.log(response.data);
+		})
+		.catch(() => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			}
+		})
   });
 
   program
@@ -88,11 +331,11 @@ export function cli(args) {
 	})
   });
 
-  program
+program
   .command('login')
   .option('--format <value>', 'Give format', 'json')
-  .requiredOption('--username <value>', 'User\'s username')
-  .requiredOption('--password <value>', 'User\'s password')
+  .requiredOption('-u, --username <value>', 'User\'s username')
+  .requiredOption('-p, --password <value>', 'User\'s password')
   .action(function (command) {
 	axios.post(`${apiUrl}/users/login?format=${command.format}`, {
 	  username: command.username,
@@ -100,19 +343,23 @@ export function cli(args) {
 	}, { httpsAgent: agent })
 	.then(function (response) {
 	  console.log(response.data);
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data), function(err) {
-		if(err) {
-		  return console.log('Writing token failed:', err);
-		}
+		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		  if(err) return console.log('Writing user failed:', err);
+		});
+		fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
+		  if(err) return console.log('Writing token failed:', err);
+		});
 		console.log(response.data.message);
-	  });
 	})
 	.catch(function (error) {
-	  console.log('Login failed: ', error.message);
+	  if (error.response.data.message)
+		console.log('Login failed: ', error.response.data.message);
+	  else
+		console.log('Login failed: ', error.message);
 	});
   });
 
-  program
+program
   .command('logout')
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
@@ -122,23 +369,24 @@ export function cli(args) {
 	}, { httpsAgent: agent })
 	.then(function(response){
 	  fs.unlink('/tmp/user.json', function(err) {
-		if(err) {
-		  return console.log('Removing user failed:', err);
-		}
-	    console.log(response.message);
+		if(err) return console.log('Removing user failed:', err);
 	  });
+	  fs.unlink('/tmp/token.json', function(err) {
+		if(err) return console.log('Removing token failed:', err);
+	  });
+	  console.log(response.message);
 	})
 	.catch(function(error) {
 	  console.log('Couldn\'t log out',error.message);
 	});
   })
 
-  program
+program
   .command('tokens')
   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .action(function (command) {
     axios.get(`${apiUrl}/secure-routes/tokens`, {
-		headers: { "Authorization": `Bearer ${command.token}` }
+	  headers: { "Authorization": `Bearer ${command.token}` }
 	}, { httpsAgent: agent })
     .then(function(response) {
       console.log(response.data);
@@ -148,49 +396,50 @@ export function cli(args) {
     })
   });
 
-  program
+program
   .command('signup')
   .option('--format <value>', 'Give format', 'json')
-  .requiredOption('--username <value>', 'User\'s username')
-  .requiredOption('--password <value>', 'User\'s password')
-  .requiredOption('--firstName <value>', 'User\'s first name')
-  .requiredOption('--lastName <value>', 'User\'s last name')
-  .requiredOption('--email <value>', 'User\'s email')
+  .requiredOption('-u, --username <value>', 'User\'s username')
+  .requiredOption('-p, --password <value>', 'User\'s password')
+  .requiredOption('-fn, --firstName <value>', 'User\'s first name')
+  .requiredOption('-ln, --lastName <value>', 'User\'s last name')
+  .requiredOption('-e, --email <value>', 'User\'s email')
   .option('--plan <value>', 'User\'s plan (standard or premium)')
 //  .option('--picture <value>', 'User\'s profile picture (url)')
   .action(function(command) {
 	axios.post(`${apiUrl}/users/signup?format=${command.format}/`, {
-		username: command.username,
-		password: command.password,
-		firstName: command.firstName,
-		lastName: command.lastName,
-		email: command.email,
-		plan_in_use: command.plan
+	  username: command.username,
+	  password: command.password,
+	  firstName: command.firstName,
+	  lastName: command.lastName,
+	  email: command.email,
+	  plan_in_use: command.plan
 	}, { httpsAgent: agent })
 	.then(function (response) {
 	  console.log(response.data);
 	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data), function(err) {
-		if(err) {
-		  return console.log('Writing token failed:', err);
+		if (err) {
+	  	  return console.log('Writing token failed:', err);
 	    }
 	    console.log(response.data.message);
 	    // console.log('Sign up successful.');
 	  });
 	})
 	.catch(function (error) {
+	  console.log(error)
 	  console.log('Sign up failed');
 	});
   });
 
-  program
+program
   .command('update-user')
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-  .option('--username <value>', 'User\'s username')
-  .option('--password <value>', 'User\'s password')
-  .option('--firstName <value>', 'User\'s firstName')
-  .option('--lastName <value>', 'User\'s lastName')
-  .option('--email <value>', 'User\'s email')
+  .option('-u, --username <value>', 'User\'s username')
+  .option('-p, --password <value>', 'User\'s password')
+  .option('-fn, --firstName <value>', 'User\'s firstName')
+  .option('-ln, --lastName <value>', 'User\'s lastName')
+  .option('-e, --email <value>', 'User\'s email')
   .option('--plan <value>', 'User\'s plan (standard or premium)')
   .action(function(command) {
 	axios.patch(`${apiUrl}/secure-routes/edit-user?format=${command.format}/`, {
@@ -232,7 +481,7 @@ export function cli(args) {
 //   });
 // })
 
-  program
+program
   .command('delete-user')
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
@@ -253,21 +502,34 @@ export function cli(args) {
 	});
   })
 
-  program
+program
   .command('get-user')
+  .option('--format <value>', 'Give format', 'json')
   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .action(function(command) {
-	  axios.get(`${apiUrl}/secure-routes/user`, {
-	    headers: { "Authorization": `Bearer ${command.token}` }
-	  }, { httpsAgent: agent })
-	  .then(function(response){
-		  console.log(response.data);
-	  })
-	  .catch(function(error) {
-		console.log('Could not reach user\'s info\n', error.message);
-	  });
+    axios.get(`${apiUrl}/secure-routes/user?format=${command.format}/`, {
+      headers: { "Authorization": `Bearer ${command.token}` }
+    }, { httpsAgent: agent })
+    .then(function(response){
+	  console.log(response.data);
+    })
+    .catch(function(error) {
+	  console.log('Could not reach user\'s info\n', error.message);
+    });
   })
 
+program
+  .command('google-url')
+  .option('--format <value>', 'Give format', 'json')
+  .action(function(command) {
+	axios.get(`${apiUrl}/users/google-url?format=${command.format}/`, {}, { httpsAgent: agent })
+	.then(function(response){
+	  console.log(response.data.url);
+	})
+	.catch(function(error){
+	  console.log(error);
+	});
+  })
 
 //   program
 //   .command('list-users')

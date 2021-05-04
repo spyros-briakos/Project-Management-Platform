@@ -1,23 +1,27 @@
 <template>
-  <div class="vue-tempalte">
-    <form>
-      <h5>Ανάκτησε τον κωδικό σου!</h5>
+  <div class="vertical-center">
+    <img id="image1" src="../../assets/img/scrum1.png">
+    <img id="image2" src="../../assets/img/scrum4.png">
 
-      <div class="form-group">
-        <!-- <label>Email</label> -->
-        <input
-          type="email"
-          required
-          v-model="email"
-          class="form-control form-control-lg"
-          placeholder="Email"
-        />
-      </div>
+    <div class="inner-block">
+      <form>
+        <h5>Ανάκτησε τον κωδικό σου!</h5>
 
-      <button type="submit" class="btn btn-dark btn-lg btn-block">
-        Reset password
-      </button>
-    </form>
+        <div class="form-group">
+          <input
+            type="email"
+            required
+            v-model="email"
+            class="form-control form-control-lg"
+            placeholder="Email"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-dark btn-lg btn-block">
+          Reset password
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 

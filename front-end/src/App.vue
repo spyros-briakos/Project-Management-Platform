@@ -1,6 +1,9 @@
 <template>
+
   <v-app id="app">
-    <app-navigation></app-navigation>
+    
+    <app-navigation v-if="!['SignIn','SignUp','ForgotPassword'].includes($route.name)"></app-navigation>
+    
     <v-content transition="slide-x-transition"> 
       <router-view></router-view>
     </v-content>
@@ -9,23 +12,22 @@
 </template>
 
 <script>
-import AppNavigation from "@/components/AppNavigation.vue";
+import AppNavigation from "./components/AppNavigation.vue";
 import myFooter from './components/homepage/footer.vue'
 
 export default {
   name: "App",
   components: {
       AppNavigation,
-      // HomeBody,
-      myFooter,
+      myFooter
   }
 };
 </script>
 
 <style>
-    .v-main__wrap.v-content__wrap{
-        position:static;
-   }
+  .v-main__wrap.v-content__wrap{
+    position:static;
+  }
   @import url(/assets/css/main.css);
 </style>
 
