@@ -9,7 +9,7 @@ import History from "../components/Project/History.vue";
 import Kanban from "../components/Project/Kanban.vue";
 import Scrumboard from "../components/Project/Scrumboard.vue";
 import Chart from "../components/Project/Chart.vue";
-import How_it_works from "../components/How_it_works.vue";
+// import How_it_works from "../components/How_it_works.vue";
 import SignIn from "../components/Sign/SignIn.vue";
 import SignUp from "../components/Sign/SignUp.vue";
 import ForgotPassword from "../components/Sign/ForgotPassword.vue";
@@ -18,9 +18,9 @@ import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import "../assets/scss/vue-sidebar-menu.scss";
 // import "custom-var.scss"
 import HowItWorks from "../components/HowItWorks/howItWorks.vue";
-import SignIn from "../components/Sign/SignIn.vue";
-import SignUp from "../components/Sign/SignUp.vue";
-import ForgotPassword from "../components/Sign/ForgotPassword.vue";
+// import SignIn from "../components/Sign/SignIn.vue";
+// import SignUp from "../components/Sign/SignUp.vue";
+// import ForgotPassword from "../components/Sign/ForgotPassword.vue";
 import ProfOpts from "../components/profile/prof_opts.vue";
 
 Vue.use(VueRouter);
