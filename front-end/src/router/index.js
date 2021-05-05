@@ -18,9 +18,6 @@ import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import "../assets/scss/vue-sidebar-menu.scss";
 // import "custom-var.scss"
 import HowItWorks from "../components/HowItWorks/howItWorks.vue";
-// import SignIn from "../components/Sign/SignIn.vue";
-// import SignUp from "../components/Sign/SignUp.vue";
-// import ForgotPassword from "../components/Sign/ForgotPassword.vue";
 import ProfOpts from "../components/profile/prof_opts.vue";
 
 Vue.use(VueRouter);
