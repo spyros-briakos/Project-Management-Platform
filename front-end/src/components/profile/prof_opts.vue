@@ -13,10 +13,12 @@
                         {{name}}
                     </div>
                     <div class="prof_opts">
-                        <button v-for="opt in this.opts" :key="opt.id" :class="{'opt_btn':true,
-                                                                                'pressed': selected_id==opt.id
-                                                                                }"
-                            v-on:click="selected_id=opt.id">
+                        <button v-for="opt in this.opts" :key="opt.id"
+                                :class="{'opt_btn':true,
+                                        'pressed': selected_id==opt.id
+                                        }"
+                                v-on:click="selected_id=opt.id,mpou(opt.svg)">
+                            <img class="icon" :src="require('../../assets/img/' + opt.svg + '')">
                             {{opt.title}}
                         </button>
                     </div>
@@ -42,17 +44,22 @@
             selected_id: 3,
             name: "Vasilis Goulas",
             opts:[
-                {id: 1, title: "Τα Projects μου"},
-                {id: 2, title: "Οι Συνεργάτες μου"},
-                {id: 3, title: "Ρυθμίσεις Λογαρισμού"},
-                {id: 4, title: "Αναβάθμιση"},
-                {id: 5, title: "Αποσύνδεση"}
+                {id: 1, title: "Τα Projects μου", svg: "project_default.svg"},
+                {id: 2, title: "Οι Συνεργάτες μου", svg: "people.svg"},
+                {id: 3, title: "Ρυθμίσεις Λογαρισμού", svg: "settings.svg"},
+                {id: 4, title: "Αναβάθμιση", svg: "upgrade.svg"},
+                {id: 5, title: "Αποσύνδεση", svg: "exit.svg"},
             ],
         }
     },
     components:{
         profSettings,
         profProjects,
+    },
+    methods:{
+        mpou(opt){
+            alert('url(' + this.route + opt + ')');
+        }
     }
 };
 </script>

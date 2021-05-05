@@ -119,10 +119,12 @@
     background-color: rgba(121, 179,140,0.2);
 }
 
-.prof_opts .opt_btn:focus::after{
-    /* opacity: 1; */
-    /* display: flex;/ */
-    /* width: 20px; */
+.prof_opts .icon{
+    content:"";
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+    /* background-color: red; */
 }
 
 .name{
