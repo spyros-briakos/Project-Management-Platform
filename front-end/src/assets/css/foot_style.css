@@ -1,8 +1,8 @@
 :root{
-    --green: rgb(72, 170, 124);
+    --green: rgb(82, 116, 100);
     --blue_grey: rgb(61, 173, 155);
     --def_back: rgb(231, 228, 216);
-    --foot_light_green: rgba(163, 228, 201, 0.829);
+    --foot_light_green: rgb(209, 216, 216);
 }
 
 html, body{

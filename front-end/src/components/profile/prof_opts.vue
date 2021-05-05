@@ -1,26 +1,30 @@
 <template>
     <div>
         <div class="wrap">
-            <div class="opts_wrap">
-                <div class="pict_wrap">
-                    <img class="prof_pict" :src="require('../../assets/img/' + def + '')">
-                    <button class="design">
-                    </button>
-                </div>
-                <div class="name">
-                    {{name}}
-                </div>
-                <div class="prof_opts">
-                    <button v-for="opt in this.opts" :key="opt.id" :class="{'opt_btn':true,
-                                                                            'pressed': selected_id==opt.id
-                                                                            }"
-                        v-on:click="selected_id=opt.id">
-                        {{opt.title}}
-                    </button>
+            <div class="big_wrap">
+
+                <div class="opts_wrap">
+                    <div class="pict_wrap">
+                        <img class="prof_pict" :src="require('../../assets/img/' + def + '')">
+                        <button class="design">
+                        </button>
+                    </div>
+                    <div class="name">
+                        {{name}}
+                    </div>
+                    <div class="prof_opts">
+                        <button v-for="opt in this.opts" :key="opt.id" :class="{'opt_btn':true,
+                                                                                'pressed': selected_id==opt.id
+                                                                                }"
+                            v-on:click="selected_id=opt.id">
+                            {{opt.title}}
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="prof_display">
-                <profSettings v-if="selected_id == 3" />            
+                <profProjects v-if="selected_id == 1" />
+                <profSettings v-else-if="selected_id == 3" />            
             </div>
         </div>
     </div>
@@ -28,7 +32,8 @@
 
 <script>
     import profSettings from "./prof_settings.vue";
-    
+    import profProjects from "./prof_projects.vue";
+
     export default {
     name: "ProfOpts",
     data() {
@@ -47,6 +52,7 @@
     },
     components:{
         profSettings,
+        profProjects,
     }
 };
 </script>

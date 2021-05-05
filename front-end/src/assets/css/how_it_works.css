@@ -3,10 +3,10 @@
     --blue_grey: rgb(61, 173, 155);
     --def_back: rgb(231, 228, 216);
     --page_beneath:  rgb(241, 227, 227);
-    --foot_light_green: rgba(163, 228, 201, 0.829);
+    /* --foot_light_green: rgba(163, 228, 201, 0.829); */
     --move_up: translateY(-27px);
     --red-orange: rgb(246, 143, 105);
-    --light_green: rgb(211, 240, 229);
+    --light_green:#21D0B2;
     --menu_circles_width: 32px;
 }
 

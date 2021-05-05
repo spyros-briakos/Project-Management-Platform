@@ -48,4 +48,7 @@ export default {
 .v-btn {
   text-transform: none !important;
 }
+.v-btn__content{
+  color: black !important;
+}
 </style>

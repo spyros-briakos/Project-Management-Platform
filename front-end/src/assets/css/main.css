@@ -13,7 +13,7 @@ font-weight: 400;
 :root{
     --head_c: rgb(240, 170, 105);
     --head_c2: rgb(127, 56, 158);
-    --light_green: rgba(181, 231, 212);
+    /* --light_green: rgba(181, 231, 212); */
 }
 
 body,
@@ -25,6 +25,9 @@ html,
     height: 100%;
 }
 
+body{
+    /* background-color: tomato; */
+}
 
 .space{
     position: static;

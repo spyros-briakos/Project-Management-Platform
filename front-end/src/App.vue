@@ -8,7 +8,7 @@
       <router-view></router-view>
     </v-content>
     
-    <myFooter v-if="!['SignIn','SignUp','ForgotPassword'].includes($route.name)"></myFooter>
+    <myFooter v-if="!['SignIn','SignUp','ForgotPassword','Profile'].includes($route.name)"></myFooter>
 
   </v-app>  
 

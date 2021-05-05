@@ -43,7 +43,7 @@ const routes = [
   },
   {
     path: "/Profile",
-    name: "ProfOpts",
+    name: "Profile",
     component: ProfOpts,
   },
 ];

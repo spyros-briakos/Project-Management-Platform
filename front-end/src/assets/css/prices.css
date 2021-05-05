@@ -3,10 +3,10 @@
     --blue_grey: rgb(61, 173, 155);
     --def_back: rgb(231, 228, 216);
     --page_beneath:  rgb(241, 227, 227);
-    --foot_light_green: rgba(163, 228, 201, 0.829);
+    /* --foot_light_green: rgba(163, 228, 201, 0.829); */
     --move_up: translateY(-27px);
     --red-orange: rgb(246, 143, 105);
-    --light_green: rgba(181, 231, 212);
+    /* --light_green: rgba(181, 231, 212); */
 }
 
 .prices{

@@ -1,17 +1,13 @@
 <template>
     <div class="prof_set_wrap">
         <ul class="settings_list" v-for="elem in this.menu" :key="elem.id">
-            <div class="mytitle"
-            :style="{
-                'background-image': elem.id==3 ? 'linear-gradient(to right, rgba(238, 88, 68, 0.6), transparent)' : '',
-                'color': elem.id==3 ? 'black' : '',            
-            }">
+            <div :class="{'mytitle':true,
+                        'warn':elem.id==3,
+                        }">
+            
                 {{elem.title}}
             </div>
-            <li v-for="item in elem.items" :key="item.id"
-                :style="{
-                    'border-bottom': elem.id==3 ? 'none' : '',    
-                }">
+            <li v-for="item in elem.items" :key="item.id">
                 <div class="display_val">
                     <label :for="item.title" class="mytitle" :style="{'color': elem.id==3 ? 'red' : ''}">{{item.title}}</label>
                     <input  v-if="elem.id!=3" type="text" :name="item.title" :value="item.hide==false ? item.val : ''" :placeholder="item.holder" class="val" >
