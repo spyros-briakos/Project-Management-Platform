@@ -32,8 +32,7 @@
 .wrap_projects .mytitle{
     width: 50%;
     font-size: 100%;
-    /* margin-bottom: 10px; */
-    margin: auto auto auto auto;
+    margin: 20px auto 20px auto;
 }
 
 .projects_ul li{
@@ -43,7 +42,7 @@
     margin-left: 5%;
     font-size: 80%;
     align-items: flex-end;
-    border-bottom: 1px solid green;
+    border-bottom: 1px solid black;
     color: black;
     cursor: pointer;
 }

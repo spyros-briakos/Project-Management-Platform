@@ -7,11 +7,8 @@
     <v-content transition="slide-x-transition"> 
       <router-view></router-view>
     </v-content>
-    
-    <myFooter v-if="!['SignIn','SignUp','ForgotPassword','Profile'].includes($route.name)"></myFooter>
-
-  </v-app>  
-
+    <myFooter v-if="!['SignIn','SignUp','ForgotPassword','Projects','Roadmap','Profile','Chart', 'Comments','History', 'Scrumboard', 'Kanban'].includes($route.name)"></myFooter>
+  </v-app>
 </template>
 
 <script>

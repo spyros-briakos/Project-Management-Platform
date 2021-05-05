@@ -37,11 +37,9 @@
 .pict_wrap{
     height: auto;
     display: flex;
-    /* width: 100%; */
     justify-content: center;
     margin-top: calc(var(--pict_size) / -2);
     background-size: 100% 100%;
-    /* border: 2px solid red; */
 }
 
 .prof_pict{
@@ -72,7 +70,6 @@
     height: 100%;
     border-radius: 20px;
     padding: 20px 0px 20px 0px;
-    /* border: 2px solid red; */    
     overflow: hidden;
 }
 
@@ -82,8 +79,6 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    /* border: 10px solid blue; */
-    /* padding: 15px 5px 15px 5px; */
 }
 
 .prof_opts .opt_btn{
@@ -100,37 +95,34 @@
     font-weight: 500;
 }
 
-.prof_opts .opt_btn:focus{
+/* .prof_opts .opt_btn:focus{
     border-left:10px solid white;
-    /* border-right:10px solid #29a19c; */
     background-color: #79b38c;
     color: rgb(47, 47, 47);
     transition: flood_left 0.5s;
     border-radius: -20px;
-}
+} */
 
-.prof_opts .opt_btn::after{
-    display: none;
-    width: 0;
-    align-items: center;
-    opacity: 0;
-    height: 10px;
-    padding-left: 10px;
-    content: ">";
-    font-size: 20px;
-    overflow:hidden;
-}
+    /* .prof_opts .opt_btn::after{
+        display: none;
+        width: 0;
+        align-items: center;
+        opacity: 0;
+        height: 10px;
+        padding-left: 10px;
+        content: ">";
+        font-size: 20px;
+        overflow:hidden;
+    } */
 
-.prof_opts .opt_btn:hover::after{
-    opacity: 1;
-    display: flex;
-    width:20px;
+.prof_opts .opt_btn:hover{
+    background-color: rgba(121, 179,140,0.2);
 }
 
 .prof_opts .opt_btn:focus::after{
-    opacity: 1;
-    display: flex;
-    width: 20px;
+    /* opacity: 1; */
+    /* display: flex;/ */
+    /* width: 20px; */
 }
 
 .name{
@@ -149,18 +141,16 @@
     display: flex;
     padding: 30px 20px 30px 20px;
     font-size: 17px;
-    /* background-color: whitesmoke; */
     width: calc(100% - calc(1.5 * var(--pict_size)px));
     max-width: 75%;
     border-radius: 30px;
-    /* margin: 20px 0 20px 0; */
     padding: 20px 20px 10px 10px;
-    /* box-shadow: 0px 5px 40px grey; */
 
 }
 
 .pressed{
-    font-weight: none;
-    font-size: none;
+    /* border-left:10px solid white !important; */
+    background-color: #79b38c !important;
+    color: rgb(47, 47, 47);
 }
 

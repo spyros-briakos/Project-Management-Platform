@@ -106,8 +106,9 @@
 
 
 .content_wrap{
-    float: right;
-    display: flex;  
+    /* float: right; */
+    display: flex;
+    /* align-items: flex-start; */
     flex-direction: row;
     width: 76%;
     padding: 10px 5px 10px 5px;
@@ -126,7 +127,7 @@
     border-right: 1px solid black;
 }
 
-.txt_wrap{
+.content_wrap .txt_wrap{
     display: flex;
     font-size: 100%;
     flex-direction: column;
@@ -144,11 +145,14 @@
     font-weight: 500;
 }
 
-.txt_subt{
+.content_wrap li .txt_subt{
     width: 80%;
     font-size: 80%;
+    display: flex;
     align-self: center;
+    justify-content: flex-start;
     margin-bottom: 15px;
+
 }
 
 
@@ -172,8 +176,9 @@
     color: rgb(138, 56, 138);
 }
 
-.txt_wrap ul{
+.display_wrap .content_wrap .txt_wrap ul{
     color: rgb(209, 123, 25);
+    text-align: start;
 }
 
 
