@@ -11,7 +11,7 @@
     justify-content: space-around;
     background-color: rgba(230, 230, 230, 0.815); 
     /* background-color: rgb(212, 198, 198);   */
-    padding: 20px 0 25px 0;
+    padding: 10px 0 10px 0;
 }
 
 .big_wrap{
@@ -53,7 +53,7 @@
 
 
 .pict_wrap .design{
-    background-image: url(../img/design.svg);
+    background-image: url(../img/design_2.svg);
     background-size: 50px 50px;
     height: 50px;
     width: 50px;
@@ -121,8 +121,8 @@
 
 .prof_opts .icon{
     content:"";
-    height: 20px;
-    width: 20px;
+    height: 25px;
+    width: 25px;
     margin-right: 10px;
     /* background-color: red; */
 }
@@ -145,9 +145,11 @@
     font-size: 17px;
     width: calc(100% - calc(1.5 * var(--pict_size)px));
     max-width: 75%;
-    border-radius: 30px;
+    /* border-radius: 30px; */
     padding: 20px 20px 10px 10px;
-
+    overflow: hidden;
+    /* border-radius: 20px; */
+    /* border: 2px solid red; */
 }
 
 .pressed{

@@ -29,6 +29,7 @@ footer{
     height: 30%;
     margin-left: auto;
     flex-direction: column;
+    text-align: left;
 }
 
 .myfooter a:visited, a::before, a{

@@ -17,7 +17,7 @@
                                 :class="{'opt_btn':true,
                                         'pressed': selected_id==opt.id
                                         }"
-                                v-on:click="selected_id=opt.id,mpou(opt.svg)">
+                                v-on:click="selected_id=opt.id">
                             <img class="icon" :src="require('../../assets/img/' + opt.svg + '')">
                             {{opt.title}}
                         </button>
@@ -26,7 +26,9 @@
             </div>
             <div class="prof_display">
                 <profProjects v-if="selected_id == 1" />
-                <profSettings v-else-if="selected_id == 3" />            
+                <profCoWorkers v-if="selected_id == 2" />
+                <profSettings v-else-if="selected_id == 3" />
+                <Prices v-else-if="selected_id == 4" />
             </div>
         </div>
     </div>
@@ -35,6 +37,8 @@
 <script>
     import profSettings from "./prof_settings.vue";
     import profProjects from "./prof_projects.vue";
+    import Prices from "../pricing/Prices.vue"
+    import ProfCoWorkers from "./prof_coworkers.vue"
 
     export default {
     name: "ProfOpts",
@@ -55,6 +59,8 @@
     components:{
         profSettings,
         profProjects,
+        Prices,
+        ProfCoWorkers,
     },
     methods:{
         mpou(opt){

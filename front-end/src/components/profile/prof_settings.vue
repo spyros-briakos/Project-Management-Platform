@@ -4,7 +4,6 @@
             <div :class="{'mytitle':true,
                         'warn':elem.id==3,
                         }">
-            
                 {{elem.title}}
             </div>
             <li v-for="item in elem.items" :key="item.id">
