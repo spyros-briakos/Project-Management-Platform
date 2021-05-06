@@ -8,16 +8,21 @@
 }
 
 
+
 .prof_set_wrap .isbutton{
     background-color:rgb(176, 219, 176);
     background-size: 100% 100%;
     width: auto;
 }
-
+    
 .settings_list{
     display: flex;
     flex-flow: column;
     width: 100%;
+    background-color: whitesmoke;
+    border-radius: 20px;
+    box-shadow: 0 0 13px rgba(128, 128, 128, 0.486);
+    padding: 10px 15px 10px 5px;
 }
 
 .settings_list li{
@@ -27,12 +32,21 @@
     padding: 5px 0 5px 20px;
 }
 
+.settings_list li:last-child{
+    border-bottom: none;
+}
+
 .settings_list li .val{
     display: flex;
     width: 100%;
     height: auto;
     color: black;
-    overflow: visible;
+    /* overflow: visible; */
+}
+
+.val:focus{
+    border: none;
+    outline:none;
 }
 
 .settings_list li .val::placeholder{
@@ -62,17 +76,21 @@
     align-items: center;
     justify-content: center;
     background-color: rgb(253, 195, 148);
+    /* color: rgb(47, 44, 226); */
+    font-weight: 500;
+    font-size: medium;
     background-size: 100% 100%;
     height: 70%;
     width: 90%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
     /* min-width: 16%; */
     border-radius: 10px;
 }
 
 .settings_list li .btn_wrap{
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-end;
     min-width: 16%;
     margin-left: auto;
 }
@@ -87,7 +105,8 @@
 .display_val .mywarning{
     display: flex;
     max-width: 60%;
-    background-color: rgba(238, 88, 68, 0.6);
+    color: rgb(221, 75, 75);
+    /* background-color: rgba(238, 88, 68, 0.6); */
 }
 
 .warn_btn_wrap{
@@ -97,5 +116,14 @@
 .warn_btn_wrap .update_btn{
     color: white !important;
     background-color: red !important;
+    font-weight: 500 !important;
 }
 
+
+.warn{
+    color: black !important;
+    background:
+        linear-gradient(to right, rgb(243, 151, 151) 20%, rgb(243, 200, 200) 40%, transparent );
+    border-radius: 10px;
+    padding-left: 5px;
+}

@@ -7,7 +7,7 @@
         }}</v-toolbar-title>
       </router-link>
       <template v-for="(item, index) in items">
-        <template v-if="index <= 2">
+        <template v-if="index <= 3">
           <v-btn :key="index" :to="item.url" plain> {{ item.title }} </v-btn>
         </template>
         <template v-else>
@@ -36,8 +36,9 @@ export default {
 
       items: [
         { title: "Πώς δουλεύει", url: "/how_it_works" },
-        { title: "Τιμές", url: "/prices" },
+        { title: "Profile", url: "/profile" },
         { title: "Projects", url: "/projects" },
+        { title: "Τιμές", url: "/prices" },
         { title: "Σύνδεση", url: "/sign/in" },
       ],
     };
@@ -48,5 +49,8 @@ export default {
 <style>
 .v-btn {
   text-transform: none !important;
+}
+.v-btn__content{
+  color: black !important;
 }
 </style>
