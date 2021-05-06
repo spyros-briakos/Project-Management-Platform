@@ -30,6 +30,7 @@ html, body{
     display: flex;
     max-width: 100%;
     padding: 8% 8% 4% 8%;
+    text-align: left;
 }
 
 .text_box_flex{
