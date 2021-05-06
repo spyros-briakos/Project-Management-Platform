@@ -14,16 +14,16 @@ function getToken(path) {
 
 function checkLogInfo(username, userPath, tokenPath) {
   if(fs.existsSync(userPath)) {
+    const data = fs.readFileSync(userPath);
+    const user = JSON.parse(data);
+
     // If a user is already logged in
     if(fs.existsSync(tokenPath)) {
-      return { result: false, message: 'Error: Please log out first!' } 
-    } else {
-      const data = fs.readFileSync(userPath);
-      const user = JSON.parse(data);
-
-      if(username !== user.username) {
-          return { result: true, message: 'Warning: another account was created last. Are you sure you want to log in with another account? (y/n)' }
-      }
+      // If it is another user than the one trying to log in
+      if(username !== user.username)
+        return { result: false, message: 'Error: Please log out first!' }
+      else
+        return { result: false, message: 'You are already logged in!' } 
     }
   }
 

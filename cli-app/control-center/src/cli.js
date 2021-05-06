@@ -338,25 +338,31 @@ program
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(function (command) {
-	axios.post(`${apiUrl}/users/login?format=${command.format}`, {
-	  username: command.username,
-	  password: command.password
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
-	    if(err) return console.log('Writing user failed:', err);
+	// Check if the user can log in
+	const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
+	if(check.result === false){
+		console.log(check.message);
+	} else {
+	  axios.post(`${apiUrl}/users/login?format=${command.format}`, {
+		username: command.username,
+		password: command.password
+	  }, { httpsAgent: agent })
+	  .then(function (response) {
+		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		  if(err) return console.log('Writing user failed:', err);
+		});
+		fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
+		  if(err) return console.log('Writing token failed:', err);
+		});
+		console.log(response.data.message);
+	  })
+	  .catch(function (error) {
+		if (error.response.data.message)
+		  console.log('Log in failed: ', error.response.data.message);
+		else
+		  console.log('Log in failed: ', error.message);
 	  });
-	  fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
-	    if(err) return console.log('Writing token failed:', err);
-	  });
-	  console.log(response.data.message);
-	})
-	.catch(function (error) {
-	  if (error.response.data.message)
-		console.log('Log in failed: ', error.response.data.message);
-	  else
-		console.log('Log in failed: ', error.message);
-	});
+	}
   });
 
 program
@@ -406,7 +412,7 @@ program
 	  else
 	    console.log('Getting user\'s token failed: ',error.message);
 	} else {
-	// Call log out on the server side
+	  // Call log out on the server side
 	  axios.get(`${apiUrl}/secure-routes/logout`, {
 		headers: { "Authorization": `Bearer ${token}` }
 	  }, { httpsAgent: agent })
@@ -420,7 +426,10 @@ program
 	    console.log(response.data.message);
 	  })
 	  .catch(function(error) {
-		console.log('Couldn\'t log out',error.message);
+		if(error.response.data.message)
+		  console.log('Couldn\'t log out',error.response.data.message);
+		else
+		  console.log('Couldn\'t log out',error.message);
 	  });
 	}
   })
@@ -446,7 +455,10 @@ program
 		console.log(response.data);
 	  })
 	  .catch(function(error) {
-	    console.log('Could not reach user\'s info\n', error.message);
+		if(error.response.data.message)
+	      console.log('Could not reach user\'s info\n', error.response.data.message);
+		else
+	      console.log('Could not reach user\'s info\n', error.message);
 	  });
 	}
   })
@@ -481,8 +493,7 @@ program
 	  }, { headers: { "Authorization": `Bearer ${token}` }
 	  }, { httpsAgent: agent })
 	  .then(function (response) {
-		console.log(response.data);
-		console.log('User\'s update successful.');
+		console.log(response.data.message);
 	  })
 	  .catch(function (error) {
 		console.log('User\'s update failed', error.response.data.message);
@@ -508,16 +519,21 @@ program
 		headers: { "Authorization": `Bearer ${token}` }
 	  }, { httpsAgent: agent })
 	  .then(function(response) {
-	    fs.unlink('/tmp/user.json', function(err) {
-		  if(err) {
-			return console.log('Removing user failed:', err);
-		  }
-		  console.log(response.data);
+		fs.unlink('/tmp/user.json', function(err) {
+		  if(err) return console.log('Removing user failed:', err);
 		});
+		fs.unlink('/tmp/token.json', function(err) {
+		  if(err) return console.log('Removing token failed:', err);
+		});
+
+		console.log(response.data.message);
 	  })
 	  .catch(function (error) {
-		console.log('Deleting user failed: ', error.response.data.message);
-	  });
+		if(error.response.data.message)
+		  console.log('Deleting user failed: ', error.response.data.message);
+		else
+		  console.log('Deleting user failed: ', error.message);
+		});
 	}
   })
 

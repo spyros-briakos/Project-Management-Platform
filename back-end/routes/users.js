@@ -46,9 +46,6 @@ router.post('/signup', [upload.single('image'), passport.authenticate('signup', 
     verify.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
 
     const user = req.user;
-    // Delete sensitive info
-    delete user.password;
-    delete user._id;
 
     res.json({
       message: 'Signup successful!\nWe sent you a verification email. Please check your Gmail!',
