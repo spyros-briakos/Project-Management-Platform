@@ -54,7 +54,7 @@
 }
 
 .settings_list li .val:hover{
-    animation: blinker 2s linear infinite;
+    animation: blinker 2s infinite alternate-reverse;
 }
 
 
@@ -165,6 +165,6 @@
         transform: rotate(-20deg);
     }
     67%{
-        transform: rotate(20deg);
+        transform: rotate(+20deg);
     }
 }
