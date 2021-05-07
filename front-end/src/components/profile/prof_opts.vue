@@ -27,8 +27,9 @@
             <div class="prof_display">
                 <prof-projects v-if="selected_id == 1" />
                 <profCoWorkers v-if="selected_id == 2" />
-                <profSettings v-else-if="selected_id == 3" />
-                <Prices v-else-if="selected_id == 4" />
+                <profSettings v-if="selected_id == 3" />
+                <Prices v-if="selected_id == 4" />
+                <profLogout v-if="selected_id == 5" />
             </div>
         </div>
     </div>
@@ -39,8 +40,9 @@
     
     import profSettings from "./prof_settings.vue";
     import profProjects from "./prof_projects.vue";
-    import Prices from "../pricing/Prices.vue"
-    import profCoWorkers from "./prof_coworkers.vue"
+    import Prices from "../pricing/Prices.vue";
+    import profCoWorkers from "./prof_coworkers.vue";
+    import profLogout from "./prof_logout.vue";
 
     export default {
     name: "ProfOpts",
@@ -63,6 +65,7 @@
         profProjects,
         Prices,
         profCoWorkers,
+        profLogout
     },
     methods:{
         mpou(opt){
@@ -78,12 +81,12 @@
                 this.selected_id = 1;
             else if(to.name == 'coWorkers')
                 this.selected_id = 2;
-            if(to.name == 'profSettings')
+            else if(to.name == 'profSettings')
                 this.selected_id = 3;
             else if(to.name == 'Upgrade')
                 this.selected_id = 4;
-            else if(to.name == 'profSettings')
-                this.selected_id = 3;
+            else if(to.name == 'profLogout')
+                this.selected_id = 5;
         }   
     }
 };
