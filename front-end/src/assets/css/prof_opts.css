@@ -121,6 +121,7 @@
 
 .prof_opts .icon{
     content:"";
+    position: static;
     height: 25px;
     width: 25px;
     margin-right: 10px;
@@ -148,7 +149,7 @@
     /* border-radius: 30px; */
     padding: 20px 20px 10px 10px;
     overflow: hidden;
-    /* border-radius: 20px; */
+    /* border-radius: 50px; */
     /* border: 2px solid red; */
 }
 

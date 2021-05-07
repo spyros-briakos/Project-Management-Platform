@@ -45,11 +45,9 @@ router.post('/signup', [upload.single('image'), passport.authenticate('signup', 
     // Send verification to the user's email
     verify.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
 
-    const user = req.user;
-
     res.json({
       message: 'Signup successful!\nWe sent you a verification email. Please check your Gmail!',
-      user: user
+      user: req.user
     });
 });
 
@@ -58,10 +56,11 @@ router.get('/verify/:verificationCode', async (req, res) => {
   // Find the user in db with the passed verification code
   User.findOne({ verificationCode: req.params.verificationCode })
     .then(async (user) => {
+      // If no such user in the db
       if(!user) {
         res.status(400).json({ message: 'User not found.' });
       }
-
+      // If the account is already active
       if(user.status == 'Active') {
         res.status(400).json({ message: 'Account already verified and active.' });
       }
@@ -71,11 +70,10 @@ router.get('/verify/:verificationCode', async (req, res) => {
 
       // Create user's authentication token (to log in user)
       const tokenObject = utils.issueJWT(user);
-      console.log(tokenObject.token);
+      // console.log(tokenObject.token);
 
       res.json({
-        message: 'Your Account was created successfully. Welcome to ScruManiac!'
-        // token: tokenObject
+        message: 'Your email was verified successfully. Welcome to ScruManiac!'
       });
     })
     .catch((err) => {
@@ -88,19 +86,14 @@ router.get('/verify/:verificationCode', async (req, res) => {
 router.post('/login', async (req, res, next) => {
   passport.authenticate('login', async (err, user, info) => {
     try {
+      // If there was an error
       if (err || !user) {
         res.statusCode = 500
-        return res.json({
-          message: info.message
-        });
+        return res.json({ message: info.message });
       }
 
       // Create user's authentication token
       const tokenObject = utils.issueJWT(user);
-
-      // Delete sensitive info
-      delete user.password;
-      delete user._id;
 
       return res.json({
         message: info.message,
@@ -113,24 +106,31 @@ router.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
+// Get url to sign up user with google
 router.get('/signup-google', async(req, res) => {
   var url = googleUtil.getConnectionUrl_Signup();
   res.json({ url: url });
 });
 
+// Google-signup callback
 router.get('/oauth2callback/signup', async(req, res) => {
+  // Get url parameters (google returned a 'code' parameter)
   const urlParams = queryString.parse(req._parsedUrl.search);
 
   if (urlParams.error) {
     console.log(`An error occurred: ${urlParams.error}`);
   } else {
     try{
+      // Get 'code' parameter
       const code = urlParams.code;
 
+      // Exchange 'code' with the user's email & profile info
       const userInfo = await googleUtil.getUserDetails_Signup(code);
 
+      // Generate a unique, random username (will be ScrumManiacX, where X is a number)
       const username = await utils.generateUsername();
 
+      // Create new user with the retrieved data
       const user = new User({
         username: username,
         firstName: userInfo.given_name,
@@ -151,7 +151,7 @@ router.get('/oauth2callback/signup', async(req, res) => {
       res.json({
         message: 'Your Account was created successfully! You are now logged in.'
         // user: savedUser,
-        // token: jwt.token,
+        // token: jwt.token
       });
     } catch (error) {
       console.log(error);
@@ -160,24 +160,31 @@ router.get('/oauth2callback/signup', async(req, res) => {
   }
 });
 
+// Get url to log in user with google
 router.get('/login-google', async(req, res) => {
   var url = googleUtil.getConnectionUrl_Login();
   res.json({ url: url });
 });
 
+// Google-login callback
 router.get('/oauth2callback/login', async(req, res) => {
+  // Get url parameters (google returned a 'code' parameter)
   const urlParams = queryString.parse(req._parsedUrl.search);
 
   if (urlParams.error) {
     console.log(`An error occurred: ${urlParams.error}`);
   } else {
     try{
+      // Get 'code' parameter
       const code = urlParams.code;
 
+      // Exchange 'code' with the user's email
       const userInfo = await googleUtil.getUserDetails_Login(code);
 
+      // Find user in db
       const [ user ] = await User.find({ email: userInfo.email });
-      console.log(user);
+
+      // If no such user in the db
       if(!user) {
         res.status(500).json({ message: 'User not found' });
       }
@@ -190,7 +197,7 @@ router.get('/oauth2callback/login', async(req, res) => {
       res.json({
         message: 'Logged in Successfully'
         // user: savedUser,
-        // token: jwt.token,
+        // token: jwt.token
       });
     } catch (error) {
       console.log(error);
@@ -199,25 +206,25 @@ router.get('/oauth2callback/login', async(req, res) => {
   }
 });
 
-router.delete('/delete-user', async (req, res) => {
-  try {
-    // Delete user from db
-    const removedUser = await User.deleteOne({ id: req.params.id });
+// router.delete('/delete-user', async (req, res) => {
+//   try {
+//     // Delete user from db
+//     const removedUser = await User.deleteOne({ id: req.params.id });
 
-    // // Mark user's auth token as invalid
-    // const token = new InvalidToken({ value: utils.extractToken(req) });
-    // await token.save();
-    // Log out user
-    req.logout();
+//     // // Mark user's auth token as invalid
+//     // const token = new InvalidToken({ value: utils.extractToken(req) });
+//     // await token.save();
+//     // Log out user
+//     req.logout();
 
-    res.json({
-      result: removedUser,
-      message: 'Deleted user successfully'
-    });
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
+//     res.json({
+//       result: removedUser,
+//       message: 'Deleted user successfully'
+//     });
+//   } catch (error) {
+//     res.status(400).json({ message: error });
+//   }
+// })
 
 // Export router
 module.exports = router;
