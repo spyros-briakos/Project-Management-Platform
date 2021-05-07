@@ -47,7 +47,10 @@ router.post('/signup', [upload.single('image'), passport.authenticate('signup', 
 
     res.json({
       message: 'Signup successful!\nWe sent you a verification email. Please check your Gmail!',
-      user: req.user
+      user: {
+        username: req.user.username,
+        email: req.user.email
+      }
     });
 });
 
@@ -66,18 +69,15 @@ router.get('/verify/:verificationCode', async (req, res) => {
       }
 
       // Update user's status & delete their verification code
-      const updatedUser = await User.updateOne({ _id: user._id }, { $set: { status: 'Active' } , $unset: { verificationCode: "" } }, { runValidators: true });
+      await User.updateOne({ _id: user._id }, { $set: { status: 'Active' } , $unset: { verificationCode: "" } }, { runValidators: true });
 
       // Create user's authentication token (to log in user)
       const tokenObject = utils.issueJWT(user);
       // console.log(tokenObject.token);
 
-      res.json({
-        message: 'Your email was verified successfully. Welcome to ScruManiac!'
-      });
+      res.json({ message: 'Your email was verified successfully. Welcome to ScruManiac!' });
     })
     .catch((err) => {
-      console.log(err);
       res.status(400).json({ message: err });
     })
 });
@@ -97,7 +97,10 @@ router.post('/login', async (req, res, next) => {
 
       return res.json({
         message: info.message,
-        user: user,
+        user: {
+          username: user.username,
+          email: user.email
+        },
         token: tokenObject
       });
     } catch (error) {
@@ -150,7 +153,10 @@ router.get('/oauth2callback/signup', async(req, res) => {
 
       res.json({
         message: 'Your Account was created successfully! You are now logged in.'
-        // user: savedUser,
+        // user: {
+        //   username: user.username,
+        //   email: user.email
+        // },
         // token: jwt.token
       });
     } catch (error) {
@@ -196,7 +202,10 @@ router.get('/oauth2callback/login', async(req, res) => {
 
       res.json({
         message: 'Logged in Successfully'
-        // user: savedUser,
+        // user: {
+        //   username: user.username,
+        //   email: user.email
+        // },
         // token: jwt.token
       });
     } catch (error) {

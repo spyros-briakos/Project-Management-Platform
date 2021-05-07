@@ -51,7 +51,7 @@ router.get('/logout', async(req, res) => {
 router.patch('/edit-user', async (req, res) => {
   try {
     // If a new email was given by the user
-    if(req.body.email) {
+    if(req.body.email && req.body.email != req.user.email) {
       // Create a verification code for the user (will be deleted after the new email address is verified)
       const verificationCode = jwt.sign({ email: req.body.email }, process.env.JWT_SECRET);
 
@@ -61,7 +61,7 @@ router.patch('/edit-user', async (req, res) => {
 
       // Update user
       const updatedUser = await User.updateOne({ _id: req.user._id }, { $set: req.body }, { runValidators: true });
-      const user = await User.find({ _id: req.user._id });
+      const user = await User.findById(req.user._id);
 
       // Send verification to the user's email
       verify.sendVerificationEmail(req.user.username, req.body.email, verificationCode);
@@ -73,19 +73,64 @@ router.patch('/edit-user', async (req, res) => {
 
       res.json({
         message: 'Updated user successfully.\nWe sent you a verification email. Please check your Gmail!',
-        user: user
+        user: {
+          username: user.username,
+          email: user.email
+        },
+        email: 'updated'
       });
     }
     else {
       // Update user
       const updatedUser = await User.updateOne({ _id: req.user._id }, { $set: req.body }, { runValidators: true });
-      const user = await User.find({ _id: req.user._id });
+      const user = await User.findById(req.user._id);
 
       res.json({
         message: 'Updated user successfully.',
-        user: user
+        user: {
+          username: user.username,
+          email: user.email
+        }
       });
     }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// Reset user's password
+router.patch('/reset-password', async (req, res) => {
+  try {
+    // Find user in db
+    const user = await User.findById(req.user._id);
+
+    // If no such user
+    if(!user) {
+      res.status(400).json({ message: 'User not found.' });
+    }
+
+    console.log(user);
+
+    // Check the right password was passed
+    const validate = await user.isValidPassword(req.body.old);
+
+    // If the given password was wrong
+    if(!validate) {
+      res.status(400).json({ message: 'Error: wrong password.' });
+    }
+
+    // If the new password and the confirmation don't match
+    if(req.body.new !== req.body.confirm) {
+      res.status(400).json({ message: 'Error: the new password and the confirmation don\'t match.' });
+    }
+
+    // Update user's password
+    user.password = req.body.new;
+    // Save it so that the new password will be hashed
+    const saved = await user.save();
+
+    res.json({ message: 'Password updated successfully.' });
+
   } catch (error) {
     res.status(400).json({ message: error });
   }
