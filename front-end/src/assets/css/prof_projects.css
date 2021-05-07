@@ -34,6 +34,7 @@
     width: 60%;
     font-size: 100%;
     margin: 20px 0 20px 40px;
+    text-decoration: underline;
 }
 
 .projects_ul li{
@@ -73,10 +74,12 @@
     from{
         opacity: 0;
         width: 0;
+        /* height: 0; */
     }
     to{
         opacity: 1;
         max-width: 50%;
+        /* height: 80px; */
     }
 }
 
@@ -91,9 +94,9 @@
         width: 30%;
         padding-right: 3px;
         font-size: 70%;
-        border-right: 2px solid black;
         align-items: center;
-        min-height: 70px;
+        border-right: 2px solid black;
+        height: 100%;
     }
     
 }
