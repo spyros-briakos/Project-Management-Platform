@@ -57,7 +57,7 @@
                 {id: 2, title: "Οι Συνεργάτες μου", path:"coWorkers", svg: "people.svg"},
                 {id: 3, title: "Ρυθμίσεις Λογαρισμού", path:"profSettings", svg: "settings.svg"},
                 {id: 4, title: "Αναβάθμιση", path:"Upgrade", svg: "upgrade.svg"},
-                {id: 5, title: "Αποσύνδεση", path:"myProjects", svg: "exit.svg"},
+                {id: 5, title: "Αποσύνδεση", path:"profLogout", svg: "exit.svg"},
             ],
         }
     },
