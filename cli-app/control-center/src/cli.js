@@ -456,9 +456,9 @@ program
 	  })
 	  .catch(function(error) {
 		if(error.response.data.message)
-	      console.log('Could not reach user\'s info\n', error.response.data.message);
+	      console.log(`Could not reach user\'s info\n${error.response.data.message}`);
 		else
-	      console.log('Could not reach user\'s info\n', error.message);
+	      console.log(`Could not reach user\'s info\n${error.message}`);
 	  });
 	}
   })
@@ -467,7 +467,7 @@ program
   .command('update-user')
   .option('--format <value>', 'Give format', 'json')
   .option('-u, --username <value>', 'User\'s username')
-  .option('-p, --password <value>', 'User\'s password')
+//   .option('-p, --password <value>', 'User\'s password')
   .option('-fn, --firstName <value>', 'User\'s firstName')
   .option('-ln, --lastName <value>', 'User\'s lastName')
   .option('-e, --email <value>', 'User\'s email')
@@ -493,10 +493,27 @@ program
 	  }, { headers: { "Authorization": `Bearer ${token}` }
 	  }, { httpsAgent: agent })
 	  .then(function (response) {
+		// Update user's info
+		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		  if(err) return console.log('Writing user failed:', err);
+		});
+
 		console.log(response.data.message);
+
+    	// If a new email was given by the user
+		if(command.email){
+		  // Log out the user until the new email is verified
+		  fs.unlink('/tmp/token.json', function(err) {
+			if(err) return console.log('Removing token failed:', err);
+		  });
+		  console.log('After verifying your email, please log in again to continue.')
+		}
 	  })
 	  .catch(function (error) {
-		console.log('User\'s update failed', error.response.data.message);
+		if(error.response.data.message)
+		  console.log(`User\'s update failed: ${error.response.data.message}`);
+		else
+		  console.log(`User\'s update failed: ${error.message}`);
 	  });
     }
   })
@@ -530,9 +547,9 @@ program
 	  })
 	  .catch(function (error) {
 		if(error.response.data.message)
-		  console.log('Deleting user failed: ', error.response.data.message);
+		  console.log(`Deleting user failed: ${error.response.data.message}`);
 		else
-		  console.log('Deleting user failed: ', error.message);
+		  console.log(`Deleting user failed: ${error.message}`);
 		});
 	}
   })

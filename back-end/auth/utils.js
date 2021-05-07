@@ -30,11 +30,14 @@ function extractToken(req) {
   return null;
 }
 
+// Create a unique, random username (will be ScrumManiacX, where X is a number)
 module.exports.generateUsername = async() => {
+  // Get all users in db
   const users = await User.find({});
+  // Number of all users + 1
   const number = users.length + 1;
 
-  return `SrumUser${number}`;
+  return `ScrumUser${number}`;
 }
 
 module.exports.issueJWT = issueJWT;
