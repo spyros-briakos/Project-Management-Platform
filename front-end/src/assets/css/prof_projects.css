@@ -46,8 +46,6 @@
     border-bottom: 1px solid black;
     color: black;
     cursor: pointer;
-    /* padding-bottom: 30px; */
-    /* border: 2px solid red; */
     margin-bottom: 20px;
 }
 
@@ -61,16 +59,12 @@
     align-self: auto;
 }
 
-.projects_ul li:hover{
-}
-
 .projects_ul li:hover::after{
     display:none;
 }
 
 .projects_ul li:hover > .partners_box{
     display: flex;
-    /* overflow: hidden; */
     animation-delay: 10s;
     animation: partners_magic 0.7s ease-out;
 }
@@ -84,7 +78,7 @@
     to{
         opacity: 1;
         /* max-width: 150px; */
-        max-height: 150px;
+        max-height: 100px;
     }
 }
 
@@ -126,9 +120,9 @@
     padding: 3px 2px 3px 10px;
     margin-left: 15px;
     overflow-y: scroll;
-    box-shadow:
-            inset 0px 2px 1px -1px rgba(0,0,0,0.2),
-            inset 0px -2px 1px -1px rgba(0,0,0,0.2);
+    /* box-shadow: */
+            /* inset 0px 2px 1px -1px rgba(0,0,0,0.2), */
+            /* inset 0px -2px 1px -1px rgba(0,0,0,0.2); */
 }
 
 .projects_ul li .partners_box::-webkit-scrollbar{
