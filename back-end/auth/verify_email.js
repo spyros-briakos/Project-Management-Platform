@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-
+// Create sender
 const transport = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -9,6 +9,7 @@ const transport = nodemailer.createTransport({
   }
 });
 
+// Send a verification email to the given Gmail address
 module.exports.sendVerificationEmail = (name, email, verificationCode) => {
   transport.sendMail({
     from: process.env.SENDER_EMAIL,

@@ -23,6 +23,7 @@ passport.use('signup', new localStrategy(
         user.image.contentType = 'image/png'
       }
 
+      // Create a verification code for the user (will be deleted after the email address is verified)
       user.verificationCode = jwt.sign({ email: user.email }, process.env.JWT_SECRET);
 
       const savedUser = await user.save();
@@ -41,18 +42,21 @@ passport.use('login', new localStrategy(
     passwordField: 'password'
   }, async (username, password, done) => {
     try {
+      // Find user in the db
       const user = await User.findOne({ username: username });
-
+      // If no such user
       if (!user) {
         return done(null, false, { message: 'User not found' });
       }
 
+      // Confirm password is valid
       const validate = await user.isValidPassword(password);
-  
+      // If wrong password
       if (!validate) {
         return done(null, false, { message: 'Wrong Password' });
       }
 
+      // If the account is still pending
       if (user.status != 'Active') {
         return done(null, false, { message: 'Pending Account. Please verify your email!' });
       }
@@ -71,9 +75,11 @@ passport.use(new JWTstrategy(
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     passReqToCallback: true
   }, async (req, payload, done) => {
+    // Find user in the db
     User.findOne({ _id: payload.sub })
       .then((user) => {
         if(user) {
+          // req.user will be used in '../routes/secure-routes'
           req.user = user;
           return done(null, user, { message: 'User authenticated successfully' });
         } else {

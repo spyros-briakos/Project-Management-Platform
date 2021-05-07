@@ -11,6 +11,7 @@ const { InvalidToken } = require("../models/User");
 // Get specific user
 router.get('/user', async (req, res) => {
   try {
+    // Find user in db
     const user = await User.findById(req.user._id);
 
     res.json(user);
