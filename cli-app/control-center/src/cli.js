@@ -467,7 +467,6 @@ program
   .command('update-user')
   .option('--format <value>', 'Give format', 'json')
   .option('-u, --username <value>', 'User\'s username')
-//   .option('-p, --password <value>', 'User\'s password')
   .option('-fn, --firstName <value>', 'User\'s firstName')
   .option('-ln, --lastName <value>', 'User\'s lastName')
   .option('-e, --email <value>', 'User\'s email')
@@ -485,7 +484,6 @@ program
 	} else {
 	  axios.patch(`${apiUrl}/secure-routes/edit-user?format=${command.format}/`, {
 		username: command.username,
-		password: command.password,
 		firstName: command.firstName,
 		lastName: command.lastName,
 		email: command.email,
@@ -501,7 +499,7 @@ program
 		console.log(response.data.message);
 
     	// If a new email was given by the user
-		if(command.email){
+		if(response.data.email){
 		  // Log out the user until the new email is verified
 		  fs.unlink('/tmp/token.json', function(err) {
 			if(err) return console.log('Removing token failed:', err);
@@ -516,6 +514,41 @@ program
 		  console.log(`User\'s update failed: ${error.message}`);
 	  });
     }
+  })
+
+program
+  .command('reset-password')
+  .option('--format <value>', 'Give format', 'json')
+  .requiredOption('-op, --oldPassword <value>','User\'s old password')
+  .requiredOption('-np, --newPassword <value>','User\'s new password')
+  .requiredOption('-cp, --confirmPassword <value>','User\'s password confrimation')
+  .action(function(command) {
+	// Get user's token to pass authentication
+	const token = utils.getToken('/tmp/token.json');
+	// If an error occured
+	if(token instanceof Error) {
+	  const error = token;
+	  if(error.code === 'ENOENT')
+	    console.log('Getting user\'s token failed: Please log in first.');
+	  else
+	    console.log('Getting user\'s token failed: ',error.message);
+	} else {
+	  axios.patch(`${apiUrl}/secure-routes/reset-password?format=${command.format}/`, {
+		old: command.oldPassword,
+		new: command.newPassword,
+		confirm: command.confirmPassword
+	  }, { headers: { "Authorization": `Bearer ${token}` }
+	  }, { httpsAgent: agent })
+	  .then(function (response) {
+		console.log(response.data.message);
+	  })
+	  .catch(function (error) {
+	    if(error.response.data.message)
+		  console.log(`Password\'s update failed: ${error.response.data.message}`);
+	    else
+		  console.log(`Password\'s update failed: ${error.message}`);
+	  });
+	}
   })
 
 program
