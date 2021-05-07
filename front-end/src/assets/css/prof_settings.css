@@ -42,7 +42,6 @@
     width: 100%;
     height: auto;
     color: black;
-    /* overflow: visible; */
 }
 
 .val:focus{
@@ -50,8 +49,19 @@
     outline:none;
 }
 
+
 .settings_list li .val::placeholder{
     font-weight: 200;
+    opacity: 0.5;
+}
+
+.settings_list li .val:hover{
+    animation: blinker 2s linear infinite;
+}
+
+
+@keyframes blinker {
+    50%{opacity: 0;}
 }
 
 .settings_list .mytitle{
@@ -90,10 +100,16 @@
 
 .settings_list li .btn_wrap{
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
+    justify-content: center;
+    align-items: center;
     min-width: 16%;
     margin-left: auto;
+}
+
+.settings_list li .btn_wrap .update_btn:hover{
+    text-decoration: underline;
+    opacity: 0.6;
+    box-shadow: 0px 6px 15px rgba(0,0,0,0.3);
 }
 
 .display_val{
@@ -111,7 +127,7 @@
 }
 
 .warn_btn_wrap{
-    /* width: 30%;  */
+    width: 30%; 
 }
 
 .warn_btn_wrap .update_btn{

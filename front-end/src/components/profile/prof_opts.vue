@@ -17,8 +17,7 @@
                                 :class="{'opt_btn':true,
                                         'pressed': selected_id==opt.id
                                         }"
-                                v-on:click="selected_id=opt.id;">
-                            <!-- <router-link to="/profile/settings">profile/sets</router-link> -->
+                                v-on:click="selected_id=opt.id,seturl(opt.path)">
                             <img class="icon" :src="require('../../assets/img/' + opt.svg + '')">
                             {{opt.title}}
                         </button>
@@ -32,11 +31,12 @@
                 <Prices v-else-if="selected_id == 4" />
             </div>
         </div>
-        <!-- <router-view></router-view> -->
     </div>
 </template>
 
 <script>
+    import router from "../../router/index.js";
+    
     import profSettings from "./prof_settings.vue";
     import profProjects from "./prof_projects.vue";
     import Prices from "../pricing/Prices.vue"
@@ -50,11 +50,11 @@
             selected_id: 3,
             name: "Vasilis Goulas",
             opts:[
-                {id: 1, title: "Τα Projects μου", svg: "project_default.svg"},
-                {id: 2, title: "Οι Συνεργάτες μου", svg: "people.svg"},
-                {id: 3, title: "Ρυθμίσεις Λογαρισμού", svg: "settings.svg"},
-                {id: 4, title: "Αναβάθμιση", svg: "upgrade.svg"},
-                {id: 5, title: "Αποσύνδεση", svg: "exit.svg"},
+                {id: 1, title: "Τα Projects μου", path:"myProjects", svg: "project_default.svg"},
+                {id: 2, title: "Οι Συνεργάτες μου", path:"coWorkers", svg: "people.svg"},
+                {id: 3, title: "Ρυθμίσεις Λογαρισμού", path:"profSettings", svg: "settings.svg"},
+                {id: 4, title: "Αναβάθμιση", path:"Upgrade", svg: "upgrade.svg"},
+                {id: 5, title: "Αποσύνδεση", path:"myProjects", svg: "exit.svg"},
             ],
         }
     },
@@ -67,7 +67,24 @@
     methods:{
         mpou(opt){
             alert('url(' + this.route + opt + ')');
+        },
+        seturl(path){
+            router.push({ name: path});
         }
+    },
+    watch: {
+        $route(to) {
+            if(to.name == 'myProjects')
+                this.selected_id = 1;
+            else if(to.name == 'coWorkers')
+                this.selected_id = 2;
+            if(to.name == 'profSettings')
+                this.selected_id = 3;
+            else if(to.name == 'Upgrade')
+                this.selected_id = 4;
+            else if(to.name == 'profSettings')
+                this.selected_id = 3;
+        }   
     }
 };
 </script>

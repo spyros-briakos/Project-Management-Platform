@@ -95,13 +95,13 @@ const routes = [
     component: ForgotPassword,
   },
   {
-    path: "/Profile",
-    name: "Profile",
+    path: "/profile",
+    name: "profile",
     component: ProfOpts,
     children:[
       {
         path: "settings",
-        name: "Settings",
+        name: "profSettings",
         component: profSettings,
       },
       {
