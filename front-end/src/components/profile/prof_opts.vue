@@ -69,7 +69,7 @@
             alert('url(' + this.route + opt + ')');
         },
         seturl(path){
-            router.push({ name: path});
+            router.push({ name: path}).catch(()=>{});
         }
     },
     watch: {

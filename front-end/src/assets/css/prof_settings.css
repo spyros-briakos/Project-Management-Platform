@@ -8,8 +8,6 @@
     text-align: left;
 }
 
-
-
 .prof_set_wrap .isbutton{
     background-color:rgb(176, 219, 176);
     background-size: 100% 100%;
@@ -30,7 +28,7 @@
     display: flex;
     flex-flow: row;
     border-bottom: 1px solid green;
-    padding: 5px 0 5px 20px;
+    padding: 5px 0 5px 20px
 }
 
 .settings_list li:last-child{
@@ -96,7 +94,9 @@
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
     /* min-width: 16%; */
     border-radius: 10px;
+    padding: 3px 4px 3px 4px;
 }
+
 
 .settings_list li .btn_wrap{
     display: flex;
@@ -137,10 +137,34 @@
 }
 
 
-.warn{
+.settings_list .warn{
     color: black !important;
-    background:
-        linear-gradient(to right, rgb(243, 151, 151) 20%, rgb(243, 200, 200) 40%, transparent );
+    /* background: */
+        /* linear-gradient(to right, rgb(243, 151, 151) 20%, rgb(243, 200, 200) 40%, transparent ); */
     border-radius: 10px;
     padding-left: 5px;
+}
+
+.prof_set_wrap .warnul{
+    border: 2px solid red;
+}
+
+
+.warn_btn_wrap .icon{
+    height: 25px;
+    width: 25px;
+    margin-right: 3px;
+}
+
+.warn_btn_wrap:hover .icon{
+    animation: 1.8s shake linear infinite;
+}
+
+@keyframes shake {
+    33%{
+        transform: rotate(-20deg);
+    }
+    67%{
+        transform: rotate(20deg);
+    }
 }

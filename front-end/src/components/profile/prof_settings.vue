@@ -1,12 +1,15 @@
 <template>
     <div class="prof_set_wrap">
-        <ul class="settings_list" v-for="elem in this.menu" :key="elem.id">
+        <ul class="settings_list" v-for="elem in this.menu" :key="elem.id"
+            :class="{'warnul':elem.id==3}">
+            
             <div :class="{'mytitle':true,
                         'warn':elem.id==3,
                         }">
                 {{elem.title}}
             </div>
-            <li v-for="item in elem.items" :key="item.id">
+            
+            <li  v-for="item in elem.items" :key="item.id">
                 <div class="display_val">
                     <label :for="item.title" class="mytitle" :style="{'color': elem.id==3 ? 'red' : ''}">{{item.title}}</label>
                     <input  v-if="elem.id!=3" type="text" :name="item.title" :value="item.hide==false ? item.val : ''" :placeholder="item.holder" class="val" >
@@ -17,7 +20,11 @@
                 <div :class="{'btn_wrap': true,
                             'warn_btn_wrap': elem.id==3,
                             }">
-                    <button v-if="item.button==true" class="update_btn"> {{elem.id==3 ? "Διαγραφή Λογαρισμού" : "Ενημέρωση"}} </button>
+                    <button v-if="item.button==true" class="update_btn">
+                        <!-- <i v-if="elem.id==3" class="far fa-trash-alt"></i> -->
+                        <font-awesome-icon v-if="elem.id==3" class="icon" :icon="['far', 'trash-alt']"/>
+                        {{elem.id==3 ? "Διαγραφή Λογαρισμού" : "Ενημέρωση"}}
+                    </button>
                 </div>
             </li>
         </ul>
@@ -25,6 +32,10 @@
 </template>
 
 <script>
+    import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
+    import { library } from '@fortawesome/fontawesome-svg-core';
+    library.add(faTrashAlt);
+
     export default {
     name: "profSettings",
     data(){
