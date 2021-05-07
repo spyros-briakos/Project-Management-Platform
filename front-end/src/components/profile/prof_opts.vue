@@ -45,6 +45,7 @@
     export default {
     name: "ProfOpts",
     data() {
+        // this.seturl("profSettings");
         return{
             def: 'prof_default.svg',
             selected_id: 3,
