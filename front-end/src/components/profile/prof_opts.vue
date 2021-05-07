@@ -17,7 +17,8 @@
                                 :class="{'opt_btn':true,
                                         'pressed': selected_id==opt.id
                                         }"
-                                v-on:click="selected_id=opt.id">
+                                v-on:click="selected_id=opt.id;">
+                            <!-- <router-link to="/profile/settings">profile/sets</router-link> -->
                             <img class="icon" :src="require('../../assets/img/' + opt.svg + '')">
                             {{opt.title}}
                         </button>
@@ -25,12 +26,13 @@
                 </div>
             </div>
             <div class="prof_display">
-                <profProjects v-if="selected_id == 1" />
+                <prof-projects v-if="selected_id == 1" />
                 <profCoWorkers v-if="selected_id == 2" />
                 <profSettings v-else-if="selected_id == 3" />
                 <Prices v-else-if="selected_id == 4" />
             </div>
         </div>
+        <!-- <router-view></router-view> -->
     </div>
 </template>
 
@@ -38,7 +40,7 @@
     import profSettings from "./prof_settings.vue";
     import profProjects from "./prof_projects.vue";
     import Prices from "../pricing/Prices.vue"
-    import ProfCoWorkers from "./prof_coworkers.vue"
+    import profCoWorkers from "./prof_coworkers.vue"
 
     export default {
     name: "ProfOpts",
@@ -60,7 +62,7 @@
         profSettings,
         profProjects,
         Prices,
-        ProfCoWorkers,
+        profCoWorkers,
     },
     methods:{
         mpou(opt){
