@@ -73,7 +73,7 @@ router.get('/verify/:verificationCode', async (req, res) => {
       // console.log(tokenObject.token);
 
       res.json({
-        message: 'Your Account was created successfully. Welcome to ScruManiac!'
+        message: 'Your email was verified successfully. Welcome to ScruManiac!'
       });
     })
     .catch((err) => {

@@ -14,7 +14,7 @@ module.exports.sendVerificationEmail = (name, email, verificationCode) => {
   transport.sendMail({
     from: process.env.SENDER_EMAIL,
     to: email,
-    subject: 'Please confirm your account',
+    subject: 'Please confirm your email',
     html: `Hi ${name}! Thank you for your registration. Press <a href=http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/verify/${verificationCode}> here </a> to verify your email.`
   }).catch(err => {
     console.log(err);
