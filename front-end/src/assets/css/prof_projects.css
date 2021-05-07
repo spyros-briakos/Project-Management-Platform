@@ -23,6 +23,7 @@
     justify-content: flex-start;
     align-content: flex-start;
     overflow-y: scroll;
+    padding-top: 20px;
 }
 
 .projects_ul button{
@@ -45,13 +46,120 @@
     border-bottom: 1px solid black;
     color: black;
     cursor: pointer;
+    margin-bottom: 20px;
 }
 
+.projects_ul li::after{
+    margin: auto 0 auto auto;
+    content: ">";
+    font-size: 100%;
+    font-weight: 100;
+    opacity: 0.5;
+    color: black;
+    align-self: auto;
+}
 
-.projects_ul li:hover{
-    animation: jumpy_projects 4s;
-    animation-iteration-count: infinite;
+.projects_ul li:hover::after{
+    display:none;
+}
 
+.projects_ul li:hover > .partners_box{
+    display: flex;
+    animation-delay: 10s;
+    animation: partners_magic 0.8s linear forwards;
+}
+
+@keyframes partners_magic {
+    from{
+        opacity: 0;
+        width: 0;
+    }
+    to{
+        opacity: 1;
+        max-width: 50%;
+    }
+}
+
+.projects_ul li:hover > .projectTitle{
+    animation: 0.6s li_magic  forwards;
+}
+
+@keyframes li_magic {
+    from{
+    }
+    to{
+        width: 30%;
+        padding-right: 3px;
+        font-size: 70%;
+        border-right: 2px solid black;
+        align-items: center;
+        min-height: 70px;
+    }
+    
+}
+
+.projects_ul li:hover > .icon{
+    align-self: center;
+}
+
+.projects_ul li .projectTitle{
+    display: flex;
+}
+
+.projects_ul li .partners_box{
+    display: none;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 60%;
+    height: 80px;
+    padding: 3px 2px 3px 10px;
+    overflow: hidden;
+}
+
+.projects_ul li .partners_box::-webkit-scrollbar{
+    display: none;
+}
+
+.projects_ul li .partners_box .partner{
+    display: flex;
+    position: relative;
+    height: 30px;
+    width: 30px;
+    margin-bottom: 3px;
+    margin-right: 6%;
+}
+
+.projects_ul li .partners_box .partner .mytxt{
+    position: absolute;
+    font-weight: 500;
+    height: 100%;
+    width: 100%;
+}
+
+.projects_ul li .partners_box .partner .fullname{
+    display: none;
+    position: fixed;
+    padding: 2px 5px 2px 5px;
+    transform: translateY(-20px);
+    background-color: rgb(139, 139, 139);
+    box-shadow: 0 1px 3px rgba(0,0,0,1);
+    color: black;
+    font-size: 80%;
+    min-width: 80px;
+    justify-content: center;
+    opacity: 0.9;
+}
+
+.projects_ul li .partners_box .partner .icon{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    opacity: 0.2;
+}
+
+.projects_ul li .partners_box .partner:hover > .fullname{
+    display: flex;
 }
 
 @keyframes jumpy_projects {
@@ -61,22 +169,14 @@
     
 }
 
-/* .projects_ul li::before{
-    content: url(../img/project_default.svg);
-    height: 40px;
-    width: 40px;
-    margin-right: 10px;
-    margin-bottom: 5px;
-    background-color: orange;
-} */
-
 .projects_ul li .icon{
     content: url(../img/project_default.svg);
     height: 40px;
     width: 40px;
+    /* height: 100%; */
+    /* width: 100%; */
     margin-right: 10px;
     margin-bottom: 5px;
-    background-color: orange;
 }
 
 

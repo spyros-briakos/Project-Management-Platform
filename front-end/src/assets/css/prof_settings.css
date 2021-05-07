@@ -7,14 +7,6 @@
     width: 100%;
     text-align: left;
 }
-
-
-
-.prof_set_wrap .isbutton{
-    background-color:rgb(176, 219, 176);
-    background-size: 100% 100%;
-    width: auto;
-}
     
 .settings_list{
     display: flex;
@@ -30,7 +22,7 @@
     display: flex;
     flex-flow: row;
     border-bottom: 1px solid green;
-    padding: 5px 0 5px 20px;
+    padding: 5px 0 5px 20px
 }
 
 .settings_list li:last-child{
@@ -56,22 +48,19 @@
 }
 
 .settings_list li .val:hover{
-    animation: blinker 2s linear infinite;
+    animation: blinker 2s ease-out infinite;
 }
 
 
 @keyframes blinker {
-    50%{opacity: 0;}
+    50%{opacity: 0.1;}
 }
 
 .settings_list .mytitle{
-    /* background-image: linear-gradient(to right, rgb(176, 219, 176), transparent); */
     margin-bottom: 0;
     font-size: 120%;
     width: 100%;
-    color: rgb(82, 146, 82);
-    /* color: black; */
-    /* font-weight: 100; */
+    color: #79b38c;
 }
 
 .settings_list li .mytitle{
@@ -79,7 +68,6 @@
     background-color: transparent;
     color: grey;
     font-weight: 300;
-    /* font-size: 50% !important; */
 }
 
 .settings_list li .btn_wrap .update_btn{
@@ -87,16 +75,17 @@
     align-items: center;
     justify-content: center;
     background-color: rgb(253, 195, 148);
-    /* color: rgb(47, 44, 226); */
+    color: black;
     font-weight: 500;
     font-size: medium;
     background-size: 100% 100%;
     height: 70%;
     width: 90%;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    /* min-width: 16%; */
     border-radius: 10px;
+    padding: 3px 4px 3px 4px;
 }
+
 
 .settings_list li .btn_wrap{
     display: flex;
@@ -123,7 +112,6 @@
     display: flex;
     max-width: 60%;
     color: rgb(221, 75, 75);
-    /* background-color: rgba(238, 88, 68, 0.6); */
 }
 
 .warn_btn_wrap{
@@ -137,10 +125,32 @@
 }
 
 
-.warn{
+.settings_list .warn{
     color: black !important;
-    background:
-        linear-gradient(to right, rgb(243, 151, 151) 20%, rgb(243, 200, 200) 40%, transparent );
     border-radius: 10px;
     padding-left: 5px;
+}
+
+.prof_set_wrap .warnul{
+    border: 2px solid red;
+}
+
+
+.warn_btn_wrap .icon{
+    height: 25px;
+    width: 25px;
+    margin-right: 3px;
+}
+
+.warn_btn_wrap:hover .icon{
+    animation: 1.8s shake linear infinite;
+}
+
+@keyframes shake {
+    33%{
+        transform: rotate(-20deg);
+    }
+    67%{
+        transform: rotate(+20deg);
+    }
 }

@@ -89,31 +89,10 @@
     justify-content: center;
     align-items: center;
     padding: 10px 5px 10px 0px;
-    /* color: white; */
     border-left:10px solid transparent;
     border-right:10px solid transparent;
     font-weight: 500;
 }
-
-/* .prof_opts .opt_btn:focus{
-    border-left:10px solid white;
-    background-color: #79b38c;
-    color: rgb(47, 47, 47);
-    transition: flood_left 0.5s;
-    border-radius: -20px;
-} */
-
-    /* .prof_opts .opt_btn::after{
-        display: none;
-        width: 0;
-        align-items: center;
-        opacity: 0;
-        height: 10px;
-        padding-left: 10px;
-        content: ">";
-        font-size: 20px;
-        overflow:hidden;
-    } */
 
 .prof_opts .opt_btn:hover{
     background-color: rgba(121, 179,140,0.2);
@@ -125,7 +104,6 @@
     height: 25px;
     width: 25px;
     margin-right: 10px;
-    /* background-color: red; */
 }
 
 .name{

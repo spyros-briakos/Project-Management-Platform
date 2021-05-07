@@ -12,7 +12,26 @@
                 <div class="icon" :style="{
                     'background-color' : color_roulete(),
                 }"></div>
-                {{project.title}}
+                <div class="projectTitle">
+                    {{project.title}}
+                </div>
+                <div class="partners_box">
+                    <div class="partner" v-for="partner in project.partners" :key="partner">
+                        <font-awesome-icon class="icon" :icon="['far', 'user']"
+                            :style="{
+                                'background-color' : color_roulete(),
+                            }">
+                        </font-awesome-icon>
+
+                        <div class="fullname">
+                            {{partner}}
+                        </div>
+
+                        <div class="mytxt">
+                            {{partner[0]}}
+                        </div>
+                    </div>
+                </div>
             </li>
         </ul>
     <router-view></router-view>
@@ -31,42 +50,57 @@
                 {
                     id: 1,
                     title: "Deploy PPO, A2C model",
-                    
+                    partners: [
+                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
+                    ],
                 },
 
                 {
                     id: 2,
                     title: "CNN's Implementation",
+                    partners: [
+                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
+                    ],
                 },
 
                 {
                     id: 3,
                     title: "Mini JS Compiler",
-                   
+                    partners: [
+                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
+                    ],
                 },
 
                 {
                     id: 4,
                     title: "LSH HyperCube Algorithms",
-                   
+                    partners: [
+                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
+                    ],
                 },
 
                 {
                     id: 5,
                     title: "Variational Autoencoders",
-                   
+                    partners: [
+                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
+                    ],
                 },
 
                 {
                     id: 6,
                     title: "Redesign Eudoxus Website",
-                   
+                    partners: [
+                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
+                    ],
                 },
 
                 {
                     id: 7,
                     title: "Best DI Team Implementation",
-                   
+                    partners: [
+                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
+                    ],
                 }
             ]
         }
