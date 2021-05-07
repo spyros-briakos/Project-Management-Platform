@@ -26,7 +26,7 @@
                         <div class="fullname">
                             {{partner}}
                         </div>
-                        
+
                         <div class="mytxt">
                             {{partner[0]}}
                         </div>

@@ -7,12 +7,6 @@
     width: 100%;
     text-align: left;
 }
-
-.prof_set_wrap .isbutton{
-    background-color:rgb(176, 219, 176);
-    background-size: 100% 100%;
-    width: auto;
-}
     
 .settings_list{
     display: flex;
@@ -54,22 +48,19 @@
 }
 
 .settings_list li .val:hover{
-    animation: blinker 2s infinite alternate-reverse;
+    animation: blinker 2s ease-out infinite;
 }
 
 
 @keyframes blinker {
-    50%{opacity: 0;}
+    50%{opacity: 0.1;}
 }
 
 .settings_list .mytitle{
-    /* background-image: linear-gradient(to right, rgb(176, 219, 176), transparent); */
     margin-bottom: 0;
     font-size: 120%;
     width: 100%;
-    color: rgb(82, 146, 82);
-    /* color: black; */
-    /* font-weight: 100; */
+    color: #79b38c;
 }
 
 .settings_list li .mytitle{
@@ -77,7 +68,6 @@
     background-color: transparent;
     color: grey;
     font-weight: 300;
-    /* font-size: 50% !important; */
 }
 
 .settings_list li .btn_wrap .update_btn{
@@ -92,7 +82,6 @@
     height: 70%;
     width: 90%;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    /* min-width: 16%; */
     border-radius: 10px;
     padding: 3px 4px 3px 4px;
 }
@@ -123,7 +112,6 @@
     display: flex;
     max-width: 60%;
     color: rgb(221, 75, 75);
-    /* background-color: rgba(238, 88, 68, 0.6); */
 }
 
 .warn_btn_wrap{
@@ -139,8 +127,6 @@
 
 .settings_list .warn{
     color: black !important;
-    /* background: */
-        /* linear-gradient(to right, rgb(243, 151, 151) 20%, rgb(243, 200, 200) 40%, transparent ); */
     border-radius: 10px;
     padding-left: 5px;
 }
