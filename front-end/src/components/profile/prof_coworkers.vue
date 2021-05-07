@@ -1,21 +1,33 @@
 <template>
     <div class="wrap_coworkers">
-        <div class="mytitle">{{welcome_mssg}}</div>
+             
+        <div class="mytitle">
+            <font-awesome-icon class="icon" :icon="['fas', 'thumbtack']" />
+            {{welcome_mssg}}
+        </div>
 
         <ul class="coworkers_ul">
             <li v-for="project in projects" :key="project.id"
-                v-on:click="mpou()">
-                <div class="icon" :style="{
-                    'border' : '4px solid ' + color_roulete(),
-                }"></div>
+                v-on:click="mpou()"
+                :style="{
+                    'background-color' : color_roulete(),
+                }">
+
+                <font-awesome-icon class="icon" :icon="['far', 'user']"/>
                 {{project.name}}
+
             </li>
         </ul>
+        
     </div>
 
 </template>
 
 <script>
+    import { faThumbtack } from '@fortawesome/free-solid-svg-icons'
+    import { library } from '@fortawesome/fontawesome-svg-core';
+    library.add(faThumbtack);
+    
     export default {
     name: "profCoWorkers",
     data(){
@@ -70,7 +82,7 @@
                 },
 
                 {
-                    id: 7,
+                    id: 9,
                     name: "Panos Perdikos",
                    
                 }
@@ -82,7 +94,7 @@
             alert('on-click');
         },
         color_roulete(){
-            let c_arr=["red", "orange", "blue", "plum", "green", "purple"];
+            let c_arr=["red", "orange", "lightblue", "plum", "green", "purple"];
             return c_arr[Math.floor(Math.random() * c_arr.length)];
         }
     }

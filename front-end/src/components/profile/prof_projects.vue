@@ -1,6 +1,9 @@
 <template>
     <div class="wrap_projects">
-        <div class="mytitle">{{welcome_mssg}}</div>
+        <div class="mytitle">
+            <font-awesome-icon class="icon" :icon="['fas', 'thumbtack']" />
+            {{welcome_mssg}}
+        </div>
         <button class="create_btn" v-on:click="mpou()">{{btn_mssg}}</button>
         
         <ul class="projects_ul">
@@ -12,6 +15,7 @@
                 {{project.title}}
             </li>
         </ul>
+    <router-view></router-view>
     </div>
 
 </template>
