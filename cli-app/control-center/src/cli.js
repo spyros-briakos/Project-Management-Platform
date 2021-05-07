@@ -4,6 +4,7 @@ const program = require('commander');
 const axios = require('axios');
 const https = require('https');
 const fs = require('fs');
+const utils = require('./utils');
 
 const apiUrl = 'http://127.0.0.1:3000/api-control';
 const agent = new https.Agent({
@@ -337,12 +338,16 @@ program
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(function (command) {
-	axios.post(`${apiUrl}/users/login?format=${command.format}`, {
-	  username: command.username,
-	  password: command.password
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  console.log(response.data);
+	// Check if the user can log in
+	const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
+	if(check.result === false){
+		console.log(check.message);
+	} else {
+	  axios.post(`${apiUrl}/users/login?format=${command.format}`, {
+		username: command.username,
+		password: command.password
+	  }, { httpsAgent: agent })
+	  .then(function (response) {
 		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
 		  if(err) return console.log('Writing user failed:', err);
 		});
@@ -350,50 +355,14 @@ program
 		  if(err) return console.log('Writing token failed:', err);
 		});
 		console.log(response.data.message);
-	})
-	.catch(function (error) {
-	  if (error.response.data.message)
-		console.log('Login failed: ', error.response.data.message);
-	  else
-		console.log('Login failed: ', error.message);
-	});
-  });
-
-program
-  .command('logout')
-  .option('--format <value>', 'Give format', 'json')
-  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-  .action(function(command) {
-	axios.get(`${apiUrl}/secure-routes/logout`, {
-		headers: { "Authorization": `Bearer ${command.token}` }
-	}, { httpsAgent: agent })
-	.then(function(response){
-	  fs.unlink('/tmp/user.json', function(err) {
-		if(err) return console.log('Removing user failed:', err);
+	  })
+	  .catch(function (error) {
+		if (error.response.data.message)
+		  console.log('Log in failed: ', error.response.data.message);
+		else
+		  console.log('Log in failed: ', error.message);
 	  });
-	  fs.unlink('/tmp/token.json', function(err) {
-		if(err) return console.log('Removing token failed:', err);
-	  });
-	  console.log(response.message);
-	})
-	.catch(function(error) {
-	  console.log('Couldn\'t log out',error.message);
-	});
-  })
-
-program
-  .command('tokens')
-  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-  .action(function (command) {
-    axios.get(`${apiUrl}/secure-routes/tokens`, {
-	  headers: { "Authorization": `Bearer ${command.token}` }
-	}, { httpsAgent: agent })
-    .then(function(response) {
-      console.log(response.data);
-    })
-    .catch(function(error) {
-      console.log(error);
-    })
+	}
   });
 
 program
@@ -405,7 +374,6 @@ program
   .requiredOption('-ln, --lastName <value>', 'User\'s last name')
   .requiredOption('-e, --email <value>', 'User\'s email')
   .option('--plan <value>', 'User\'s plan (standard or premium)')
-//  .option('--picture <value>', 'User\'s profile picture (url)')
   .action(function(command) {
 	axios.post(`${apiUrl}/users/signup?format=${command.format}/`, {
 	  username: command.username,
@@ -416,25 +384,88 @@ program
 	  plan_in_use: command.plan
 	}, { httpsAgent: agent })
 	.then(function (response) {
-	  console.log(response.data);
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data), function(err) {
-		if (err) {
-	  	  return console.log('Writing token failed:', err);
-	    }
-	    console.log(response.data.message);
-	    // console.log('Sign up successful.');
+	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+	    if(err) return console.log('Writing user failed:', err);
 	  });
+	  console.log(response.data.message);
+	  console.log('After verifying your email, please log in to continue.')
 	})
 	.catch(function (error) {
-	  console.log(error)
-	  console.log('Sign up failed');
+	  if (error.response.data.message)
+		console.log('Sign up failed: ', error.response.data.message);
+	  else
+		console.log('Sign up failed: ', error.message);
 	});
   });
 
 program
+  .command('logout')
+  .option('--format <value>', 'Give format', 'json')
+  .action(function(command) {
+	// Get user's token to pass authentication
+	const token = utils.getToken('/tmp/token.json');
+	// If an error occured
+	if(token instanceof Error) {
+	  const error = token;
+	  if(error.code === 'ENOENT')
+	    console.log('Getting user\'s token failed: Please log in first.');
+	  else
+	    console.log('Getting user\'s token failed: ',error.message);
+	} else {
+	  // Call log out on the server side
+	  axios.get(`${apiUrl}/secure-routes/logout`, {
+		headers: { "Authorization": `Bearer ${token}` }
+	  }, { httpsAgent: agent })
+	  .then(function(response){
+		fs.unlink('/tmp/user.json', function(err) {
+		  if(err) return console.log('Removing user failed:', err);
+		});
+		fs.unlink('/tmp/token.json', function(err) {
+		  if(err) return console.log('Removing token failed:', err);
+	    });
+	    console.log(response.data.message);
+	  })
+	  .catch(function(error) {
+		if(error.response.data.message)
+		  console.log('Couldn\'t log out',error.response.data.message);
+		else
+		  console.log('Couldn\'t log out',error.message);
+	  });
+	}
+  })
+
+program
+  .command('get-user')
+  .option('--format <value>', 'Give format', 'json')
+  .action(function(command) {
+	// Get user's token to pass authentication
+	const token = utils.getToken('/tmp/token.json');
+	// If an error occured
+	if(token instanceof Error) {
+	  const error = token;
+	  if(error.code === 'ENOENT')
+	    console.log('Getting user\'s token failed: Please log in first.');
+	  else
+	    console.log('Getting user\'s token failed: ',error.message);
+	} else {
+	  axios.get(`${apiUrl}/secure-routes/user?format=${command.format}/`, {
+	    headers: { "Authorization": `Bearer ${token}` }
+	  }, { httpsAgent: agent })
+	  .then(function(response){
+		console.log(response.data);
+	  })
+	  .catch(function(error) {
+		if(error.response.data.message)
+	      console.log('Could not reach user\'s info\n', error.response.data.message);
+		else
+	      console.log('Could not reach user\'s info\n', error.message);
+	  });
+	}
+  })
+
+program
   .command('update-user')
   .option('--format <value>', 'Give format', 'json')
-  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .option('-u, --username <value>', 'User\'s username')
   .option('-p, --password <value>', 'User\'s password')
   .option('-fn, --firstName <value>', 'User\'s firstName')
@@ -442,23 +473,119 @@ program
   .option('-e, --email <value>', 'User\'s email')
   .option('--plan <value>', 'User\'s plan (standard or premium)')
   .action(function(command) {
-	axios.patch(`${apiUrl}/secure-routes/edit-user?format=${command.format}/`, {
-	  username: command.username,
-	  password: command.password,
-	  firstName: command.firstName,
-	  lastName: command.lastName,
-	  email: command.email,
-	  plan_in_use: command.plan,
-	}, { headers: { "Authorization": `Bearer ${command.token}` }
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  console.log(response.data);
-	  console.log('User\'s update successful.');
+	// Get user's token to pass authentication
+	const token = utils.getToken('/tmp/token.json');
+	// If an error occured
+	if(token instanceof Error) {
+	  const error = token;
+	  if(error.code === 'ENOENT')
+	    console.log('Getting user\'s token failed: Please log in first.');
+	  else
+	    console.log('Getting user\'s token failed: ',error.message);
+	} else {
+	  axios.patch(`${apiUrl}/secure-routes/edit-user?format=${command.format}/`, {
+		username: command.username,
+		password: command.password,
+		firstName: command.firstName,
+		lastName: command.lastName,
+		email: command.email,
+		plan_in_use: command.plan,
+	  }, { headers: { "Authorization": `Bearer ${token}` }
+	  }, { httpsAgent: agent })
+	  .then(function (response) {
+		console.log(response.data.message);
+	  })
+	  .catch(function (error) {
+		console.log('User\'s update failed', error.response.data.message);
+	  });
+    }
+  })
+
+program
+  .command('delete-user')
+  .option('--format <value>', 'Give format', 'json')
+  .action(function(command) {
+	// Get user's token to pass authentication
+	const token = utils.getToken('/tmp/token.json');
+	// If an error occured
+	if(token instanceof Error) {
+	  const error = token;
+	  if(error.code === 'ENOENT')
+	    console.log('Getting user\'s token failed: Please log in first.');
+	  else
+	    console.log('Getting user\'s token failed: ',error.message);
+	} else {
+	  axios.delete(`${apiUrl}/secure-routes/delete-user?format=${command.format}/`, {
+		headers: { "Authorization": `Bearer ${token}` }
+	  }, { httpsAgent: agent })
+	  .then(function(response) {
+		fs.unlink('/tmp/user.json', function(err) {
+		  if(err) return console.log('Removing user failed:', err);
+		});
+		fs.unlink('/tmp/token.json', function(err) {
+		  if(err) return console.log('Removing token failed:', err);
+		});
+
+		console.log(response.data.message);
+	  })
+	  .catch(function (error) {
+		if(error.response.data.message)
+		  console.log('Deleting user failed: ', error.response.data.message);
+		else
+		  console.log('Deleting user failed: ', error.message);
+		});
+	}
+  })
+
+program
+  .command('signup-google')
+  .option('--format <value>', 'Give format', 'json')
+  .action(function(command) {
+	axios.get(`${apiUrl}/users/signup-google?format=${command.format}/`, {}, { httpsAgent: agent })
+	.then(function(response){
+	  console.log(response.data.url);
 	})
-	.catch(function (error) {
-	  console.log('User\'s update failed', error.response.data.message);
+	.catch(function(error){
+	  console.log(error);
 	});
-})
+  })
+
+program
+  .command('login-google')
+  .option('--format <value>', 'Give format', 'json')
+  .action(function(command) {
+	axios.get(`${apiUrl}/users/login-google?format=${command.format}/`, {}, { httpsAgent: agent })
+	.then(function(response){
+	  console.log(response.data.url);
+	})
+	.catch(function(error){
+	  console.log(error);
+	});
+  })
+
+// program
+//   .command('tokens')
+//   .action(function (command) {
+// 	// Get user's token to pass authentication
+// 	const token = utils.getToken('/tmp/token.json');
+// 	if(token instanceof Error) {
+// 	  const error = token;
+// 	  if(error.code === 'ENOENT')
+// 	    console.log('Getting user\'s token failed: Please log in first.');
+// 	  else
+// 	    console.log('Getting user\'s token failed: ',error.message);
+// 	} else {
+// 	  axios.get(`${apiUrl}/secure-routes/tokens`, {
+// 		headers: { "Authorization": `Bearer ${token}` }
+// 	  }, { httpsAgent: agent })
+// 	  .then(function(response) {
+// 		console.log(response.data);
+// 	  })
+// 	  .catch(function(error) {
+// 		console.log(error);
+// 	  })
+// 	}
+//   });
 
 // program
 // .command('delete-user')
@@ -481,55 +608,8 @@ program
 //   });
 // })
 
-program
-  .command('delete-user')
-  .option('--format <value>', 'Give format', 'json')
-  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-  .action(function(command) {
-	axios.delete(`${apiUrl}/secure-routes/delete-user?format=${command.format}/`, {
-	  headers: { "Authorization": `Bearer ${command.token}` }
-	}, { httpsAgent: agent })
-	.then(function(response) {
-	  fs.unlink('/tmp/user.json', function(err) {
-	    if(err) {
-		  return console.log('Removing user failed:', err);
-		}
-		console.log(response.data);
-	  });
-	})
-	.catch(function (error) {
-	  console.log('Deleting user failed: ', error.response.data.message);
-	});
-  })
 
-program
-  .command('get-user')
-  .option('--format <value>', 'Give format', 'json')
-  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-  .action(function(command) {
-    axios.get(`${apiUrl}/secure-routes/user?format=${command.format}/`, {
-      headers: { "Authorization": `Bearer ${command.token}` }
-    }, { httpsAgent: agent })
-    .then(function(response){
-	  console.log(response.data);
-    })
-    .catch(function(error) {
-	  console.log('Could not reach user\'s info\n', error.message);
-    });
-  })
-
-program
-  .command('google-url')
-  .option('--format <value>', 'Give format', 'json')
-  .action(function(command) {
-	axios.get(`${apiUrl}/users/google-url?format=${command.format}/`, {}, { httpsAgent: agent })
-	.then(function(response){
-	  console.log(response.data.url);
-	})
-	.catch(function(error){
-	  console.log(error);
-	});
-  })
+/*--------------------------------------------------------------------------------------------------*/
 
 //   program
 //   .command('list-users')

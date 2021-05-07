@@ -45,34 +45,37 @@ router.post('/signup', [upload.single('image'), passport.authenticate('signup', 
     // Send verification to the user's email
     verify.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
 
+    const user = req.user;
+
     res.json({
-      message: 'Signup successful!\n We sent you a verification email. Please check your gmail!',
-      user: req.user
+      message: 'Signup successful!\nWe sent you a verification email. Please check your Gmail!',
+      user: user
     });
 });
 
 // Verified user via email
-router.get('/verify/:verificationCode', async (req, res, next) => {
+router.get('/verify/:verificationCode', async (req, res) => {
   // Find the user in db with the passed verification code
   User.findOne({ verificationCode: req.params.verificationCode })
     .then(async (user) => {
       if(!user) {
-        res.status(400).json({ message: 'User not found' });
+        res.status(400).json({ message: 'User not found.' });
       }
 
-      // Update user's status
-      const updatedUser = await User.updateOne({ _id: user._id }, { $set: { status: 'Active' } }, { runValidators: true });
+      if(user.status == 'Active') {
+        res.status(400).json({ message: 'Account already verified and active.' });
+      }
+
+      // Update user's status & delete their verification code
+      const updatedUser = await User.updateOne({ _id: user._id }, { $set: { status: 'Active' } , $unset: { verificationCode: "" } }, { runValidators: true });
 
       // Create user's authentication token (to log in user)
-      const jwt = utils.issueJWT(user);
-
-      console.log(jwt.token);
+      const tokenObject = utils.issueJWT(user);
+      console.log(tokenObject.token);
 
       res.json({
-        message: 'Your Account was created successfully! You are now logged in.'
-        // user: updatedUser,
-        // token: jwt.token,
-        // expiresIn: jwt.expires
+        message: 'Your Account was created successfully. Welcome to ScruManiac!'
+        // token: tokenObject
       });
     })
     .catch((err) => {
@@ -95,6 +98,10 @@ router.post('/login', async (req, res, next) => {
       // Create user's authentication token
       const tokenObject = utils.issueJWT(user);
 
+      // Delete sensitive info
+      delete user.password;
+      delete user._id;
+
       return res.json({
         message: info.message,
         user: user,
@@ -106,45 +113,111 @@ router.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/google-url', async(req, res) => {
-  var url = googleUtil.getConnectionUrl();
+router.get('/signup-google', async(req, res) => {
+  var url = googleUtil.getConnectionUrl_Signup();
   res.json({ url: url });
 });
 
-router.get('/oauth2callback', async(req, res) => {
+router.get('/oauth2callback/signup', async(req, res) => {
   const urlParams = queryString.parse(req._parsedUrl.search);
 
   if (urlParams.error) {
     console.log(`An error occurred: ${urlParams.error}`);
   } else {
-    const code = urlParams.code;
-    console.log(`The code is: ${code}`);
+    try{
+      const code = urlParams.code;
 
-    const userInfo = await googleUtil.getUserDetails(code);
-    console.log(`User info: ${userInfo}`);
-    res.json({ code: code, userInfo: userInfo });
+      const userInfo = await googleUtil.getUserDetails_Signup(code);
+
+      const username = await utils.generateUsername();
+
+      const user = new User({
+        username: username,
+        firstName: userInfo.given_name,
+        lastName: userInfo.family_name,
+        email: userInfo.email,
+        status: 'Active'
+      });
+
+      user.image.url = userInfo.picture;
+
+      const savedUser = await user.save();
+
+      // Create user's authentication token (to log in user)
+      const jwt = utils.issueJWT(savedUser);
+
+      console.log(jwt.token);
+
+      res.json({
+        message: 'Your Account was created successfully! You are now logged in.'
+        // user: savedUser,
+        // token: jwt.token,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ message: error });
+    }
   }
 });
 
-// router.delete('/delete-user', async (req, res) => {
-//   try {
-//     // Delete user from db
-//     const removedUser = await User.deleteOne({ id: req.params.id });
+router.get('/login-google', async(req, res) => {
+  var url = googleUtil.getConnectionUrl_Login();
+  res.json({ url: url });
+});
 
-//     // // Mark user's auth token as invalid
-//     // const token = new InvalidToken({ value: utils.extractToken(req) });
-//     // await token.save();
-//     // Log out user
-//     req.logout();
+router.get('/oauth2callback/login', async(req, res) => {
+  const urlParams = queryString.parse(req._parsedUrl.search);
 
-//     res.json({
-//       result: removedUser,
-//       message: 'Deleted user successfully'
-//     });
-//   } catch (error) {
-//     res.status(400).json({ message: error });
-//   }
-// })
+  if (urlParams.error) {
+    console.log(`An error occurred: ${urlParams.error}`);
+  } else {
+    try{
+      const code = urlParams.code;
+
+      const userInfo = await googleUtil.getUserDetails_Login(code);
+
+      const [ user ] = await User.find({ email: userInfo.email });
+      console.log(user);
+      if(!user) {
+        res.status(500).json({ message: 'User not found' });
+      }
+
+      // Create user's authentication token (to log in user)
+      const jwt = utils.issueJWT(user);
+
+      console.log(jwt.token);
+
+      res.json({
+        message: 'Logged in Successfully'
+        // user: savedUser,
+        // token: jwt.token,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ message: error });
+    }
+  }
+});
+
+router.delete('/delete-user', async (req, res) => {
+  try {
+    // Delete user from db
+    const removedUser = await User.deleteOne({ id: req.params.id });
+
+    // // Mark user's auth token as invalid
+    // const token = new InvalidToken({ value: utils.extractToken(req) });
+    // await token.save();
+    // Log out user
+    req.logout();
+
+    res.json({
+      result: removedUser,
+      message: 'Deleted user successfully'
+    });
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
 
 // Export router
 module.exports = router;

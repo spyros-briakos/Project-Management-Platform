@@ -12,6 +12,7 @@ const { InvalidToken } = require("../models/User");
 router.get('/user', async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
+
     res.json(user);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -34,25 +35,22 @@ router.get('/logout', async(req, res) => {
   }
 });
 
-// Get all invalid tokens
-router.get('/tokens', async(req, res) => {
-  try {
-    const tokens = await InvalidToken.find({});
-    res.json(tokens);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-});
+// // Get all invalid tokens
+// router.get('/tokens', async(req, res) => {
+//   try {
+//     const tokens = await InvalidToken.find({});
+//     res.json(tokens);
+//   } catch (error) {
+//     res.status(400).json({ message: error });
+//   }
+// });
 
 // Update specific user
 router.patch('/edit-user', async (req, res) => {
   try {
     const updatedUser = await User.updateOne({ _id: req.user._id }, { $set: req.body }, { runValidators: true });
 
-    res.json({
-      result: updatedUser,
-      message: 'Updated user successfully'
-    });
+    res.json({ message: 'Updated user successfully.' });
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -70,10 +68,7 @@ router.delete('/delete-user', async (req, res) => {
     // Log out user
     req.logout();
 
-    res.json({
-      result: removedUser,
-      message: 'Deleted user successfully'
-    });
+    res.json({ message: 'Deleted user successfully.' });
   } catch (error) {
     res.status(400).json({ message: error });
   }

@@ -23,13 +23,12 @@ passport.use('signup', new localStrategy(
         user.image.contentType = 'image/png'
       }
 
-      user.verificationCode = jwt.sign({ email: user.email }, 'EMAIL_SECRET');
+      user.verificationCode = jwt.sign({ email: user.email }, process.env.JWT_SECRET);
 
       const savedUser = await user.save();
 
       done(null, user);
     } catch (error) {
-      // console.log(error);
       done(error);
     }
   })
@@ -42,7 +41,7 @@ passport.use('login', new localStrategy(
     passwordField: 'password'
   }, async (username, password, done) => {
     try {
-      const user = await User.findOne({ username });
+      const user = await User.findOne({ username: username });
 
       if (!user) {
         return done(null, false, { message: 'User not found' });
@@ -68,7 +67,7 @@ passport.use('login', new localStrategy(
 // Passport-jwt authentication strategy
 passport.use(new JWTstrategy(
   {
-    secretOrKey: 'TOP_SECRET',
+    secretOrKey: process.env.JWT_SECRET,
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     passReqToCallback: true
   }, async (req, payload, done) => {

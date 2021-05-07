@@ -16,7 +16,6 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
     minLength: 8
   },
   firstName: {
@@ -43,7 +42,10 @@ const UserSchema = new mongoose.Schema({
   },
   image: {
     data: Buffer,
-    contentType: String,
+    contentType: {
+      type: String,
+      default: 'string'
+    },
 		url: {
 			type: String,
 			default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZL12v4NCVMfrCwtG1huVb4zXxrVIu-ibumA&usqp=CAU"
@@ -65,13 +67,14 @@ const UserSchema = new mongoose.Schema({
 
 // Hash the user's password before saving the user in the db
 UserSchema.pre('save', async function(next) {
+  if(this.password){
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(this.password, salt);
 
     this.password = hash;
     next();
   }
-);
+});
 
 // Hash given password to check if it is valid
 UserSchema.methods.isValidPassword = async function(password) {
