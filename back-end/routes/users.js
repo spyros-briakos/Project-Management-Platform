@@ -3,9 +3,10 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const jwt = require('jsonwebtoken');
 const multer = require("multer");
 const utils = require("../auth/utils");
-const verify = require("../auth/verify_email");
+const send_email = require("../auth/send_email");
 const googleUtil = require("../auth/google-util");
 const queryString = require("query-string");
 
@@ -43,13 +44,16 @@ router.get("/", async (req, res) => {
 router.post('/signup', [upload.single('image'), passport.authenticate('signup', { session: false })],
   async (req, res) => {
     // Send verification to the user's email
-    verify.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
+    send_email.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
 
     res.json({
       message: 'Signup successful!\nWe sent you a verification email. Please check your Gmail!',
       user: {
         username: req.user.username,
-        email: req.user.email
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        email: req.user.email,
+        projects: req.user.projects
       }
     });
 });
@@ -99,7 +103,10 @@ router.post('/login', async (req, res, next) => {
         message: info.message,
         user: {
           username: user.username,
-          email: user.email
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          projects: user.projects
         },
         token: tokenObject
       });
@@ -147,17 +154,20 @@ router.get('/oauth2callback/signup', async(req, res) => {
       const savedUser = await user.save();
 
       // Create user's authentication token (to log in user)
-      const jwt = utils.issueJWT(savedUser);
+      const tokenObject = utils.issueJWT(savedUser);
 
-      console.log(jwt.token);
+      console.log(tokenObject.token);
 
       res.json({
         message: 'Your Account was created successfully! You are now logged in.'
         // user: {
         //   username: user.username,
-        //   email: user.email
+        //   firstName: user.firstName,
+        //   lastName: user.lastName,
+        //   email: user.email,
+        //   projects: user.projects
         // },
-        // token: jwt.token
+        // token: tokenObject.token
       });
     } catch (error) {
       console.log(error);
@@ -196,24 +206,99 @@ router.get('/oauth2callback/login', async(req, res) => {
       }
 
       // Create user's authentication token (to log in user)
-      const jwt = utils.issueJWT(user);
+      const tokenObject = utils.issueJWT(user);
 
-      console.log(jwt.token);
+      console.log(tokenObject.token);
 
       res.json({
         message: 'Logged in Successfully'
         // user: {
         //   username: user.username,
-        //   email: user.email
+        //   firstName: user.firstName,
+        //   lastName: user.lastName,
+        //   email: user.email,
+        //   projects: user.projects
         // },
-        // token: jwt.token
+        // token: tokenObject.token
       });
     } catch (error) {
-      console.log(error);
       res.status(400).json({ message: error });
     }
   }
 });
+
+// Send email to the user to change set a new password
+router.patch('/forgot-password', async(req, res) => {
+  try{
+    // Find user in db
+    const user = await User.findOne({ email: req.body.email });
+
+    // If no such user
+    if(!user) {
+      res.status(400).json({ message: 'User not found.' });
+    }
+
+    // If the user's account is still pending, refuse to send email to change password
+    if(user.status === 'Pending') {
+      res.status(400).json({ message: 'Error: account is still pending! Please verify your email first.' });
+    }
+
+    // Create a verification code for the user (will be deleted after the new password is created)
+    const verificationCode = jwt.sign({ email: req.body.email }, process.env.JWT_SECRET);
+
+    // Update user
+    await User.updateOne({ email: req.body.email }, { $set: { verificationCode: verificationCode } }, { runValidators: true });
+
+    // Send email to the user to change their password
+    send_email.changePassword(user.username, req.body.email, verificationCode);
+
+    res.json({ message: 'We sent you an email! Please check your Gmail to set a new password.' });
+  } catch(error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// User forgot their password & have set a new one
+router.post('/set-password/:verificationCode', async(req, res) => {
+  try {
+    // Find user in db
+    const user = await User.findOne({ verificationCode: req.params.verificationCode });
+
+    // If no such user
+    if(!user) {
+      res.status(400).json({ message: 'User not found.' });
+    }
+
+    // If the new password and the confirmation don't match
+    if(req.body.new !== req.body.confirm) {
+      res.status(400).json({ message: 'Error: the new password and the confirmation don\'t match with each other.' });
+    }
+
+    // Update user's password
+    user.password = req.body.new;
+    // Delete user's verification code
+    user.verificationCode = undefined;
+    // Save user so that the new password will be hashed
+    const saved = await user.save();
+
+    // Create user's authentication token (to log in user)
+    const tokenObject = utils.issueJWT(user);
+
+    res.json({
+      message: 'New password set successfully! You are now logged in.',
+      user: {
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        projects: user.projects
+      },
+      token: tokenObject
+    });
+  } catch(error) {
+    res.status(400).json({ message: error });
+  }
+})
 
 // router.delete('/delete-user', async (req, res) => {
 //   try {

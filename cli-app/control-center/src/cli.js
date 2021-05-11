@@ -551,6 +551,31 @@ program
 	}
   })
 
+// NOT GOOD WITH CLI-APP
+// An email will be sent so the user can set a new password & be logged in again
+program
+  .command('forgot-password')
+  .option('--format <value>', 'Give format', 'json')
+  .requiredOption('-e, --email <value>','User\'s email')
+  .action(function(command) {
+	if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
+		console.log('You are already logged in.\nIf you forgot your password and want to set a new one, please log out first.');
+	} else {
+	  axios.patch(`${apiUrl}/users/forgot-password?format=${command.format}/`,{
+	    email: command.email
+	  }, { httpsAgent: agent })
+	  .then(function (response) {
+	    console.log(response.data.message);
+	  })
+	  .catch(function (error) {
+	    if(error.response && error.response.data.message)
+		  console.log(`Sending email failed: ${error.response.data.message}`);
+	    else
+		  console.log(`Sending email failed: ${error.message}`);
+	  });
+	}
+  })
+
 program
   .command('delete-user')
   .option('--format <value>', 'Give format', 'json')
@@ -587,6 +612,7 @@ program
 	}
   })
 
+// NOT GOOD WITH CLI-APP
 program
   .command('signup-google')
   .option('--format <value>', 'Give format', 'json')
@@ -600,6 +626,7 @@ program
 	});
   })
 
+// NOT GOOD WITH CLI-APP
 program
   .command('login-google')
   .option('--format <value>', 'Give format', 'json')

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const utils = require("../auth/utils");
-const verify = require("../auth/verify_email");
+const send_email = require("../auth/send_email");
 const jwt = require('jsonwebtoken');
 
 // Import User model
@@ -64,7 +64,7 @@ router.patch('/edit-user', async (req, res) => {
       const user = await User.findById(req.user._id);
 
       // Send verification to the user's email
-      verify.sendVerificationEmail(req.user.username, req.body.email, verificationCode);
+      send_email.sendVerificationEmail(req.user.username, req.body.email, verificationCode);
 
       // Log out the user until the new email is verified
       const token = new InvalidToken({ value: utils.extractToken(req) });
@@ -75,7 +75,10 @@ router.patch('/edit-user', async (req, res) => {
         message: 'Updated user successfully.\nWe sent you a verification email. Please check your Gmail!',
         user: {
           username: user.username,
-          email: user.email
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          projects: user.projects
         },
         email: 'updated'
       });
@@ -89,7 +92,10 @@ router.patch('/edit-user', async (req, res) => {
         message: 'Updated user successfully.',
         user: {
           username: user.username,
-          email: user.email
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          projects: user.projects
         }
       });
     }
@@ -108,8 +114,6 @@ router.patch('/reset-password', async (req, res) => {
     if(!user) {
       res.status(400).json({ message: 'User not found.' });
     }
-
-    console.log(user);
 
     // Check the right password was passed
     const validate = await user.isValidPassword(req.body.old);
