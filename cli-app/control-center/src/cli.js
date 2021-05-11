@@ -358,9 +358,9 @@ program
 	  })
 	  .catch(function (error) {
 		if (error.response.data.message)
-		  console.log('Log in failed: ', error.response.data.message);
+		  console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
 		else
-		  console.log('Log in failed: ', error.message);
+		  console.log('Η σύνδεση απέτυχε: ', error.message);
 	  });
 	}
   });
@@ -388,13 +388,13 @@ program
 	    if(err) return console.log('Writing user failed:', err);
 	  });
 	  console.log(response.data.message);
-	  console.log('After verifying your email, please log in to continue.')
+	  console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
 	})
 	.catch(function (error) {
 	  if (error.response.data.message)
-		console.log('Sign up failed: ', error.response.data.message);
+		console.log('Η εγγραφή απέτυχε: ', error.response.data.message);
 	  else
-		console.log('Sign up failed: ', error.message);
+		console.log('Η εγγραφή απέτυχε: ', error.message);
 	});
   });
 
@@ -408,9 +408,9 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Getting user\'s token failed: Please log in first.');
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Getting user\'s token failed: ',error.message);
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
 	} else {
 	  // Call log out on the server side
 	  axios.get(`${apiUrl}/secure-routes/logout`, {
@@ -427,9 +427,9 @@ program
 	  })
 	  .catch(function(error) {
 		if(error.response.data.message)
-		  console.log('Couldn\'t log out',error.response.data.message);
+		  console.log('Η αποσύνδεση απέτυχε.',error.response.data.message);
 		else
-		  console.log('Couldn\'t log out',error.message);
+		  console.log('Η αποσύνδεση απέτυχε.',error.message);
 	  });
 	}
   })
@@ -444,9 +444,9 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Getting user\'s token failed: Please log in first.');
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Getting user\'s token failed: ',error.message);
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
 	} else {
 	  axios.get(`${apiUrl}/secure-routes/user?format=${command.format}/`, {
 	    headers: { "Authorization": `Bearer ${token}` }
@@ -456,9 +456,9 @@ program
 	  })
 	  .catch(function(error) {
 		if(error.response.data.message)
-	      console.log(`Could not reach user\'s info\n${error.response.data.message}`);
+	      console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.response.data.message}`);
 		else
-	      console.log(`Could not reach user\'s info\n${error.message}`);
+	      console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.message}`);
 	  });
 	}
   })
@@ -478,9 +478,9 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Getting user\'s token failed: Please log in first.');
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Getting user\'s token failed: ',error.message);
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
 	} else {
 	  axios.patch(`${apiUrl}/secure-routes/edit-user?format=${command.format}/`, {
 		username: command.username,
@@ -504,14 +504,14 @@ program
 		  fs.unlink('/tmp/token.json', function(err) {
 			if(err) return console.log('Removing token failed:', err);
 		  });
-		  console.log('After verifying your email, please log in again to continue.')
+		  console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
 		}
 	  })
 	  .catch(function (error) {
 		if(error.response.data.message)
-		  console.log(`User\'s update failed: ${error.response.data.message}`);
+		  console.log(`Η ενμηέρωση του λογαριασμού απέτυχε: ${error.response.data.message}`);
 		else
-		  console.log(`User\'s update failed: ${error.message}`);
+		  console.log(`Η ενμηέρωση του λογαριασμού απέτυχε: ${error.message}`);
 	  });
     }
   })
@@ -529,9 +529,9 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Getting user\'s token failed: Please log in first.');
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Getting user\'s token failed: ',error.message);
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
 	} else {
 	  axios.patch(`${apiUrl}/secure-routes/reset-password?format=${command.format}/`, {
 		old: command.oldPassword,
@@ -544,9 +544,9 @@ program
 	  })
 	  .catch(function (error) {
 	    if(error.response.data.message)
-		  console.log(`Password\'s update failed: ${error.response.data.message}`);
+		  console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
 	    else
-		  console.log(`Password\'s update failed: ${error.message}`);
+		  console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
 	  });
 	}
   })
@@ -559,7 +559,7 @@ program
   .requiredOption('-e, --email <value>','User\'s email')
   .action(function(command) {
 	if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
-		console.log('You are already logged in.\nIf you forgot your password and want to set a new one, please log out first.');
+		console.log('Είσαι ήδη συνδεδεμένος/-η.\nΑν ξέχασες τον κωδικό σου και θες να ορίσεις καινούριο, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
 	} else {
 	  axios.patch(`${apiUrl}/users/forgot-password?format=${command.format}/`,{
 	    email: command.email
@@ -569,9 +569,9 @@ program
 	  })
 	  .catch(function (error) {
 	    if(error.response && error.response.data.message)
-		  console.log(`Sending email failed: ${error.response.data.message}`);
+		  console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
 	    else
-		  console.log(`Sending email failed: ${error.message}`);
+		  console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
 	  });
 	}
   })
@@ -586,9 +586,9 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Getting user\'s token failed: Please log in first.');
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Getting user\'s token failed: ',error.message);
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
 	} else {
 	  axios.delete(`${apiUrl}/secure-routes/delete-user?format=${command.format}/`, {
 		headers: { "Authorization": `Bearer ${token}` }
@@ -605,9 +605,9 @@ program
 	  })
 	  .catch(function (error) {
 		if(error.response.data.message)
-		  console.log(`Deleting user failed: ${error.response.data.message}`);
+		  console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.response.data.message}`);
 		else
-		  console.log(`Deleting user failed: ${error.message}`);
+		  console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.message}`);
 		});
 	}
   })

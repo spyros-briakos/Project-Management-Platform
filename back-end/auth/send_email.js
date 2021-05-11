@@ -14,8 +14,8 @@ module.exports.sendVerificationEmail = (name, email, verificationCode) => {
   transport.sendMail({
     from: process.env.SENDER_EMAIL,
     to: email,
-    subject: 'Please confirm your email',
-    html: `Hi ${name}! Thank you for your registration. Press <a href=http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/verify/${verificationCode}> here </a> to verify your email.`
+    subject: 'ScruManiac: Επιβεβαίωση email',
+    html: `Γεια σου ${name}! Ευχαριστούμε για την εγγραφή σου στο ScruManiac. Πάτα <a href=http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/verify/${verificationCode}> εδώ </a> για να επιβεβαιώσεις το email σου και να ενεργοποιηθεί ο λογαριασμός σου.`
   }).catch(err => {
     console.log(err);
     return null;

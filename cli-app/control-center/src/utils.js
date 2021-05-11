@@ -21,9 +21,9 @@ function checkLogInfo(username, userPath, tokenPath) {
     if(fs.existsSync(tokenPath)) {
       // If it is another user than the one trying to log in
       if(username !== user.username)
-        return { result: false, message: 'Error: Please log out first!' }
+        return { result: false, message: 'Σφαλμά: παρακαλούμε να έχεις αποσυνδεθεί πρωτού συνδεθείς σε άλλο λογαριασμό!' }
       else
-        return { result: false, message: 'You are already logged in!' } 
+        return { result: false, message: 'Είσαι ήδη συνδεδεμένος/-η!' } 
     }
   }
 

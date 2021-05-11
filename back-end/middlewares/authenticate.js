@@ -24,7 +24,7 @@ const authenticateUser = async (req, res, next) => {
       return next();
     }
   
-    res.status(400).json({ message: 'Error: Invalid authentication token used' });
+    res.status(400).json({ message: 'Σφάλμα κατά τον έλεγχο ταυτότητας του χρήστη.' });
   });
 
   middleware(req, res, next);
