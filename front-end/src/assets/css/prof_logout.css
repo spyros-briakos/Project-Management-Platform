@@ -1,0 +1,110 @@
+:root{
+    --head_c: rgb(240, 170, 105);
+    --head_c2: rgb(127, 56, 158);
+    --light_green: rgba(181, 231, 212);
+}
+
+.prof_logout_wrap{
+    display: flex;
+    /* background-color: rgba(181, 231, 212); */
+    flex-flow: column;
+    /* height: 100%; */
+    width: 100%;
+    /* align-items: bottom; */
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    /* border: 2px solid red; */
+}
+
+
+.logout_panel{
+    display: flex;
+    flex-flow: column;
+    background-color: rgba(181, 231, 212);
+    /* border: 2px solid rgb(47, 0, 255); */
+    border-radius: 20px;
+    width: 70%;
+    box-shadow: 0 0 13px rgba(128, 128, 128, 0.486);
+    padding: 10px 15px 10px 5px;
+    justify-content: center;
+    align-content: center
+}
+
+.logout_panel h1{
+    /* border: 2px solid red; */
+    font-size: 140%;
+}
+
+.logout_personal_info{
+    border: 2px solid rgb(0, 0, 0);
+    /* height: 50%; */
+    /* width: 50%; */
+    border-radius: 20px;
+    display: flex;
+    /* flex-flow: column; */
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 15px;
+
+    /* padding: 10px 15px 10px 5px; */
+}
+
+.logout_prof_pict{
+    /* display: flex; */
+    height: 75%;
+    width: 30%;
+    /* border: 2px solid rgb(0, 0, 0); */
+
+}
+
+.logout_personal_info_text_wrapper{
+    /* border: 2px solid rgb(0, 0, 0); */
+    /* height: 100%; */
+    /* width: 50%;*/
+    border-radius: 20px;
+    display: flex;
+    flex-flow: column;
+    align-content: center;
+    justify-content: center;
+    /* margin-bottom: 15px; */
+    /* padding: 10px 15px 10px 5px; */
+}
+
+.logout_personal_info_text{
+    /* border: 2px solid rgb(0, 0, 0); */
+    /* height: 100%; */
+    /* width: 50%;*/
+    border-radius: 20px;
+    font-size: 110%;
+    display: flex;
+    flex-flow: column;
+    align-content: flex-start;
+    justify-content: flex-start;
+    /* margin-bottom: 15px; */
+    /* padding: 10px 15px 10px 5px; */
+}
+
+
+
+
+.logout_btn{
+    color: white !important;
+    background-color: rgb(255, 0, 0) !important;
+    border-radius: 20px;
+    font-size: 130% !important;
+    padding: 20px 150px 20px 150px;
+    height: 100%;
+    width: 100%;
+    /* border-bottom: 1px solid green; */
+
+} 
+
+
+
+.logout_btn:hover{
+    text-decoration: underline;
+    opacity: 0.6;
+    box-shadow: 0px 6px 15px rgba(0,0,0,0.3);
+}

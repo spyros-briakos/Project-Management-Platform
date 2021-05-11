@@ -21,6 +21,7 @@ import ProfOpts from "../components/profile/prof_opts.vue";
     import profSettings from "../components/profile/prof_settings.vue";
     import profProjects from "../components/profile/prof_projects.vue";
     import profCoWorkers from "../components/profile/prof_coworkers.vue";
+    import profLogout from "../components/profile/prof_logout.vue";
 
 
 Vue.use(VueRouter);
@@ -118,6 +119,11 @@ const routes = [
         path: "co_workers",
         name: "coWorkers",
         component: profCoWorkers,
+      },
+      {
+        path: "profLogout",
+        name: "profLogout",
+        component: profLogout,
       },
     ],
   },
