@@ -7,14 +7,14 @@
         </div>
 
         <ul class="coworkers_ul">
-            <li v-for="project in projects" :key="project.id"
+            <li v-for="person in coWorkers" :key="person.id"
                 v-on:click="mpou()"
                 :style="{
                     'background-color' : color_roulete(),
                 }">
 
                 <font-awesome-icon class="icon" :icon="['far', 'user']"/>
-                {{project.name}}
+                {{person.name}}
 
             </li>
         </ul>
@@ -33,61 +33,10 @@
     data(){
         return{
             welcome_mssg: "Οι Συνεργάτες σου:",
-            projects:[
-                {
-                    id: 1,
-                    name: "Christina Evaggelou",
-                    
-                },
-
-                {
-                    id: 2,
-                    name: "Giwrgos Raptis",
-                },
-
-                {
-                    id: 3,
-                    name: "Melina Papadioti",
-                   
-                },
-
-                {
-                    id: 4,
-                    name: "Antonis Mourat",
-                   
-                },
-
-                {
-                    id: 5,
-                    name: "Vasilis Mpimis",
-                   
-                },
-
-                {
-                    id: 6,
-                    name: "Eleni Masoura",
-                   
-                },
-
-                {
-                    id: 7,
-                    name: "Rafail Musaj",
-                   
-                },
-
-                {
-                    id: 8,
-                    name: "Chris Baziotis",
-                   
-                },
-
-                {
-                    id: 9,
-                    name: "Panos Perdikos",
-                   
-                }
-            ]
         }
+    },
+    props:{
+        coWorkers: Array,
     },
     methods:{
         mpou(){

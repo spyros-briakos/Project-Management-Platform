@@ -1,11 +1,15 @@
 <template>
     <div class="wrap_projects">
+        <div class="create_prj" v-if="create_prj==1">
+            <createProject :coWorkers="coWorkers" :user="user" />
+        </div>
         <div class="mytitle">
-            <font-awesome-icon class="icon" :icon="['fas', 'thumbtack']" />
+            <font-awesome-icon class="icon" :icon="['fas', 'thumbtack']"
+                :style="{'opacity': create_prj==1 ? '0.6' : ''}"/>
             {{welcome_mssg}}
         </div>
-        <button class="create_btn" v-on:click="mpou()">{{btn_mssg}}</button>
-        
+        <button class="create_btn" v-on:click="create_prj=1">{{btn_mssg}}</button>
+
         <ul class="projects_ul">
             <li v-for="project in projects" :key="project.id"
                 v-on:click="mpou()">
@@ -40,12 +44,16 @@
 </template>
 
 <script>
+
+    import createProject from "../create.vue"
+
     export default {
     name: "profProjects",
     data(){
         return{
             welcome_mssg: "Όλα σου τα Projects:",
             btn_mssg: "Δημιουργία Project",
+            create_prj: 0,
             projects:[
                 {
                     id: 1,
@@ -113,6 +121,13 @@
             let c_arr=["red", "orange", "blue", "yellow", "plum", "green", "purple"];
             return c_arr[Math.floor(Math.random() * c_arr.length)];
         }
+    },
+    components:{
+        createProject,
+    },
+    props:{
+        user:String,
+        coWorkers:Array,
     }
 };
 </script>

@@ -96,7 +96,8 @@ const routes = [
     component: ForgotPassword,
   },
   {
-    path: "/profile", redirect:"/profile/settings",
+    path: "/profile",
+    // redirect:"/profile/settings",
     name: "profile",
     component: ProfOpts,
     children:[

@@ -24,9 +24,11 @@
                     </div>
                 </div>
             </div>
+
             <div class="prof_display">
-                <prof-projects v-if="selected_id == 1" />
-                <profCoWorkers v-if="selected_id == 2" />
+                <!-- <createProject :readonly="true" :user="name" :coWorkers="getCoWorkers" v-if="selected_id==1"/>  -->
+                <prof-projects :coWorkers="getCoWorkers" :user="name" v-if="selected_id == 1"/>
+                <profCoWorkers :coWorkers="getCoWorkers" v-if="selected_id == 2" />
                 <profSettings v-if="selected_id == 3" />
                 <Prices v-if="selected_id == 4" />
                 <profLogout v-if="selected_id == 5" />
@@ -43,6 +45,7 @@
     import Prices from "../pricing/Prices.vue";
     import profCoWorkers from "./prof_coworkers.vue";
     import profLogout from "./prof_logout.vue";
+
 
     export default {
     name: "ProfOpts",
@@ -66,7 +69,7 @@
         profProjects,
         Prices,
         profCoWorkers,
-        profLogout
+        profLogout,
     },
     methods:{
         mpou(opt){
@@ -74,6 +77,21 @@
         },
         seturl(path){
             router.push({ name: path}).catch(()=>{});
+        }
+    },
+    computed:{
+        getCoWorkers(){
+            return [
+                {id: 1, name: "Christina Evaggelou"},
+                {id: 2, name: "Giwrgos Raptis"},
+                {id: 3, name: "Melina Papadioti"},
+                {id: 4, name: "Antonis Mourat"},
+                {id: 5, name: "Vasilis Mpimis"},
+                {id: 6, name: "Eleni Masoura"},
+                {id: 7, name: "Rafail Musaj"},
+                {id: 8, name: "Chris Baziotis"},
+                {id: 9, name: "Panos Perdikos"},
+            ]
         }
     },
     watch: {
