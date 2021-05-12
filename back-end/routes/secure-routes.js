@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const utils = require("../auth/utils");
-const verify = require("../auth/verify_email");
+const send_email = require("../auth/send_email");
 const jwt = require('jsonwebtoken');
 
 // Import User model
@@ -31,7 +31,7 @@ router.get('/logout', async(req, res) => {
     await token.save();
 
     req.logout();
-    res.json({ message: 'Logged out successfully' });
+    res.json({ message: 'Επιτυχής αποσύνδεση.' });
   } catch (error) {
     res.json({ message: error });
   }
@@ -64,7 +64,7 @@ router.patch('/edit-user', async (req, res) => {
       const user = await User.findById(req.user._id);
 
       // Send verification to the user's email
-      verify.sendVerificationEmail(req.user.username, req.body.email, verificationCode);
+      send_email.sendVerificationEmail(req.user.username, req.body.email, verificationCode);
 
       // Log out the user until the new email is verified
       const token = new InvalidToken({ value: utils.extractToken(req) });
@@ -72,10 +72,13 @@ router.patch('/edit-user', async (req, res) => {
       req.logout();
 
       res.json({
-        message: 'Updated user successfully.\nWe sent you a verification email. Please check your Gmail!',
+        message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.\nΣου στείλαμε email επιβεβαίωσης. Παρακαλούμε δες το Gmail σου!',
         user: {
           username: user.username,
-          email: user.email
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          projects: user.projects
         },
         email: 'updated'
       });
@@ -86,10 +89,13 @@ router.patch('/edit-user', async (req, res) => {
       const user = await User.findById(req.user._id);
 
       res.json({
-        message: 'Updated user successfully.',
+        message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.',
         user: {
           username: user.username,
-          email: user.email
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          projects: user.projects
         }
       });
     }
@@ -106,22 +112,20 @@ router.patch('/reset-password', async (req, res) => {
 
     // If no such user
     if(!user) {
-      res.status(400).json({ message: 'User not found.' });
+      res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
     }
-
-    console.log(user);
 
     // Check the right password was passed
     const validate = await user.isValidPassword(req.body.old);
 
     // If the given password was wrong
     if(!validate) {
-      res.status(400).json({ message: 'Error: wrong password.' });
+      res.status(400).json({ message: 'Σφάλμα: λάθος κωδικός πρόσβασης.' });
     }
 
     // If the new password and the confirmation don't match
     if(req.body.new !== req.body.confirm) {
-      res.status(400).json({ message: 'Error: the new password and the confirmation don\'t match.' });
+      res.status(400).json({ message: 'Σφάλμα: ο νέος κωδικός πρόσβασης και η επιβεβαίωσή του διαφέρουν.' });
     }
 
     // Update user's password
@@ -129,7 +133,7 @@ router.patch('/reset-password', async (req, res) => {
     // Save it so that the new password will be hashed
     const saved = await user.save();
 
-    res.json({ message: 'Password updated successfully.' });
+    res.json({ message: 'Επιτυχής ενημέρωση του κωδικού πρόσβασης.' });
 
   } catch (error) {
     res.status(400).json({ message: error });
@@ -148,7 +152,7 @@ router.delete('/delete-user', async (req, res) => {
     // Log out user
     req.logout();
 
-    res.json({ message: 'Deleted user successfully.' });
+    res.json({ message: 'Επιτυχής διαγραφή λογαριασμού.' });
   } catch (error) {
     res.status(400).json({ message: error });
   }

@@ -46,24 +46,24 @@ passport.use('login', new localStrategy(
       const user = await User.findOne({ username: username });
       // If no such user
       if (!user) {
-        return done(null, false, { message: 'User not found' });
+        return done(null, false, { message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
       }
 
       // Confirm password is valid
       const validate = await user.isValidPassword(password);
       // If wrong password
       if (!validate) {
-        return done(null, false, { message: 'Wrong Password' });
+        return done(null, false, { message: 'Λάθος κωδικός πρόσβασης.' });
       }
 
       // If the account is still pending
       if (user.status != 'Active') {
-        return done(null, false, { message: 'Pending Account. Please verify your email!' });
+        return done(null, false, { message: 'Ο λογαριασμός δεν έχει ενεργοποιηθεί ακόμα. Παρακαλούμε επιβεβαιώσε πρώτα το email σου!' });
       }
 
-      return done(null, user, { message: 'Logged in Successfully' });
+      return done(null, user, { message: 'Η σύνδεσή σου ολοκληρώθηκε με επιτυχία.' });
     } catch (error) {
-      return done(error, null, { message: 'An error occured' });
+      return done(error, null, { message: 'Προέκυψε σφάλμα.' });
     }
   })
 );
@@ -81,11 +81,11 @@ passport.use(new JWTstrategy(
         if(user) {
           // req.user will be used in '../routes/secure-routes'
           req.user = user;
-          return done(null, user, { message: 'User authenticated successfully' });
+          return done(null, user, { message: 'Επιτυχής έλεγχος ταυτότητας.' });
         } else {
-          return done(null, false, { message: 'Could not find user' });
+          return done(null, false, { message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
         }
       })
-      .catch(error => done(error, null, { message: 'An error occurred' }));
+      .catch(error => done(error, null, { message: 'Προέκυψε σφάλμα.' }));
   })
 );

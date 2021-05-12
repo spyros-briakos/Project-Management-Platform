@@ -3,9 +3,10 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const jwt = require('jsonwebtoken');
 const multer = require("multer");
 const utils = require("../auth/utils");
-const verify = require("../auth/verify_email");
+const send_email = require("../auth/send_email");
 const googleUtil = require("../auth/google-util");
 const queryString = require("query-string");
 
@@ -43,13 +44,16 @@ router.get("/", async (req, res) => {
 router.post('/signup', [upload.single('image'), passport.authenticate('signup', { session: false })],
   async (req, res) => {
     // Send verification to the user's email
-    verify.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
+    send_email.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
 
     res.json({
-      message: 'Signup successful!\nWe sent you a verification email. Please check your Gmail!',
+      message: 'Επιτυχής εγγραφή!\nΣου στείλαμε email επιβεβαίωσης. Παρακαλούμε δες το Gmail σου!',
       user: {
         username: req.user.username,
-        email: req.user.email
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        email: req.user.email,
+        projects: req.user.projects
       }
     });
 });
@@ -61,11 +65,11 @@ router.get('/verify/:verificationCode', async (req, res) => {
     .then(async (user) => {
       // If no such user in the db
       if(!user) {
-        res.status(400).json({ message: 'User not found.' });
+        res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
       }
       // If the account is already active
       if(user.status == 'Active') {
-        res.status(400).json({ message: 'Account already verified and active.' });
+        res.status(400).json({ message: 'Ο λογαριασμός σου είναι ήδη επιβεβαιωμένος και ενεργός.' });
       }
 
       // Update user's status & delete their verification code
@@ -75,7 +79,7 @@ router.get('/verify/:verificationCode', async (req, res) => {
       const tokenObject = utils.issueJWT(user);
       // console.log(tokenObject.token);
 
-      res.json({ message: 'Your email was verified successfully. Welcome to ScruManiac!' });
+      res.json({ message: 'Το email σου επιβεβαιώθηκε με επιτυχία. Καλωσήρθες στο ScruManiac!' });
     })
     .catch((err) => {
       res.status(400).json({ message: err });
@@ -99,7 +103,10 @@ router.post('/login', async (req, res, next) => {
         message: info.message,
         user: {
           username: user.username,
-          email: user.email
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          projects: user.projects
         },
         token: tokenObject
       });
@@ -147,17 +154,20 @@ router.get('/oauth2callback/signup', async(req, res) => {
       const savedUser = await user.save();
 
       // Create user's authentication token (to log in user)
-      const jwt = utils.issueJWT(savedUser);
+      const tokenObject = utils.issueJWT(savedUser);
 
-      console.log(jwt.token);
+      console.log(tokenObject.token);
 
       res.json({
-        message: 'Your Account was created successfully! You are now logged in.'
+        message: 'Ο λογαριασμός σου δημιουργήθηκε με επιτυχία! Είσαι πλέον συνδεδεμένος/-η στο ScruManiac.'
         // user: {
         //   username: user.username,
-        //   email: user.email
+        //   firstName: user.firstName,
+        //   lastName: user.lastName,
+        //   email: user.email,
+        //   projects: user.projects
         // },
-        // token: jwt.token
+        // token: tokenObject.token
       });
     } catch (error) {
       console.log(error);
@@ -192,28 +202,103 @@ router.get('/oauth2callback/login', async(req, res) => {
 
       // If no such user in the db
       if(!user) {
-        res.status(500).json({ message: 'User not found' });
+        res.status(500).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
       }
 
       // Create user's authentication token (to log in user)
-      const jwt = utils.issueJWT(user);
+      const tokenObject = utils.issueJWT(user);
 
-      console.log(jwt.token);
+      console.log(tokenObject.token);
 
       res.json({
-        message: 'Logged in Successfully'
+        message: 'Η σύνδεσή σου ολοκληρώθηκε με επιτυχία.'
         // user: {
         //   username: user.username,
-        //   email: user.email
+        //   firstName: user.firstName,
+        //   lastName: user.lastName,
+        //   email: user.email,
+        //   projects: user.projects
         // },
-        // token: jwt.token
+        // token: tokenObject.token
       });
     } catch (error) {
-      console.log(error);
       res.status(400).json({ message: error });
     }
   }
 });
+
+// Send email to the user to change set a new password
+router.patch('/forgot-password', async(req, res) => {
+  try{
+    // Find user in db
+    const user = await User.findOne({ email: req.body.email });
+
+    // If no such user
+    if(!user) {
+      res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+    }
+
+    // If the user's account is still pending, refuse to send email to change password
+    if(user.status === 'Pending') {
+      res.status(400).json({ message: 'Σφάλμα: ο λογαριασμός δεν έχει ενεργοποιηθεί ακόμα! Παρακαλούμε επιβεβαίωσε πρώτα το email σου.' });
+    }
+
+    // Create a verification code for the user (will be deleted after the new password is created)
+    const verificationCode = jwt.sign({ email: req.body.email }, process.env.JWT_SECRET);
+
+    // Update user
+    await User.updateOne({ email: req.body.email }, { $set: { verificationCode: verificationCode } }, { runValidators: true });
+
+    // Send email to the user to change their password
+    send_email.changePassword(user.username, req.body.email, verificationCode);
+
+    res.json({ message: 'Σου στείλαμε email! Παρακαλούμε δες το Gmail σου για να δημιουργήσεις νέο κωδικό πρόσβασης.' });
+  } catch(error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// User forgot their password & have set a new one
+router.post('/set-password/:verificationCode', async(req, res) => {
+  try {
+    // Find user in db
+    const user = await User.findOne({ verificationCode: req.params.verificationCode });
+
+    // If no such user
+    if(!user) {
+      res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+    }
+
+    // If the new password and the confirmation don't match
+    if(req.body.new !== req.body.confirm) {
+      res.status(400).json({ message: 'Σφάλμα: ο νέος κωδικός πρόσβασης και η επιβεβαίωσή του διαφέρουν.' });
+    }
+
+    // Update user's password
+    user.password = req.body.new;
+    // Delete user's verification code
+    user.verificationCode = undefined;
+    // Save user so that the new password will be hashed
+    const saved = await user.save();
+
+    // Create user's authentication token (to log in user)
+    const tokenObject = utils.issueJWT(user);
+
+    res.json({
+      message: 'Ο νέος σου κωδικός δημιουργήθηκε με επιτυχία! Είσαι πλέον συνδεδεμένος/-η στο ScruManiac.',
+      user: {
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        projects: user.projects
+      },
+      token: tokenObject
+    });
+  } catch(error) {
+    res.status(400).json({ message: error });
+  }
+})
 
 // router.delete('/delete-user', async (req, res) => {
 //   try {
