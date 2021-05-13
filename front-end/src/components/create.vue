@@ -9,50 +9,50 @@
             {{mssg}}
         </div>
 
-        <v-form>
-            <v-text-field v-for="input in input_fields" :key="input.name"
-                :label="input.name"
-                :placeholder="input.placeholder"
-                :hint="input.hint"
-                :rules="main_rules"
-                hide-details="auto"
-                :value="input.value"
-                :readonly="input.readonly"
-                required>
-                {{input.name}}
-            </v-text-field>
+        <v-form class="wrap_form">
+                <v-text-field class="mycont" v-for="input in input_fields" :key="input.name"
+                    :label="input.name"
+                    :placeholder="input.placeholder"
+                    :hint="input.hint"
+                    :rules="main_rules"
+                    hide-details="auto"
+                    :value="input.value"
+                    :readonly="input.readonly"
+                    required>
+                    {{input.name}}
+                </v-text-field>
 
-            <v-radio-group v-for="choose in choose_fields" :key="choose.name"
-                :label="choose.name"
-                mandatory
-                >
+                <v-radio-group v-for="choose in choose_fields" :key="choose.name"
+                    :label="choose.name"
+                    mandatory
+                    >
 
-                <v-radio v-for="opt in choose.opts" :key="opt.val"
-                    :label="opt.disabled ? opt.val + ' || ' + opt.mssg : opt.val"
-                    :value="opt.id"
-                    :disabled="opt.disabled">
-                </v-radio>
+                    <v-radio v-for="opt in choose.opts" :key="opt.val"
+                        :label="opt.disabled ? opt.val + ' || ' + opt.mssg : opt.val"
+                        :value="opt.id"
+                        :disabled="opt.disabled">
+                    </v-radio>
 
-            </v-radio-group>
+                </v-radio-group>
 
-            <v-autocomplete
-                multiple
-                chips
-                :label="get_friends.label"
-                :items="get_friends.people"
-                item-text="name"
-                itme-value="id"
-                :placeholder="get_friends.placeholder"
-                :hint="get_friends.hint"
-                :search-input.sync="get_friends.search"
-                clearable
-                allow-overflow='false'
-                :menu-props="{maxHeight: 150}"
-                >
-            </v-autocomplete>
+                <v-autocomplete
+                    class="friends_picker"
+                    multiple
+                    chips
+                    :label="get_friends.label"
+                    :items="get_friends.people"
+                    item-text="name"
+                    itme-value="id"
+                    :placeholder="get_friends.placeholder"
+                    :hint="get_friends.hint"
+                    :search-input.sync="get_friends.search"
+                    clearable
+                    :menu-props="{maxHeight: 150}"
+                    >
+                </v-autocomplete>
 
         <v-btn>
-            SUBMIT
+            Δημιουργία
         </v-btn>
 
         </v-form>
