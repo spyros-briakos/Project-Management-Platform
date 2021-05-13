@@ -53,7 +53,8 @@ router.post('/signup', [upload.single('image'), passport.authenticate('signup', 
         firstName: req.user.firstName,
         lastName: req.user.lastName,
         email: req.user.email,
-        projects: req.user.projects
+        projects: req.user.projects,
+        plan_in_use: user.plan_in_use
       }
     });
 });
@@ -65,11 +66,11 @@ router.get('/verify/:verificationCode', async (req, res) => {
     .then(async (user) => {
       // If no such user in the db
       if(!user) {
-        res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+        return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
       }
       // If the account is already active
       if(user.status == 'Active') {
-        res.status(400).json({ message: 'Ο λογαριασμός σου είναι ήδη επιβεβαιωμένος και ενεργός.' });
+        return res.status(400).json({ message: 'Ο λογαριασμός σου είναι ήδη επιβεβαιωμένος και ενεργός.' });
       }
 
       // Update user's status & delete their verification code
@@ -106,7 +107,8 @@ router.post('/login', async (req, res, next) => {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          projects: user.projects
+          projects: user.projects,
+          plan_in_use: user.plan_in_use
         },
         token: tokenObject
       });
@@ -146,7 +148,8 @@ router.get('/oauth2callback/signup', async(req, res) => {
         firstName: userInfo.given_name,
         lastName: userInfo.family_name,
         email: userInfo.email,
-        status: 'Active'
+        status: 'Active',
+        plan_in_use: user.plan_in_use
       });
 
       user.image.url = userInfo.picture;
@@ -165,7 +168,8 @@ router.get('/oauth2callback/signup', async(req, res) => {
         //   firstName: user.firstName,
         //   lastName: user.lastName,
         //   email: user.email,
-        //   projects: user.projects
+        //   projects: user.projects,
+        //   plan_in_use: user.plan_in_use
         // },
         // token: tokenObject.token
       });
@@ -202,7 +206,7 @@ router.get('/oauth2callback/login', async(req, res) => {
 
       // If no such user in the db
       if(!user) {
-        res.status(500).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+        return res.status(500).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
       }
 
       // Create user's authentication token (to log in user)
@@ -217,7 +221,8 @@ router.get('/oauth2callback/login', async(req, res) => {
         //   firstName: user.firstName,
         //   lastName: user.lastName,
         //   email: user.email,
-        //   projects: user.projects
+        //   projects: user.projects,
+        //   plan_in_use: user.plan_in_use
         // },
         // token: tokenObject.token
       });
@@ -235,12 +240,12 @@ router.patch('/forgot-password', async(req, res) => {
 
     // If no such user
     if(!user) {
-      res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
     }
 
     // If the user's account is still pending, refuse to send email to change password
     if(user.status === 'Pending') {
-      res.status(400).json({ message: 'Σφάλμα: ο λογαριασμός δεν έχει ενεργοποιηθεί ακόμα! Παρακαλούμε επιβεβαίωσε πρώτα το email σου.' });
+      return res.status(400).json({ message: 'Σφάλμα: ο λογαριασμός δεν έχει ενεργοποιηθεί ακόμα! Παρακαλούμε επιβεβαίωσε πρώτα το email σου.' });
     }
 
     // Create a verification code for the user (will be deleted after the new password is created)
@@ -266,12 +271,12 @@ router.post('/set-password/:verificationCode', async(req, res) => {
 
     // If no such user
     if(!user) {
-      res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
     }
 
     // If the new password and the confirmation don't match
     if(req.body.new !== req.body.confirm) {
-      res.status(400).json({ message: 'Σφάλμα: ο νέος κωδικός πρόσβασης και η επιβεβαίωσή του διαφέρουν.' });
+      return res.status(400).json({ message: 'Σφάλμα: ο νέος κωδικός πρόσβασης και η επιβεβαίωσή του διαφέρουν.' });
     }
 
     // Update user's password
@@ -291,7 +296,8 @@ router.post('/set-password/:verificationCode', async(req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        projects: user.projects
+        projects: user.projects,
+        plan_in_use: user.plan_in_use
       },
       token: tokenObject
     });

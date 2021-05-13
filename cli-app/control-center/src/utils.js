@@ -8,7 +8,7 @@ function getToken(path) {
 
     return token.substring(7);
   } catch(error) {
-      return error;
+    return error;
   }
 }
 

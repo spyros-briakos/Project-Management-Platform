@@ -4,6 +4,7 @@ const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+require('datejs');
 
 const { User } = require('../models/User');
 
@@ -15,6 +16,24 @@ passport.use('signup', new localStrategy(
     passReqToCallback: true
   }, async (req, username, password, done) => {
     try {
+      // If the user wants a premium plan in the app
+      if(req.body.plan_in_use && req.body.plan_in_use !== 'standard') {
+        // Get today's date
+        const today = new Date();
+
+        // If the user wants to be premium for a month
+        if(req.body.plan_in_use === 'premium-monthly') {
+          req.body.premium_ending_date = today.add(1).month();
+        // If the user wants to be premium for a year
+        } else if(req.body.plan_in_use === 'premium-yearly') {
+          req.body.premium_ending_date = today.add(12).month();
+        }
+
+        // Keep only the premium value after setting the expiration date
+        req.body.plan_in_use = 'premium';
+      }
+
+      // Create new user
       const user = new User(req.body);
 
       // If an image was uploaded, save it locally
@@ -26,6 +45,7 @@ passport.use('signup', new localStrategy(
       // Create a verification code for the user (will be deleted after the email address is verified)
       user.verificationCode = jwt.sign({ email: user.email }, process.env.JWT_SECRET);
 
+      // Save user in the db
       const savedUser = await user.save();
 
       done(null, user);

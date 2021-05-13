@@ -373,7 +373,7 @@ program
   .requiredOption('-fn, --firstName <value>', 'User\'s first name')
   .requiredOption('-ln, --lastName <value>', 'User\'s last name')
   .requiredOption('-e, --email <value>', 'User\'s email')
-  .option('--plan <value>', 'User\'s plan (standard or premium)')
+  .option('--plan <value>', 'User\'s plan (standard | premium-monthly | premium-year)')
   .action(function(command) {
 	axios.post(`${apiUrl}/users/signup?format=${command.format}/`, {
 	  username: command.username,
@@ -470,7 +470,6 @@ program
   .option('-fn, --firstName <value>', 'User\'s firstName')
   .option('-ln, --lastName <value>', 'User\'s lastName')
   .option('-e, --email <value>', 'User\'s email')
-  .option('--plan <value>', 'User\'s plan (standard or premium)')
   .action(function(command) {
 	// Get user's token to pass authentication
 	const token = utils.getToken('/tmp/token.json');
@@ -487,7 +486,7 @@ program
 		firstName: command.firstName,
 		lastName: command.lastName,
 		email: command.email,
-		plan_in_use: command.plan,
+		plan_in_use: command.plan
 	  }, { headers: { "Authorization": `Bearer ${token}` }
 	  }, { httpsAgent: agent })
 	  .then(function (response) {
@@ -574,6 +573,42 @@ program
 		  console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
 	  });
 	}
+  })
+
+program
+  .command('get-premium')
+  .option('--format <value>', 'Give format', 'json')
+  .requiredOption('-t, --type <value>', 'Premium plan type (month or year)')
+  .action(function(command) {
+	// Get user's token to pass authentication
+	const token = utils.getToken('/tmp/token.json');
+	// If an error occured
+	if(token instanceof Error) {
+	  const error = token;
+	  if(error.code === 'ENOENT')
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
+	} else {
+	  axios.patch(`${apiUrl}/secure-routes/upgrade-plan?format=${command.format}/`, {
+		plan_in_use: command.type
+	  }, { headers: { "Authorization": `Bearer ${token}` }
+	  }, { httpsAgent: agent })
+	  .then(function (response) {
+		// Update user's info
+		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		  if(err) return console.log('Writing user failed:', err);
+		});
+
+		console.log(response.data.message);
+	  })
+	  .catch(function (error) {
+		if(error.response && error.response.data.message)
+		  console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.response.data.message}`);
+		else
+		  console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.message}`);
+	  });
+    }
   })
 
 program
