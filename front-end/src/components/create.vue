@@ -10,30 +10,81 @@
         </div>
 
         <v-form class="wrap_form">
-                <v-text-field class="mycont" v-for="input in input_fields" :key="input.name"
-                    :label="input.name"
-                    :placeholder="input.placeholder"
-                    :hint="input.hint"
-                    :rules="main_rules"
-                    hide-details="auto"
-                    :value="input.value"
-                    :readonly="input.readonly"
-                    required>
-                    {{input.name}}
-                </v-text-field>
+            <v-text-field class="mycont" v-for="input in input_fields" :key="input.name"
+                :label="input.name"
+                :placeholder="input.placeholder"
+                :hint="input.hint"
+                :rules="main_rules"
+                hide-details="auto"
+                :value="input.value"
+                :readonly="input.readonly"
+                required>
+                {{input.name}}
+            </v-text-field>
 
-                <v-radio-group v-for="choose in choose_fields" :key="choose.name"
-                    :label="choose.name"
-                    mandatory
+            <v-radio-group class="type_wrap" v-for="choose in choose_fields" :key="choose.name"
+                :label="choose.name"
+                mandatory
+                >
+
+                <v-radio v-for="opt in choose.opts" :key="opt.val"
+                    :label="opt.disabled ? opt.val + ' || ' + opt.mssg : opt.val"
+                    :value="opt.id"
+                    :disabled="opt.disabled">
+                </v-radio>
+
+            </v-radio-group>
+
+                <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :return-value.sync="dates"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
                     >
+                        
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                            class="small"
+                            v-model="datesRange"
+                            label="Διάρκεια Project"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                        </v-text-field>
+                    </template>
+                    
+                    <v-date-picker
+                    v-model="dates"
+                    no-title
+                    range
+                    show-current
+                    scrollable
+                    >
+                    
+                    <v-spacer></v-spacer>
+                    
+                    <v-btn
+                        text
+                        color="primary"
+                        @click="menu = false"
+                    >
+                        Ακύρωση
+                    </v-btn>
 
-                    <v-radio v-for="opt in choose.opts" :key="opt.val"
-                        :label="opt.disabled ? opt.val + ' || ' + opt.mssg : opt.val"
-                        :value="opt.id"
-                        :disabled="opt.disabled">
-                    </v-radio>
-
-                </v-radio-group>
+                    <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(dates)"
+                    >
+                        OK
+                    </v-btn>
+                    </v-date-picker>
+                </v-menu>
 
                 <v-autocomplete
                     class="friends_picker"
@@ -51,9 +102,9 @@
                     >
                 </v-autocomplete>
 
-        <v-btn>
-            Δημιουργία
-        </v-btn>
+            <v-btn class="create_btn">
+                Δημιουργία
+            </v-btn>
 
         </v-form>
     </div>
@@ -66,6 +117,8 @@ export default({
     
     data(){
         return{
+            dates: ['2021-01-01','2022-02-02'],
+            menu:false,
             main_rules:[
                 v => !!v || 'Αναγκαίο Πεδίο'
             ],
@@ -145,6 +198,9 @@ export default({
                 names.push(person.name);
             return names;
         },
+        datesRange(){
+            return this.dates.join(' ~ ');
+        }
         
     },
     watch:{

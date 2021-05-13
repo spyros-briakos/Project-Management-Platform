@@ -5,8 +5,7 @@
         <div class="create_prj" v-if="create_prj==1">
             <createProject :coWorkers="coWorkers" :user="user" />
             <button class="close_form" v-on:click="create_prj=0">
-                <!-- <i class="far fa-times-circle icon"></i> -->
-                <font-awesome-icon class="icon" :icon="['far', 'timesCircle']"/>
+                <font-awesome-icon class="icon" :icon="['far', 'times-circle']"/>
             </button>
         </div>
 
