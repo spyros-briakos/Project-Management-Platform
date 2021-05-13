@@ -9,8 +9,8 @@
             {{mssg}}
         </div>
 
-        <v-form>
-            <v-text-field v-for="input in input_fields" :key="input.name"
+        <v-form class="wrap_form">
+            <v-text-field class="mycont" v-for="input in input_fields" :key="input.name"
                 :label="input.name"
                 :placeholder="input.placeholder"
                 :hint="input.hint"
@@ -22,7 +22,7 @@
                 {{input.name}}
             </v-text-field>
 
-            <v-radio-group v-for="choose in choose_fields" :key="choose.name"
+            <v-radio-group class="type_wrap" v-for="choose in choose_fields" :key="choose.name"
                 :label="choose.name"
                 mandatory
                 >
@@ -35,25 +35,76 @@
 
             </v-radio-group>
 
-            <v-autocomplete
-                multiple
-                chips
-                :label="get_friends.label"
-                :items="get_friends.people"
-                item-text="name"
-                itme-value="id"
-                :placeholder="get_friends.placeholder"
-                :hint="get_friends.hint"
-                :search-input.sync="get_friends.search"
-                clearable
-                allow-overflow='false'
-                :menu-props="{maxHeight: 150}"
-                >
-            </v-autocomplete>
+                <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :return-value.sync="dates"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                    >
+                        
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                            class="small"
+                            v-model="datesRange"
+                            label="Διάρκεια Project"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                        </v-text-field>
+                    </template>
+                    
+                    <v-date-picker
+                    v-model="dates"
+                    no-title
+                    range
+                    show-current
+                    scrollable
+                    >
+                    
+                    <v-spacer></v-spacer>
+                    
+                    <v-btn
+                        text
+                        color="primary"
+                        @click="menu = false"
+                    >
+                        Ακύρωση
+                    </v-btn>
 
-        <v-btn>
-            SUBMIT
-        </v-btn>
+                    <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.menu.save(dates)"
+                    >
+                        OK
+                    </v-btn>
+                    </v-date-picker>
+                </v-menu>
+
+                <v-autocomplete
+                    class="friends_picker"
+                    multiple
+                    chips
+                    :label="get_friends.label"
+                    :items="get_friends.people"
+                    item-text="name"
+                    itme-value="id"
+                    :placeholder="get_friends.placeholder"
+                    :hint="get_friends.hint"
+                    :search-input.sync="get_friends.search"
+                    clearable
+                    :menu-props="{maxHeight: 150}"
+                    >
+                </v-autocomplete>
+
+            <v-btn class="create_btn">
+                Δημιουργία
+            </v-btn>
 
         </v-form>
     </div>
@@ -66,6 +117,8 @@ export default({
     
     data(){
         return{
+            dates: ['2021-01-01','2022-02-02'],
+            menu:false,
             main_rules:[
                 v => !!v || 'Αναγκαίο Πεδίο'
             ],
@@ -145,6 +198,9 @@ export default({
                 names.push(person.name);
             return names;
         },
+        datesRange(){
+            return this.dates.join(' ~ ');
+        }
         
     },
     watch:{

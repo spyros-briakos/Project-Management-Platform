@@ -7,9 +7,8 @@
     align-content: flex-start;
     background-color: whitesmoke;
     border-radius: 20px;
-    padding: 20px 20px 20px 20px;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.3);
-    /* border: 2px solid red; */
+    padding: 10px 20px 20px 20px;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.3);
 }
 
 .createWiz_wrap .wizTitle{
@@ -17,7 +16,6 @@
     display: flex;
     color: black;
     font-size: 150%;
-    /* border: 2px solid red; */
 }
 
 .createWiz_wrap .wizSub{
@@ -29,7 +27,36 @@
     font-size: 80%;
 }
 
-/* .createWiz_wrap .v-form .v-radio-group */
 .v-radio  .v-label{
     margin-bottom: 0 !important;
+}
+
+.createWiz_wrap .wrap_form{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.createWiz_wrap .v-form .type_wrap{
+    width: 80%;
+}
+
+.v-form .mycont{
+    width: 40%;
+    margin-right: 15px;
+}
+
+.v-form .friends_picker{
+    width: 60% !important;
+    max-width: 60% !important;
+}
+
+.small{
+    max-width: 60% !important;
+    width: 60% !important;
+}
+
+
+.createWiz_wrap .v-form .create_btn{
+    margin-left: auto;
+    background-color: rgb(111, 111, 226) !important;
 }

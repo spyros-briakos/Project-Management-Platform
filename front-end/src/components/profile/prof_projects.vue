@@ -1,8 +1,14 @@
 <template>
     <div class="wrap_projects">
+        
+        <div v-if="create_prj==1" class="overlay"></div>
         <div class="create_prj" v-if="create_prj==1">
             <createProject :coWorkers="coWorkers" :user="user" />
+            <button class="close_form" v-on:click="create_prj=0">
+                <font-awesome-icon class="icon" :icon="['far', 'times-circle']"/>
+            </button>
         </div>
+
         <div class="mytitle">
             <font-awesome-icon class="icon" :icon="['fas', 'thumbtack']"
                 :style="{'opacity': create_prj==1 ? '0.6' : ''}"/>
