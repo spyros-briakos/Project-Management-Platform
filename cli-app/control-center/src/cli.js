@@ -62,6 +62,7 @@ export function cli(args) {
   .command('create-project')
   .requiredOption('-p, --project <value>', 'Project\'s name')
   .option('-d, --description <value>', 'Project\'s description')
+  .option('--plan <value>', 'Project\'s plan')
   .action((command) => {
 		let data
 		let token = ''
@@ -73,7 +74,8 @@ export function cli(args) {
 		}
     axios.post(`${apiUrl}/projects/`, {
 			name: command.project,
-			description: command.description
+			description: command.description,
+			plan_in_use: command.plan
 		}, { headers: { "Authorization": token } })
 		.then((response) => {
 			console.log(response.data);
@@ -186,11 +188,11 @@ export function cli(args) {
 		} catch (err) {
 				return console.log('Reading projects failed:', err);
 		}
-    axios.PATCH(`${apiUrl}/projects/${project._id}`, {status: 'done'}, { headers: { "Authorization": token } })
+    axios.patch(`${apiUrl}/projects/${project._id}`, {status: 'done'}, { headers: { "Authorization": token } })
 		.then((response) => {
 			console.log(response);
 
-			let project = data.projects.filter(p => p.name != command.project)[0]
+			let project = data.projects.filter(p => p.name == command.project)[0]
 			project.status = 'done'
 			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
 				if(err) return console.log('Writing data failed:', err);
@@ -209,11 +211,112 @@ export function cli(args) {
 
 	program
   .command('edit-project')
-  .requiredOption('-p, --project <value>', 'User\'s project name')
-  .option('-n, --name <value>', 'User\'s new project name')
-  .option('-d, --description <value>', 'User\'s new project description')
-  .option('-po, --productOwner <value>', 'User\'s new project productOwner')
-  .option('-sm, --scrumMaster <value>', 'User\'s new project scrumMaster')
+  .requiredOption('-p, --project <value>', 'Project\'s name')
+  .option('-n, --name <value>', 'Project\'s name')
+  .option('-d, --description <value>', 'Project\'s description')
+  .option('-po, --productOwner <value>', 'Project\'s productOwner')
+  .option('-sm, --scrumMaster <value>', 'Project\'s scrumMaster')
+  .option('--plan <value>', 'Project\'s business plan')
+  .action((command) => {
+    let data
+		let token = ''
+		let project = {}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
+			token = data.token
+		} catch (err) {
+				return console.log('Reading token failed:', err);
+		}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
+			let projects = data.projects.filter(p => p.name == command.project)
+			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
+			project = projects[0]
+		} catch (err) {
+				return console.log('Reading projects failed:', err);
+		}
+    axios.patch(`${apiUrl}/projects/${project._id}`, {
+			name: command.name ? command.name : project.name,
+			description: command.description ? command.description : project.description,
+			productOwner: command.productOwner ? command.productOwner : project.productOwner,
+			scrumMaster: command.scrumMaster ? command.scrumMaster : project.scrumMaster,
+			plan_in_use: command.plan ? command.plan : project.plan,
+		}, { headers: { "Authorization": token } })
+		.then((response) => {
+			console.log(response);
+
+			project.name = command.name
+			project.description = command.description
+			project.productOwner = command.productOwner
+			project.scrumMaster = command.scrumMaster
+			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+				if(err) return console.log('Writing data failed:', err);
+			});
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else if (err.response && err.response.message) {
+				console.log(err.response.message)
+			}
+		})
+  });
+
+	program
+  .command('invite-user')
+  .requiredOption('-p, --project <value>', 'Project name')
+  .option('-u, --username <value>', 'Username')
+  .action((command) => {
+    let data
+		let token = ''
+		let project = {}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
+			token = data.token
+		} catch (err) {
+				return console.log('Reading token failed:', err);
+		}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
+			let projects = data.projects.filter(p => p.name == command.project)
+			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
+			project = projects[0]
+		} catch (err) {
+				return console.log('Reading projects failed:', err);
+		}
+    axios.PATCH(`${apiUrl}/projects/${project._id}`, {
+			name: command.name ? command.name : project.name,
+			description: command.description ? command.description : project.description,
+			productOwner: command.productOwner ? command.productOwner : project.productOwner,
+			scrumMaster: command.scrumMaster ? command.scrumMaster : project.scrumMaster,
+		}, { headers: { "Authorization": token } })
+		.then((response) => {
+			console.log(response);
+
+			project.name = command.name
+			project.description = command.description
+			project.productOwner = command.productOwner
+			project.scrumMaster = command.scrumMaster
+			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+				if(err) return console.log('Writing data failed:', err);
+			});
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
+			}
+		})
+  });
+
+	program
+  .command('leave-project')
+  .requiredOption('-p, --project <value>', 'Project name')
   .action((command) => {
     let data
 		let token = ''
@@ -339,10 +442,10 @@ program
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(function (command) {
 	// Check if the user can log in
-	const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
-	if(check.result === false){
-		console.log(check.message);
-	} else {
+	// const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
+	// if(check.result === false){
+	// 	console.log(check.message);
+	// } else {
 	  axios.post(`${apiUrl}/users/login?format=${command.format}`, {
 		username: command.username,
 		password: command.password
@@ -354,15 +457,16 @@ program
 		fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
 		  if(err) return console.log('Writing token failed:', err);
 		});
-		console.log(response.data.message);
+				console.log(response.data.message);
 	  })
 	  .catch(function (error) {
-		if (error.response.data.message)
-		  console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
-		else
-		  console.log('Η σύνδεση απέτυχε: ', error.message);
-	  });
-	}
+			if (error.response.data.message) {
+				console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
+			} else {
+				console.log('Η σύνδεση απέτυχε: ', error.message);
+			}
+		});
+	// }
   });
 
 program

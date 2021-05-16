@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
     var decoded = jwt.verify(token, process.env.JWT_SECRET);
     var userId = decoded.sub;
     console.log(userId)
-    const user = await User.findById(userId);
+    const user = await User.findById(userId, ()=>{});
     // console.log(user)
     const project = new Project(req.body);
     project.productOwner = userId;
