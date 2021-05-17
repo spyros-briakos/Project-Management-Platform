@@ -268,3 +268,24 @@
     z-index: 0;
     opacity: 1;
 }
+
+.wrap_projects .projects_ul .partners_box .accept,
+.wrap_projects .projects_ul .partners_box .ignore{
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* padding: 3px 5px 3px 5px; */
+    height: 80%;
+    width: 60%;
+    /* background-color:green; */
+    color: green;
+    margin-left: auto;
+    /* margin-right: auto; */
+    /* margin-left: 15px; */
+    /* font-size: 80%; */
+}
+
+.wrap_projects .projects_ul .partners_box .ignore{
+    /* background-color: red; */
+    color: red;
+}
