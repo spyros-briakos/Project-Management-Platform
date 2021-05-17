@@ -20,15 +20,17 @@
                                 v-on:click="selected_id=opt.id,seturl(opt.path)">
                             <img class="icon" :src="require('../../assets/img/' + opt.svg + '')">
                             {{opt.title}}
+                            <div v-if="opt.id==1">
+                                <font-awesome-icon v-if="existNewInvs()" class="icon icon_notify" :icon="['fas', 'bell']"/>
+                            </div>
                         </button>
                     </div>
                 </div>
             </div>
 
             <div class="prof_display">
-                <!-- <createProject :readonly="true" :user="name" :coWorkers="getCoWorkers" v-if="selected_id==1"/>  -->
-                <prof-projects :coWorkers="getCoWorkers" :user="name" v-if="selected_id == 1"/>
-                <profCoWorkers :coWorkers="getCoWorkers" v-if="selected_id == 2" />
+                <prof-projects v-bind:seen="invites.seen_invites" v-on:update-seen="updateSeen($event)" :coWorkers="coWorkers" :invites="invites.inv_list" :user="name" v-if="selected_id == 1"/>
+                <profCoWorkers :coWorkers="coWorkers" v-if="selected_id == 2" />
                 <profSettings v-if="selected_id == 3" />
                 <Prices v-if="selected_id == 4" />
                 <profLogout v-if="selected_id == 5" />
@@ -62,6 +64,11 @@
                 {id: 4, title: "Αναβάθμιση", path:"Upgrade", svg: "upgrade.svg"},
                 {id: 5, title: "Αποσύνδεση", path:"profLogout", svg: "exit.svg"},
             ],
+            invites:{
+                inv_list: this.getInvites(),
+                seen_invites: '',
+            },
+            coWorkers: this.getCoWorkers()
         }
     },
     components:{
@@ -77,9 +84,23 @@
         },
         seturl(path){
             router.push({ name: path}).catch(()=>{});
-        }
-    },
-    computed:{
+        },
+        new_invite(){
+            let invites = this.getInvites();
+            for (let invite of invites) {
+                if( invite.seen == 0){
+                    return 1;
+                }
+            }
+            return 0;
+        },
+        getInvites(){
+            return[
+                {title: 'test Invite 1', from: 'SOYVLAKIA O MPAMPHS', date: '23-2-2021', seen: 1},
+                {title: 'test Invite 2', from: 'SOYVLAKIA O MPAMPHS', date: '23-2-2021', seen: 1},
+                {title: 'test Invite 3', from: 'SOYVLAKIA O MPAMPHS', date: '23-2-2021', seen: 0},
+            ]
+        },
         getCoWorkers(){
             return [
                 {id: 1, name: "Christina Evaggelou"},
@@ -92,7 +113,26 @@
                 {id: 8, name: "Chris Baziotis"},
                 {id: 9, name: "Panos Perdikos"},
             ]
+        },
+        updateSeen(title){
+            for(let inv of this.invites.inv_list){
+                if(inv.title == title){
+                    inv.seen = 1;
+                }
+            }
+        },
+        existNewInvs(){
+            for(let inv of this.invites.inv_list){
+                if(inv.seen == 0){
+                    return true;
+                }
+            }
+            return false;
         }
+    },
+    computed:{
+        
+        
     },
     watch: {
         $route(to) {
@@ -106,7 +146,7 @@
                 this.selected_id = 4;
             else if(to.name == 'profLogout')
                 this.selected_id = 5;
-        }   
+        }
     }
 };
 </script>

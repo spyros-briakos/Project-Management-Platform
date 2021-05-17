@@ -20,7 +20,7 @@
 
             <li v-for="invite in invites" :key="invite.title"
                 :style="{'opacity': 0.3}"
-                @mouseover="invites_mouse_over=invite.title"
+                @mouseover="mouse_on(invite.title)"
                 @mouseleave="invites_mouse_over=''">
                 
                 <div class="icon" :style="{
@@ -148,25 +148,6 @@
                     ],
                 }
             ],
-            invites:[
-                {
-                    title: 'test Invite 1',
-                    from: 'SOYVLAKIA O MPAMPHS',
-                    date: '23-2-2021'
-                },
-
-                {
-                    title: 'test Invite 2',
-                    from: 'SOYVLAKIA O MPAMPHS',
-                    date: '23-2-2021'
-                },
-
-                {
-                    title: 'test Invite 3',
-                    from: 'SOYVLAKIA O MPAMPHS',
-                    date: '23-2-2021'
-                }
-            ],
         }
     },
     methods:{
@@ -182,7 +163,14 @@
         },
         reject_inv(name){
             alert("Rejected: " + name);
+        },
+        mouse_on(title){
+            this.invites_mouse_over=title;
+            this.$emit('update-seen', title);
         }
+    },
+    computed:{
+
     },
     components:{
         createProject,
@@ -190,6 +178,7 @@
     props:{
         user:String,
         coWorkers:Array,
+        invites:Array,
     }
 };
 </script>

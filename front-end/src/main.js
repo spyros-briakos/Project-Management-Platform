@@ -9,6 +9,7 @@ import "@/assets/css/main.css";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
@@ -20,7 +21,7 @@ import Gantt from "highcharts/modules/gantt";
 Gantt(Highcharts);
 Vue.use(HighchartsVue);
 
-library.add(faUserSecret, faUser, faTimesCircle, faCheckCircle)
+library.add(faUserSecret, faUser, faTimesCircle, faCheckCircle, faBell)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
