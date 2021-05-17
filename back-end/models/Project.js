@@ -35,6 +35,11 @@ const ProjectSchema = new mongoose.Schema({
     enum: ['inProgress', 'done'],
     default: 'inProgress',
   },
+  plan_in_use: {
+    type: String,
+    enum: ['standard', 'premium'],
+    default: 'standard'
+  },
   startingDate: {
     type: Date,
     default: Date.now

@@ -78,7 +78,8 @@ router.patch('/edit-user', async (req, res) => {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          projects: user.projects
+          projects: user.projects,
+          plan_in_use: user.plan_in_use
         },
         email: 'updated'
       });
@@ -95,7 +96,8 @@ router.patch('/edit-user', async (req, res) => {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          projects: user.projects
+          projects: user.projects,
+          plan_in_use: user.plan_in_use
         }
       });
     }
@@ -112,7 +114,7 @@ router.patch('/reset-password', async (req, res) => {
 
     // If no such user
     if(!user) {
-      res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
     }
 
     // Check the right password was passed
@@ -120,12 +122,12 @@ router.patch('/reset-password', async (req, res) => {
 
     // If the given password was wrong
     if(!validate) {
-      res.status(400).json({ message: 'Σφάλμα: λάθος κωδικός πρόσβασης.' });
+      return res.status(400).json({ message: 'Σφάλμα: λάθος κωδικός πρόσβασης.' });
     }
 
     // If the new password and the confirmation don't match
     if(req.body.new !== req.body.confirm) {
-      res.status(400).json({ message: 'Σφάλμα: ο νέος κωδικός πρόσβασης και η επιβεβαίωσή του διαφέρουν.' });
+      return res.status(400).json({ message: 'Σφάλμα: ο νέος κωδικός πρόσβασης και η επιβεβαίωσή του διαφέρουν.' });
     }
 
     // Update user's password
@@ -135,6 +137,57 @@ router.patch('/reset-password', async (req, res) => {
 
     res.json({ message: 'Επιτυχής ενημέρωση του κωδικού πρόσβασης.' });
 
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// Upgrade user's plan to premium
+router.patch('/upgrade-plan', async (req, res) => {
+  try {
+    /// Find user
+    const user = await User.findById(req.user._id);
+
+    // If no such user in the db
+    if(!user) {
+      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+    }
+
+    // If user's plan is already premium
+    if(user.plan_in_use === 'premium') {
+      const ending_date = user.premium_ending_date.toLocaleDateString();
+      return res.status(400).json({ message: `Ο λογαριασμός σου είναι ήδη προνομιούχος και λήγει στις ${ending_date}.` });
+    }
+
+    // Get today's date
+    const today = new Date();
+
+    // If the user wants to be premium for a month
+    if(req.body.plan_in_use === 'month') {
+      req.body.premium_ending_date = today.add(1).month();
+    // If the user wants to be premium for a year
+    } else if(req.body.plan_in_use === 'year') {
+      req.body.premium_ending_date = today.add(12).month();
+    }
+
+    // Keep only the premium value after setting the expiration date
+    req.body.plan_in_use = 'premium';
+
+    // Upgrade user's plan
+    const updatedUser = await User.updateOne({ _id: req.user._id }, { $set: { plan_in_use: req.body.plan_in_use, premium_ending_date: req.body.premium_ending_date } }, { runValidators: true });
+    user = await User.findById(req.user._id);
+
+    res.json({
+      message: 'Ο λογαριασμός σου αναβαθμίστηκε με επιτυχία σε προνομιούχος!',
+      user: {
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        projects: user.projects,
+        plan_in_use: user.plan_in_use
+      }
+    });
   } catch (error) {
     res.status(400).json({ message: error });
   }
