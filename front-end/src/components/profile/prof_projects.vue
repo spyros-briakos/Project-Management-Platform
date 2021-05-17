@@ -23,9 +23,12 @@
                 @mouseover="mouse_on(invite.title)"
                 @mouseleave="invites_mouse_over=''">
                 
+                
+                <div v-if="!invite.seen" class="notify"></div>
                 <div class="icon" :style="{
                     'background-color' : color_roulete(),
-                }"></div>
+                }">
+                </div>
                 <div class="projectTitle">
                     {{invites_mouse_over == invite.title ? 'Από: ' + invite.from + ' ' + invite.date : 'Πρόσκληση: ' + invite.title}}
                 </div>
