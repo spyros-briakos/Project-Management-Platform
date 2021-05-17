@@ -42,19 +42,18 @@ const UserSchema = new mongoose.Schema({
   },
   image: {
     data: Buffer,
-    contentType: {
-      type: String,
-      default: 'string'
-    },
-		url: {
-			type: String,
-			default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZL12v4NCVMfrCwtG1huVb4zXxrVIu-ibumA&usqp=CAU"
-		}
+    contentType: String
   },
   projects: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project"
+    }
+  ],
+  invitations: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Invitation'
     }
   ],
   plan_in_use: {
@@ -83,6 +82,8 @@ UserSchema.methods.isValidPassword = async function(password) {
   return compare;
 }
 
+// ----------------------------------------------------
+
 // Save invalid tokens in the systems until they expire
 const InvalidTokenSchema = new mongoose.Schema({
   value: String,
@@ -95,12 +96,40 @@ const InvalidTokenSchema = new mongoose.Schema({
 // Create TTL Index (expire token 1 day after it was created)
 InvalidTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds:86400 });
 
+// ----------------------------------------------------
+
+// Invitation Schema
+const InvitationSchema = new mongoose.Schema({
+  receiver: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  sender: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  project: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Project'
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  },
+  invitationCode: String
+});
+
+// ----------------------------------------------------
+
 // User model
 const User = mongoose.model('User', UserSchema);
 // InvalidToken model
 const InvalidToken = mongoose.model('InvalidToken', InvalidTokenSchema);
+// Invitation model
+const Invitation = mongoose.model('Invitation', InvitationSchema);
 
 module.exports = {
   User: User,
-  InvalidToken: InvalidToken
+  InvalidToken: InvalidToken,
+  Invitation: Invitation
 }

@@ -42,3 +42,18 @@ module.exports.changePassword = (name, email, verificationCode) => {
     return null;
   });
 };
+
+// Send email to invite a user to a project
+module.exports.sendInvitation = (email, sender, project, invitationCode) => {
+  transport.sendMail({
+    from: process.env.SENDER_EMAIL,
+    to: email,
+    subject: 'ScruManiac: Πρόσκληση σε project',
+    html: `<h3>Ο χρήστης ${sender} σε προσκαλεί να συμμετέχεις στο project του με όνομα ${project}!</h3>
+          Επίλεξε αν θες να κάνεις <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/answer-invitation/${invitationCode}?answer=accept'>ΑΠΟΔΟΧΗ</a> 
+          ή <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/answer-invitation/${invitationCode}?answer=reject'>ΑΠΟΡΡΙΨΗ</a> της πρόσκλησης.`
+  }).catch(err => {
+    console.log(err);
+    return null;
+  });
+}

@@ -8,6 +8,10 @@ const jwt = require('jsonwebtoken');
 const { User } = require("../models/User");
 // Import InvalidToken model (created after a user logs out)
 const { InvalidToken } = require("../models/User");
+// Import Invitation model (for invitations to a project)
+const { Invitation } = require("../models/User");
+// Import Project model
+const Project = require('../models/Project');
 
 
 // Get specific user
@@ -60,8 +64,7 @@ router.patch('/edit-user', async (req, res) => {
       req.body['verificationCode'] = verificationCode;
 
       // Update user
-      const updatedUser = await User.updateOne({ _id: req.user._id }, { $set: req.body }, { runValidators: true });
-      const user = await User.findById(req.user._id);
+      const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
 
       // Send verification to the user's email
       send_email.sendVerificationEmail(req.user.username, req.body.email, verificationCode);
@@ -74,34 +77,34 @@ router.patch('/edit-user', async (req, res) => {
       res.json({
         message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.\nΣου στείλαμε email επιβεβαίωσης. Παρακαλούμε δες το Gmail σου!',
         user: {
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          projects: user.projects,
-          plan_in_use: user.plan_in_use
+          username: updatedUser.username,
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          email: updatedUser.email,
+          projects: updatedUser.projects,
+          plan_in_use: updatedUser.plan_in_use
         },
         email: 'updated'
       });
     }
     else {
       // Update user
-      const updatedUser = await User.updateOne({ _id: req.user._id }, { $set: req.body }, { runValidators: true });
-      const user = await User.findById(req.user._id);
+      const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
 
       res.json({
         message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.',
         user: {
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          projects: user.projects,
-          plan_in_use: user.plan_in_use
+          username: updatedUser.username,
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          email: updatedUser.email,
+          projects: updatedUser.projects,
+          plan_in_use: updatedUser.plan_in_use
         }
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: error });
   }
 })
@@ -174,18 +177,17 @@ router.patch('/upgrade-plan', async (req, res) => {
     req.body.plan_in_use = 'premium';
 
     // Upgrade user's plan
-    const updatedUser = await User.updateOne({ _id: req.user._id }, { $set: { plan_in_use: req.body.plan_in_use, premium_ending_date: req.body.premium_ending_date } }, { runValidators: true });
-    user = await User.findById(req.user._id);
+    const updatedUser = await User.findByIdAndUpdate(req.user._id, { plan_in_use: req.body.plan_in_use, premium_ending_date: req.body.premium_ending_date }, { runValidators: true, new: true });
 
     res.json({
       message: 'Ο λογαριασμός σου αναβαθμίστηκε με επιτυχία σε προνομιούχος!',
       user: {
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        projects: user.projects,
-        plan_in_use: user.plan_in_use
+        username: updatedUser.username,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email,
+        projects: updatedUser.projects,
+        plan_in_use: updatedUser.plan_in_use
       }
     });
   } catch (error) {
@@ -210,5 +212,81 @@ router.delete('/delete-user', async (req, res) => {
     res.status(400).json({ message: error });
   }
 })
+
+// Invite user(s) to a specific project
+router.post('/project-invite/:projectId', async(req, res) => {
+  try {
+    const sent = [];
+
+    // For each user specified in the request
+    for (let username of req.body.users) {
+      try {
+        // Find user in the db
+        const user = await User.findOne({ username: username }).exec();
+
+        // If no such user in the db
+        if(!user) {
+          if(sent.length > 0) {
+            const users = set.toString();
+            return res.status(400).json({ message: `Δεν βρέθηκε χρήστης με το username ${username}.\nΣτάλθηκε πρόσκληση στον χρήστη ${users}.` });
+          } else if(sent.length > 1) {            
+            const users = set.toString();
+            return res.status(400).json({ message: `Δεν βρέθηκε χρήστης με το username ${username}.\nΣτάλθηκαν προσκλήσεις στους χρήστες ${users}.` });
+          } else {
+            return res.status(400).json({ message: `Δεν βρέθηκε χρήστης με το username ${username}.` });
+          }
+        }
+
+        // If the requested user is already in the project
+        if(user.projects.includes(req.params.projectId)) {
+          if(sent.length == 1) {
+            const users = set.toString();
+            return res.status(400).json({ message: `Ο χρήστης με το username ${username} είναι ήδη μέλος αυτού του project.\nΣτάλθηκε πρόσκληση στον χρήστη ${users}.` });
+          } else if(sent.length > 1) {            
+            const users = set.toString();
+            return res.status(400).json({ message: `Ο χρήστης με το username ${username} είναι ήδη μέλος αυτού του project.\nΣτάλθηκαν προσκλήσεις στους χρήστες ${users}.` });
+          } else {
+            return res.status(400).json({ message: `Ο χρήστης με το username ${username} είναι ήδη μέλος αυτού του project.` });
+          }
+        }
+
+        // Create the invitation
+        const newInvitation = new Invitation({
+          receiver: user._id,
+          sender: req.user._id,
+          project: req.params.projectId
+        });
+
+        // Save invitation in the db
+        const invitation = await newInvitation.save();
+
+        // Create an invitation code
+        const invitationCode = jwt.sign({ id: invitation._id }, process.env.JWT_SECRET);
+        await Invitation.updateOne({ _id: invitation._id }, { $set: { invitationCode: invitationCode } }, { runValidators: true });
+
+        // Update user's invitations in the app
+        const invitations = user.invitations;
+        invitations.push(invitation._id);
+        await User.updateOne({ username: username }, { $set: { invitations: invitations } }, { runValidators: true });
+
+        // Also send the invitation to the user's email
+        send_email.sendInvitation(user.email, req.user.username, req.body.project, invitationCode);
+
+        // Keep usernames that will receive an invitation, to report them to the user in case of an error
+        sent.push(username);
+      } catch (err) {
+        return res.status(400).json({ message: err });
+      }
+    }
+
+    if(req.body.users.length == 1) {
+      res.json({ message: `Η πρόσκληση του χρήστη ${req.body.users[0]} στο project ${req.body.project} στάλθηκε με επιτυχία!` });
+    } else {
+      res.json({ message: `Όλες οι προσκλήσεις μελών στο project ${req.body.project} στάλθηκαν με επιτυχία!` });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
 
 module.exports = router;
