@@ -16,6 +16,9 @@
                     <div class="mywarning" v-else>
                         {{item.val}}
                     </div>
+                    <div v-if="item.hint" class="warn_hover">
+                        {{item.hint}}
+                    </div>
                 </div>
                 <div :class="{'btn_wrap': true,
                             'warn_btn_wrap': elem.id==3,
@@ -46,7 +49,7 @@
                     title: "Προσωπικές Πληροφορίες",
                     items: [
                         {id: 1, title: "Ονοματεπώνυμο", val: "Vasilis Goulas", hide:false, holder: "", button: true},
-                        {id: 2, title: "E-mail", val: "vas_gou@gmail.com", hide:false, holder: "", button: true},
+                        {id: 2, title: "E-mail", val: "vas_gou@gmail.com", hide:false, holder: "", button: true, hint: "Αν ενημερώσεις το e-mail σου, θα αποσυνδεθείς μέχρι να επιβεβαιώσεις την καινούργια σου διεύθυνση !!"},
                     ]
                 },
 

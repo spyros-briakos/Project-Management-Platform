@@ -17,6 +17,37 @@
         <button class="create_btn" v-on:click="create_prj=1">{{btn_mssg}}</button>
 
         <ul class="projects_ul">
+
+            <li v-for="invite in invites" :key="invite.title"
+                :style="{'opacity': 0.3}"
+                @mouseover="mouse_on(invite.title)"
+                @mouseleave="invites_mouse_over=''">
+                
+                
+                <div v-if="!invite.seen" class="notify"></div>
+                <div class="icon" :style="{
+                    'background-color' : color_roulete(),
+                }">
+                </div>
+                <div class="projectTitle">
+                    {{invites_mouse_over == invite.title ? 'Από: ' + invite.from + ' ' + invite.date : 'Πρόσκληση: ' + invite.title}}
+                </div>
+                <div class="partners_box"
+                    :style="{
+                        'flex-flow': 'row',
+                        'align-items': 'center',
+                    }">
+                    <button v-on:click="accept_inv(invite.title)">
+                        <!-- Αποδοχή -->
+                        <font-awesome-icon class="accept" :icon="['far', 'check-circle']"/> 
+                    </button>
+                    <button v-on:click="reject_inv(invite.title)">
+                        <!-- Απόριψη -->
+                        <font-awesome-icon class="ignore" :icon="['far', 'times-circle']"/>
+                    </button>
+                </div>
+            </li>
+
             <li v-for="project in projects" :key="project.id"
                 v-on:click="mpou()">
                 <div class="icon" :style="{
@@ -43,6 +74,8 @@
                     </div>
                 </div>
             </li>
+
+            
         </ul>
     <router-view></router-view>
     </div>
@@ -60,6 +93,7 @@
             welcome_mssg: "Όλα σου τα Projects:",
             btn_mssg: "Δημιουργία Project",
             create_prj: 0,
+            invites_mouse_over: '',
             projects:[
                 {
                     id: 1,
@@ -116,7 +150,7 @@
                         'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
                     ],
                 }
-            ]
+            ],
         }
     },
     methods:{
@@ -126,7 +160,20 @@
         color_roulete(){
             let c_arr=["red", "orange", "blue", "yellow", "plum", "green", "purple"];
             return c_arr[Math.floor(Math.random() * c_arr.length)];
+        },
+        accept_inv(name){
+            alert("Accepted: " + name);
+        },
+        reject_inv(name){
+            alert("Rejected: " + name);
+        },
+        mouse_on(title){
+            this.invites_mouse_over=title;
+            this.$emit('update-seen', title);
         }
+    },
+    computed:{
+
     },
     components:{
         createProject,
@@ -134,6 +181,7 @@
     props:{
         user:String,
         coWorkers:Array,
+        invites:Array,
     }
 };
 </script>

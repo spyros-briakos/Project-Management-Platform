@@ -46,7 +46,7 @@
     width: var(--pict_size);
     border: 2px solid black;
     border-radius: 50%;
-    background-color: rgb(236, 200, 149);
+    background-color: rgb(220, 228, 228);
     box-shadow: 0 0 30px rgba(0,0,0,0.26);
 }
 
@@ -133,3 +133,14 @@
         rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
+.wrap .big_wrap .opts_wrap .prof_opts .opt_btn .icon_notify{
+    margin-left: 5px;
+    color: red;
+    /* background-color: ; */
+}
+
+.wrap .big_wrap .opts_wrap .prof_opts .opt_btn .icon_notify::after{
+    content: '';
+    width:1px;
+    border:1px solid red;
+}    

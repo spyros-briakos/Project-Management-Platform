@@ -154,3 +154,23 @@
         transform: rotate(+20deg);
     }
 }
+
+
+.prof_set_wrap .settings_list .display_val .warn_hover{
+    display: none;
+    position: fixed;
+    padding: 2px 5px 2px 5px;
+    transform: translateY(-10px);
+    background-color: rgb(139, 139, 139);
+    color: black;
+    font-size: 80%;
+    min-width: var(--fullname_arrow_width);
+    height: var(--fullname_arrow_height);
+    justify-content: center;
+    opacity: 0.95;
+}
+
+
+.prof_set_wrap .settings_list .display_val:hover > .warn_hover{
+    display: flex;
+}
