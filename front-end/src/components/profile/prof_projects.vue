@@ -26,7 +26,7 @@
                 
                 <div v-if="!invite.seen" class="notify"></div>
                 <div class="icon" :style="{
-                    'background-color' : color_roulete(),
+                    'background-color' :  !invite.color ? invite.color=color_roulete() : invite.color,
                 }">
                 </div>
                 <div class="projectTitle">
@@ -51,7 +51,7 @@
             <li v-for="project in projects" :key="project.id"
                 v-on:click="mpou()">
                 <div class="icon" :style="{
-                    'background-color' : color_roulete(),
+                    'background-color' : !project.color ? project.color=color_roulete() : project.color,
                 }"></div>
                 <div class="projectTitle">
                     {{project.title}}
