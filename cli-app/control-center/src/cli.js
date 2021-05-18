@@ -264,54 +264,51 @@ export function cli(args) {
 		})
   });
 
-	program
+program
   .command('invite-user')
   .requiredOption('-p, --project <value>', 'Project name')
-  .option('-u, --username <value>', 'Username')
+  .requiredOption('-u, --username <value...>', 'Username')
   .action((command) => {
-    let data
-		let token = ''
-		let project = {}
-		try {
-			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
-			token = data.token
-		} catch (err) {
-				return console.log('Reading token failed:', err);
-		}
-		try {
-			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
-			let projects = data.projects.filter(p => p.name == command.project)
-			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
-			project = projects[0]
-		} catch (err) {
-				return console.log('Reading projects failed:', err);
-		}
-    axios.PATCH(`${apiUrl}/projects/${project._id}`, {
-			name: command.name ? command.name : project.name,
-			description: command.description ? command.description : project.description,
-			productOwner: command.productOwner ? command.productOwner : project.productOwner,
-			scrumMaster: command.scrumMaster ? command.scrumMaster : project.scrumMaster,
-		}, { headers: { "Authorization": token } })
-		.then((response) => {
-			console.log(response);
+	// Get user's token to pass authentication
+	const token = utils.getToken('/tmp/token.json');
+	// If an error occured
+	if(token instanceof Error) {
+	  const error = token;
+	  if(error.code === 'ENOENT')
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
+	} else {
+	  // Get current user and the requested project
+      let user = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'));
+	  let projects = user.projects.filter(p => p.name == command.project);
 
-			project.name = command.name
-			project.description = command.description
-			project.productOwner = command.productOwner
-			project.scrumMaster = command.scrumMaster
-			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
-				if(err) return console.log('Writing data failed:', err);
-			});
-		})
-		.catch((err) => {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
-		})
+	  // If no such project was found
+	  if (projects.length == 0)
+	    return console.log('Δεν βρέθηκε κάποιο project με το όνομα \''+command.project+'\'');
+
+	  let project = projects[0];
+
+	  // Invite the requested user(s)
+	  axios.post(`${apiUrl}/secure-routes/project-invite/${project._id}`, {
+		users: [command.username].concat(command.args),
+		project: command.project
+	  }, { headers: { "Authorization": `Bearer ${token}` }
+	  }, { httpsAgent: agent })
+	  .then((response) => {
+		console.log(response.data.message);
+
+		// fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+		//   if(err) return console.log('Writing data failed:', err);
+		// });
+	  })
+	  .catch((err) => {
+		if (err.response && err.response.data.message)
+		  console.log('Η πρόσκληση μελών απέτυχε: ', err.response.data.message);
+		else
+		  console.log('Η πρόσκληση μελών απέτυχε: ', err.message);
+	  });
+	}
   });
 
 	program
@@ -441,31 +438,31 @@ program
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(function (command) {
-	// Check if the user can log in
+	// // Check if the user can log in
 	// const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
 	// if(check.result === false){
 	// 	console.log(check.message);
 	// } else {
-	  axios.post(`${apiUrl}/users/login?format=${command.format}`, {
-		username: command.username,
-		password: command.password
-	  }, { httpsAgent: agent })
-	  .then(function (response) {
-		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
-		  if(err) return console.log('Writing user failed:', err);
-		});
-		fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
-		  if(err) return console.log('Writing token failed:', err);
-		});
-				console.log(response.data.message);
-	  })
-	  .catch(function (error) {
-			if (error.response.data.message) {
-				console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
-			} else {
-				console.log('Η σύνδεση απέτυχε: ', error.message);
-			}
-		});
+	axios.post(`${apiUrl}/users/login?format=${command.format}`, {
+	  username: command.username,
+	  password: command.password
+	}, { httpsAgent: agent })
+	.then(function (response) {
+	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		if(err) return console.log('Writing user failed:', err);
+	  });
+	  fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
+		if(err) return console.log('Writing token failed:', err);
+	  });
+	  console.log(response.data.message);
+	})
+	.catch(function (error) {
+	  if (error.response && error.response.data.message) {
+		console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
+	  } else {
+		console.log('Η σύνδεση απέτυχε: ', error.message);
+	  }
+	});
 	// }
   });
 
@@ -495,7 +492,7 @@ program
 	  console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
 	})
 	.catch(function (error) {
-	  if (error.response.data.message)
+	  if (error.response && error.response.data.message)
 		console.log('Η εγγραφή απέτυχε: ', error.response.data.message);
 	  else
 		console.log('Η εγγραφή απέτυχε: ', error.message);
@@ -530,7 +527,7 @@ program
 	    console.log(response.data.message);
 	  })
 	  .catch(function(error) {
-		if(error.response.data.message)
+		if(error.response && error.response.data.message)
 		  console.log('Η αποσύνδεση απέτυχε.',error.response.data.message);
 		else
 		  console.log('Η αποσύνδεση απέτυχε.',error.message);
@@ -559,7 +556,7 @@ program
 		console.log(response.data);
 	  })
 	  .catch(function(error) {
-		if(error.response.data.message)
+		if(error.response && error.response.data.message)
 	      console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.response.data.message}`);
 		else
 	      console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.message}`);
@@ -611,10 +608,11 @@ program
 		}
 	  })
 	  .catch(function (error) {
-		if(error.response.data.message)
-		  console.log(`Η ενμηέρωση του λογαριασμού απέτυχε: ${error.response.data.message}`);
+		console.log(error);
+		if(error.response && error.response.data.message)
+		  console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.response.data.message}`);
 		else
-		  console.log(`Η ενμηέρωση του λογαριασμού απέτυχε: ${error.message}`);
+		  console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.message}`);
 	  });
     }
   })
@@ -646,7 +644,7 @@ program
 		console.log(response.data.message);
 	  })
 	  .catch(function (error) {
-	    if(error.response.data.message)
+	    if(error.response && error.response.data.message)
 		  console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
 	    else
 		  console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
@@ -743,7 +741,7 @@ program
 		console.log(response.data.message);
 	  })
 	  .catch(function (error) {
-		if(error.response.data.message)
+		if(error.response && error.response.data.message)
 		  console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.response.data.message}`);
 		else
 		  console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.message}`);
@@ -804,25 +802,54 @@ program
 //   });
 
 // program
-// .command('delete-user')
-// .option('--format <value>', 'Give format', 'json')
-// .requiredOption('--id <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-// .action(function(command) {
-//   axios.delete(`${apiUrl}/users/delete-user?format=${command.format}/`, {
-// 	  id: command.id
-//   }, { httpsAgent: agent })
-//   .then(function(response) {
-// 	fs.unlink('/tmp/user.json', function(err) {
-// 	  if(err) {
-// 		return console.log('Removing user failed:', err);
-// 	  }
+//   .command('delete-user')
+//   .option('--format <value>', 'Give format', 'json')
+//   .requiredOption('--id <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+//   .action(function(command) {
+// 	axios.delete(`${apiUrl}/users/delete-user/${command.id}?format=${command.format}/`, {},
+// 	{ httpsAgent: agent })
+//     .then(function(response) {
+// 	//   fs.unlink('/tmp/user.json', function(err) {
+// 	//     if(err) {
+// 	// 	  return console.log('Removing user failed:', err);
+// 	//     }
 // 	  console.log(response.data);
+// 	//   });
+//     })
+//     .catch(function (error) {
+// 	  console.log('Deleting user failed: ', error.response.data.message);
+//     });
+//   })
+
+// program
+//   .command('inv')
+//   .option('--format <value>', 'Give format', 'json')
+//   .action(function(command) {
+// 	axios.get(`${apiUrl}/users/inv?format=${command.format}/`, {}, { httpsAgent: agent })
+// 	.then(function(response) {
+// 	  console.log(response.data);
+// 	})
+// 	.catch(function (error) {
+// 	  console.log('Deleting user failed: ', error.response);
 // 	});
 //   })
-//   .catch(function (error) {
-// 	console.log('Deleting user failed: ', error.response.data.message);
-//   });
-// })
+
+// program
+//   .command('rm-inv')
+//   .option('--format <value>', 'Give format', 'json')
+//   .requiredOption('--id <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+//   .action(function(command) {
+// 	axios.post(`${apiUrl}/users/rm-inv?format=${command.format}/`, {
+// 		id: command.id
+// 	}, { httpsAgent: agent })
+// 	.then(function(response) {
+// 	  console.log(response.data);
+// 	})
+// 	.catch(function (error) {
+// 	  console.log(error);
+// 	  console.log('Deleting inv failed');
+// 	});
+//   })
 
 
 /*--------------------------------------------------------------------------------------------------*/

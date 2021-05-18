@@ -38,8 +38,8 @@ passport.use('signup', new localStrategy(
 
       // If an image was uploaded, save it locally
       if(req.file) {
-        user.image.data = fs.readFileSync(path.join(__dirname + '../uploads' + req.file.filename)),
-        user.image.contentType = 'image/png'
+        user.image.data = fs.readFileSync(path.join(__dirname + '../uploads' + req.file.filename));
+        user.image.contentType = 'image/png';
       }
 
       // Create a verification code for the user (will be deleted after the email address is verified)

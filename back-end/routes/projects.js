@@ -4,10 +4,11 @@ const express = require("express");
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const moment = require("moment");
+const { updateOne, findById } = require("../models/Project");
 
 // Import Project model
 const Project = require("../models/Project");
-const User = require("../models/User");
+const { User } = require("../models/User");
 
 // Get all projects
 router.get("/", async (req, res) => {
@@ -34,6 +35,12 @@ router.post("/", async (req, res) => {
     project.members = [userId];
     project.plan_in_use = req.body.plan_in_use == 'premium' && user.plan_in_use == 'premium' ? req.body.plan_in_use : 'standard';
     const savedProject = await project.save();
+
+    // Add new project to user's projects
+    const projects = user.projects;
+    projects.push(savedProject._id);
+    await User.updateOne({ _id: user._id }, { $set: { projects: projects } }, { runValidators: true });
+
     res.json(savedProject);
   } catch (error) {
     console.log(error)
@@ -54,6 +61,28 @@ router.get('/:projectId', async (req, res) => {
 // Delete specific project
 router.delete('/:projectId', async (req, res) => {
   try {
+    // Find project in the db
+    const project = await Project.findById(req.params.projectId);
+
+    // First remove project from all members
+    for (let userId of project.members) {
+      try {
+        // Get current user-member
+        const user = User.findById(userId);
+        const projects = user.projects;
+        // Get project's position in the list of user's projects
+        const index = projects.findIndex((projectId) => { return projectId === req.params.projectId });
+        // At position index, remove 1 item
+        projects.splice(index, 1);
+
+        // Update user's info
+        await User.updateOne({ _id: user._id }, { $set: { projects: projects } }, { runValidators: true });
+
+      } catch (err) {
+        return res.status(400).json({ message: err });
+      }
+    }
+
     const removedProject = await Project.deleteOne({ _id: req.params.projectId });
     res.json(removedProject);
   } catch (error) {
@@ -76,7 +105,7 @@ router.patch('/:projectId', async (req, res) => {
       const user = await User.findById(userId);
       project.plan_in_use = req.body.plan_in_use == 'premium' && user.plan_in_use == 'premium' ? req.body.plan_in_use : 'standard';
       if (req.body.plan_in_use == 'premium' && user.plan_in_use != 'premium') {
-        res.status(400).json({ message: "Can\'t update project to premium, if you have not unlocked the premium plan." });
+        return res.status(400).json({ message: "Can\'t update project to premium, if you have not unlocked the premium plan." });
       }
     }
     const updatedProject = await Project.updateOne({ _id: req.params.projectId }, { $set: req.body });

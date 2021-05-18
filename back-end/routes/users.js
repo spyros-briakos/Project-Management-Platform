@@ -12,7 +12,10 @@ const queryString = require("query-string");
 
 // Import User model
 const { User } = require("../models/User");
-
+// Import Invitation model (for invitations to a project)
+const { Invitation } = require("../models/User");
+// Import Project model
+const Project = require("../models/Project");
 
 // Handling of image upload
  
@@ -54,7 +57,7 @@ router.post('/signup', [upload.single('image'), passport.authenticate('signup', 
         lastName: req.user.lastName,
         email: req.user.email,
         projects: req.user.projects,
-        plan_in_use: user.plan_in_use
+        plan_in_use: req.user.plan_in_use
       }
     });
 });
@@ -236,7 +239,7 @@ router.get('/oauth2callback/login', async(req, res) => {
 router.patch('/forgot-password', async(req, res) => {
   try{
     // Find user in db
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email }).exec();
 
     // If no such user
     if(!user) {
@@ -267,7 +270,7 @@ router.patch('/forgot-password', async(req, res) => {
 router.post('/set-password/:verificationCode', async(req, res) => {
   try {
     // Find user in db
-    const user = await User.findOne({ verificationCode: req.params.verificationCode });
+    const user = await User.findOne({ verificationCode: req.params.verificationCode }).exec();
 
     // If no such user
     if(!user) {
@@ -306,21 +309,113 @@ router.post('/set-password/:verificationCode', async(req, res) => {
   }
 })
 
-// router.delete('/delete-user', async (req, res) => {
-//   try {
-//     // Delete user from db
-//     const removedUser = await User.deleteOne({ id: req.params.id });
+router.get('/answer-invitation/:invitationCode', async(req, res) => {
+  try {
+    // Find invitation in the db by the invitationCode
+    const invitation = await Invitation.findOne({ invitationCode: req.params.invitationCode }).exec();
 
-//     // // Mark user's auth token as invalid
-//     // const token = new InvalidToken({ value: utils.extractToken(req) });
-//     // await token.save();
-//     // Log out user
-//     req.logout();
+    // If no such invitation found
+    if(!invitation) {
+      return res.status(400).json({ message: 'Σφάλμα: μη έγκυρη πρόσκληση σε project. Ελέγξτε εάν η πρόσκληση έχει ήδη απαντηθεί.' });
+    }
+
+    // Find the user that answered the invitation
+    const user = await User.findById(invitation.receiver);
+
+    if(req.query.answer) {
+      // If the user accepted the invitation
+      if(req.query.answer === 'accept') {
+        // Find project in db
+        const project = await Project.findById(invitation.project);
+
+        // If no such project in db
+        if(!project) {
+          return res.status(400).json({ message: 'Σφάλμα: δεν βρέθηκε το αντίστοιχο project.' });
+        }
+
+        // Add current user to the project's members
+        const members = project.members;
+        members.push(user._id);
+        await Project.updateOne({ _id: project._id }, { $set: { members: members } }, { runValidators: true });
+
+        // Update user's projects
+        const projects = user.projects;
+        projects.push(project._id);
+        // Delete user's invitation
+        const invitations = user.invitations;
+        // Get invitation's position in the list of user's invitations
+        const index = invitations.findIndex((invitationId) => { return invitationId === invitation._id });
+        // At position index, remove 1 item
+        invitations.splice(index, 1);
+        // Update user
+        await User.updateOne({ _id: user._id }, { $set: { projects: projects, invitations: invitations } }, { runValidators: true });
+
+        // Delete invtitation from the db as well
+        await Invitation.deleteOne({ _id: invitation._id });
+
+        return res.json({ message: `Επιτυχής αποδοχή πρόσκλησης. Είσαι πλέον μέλος στο project ${project.name}!` });
+      }
+      // If the user rejected the invitation
+      else if(req.query.answer === 'reject') {
+        // Delete user's invitation
+        const invitations = user.invitations;
+        // Get invitation's position in the list of user's invitations
+        const index = invitations.findIndex((invitationId) => { return invitationId === invitation._id });
+        // At position index, remove 1 item
+        invitations.splice(index, 1);
+        // Update user
+        await User.updateOne({ _id: user._id }, { $set: { invitations: invitations } }, { runValidators: true });
+
+        // Delete invtitation from the db as well
+        await Invitation.deleteOne({ _id: invitation._id });
+        return res.json({ message: `Η πρόσκληση στο project ${project.name} απορρίφθηκε με επιτυχία.` });
+      } else{
+        return res.status(400).json({ message: 'Προέκυψε κάποιο σφάλμα.' });
+      }
+    } else {
+      return res.status(400).json({ message: 'Προέκυψε κάποιο σφάλμα.' });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// router.post('/rm-inv', async(req, res) => {
+//   try {
+//     await Invitation.deleteOne({ _id: req.body.id });
+//     res.json({ message: 'done' });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(400).json({ message: error });
+//   }
+// })
+
+// router.delete('/delete-user/:userId', async (req, res) => {
+//   try {
+//     // // Delete user from db
+//     // const removedUser = await User.deleteOne({ id: req.params.id });
+
+//     // // // Mark user's auth token as invalid
+//     // // const token = new InvalidToken({ value: utils.extractToken(req) });
+//     // // await token.save();
+//     // // Log out user
+//     // req.logout();
+//     const user = await User.updateOne({ _id: req.params.userId }, { $set: { invitations: [] } }, { new: true });
+//     console.log(user);
 
 //     res.json({
-//       result: removedUser,
+//       // result: removedUser,
 //       message: 'Deleted user successfully'
 //     });
+//   } catch (error) {
+//     res.status(400).json({ message: error });
+//   }
+// })
+
+// router.get("/inv", async (req, res) => {
+//   try {
+//     const invs = await Invitation.find({});
+//     res.json(invs);
 //   } catch (error) {
 //     res.status(400).json({ message: error });
 //   }
