@@ -2,17 +2,22 @@
     display:flex;
     height:91.5vh;
     justify-content: center;
+    background-color: rgba(230, 230, 230, 0.815);
 }
 
 .history_wrap{
     display:flex;
+    flex-flow: row;
     flex-wrap: wrap;
-    min-height: 400px;
-    height: 80vh;
+    min-height: 40vh;
+    max-height: 80vh;
     margin-top: 5vh;
     width:80%;
     margin-left: 10vh;
-    background-color: rgba(121, 179,140,0.3);
+    align-content: flex-start;
+    /* background-color: rgba(121, 179,140,0.3); */
+
+    background-color: whitesmoke;
     border-radius: 20px;
     overflow-y: scroll;
     box-shadow: 0 7px 12px rgba(0,0,0,0.6);
@@ -24,8 +29,8 @@
     flex-wrap: wrap;
     width:100%;
     padding: 0px 10px 0 10px;
+    height: 100%;
     justify-content: space-between;
-    min-height: 12vh;
 }
 
 .history_wrap .myflex_row:hover{
@@ -40,16 +45,12 @@
     display: flex;
     flex-flow: column;
     width:100%;
-    min-height: 12vh;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
+    height: 20vh;
 }
 
 .history_wrap .myflex_row .myflex_item{
     display: flex;
-    /* border: 2px solid blue; */
     flex-flow: column;
-    height: auto;
     min-width: 16%;
     max-width: 16%;
     justify-content: center;
@@ -61,8 +62,8 @@
     font-weight: 600;
     font-size: 120%;
     padding: 20px 10px 0 10px;
-    /* max-height: 3vh ; */
     min-height: 10vh;
+    max-height: 10vh;
 }
 
 .history_wrap .endDate{

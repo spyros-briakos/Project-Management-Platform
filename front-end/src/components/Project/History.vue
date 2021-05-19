@@ -1,16 +1,16 @@
 <template>
     <div class="history_back">
         <div class="history_wrap">
-                <div class="myflex_row labels">
-                    <div v-for="label in menu.labels" :key="label"
-                        :class="{'myflex_item': true,
-                                'sprint': label=='Sprint',
-                                'endDate': label=='Ημ/νια Ολοκλήρωσης',
-                                }">
-                            {{label}}
-                    </div>
-                    <div class="mydivider"></div>
+            <div class="myflex_row labels">
+                <div v-for="label in menu.labels" :key="label"
+                    :class="{'myflex_item': true,
+                            'sprint': label=='Sprint',
+                            'endDate': label=='Ημ/νια Ολοκλήρωσης',
+                            }">
+                        {{label}}
                 </div>
+                <div class="mydivider"></div>
+            </div>
 
             <div v-for="item in menu.items" :key="item.id" class="row_divider_wrap">
                 <div class="myflex_row">
@@ -22,7 +22,7 @@
                     </div>
                     <div class="myflex_item">
                         <!-- {{item.progress + '%'}} -->
-                        <v-progress-linear
+                        <!-- <v-progress-linear
                             :color="item.progress== 100 ? 'green' : 'teal'"
                             v-model="item.progress"
                             height="18"
@@ -30,7 +30,18 @@
                             rounded
                         >
                         {{item.progress+' %'}}
-                        </v-progress-linear>
+                        </v-progress-linear> -->
+
+                        <v-progress-circular
+                            :rotate="-45"
+                            :size="80"
+                            :width="15"
+                            :value="item.progress"
+                            color="teal"
+                            >
+                                {{ item.progress + '%' }}
+                        </v-progress-circular>
+
                     </div>
                     <div class="myflex_item">
                         {{item.start}}
