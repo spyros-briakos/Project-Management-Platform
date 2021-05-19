@@ -1,46 +1,48 @@
 <template>
     <div class="history_back">
         <div class="history_wrap">
-            <div class="myflex_row labels">
-                <div v-for="label in menu.labels" :key="label"
-                    :class="{'myflex_item': true,
-                            'sprint': label=='Sprint',
-                            'endDate': label=='Ημ/νια Ολοκλήρωσης',
-                            }">
-                        {{label}}
+                <div class="myflex_row labels">
+                    <div v-for="label in menu.labels" :key="label"
+                        :class="{'myflex_item': true,
+                                'sprint': label=='Sprint',
+                                'endDate': label=='Ημ/νια Ολοκλήρωσης',
+                                }">
+                            {{label}}
+                    </div>
+                    <div class="mydivider"></div>
                 </div>
-                <div class="divider"></div>
-            </div>
 
-            <div v-for="item in menu.items" :key="item.id" class="myflex_row">
-                <div class="myflex_item sprint">
-                    {{'No'+item.id}}
+            <div v-for="item in menu.items" :key="item.id" class="row_divider_wrap">
+                <div class="myflex_row">
+                    <div class="myflex_item sprint">
+                        {{'No'+item.id}}
+                    </div>
+                    <div class="myflex_item">
+                        {{item.status}}
+                    </div>
+                    <div class="myflex_item">
+                        <!-- {{item.progress + '%'}} -->
+                        <v-progress-linear
+                            :color="item.progress== 100 ? 'green' : 'teal'"
+                            v-model="item.progress"
+                            height="18"
+                            :striped="item.progress!=100 ? true : false"
+                            rounded
+                        >
+                        {{item.progress+' %'}}
+                        </v-progress-linear>
+                    </div>
+                    <div class="myflex_item">
+                        {{item.start}}
+                    </div>
+                    <div class="myflex_item endDate">
+                        {{item.end}}
+                    </div>
+                    <div class="myflex_item">
+                        {{item.comments}}
+                    </div>
                 </div>
-                <div class="myflex_item">
-                    {{item.status}}
-                </div>
-                <div class="myflex_item">
-                    <!-- {{item.progress + '%'}} -->
-                    <v-progress-linear
-                        :color="item.progress== 100 ? 'green' : 'teal'"
-                        v-model="item.progress"
-                        height="18"
-                        :striped="item.progress!=100 ? true : false"
-                        rounded
-                    >
-                    {{item.progress+' %'}}
-                    </v-progress-linear>
-                </div>
-                <div class="myflex_item">
-                    {{item.start}}
-                </div>
-                <div class="myflex_item endDate">
-                    {{item.end}}
-                </div>
-                <div class="myflex_item">
-                    {{item.comments}}
-                </div>
-                <div v-if="item.id != 1" class="divider"></div>
+                <div v-if="item.id != 1" class="mydivider"></div>
             </div>
         </div>
         <router-view></router-view> 

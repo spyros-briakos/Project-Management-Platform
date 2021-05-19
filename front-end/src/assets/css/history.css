@@ -25,22 +25,35 @@
     width:100%;
     padding: 0px 10px 0 10px;
     justify-content: space-between;
+    min-height: 12vh;
+}
+
+.history_wrap .myflex_row:hover{
+    background-color:rgba(0,0,0,0.1);
+}
+
+.history_wrap .labels:hover{
+    background-color: transparent !important;
+}
+
+.history_wrap .row_divider_wrap{
+    display: flex;
+    flex-flow: column;
+    width:100%;
+    min-height: 12vh;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
 }
 
 .history_wrap .myflex_row .myflex_item{
     display: flex;
     /* border: 2px solid blue; */
     flex-flow: column;
-    /* align-items: center; */
-    /* justify-content: center; */
-    /* justify-items: center; */
-    /* align-content: center; */
     height: auto;
     min-width: 16%;
     max-width: 16%;
     justify-content: center;
     align-items: center;
-    padding: 0 10px 0 10px;
     overflow: hidden;
 }
 
@@ -48,6 +61,8 @@
     font-weight: 600;
     font-size: 120%;
     padding: 20px 10px 0 10px;
+    /* max-height: 3vh ; */
+    min-height: 10vh;
 }
 
 .history_wrap .endDate{
@@ -60,16 +75,14 @@
     max-width: 10% !important;
 }
 
-.history_wrap .labels .divider{
-    width: 100% !important;
-    margin-right: auto;
-    margin-left: auto;
+.history_wrap .labels .mydivider{
+    width: 100%;
+    margin: 0 auto 0 auto;
     border-bottom: 2px solid black;
 }
 
-.history_wrap .myflex_row .divider{
+.history_wrap .row_divider_wrap .mydivider{
     width: 95%;
-    margin-right: auto;
-    margin-left: auto;
+    margin: 0 auto 0 auto;
     border-bottom: 2px solid black;
 }
