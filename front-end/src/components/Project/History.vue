@@ -20,7 +20,16 @@
                     {{item.status}}
                 </div>
                 <div class="myflex_item">
-                    {{item.progress}}
+                    <!-- {{item.progress + '%'}} -->
+                    <v-progress-linear
+                        :color="item.progress== 100 ? 'green' : 'teal'"
+                        v-model="item.progress"
+                        height="18"
+                        :striped="item.progress!=100 ? true : false"
+                        rounded
+                    >
+                    {{item.progress+' %'}}
+                    </v-progress-linear>
                 </div>
                 <div class="myflex_item">
                     {{item.start}}
@@ -52,12 +61,12 @@
                     ],
                     items_count: 6,
                     items:[
-                        {id: 6, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 5, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 4, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 3, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 2, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 1, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 6, status: 'Ολοκληρώθηκε', progress:'70', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 5, status: 'Ολοκληρώθηκε', progress:'90', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 4, status: 'Ολοκληρώθηκε', progress:'50', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 3, status: 'Ολοκληρώθηκε', progress:'10', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 2, status: 'Ολοκληρώθηκε', progress:'100', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 1, status: 'Ολοκληρώθηκε', progress:'100', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
                     ],
                 }
             }

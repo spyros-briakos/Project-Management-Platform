@@ -1,9 +1,6 @@
 .history_back{
     display:flex;
-    /* background-color: cadetblue; */
-    /* background-color: rgba(121, 179,140,1); */
     height:91.5vh;
-    /* align-items: center; */
     justify-content: center;
 }
 
@@ -18,23 +15,26 @@
     background-color: rgba(121, 179,140,0.3);
     border-radius: 20px;
     overflow-y: scroll;
+    box-shadow: 0 7px 12px rgba(0,0,0,0.6);
 }
 
 .history_wrap .myflex_row{
     display: flex;
     flex-flow: row;
     flex-wrap: wrap;
-    /* border: 2px solid red; */
     width:100%;
-    /* height:10vh; */
     padding: 0px 10px 0 10px;
     justify-content: space-between;
 }
 
 .history_wrap .myflex_row .myflex_item{
     display: flex;
-    /* flex-wrap: wrap; */
     /* border: 2px solid blue; */
+    flex-flow: column;
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* justify-items: center; */
+    /* align-content: center; */
     height: auto;
     min-width: 16%;
     max-width: 16%;
