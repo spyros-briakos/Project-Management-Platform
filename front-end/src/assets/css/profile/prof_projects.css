@@ -227,7 +227,7 @@
 }
 
 .projects_ul li .icon{
-    content: url(../img/project_default.svg);
+    content: url(../../img/project_default.svg);
     height: 40px;
     width: 40px;
     /* height: 100%; */

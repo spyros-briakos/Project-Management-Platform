@@ -19,7 +19,7 @@
         <ul class="projects_ul">
 
             <li v-for="invite in invites" :key="invite.title"
-                :style="{'opacity': 0.3}"
+                :style="{'opacity': 1}"
                 @mouseover="mouse_on(invite.title)"
                 @mouseleave="invites_mouse_over=''">
                 
@@ -187,5 +187,5 @@
 </script>
 
 <style scoped>
-    @import "../../assets/css/prof_projects.css";
+    @import "../../assets/css/profile/prof_projects.css";
 </style>

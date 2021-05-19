@@ -1,13 +1,75 @@
 <template>
-  <div class="history">
-    <h1>This is a history page</h1>
-    <router-view></router-view> 
-  </div>
+    <div class="history_back">
+        <div class="history_wrap">
+            <div class="myflex_row labels">
+                <div v-for="label in menu.labels" :key="label"
+                    :class="{'myflex_item': true,
+                            'sprint': label=='Sprint',
+                            'endDate': label=='Ημ/νια Ολοκλήρωσης',
+                            }">
+                        {{label}}
+                </div>
+                <div class="divider"></div>
+            </div>
+
+            <div v-for="item in menu.items" :key="item.id" class="myflex_row">
+                <div class="myflex_item sprint">
+                    {{'No'+item.id}}
+                </div>
+                <div class="myflex_item">
+                    {{item.status}}
+                </div>
+                <div class="myflex_item">
+                    {{item.progress}}
+                </div>
+                <div class="myflex_item">
+                    {{item.start}}
+                </div>
+                <div class="myflex_item endDate">
+                    {{item.end}}
+                </div>
+                <div class="myflex_item">
+                    {{item.comments}}
+                </div>
+                <div v-if="item.id != 1" class="divider"></div>
+            </div>
+        </div>
+        <router-view></router-view> 
+    </div>
 </template>
 
-<style>
-.history {
-  padding-left: 50px;
-  padding-top: 50px;
-}
+
+<script>
+    export default {
+        name: "History",
+        data(){
+            return{
+                menu:{
+                    labels_count: 6,
+                    labels:[
+                        'Sprint', 'Κατάσταση', 'Πρόοδος', 'Ημ/νια Έναρξης',
+                        'Ημ/νια Ολοκλήρωσης', 'Σχόλια',
+                    ],
+                    items_count: 6,
+                    items:[
+                        {id: 6, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 5, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 4, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 3, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 2, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 1, status: 'Ολοκληρώθηκε', progress:'100%', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                    ],
+                }
+            }
+        },
+        methods:{
+            mpou(){
+                alert("on-click");
+            },
+        },
+    };
+</script>
+
+<style scoped>
+    @import "../../assets/css/history.css";
 </style>

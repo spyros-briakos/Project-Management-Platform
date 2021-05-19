@@ -1,0 +1,75 @@
+.history_back{
+    display:flex;
+    /* background-color: cadetblue; */
+    /* background-color: rgba(121, 179,140,1); */
+    height:91.5vh;
+    /* align-items: center; */
+    justify-content: center;
+}
+
+.history_wrap{
+    display:flex;
+    flex-wrap: wrap;
+    min-height: 400px;
+    height: 80vh;
+    margin-top: 5vh;
+    width:80%;
+    margin-left: 10vh;
+    background-color: rgba(121, 179,140,0.3);
+    border-radius: 20px;
+    overflow-y: scroll;
+}
+
+.history_wrap .myflex_row{
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    /* border: 2px solid red; */
+    width:100%;
+    /* height:10vh; */
+    padding: 0px 10px 0 10px;
+    justify-content: space-between;
+}
+
+.history_wrap .myflex_row .myflex_item{
+    display: flex;
+    /* flex-wrap: wrap; */
+    /* border: 2px solid blue; */
+    height: auto;
+    min-width: 16%;
+    max-width: 16%;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px 0 10px;
+    overflow: hidden;
+}
+
+.history_wrap .labels{
+    font-weight: 600;
+    font-size: 120%;
+    padding: 20px 10px 0 10px;
+}
+
+.history_wrap .endDate{
+    min-width: 20% !important;
+    max-width: 20% !important;
+}
+
+.history_wrap .sprint{
+    min-width: 10% !important;
+    max-width: 10% !important;
+}
+
+.history_wrap .labels .divider{
+    width: 100% !important;
+    margin-right: auto;
+    margin-left: auto;
+    border-bottom: 2px solid black;
+}
+
+.history_wrap .myflex_row .divider{
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+    border-bottom: 2px solid black;
+}

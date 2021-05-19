@@ -77,5 +77,5 @@
 </script>
 
 <style scoped>
-    @import "../../assets/css/prof_settings.css";
+    @import "../../assets/css/profile/prof_settings.css";
 </style>
