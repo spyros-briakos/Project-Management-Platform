@@ -227,9 +227,10 @@
 }
 
 .projects_ul li .icon{
-    content: url(../../img/project_default.svg);
-    height: 40px;
-    width: 40px;
+    /* content: url(../../img/project_default.svg); */
+    height: 35px;
+    width: 35px;
+    /* color: rgb(188, 161, 216)    ; */
     /* height: 100%; */
     /* width: 100%; */
     margin-right: 10px;
