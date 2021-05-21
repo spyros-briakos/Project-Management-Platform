@@ -18,6 +18,10 @@ import Highcharts from "highcharts";
 import HighchartsVue from "highcharts-vue";
 import Gantt from "highcharts/modules/gantt";
 
+import "./assets/app.scss"; 
+import "./plugins";
+import store from "./store";
+
 Gantt(Highcharts);
 Vue.use(HighchartsVue);
 
@@ -28,6 +32,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false;
 
 new Vue({
+  store,
   router,
   vuetify,
   render: (h) => h(App),
