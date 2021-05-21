@@ -17,18 +17,23 @@
         <button class="create_btn" v-on:click="create_prj=1">{{btn_mssg}}</button>
 
         <ul class="projects_ul">
-
+                    
             <li v-for="invite in invites" :key="invite.title"
-                :style="{'opacity': 0.3}"
+                :style="{'opacity': 1}"
                 @mouseover="mouse_on(invite.title)"
                 @mouseleave="invites_mouse_over=''">
                 
                 
+            <font-awesome-icon class="icon" :icon="!invite.icon ? invite.icon=icon_roulete() : invite.icon"
+                    :style="{
+                        'color' : !invite.color ? invite.color=color_roulete() : invite.color,
+                    }"
+            />
                 <div v-if="!invite.seen" class="notify"></div>
-                <div class="icon" :style="{
-                    'background-color' : color_roulete(),
-                }">
-                </div>
+                <!-- <div class="icon" :style="{
+                    'background-color' :  !invite.color ? invite.color=color_roulete() : invite.color,
+                }"> -->
+                <!-- </div> -->
                 <div class="projectTitle">
                     {{invites_mouse_over == invite.title ? 'Από: ' + invite.from + ' ' + invite.date : 'Πρόσκληση: ' + invite.title}}
                 </div>
@@ -50,9 +55,15 @@
 
             <li v-for="project in projects" :key="project.id"
                 v-on:click="mpou()">
-                <div class="icon" :style="{
-                    'background-color' : color_roulete(),
-                }"></div>
+
+            <font-awesome-icon class="icon" :icon="!project.icon ? project.icon=icon_roulete() : project.icon"
+                :style="{
+                        'color' : !project.color ? project.color=color_roulete() : project.color,
+                    }"
+            />
+                <!-- <div class="icon" :style="{
+                    'background-color' : !project.color ? project.color=color_roulete() : project.color,
+                }"></div> -->
                 <div class="projectTitle">
                     {{project.title}}
                 </div>
@@ -158,9 +169,14 @@
             alert("on-click");
         },
         color_roulete(){
-            let c_arr=["red", "orange", "blue", "yellow", "plum", "green", "purple"];
+            let c_arr=["red", "orange", "blue", "darkyellow", "plum", "green", "purple"];
             return c_arr[Math.floor(Math.random() * c_arr.length)];
         },
+        icon_roulete(){
+            let i_arr=[['fas', 'stream'], ['far', 'chart-bar'], ['fas', 'chart-pie']];
+            return i_arr[Math.floor(Math.random() * i_arr.length)];
+        }
+        ,
         accept_inv(name){
             alert("Accepted: " + name);
         },
@@ -187,5 +203,5 @@
 </script>
 
 <style scoped>
-    @import "../../assets/css/prof_projects.css";
+    @import "../../assets/css/profile/prof_projects.css";
 </style>

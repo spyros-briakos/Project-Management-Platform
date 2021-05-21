@@ -35,5 +35,5 @@
 </script>
 
 <style scoped>
-    @import "../../assets/css/prof_logout.css";
+    @import "../../assets/css/profile/prof_logout.css";
 </style>

@@ -1,0 +1,114 @@
+.history_back{
+    display:flex;
+    height:91.5vh;
+    justify-content: center;
+    background-color: rgba(230, 230, 230, 0.815);
+}
+
+.history_wrap{
+    display:flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    min-height: 40vh;
+    max-height: 80vh;
+    margin-top: 5vh;
+    width:80%;
+    margin-left: 10vh;
+    align-content: flex-start;
+    background-color: rgba(130, 202, 154, 0.2);
+    padding: 5px 0px 0 0px;
+    /* background-color: whitesmoke; */
+    border-radius: 20px;
+    overflow-y: hidden;
+    box-shadow: 0 7px 12px rgba(0,0,0,0.6);
+}
+
+.history_wrap .myflex_row{
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    width:100%;
+    padding: 0px 10px 0 10px;
+    height: 100%;
+    justify-content: space-between;
+    /* border: 2px solid red; */
+}
+
+.history_wrap .myflex_row:hover{
+    /* background-color:rgba(0,0,0,0.1); */
+}
+
+.history_wrap .sprints_wrap .row_divider_wrap .myflex_row:hover{
+    background: radial-gradient(circle, rgba(174,238,202,1) 0%, rgba(194,233,148,1) 100%);
+    /* background-image: linear-gradient(to right,transparent, rgba(0,0,0,0.1), transparent); */
+}
+
+.history_wrap .labels:hover{
+    background-color: transparent !important;
+}
+
+.history_wrap .row_divider_wrap{
+    display: flex;
+    flex-flow: column;
+    width:100%;
+    height: 20vh;
+    /* border: 2px solid blue; */
+}
+
+.history_wrap .myflex_row .myflex_item{
+    display: flex;
+    flex-flow: column;
+    min-width: 16%;
+    max-width: 16%;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.history_wrap .labels{
+    font-weight: 600;
+    font-size: 120%;
+    padding: 20px 10px 0 10px;
+    min-height: 10vh;
+    max-height: 10vh;
+}
+
+.history_wrap .endDate{
+    min-width: 20% !important;
+    max-width: 20% !important;
+}
+
+.history_wrap .sprint{
+    min-width: 10% !important;
+    max-width: 10% !important;
+}
+
+.history_wrap .labels .mydivider{
+    width: 100%;
+    margin: 0 auto 0 auto;
+    border-bottom: 2px solid black;
+}
+
+.history_wrap .sprints_wrap .row_divider_wrap .mydivider{
+    width: 100%;
+    margin: 0 auto 0 auto;
+    border-bottom: 2px solid black;
+    opacity:0.1;
+}
+
+.history_wrap .sprints_wrap .row_divider_wrap:hover > .mydivider{
+    /* display:none; */
+}
+
+.history_wrap .sprints_wrap{
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    height: 80%;
+    background-color: whitesmoke;
+    align-content: flex-start;
+
+    box-shadow:
+        /* rgba(50, 50, 93, 0.25) 0px 10px 24px -12px inset, */
+        rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}

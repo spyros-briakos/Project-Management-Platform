@@ -152,5 +152,5 @@
 </script>
 
 <style scoped>
-    @import "../../assets/css/prof_opts.css";
+    @import "../../assets/css/profile/prof_opts.css";
 </style>
