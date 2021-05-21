@@ -297,10 +297,6 @@ program
 	  }, { httpsAgent: agent })
 	  .then((response) => {
 		console.log(response.data.message);
-
-		// fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
-		//   if(err) return console.log('Writing data failed:', err);
-		// });
 	  })
 	  .catch((err) => {
 		if (err.response && err.response.data.message)
@@ -438,32 +434,32 @@ program
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(function (command) {
-	// // Check if the user can log in
-	// const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
-	// if(check.result === false){
-	// 	console.log(check.message);
-	// } else {
-	axios.post(`${apiUrl}/users/login?format=${command.format}`, {
-	  username: command.username,
-	  password: command.password
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
-		if(err) return console.log('Writing user failed:', err);
+	// Check if the user can log in
+	const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
+	if(check.result === false){
+		console.log(check.message);
+	} else {
+	  axios.post(`${apiUrl}/users/login?format=${command.format}`, {
+		username: command.username,
+		password: command.password
+	  }, { httpsAgent: agent })
+	  .then(function (response) {
+		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		  if(err) return console.log('Writing user failed:', err);
+		});
+		fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
+		  if(err) return console.log('Writing token failed:', err);
+		});
+		console.log(response.data.message);
+	  })
+	  .catch(function (error) {
+		if (error.response && error.response.data.message) {
+		  console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
+		} else {
+		  console.log('Η σύνδεση απέτυχε: ', error.message);
+		}
 	  });
-	  fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
-		if(err) return console.log('Writing token failed:', err);
-	  });
-	  console.log(response.data.message);
-	})
-	.catch(function (error) {
-	  if (error.response && error.response.data.message) {
-		console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
-	  } else {
-		console.log('Η σύνδεση απέτυχε: ', error.message);
-	  }
-	});
-	// }
+	}
   });
 
 program
@@ -818,6 +814,21 @@ program
 //     })
 //     .catch(function (error) {
 // 	  console.log('Deleting user failed: ', error.response.data.message);
+//     });
+//   })
+
+// program
+//   .command('delete-pr')
+//   .option('--format <value>', 'Give format', 'json')
+//   .requiredOption('--id <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+//   .action(function(command) {
+// 	axios.delete(`${apiUrl}/users/delete-project/${command.id}?format=${command.format}/`, {},
+// 	{ httpsAgent: agent })
+//     .then(function(response) {
+// 	  console.log(response.data);
+//     })
+//     .catch(function (error) {
+// 	  console.log('Deleting project failed: ', error.response.data.message);
 //     });
 //   })
 

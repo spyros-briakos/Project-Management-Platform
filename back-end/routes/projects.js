@@ -64,11 +64,22 @@ router.delete('/:projectId', async (req, res) => {
     // Find project in the db
     const project = await Project.findById(req.params.projectId);
 
+    // If no such project in the db
+    if(!project) {
+      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιο project.' });
+    }
+
     // First remove project from all members
     for (let userId of project.members) {
       try {
         // Get current user-member
-        const user = User.findById(userId);
+        const user = await User.findById(userId);
+
+        // If no such user in the db
+        if(!user) {
+          return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+        }
+
         const projects = user.projects;
         // Get project's position in the list of user's projects
         const index = projects.findIndex((projectId) => { return projectId === req.params.projectId });

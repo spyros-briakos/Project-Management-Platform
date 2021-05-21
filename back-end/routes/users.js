@@ -77,15 +77,15 @@ router.get('/verify/:verificationCode', async (req, res) => {
       }
 
       // Update user's status & delete their verification code
-      await User.updateOne({ _id: user._id }, { $set: { status: 'Active' } , $unset: { verificationCode: "" } }, { runValidators: true });
+      await User.updateOne({ _id: user._id }, { $set: { status: 'Active' }, $unset: { verificationCode: 1 } }, { runValidators: true });
 
       // Create user's authentication token (to log in user)
       const tokenObject = utils.issueJWT(user);
-      // console.log(tokenObject.token);
 
       res.json({ message: 'Το email σου επιβεβαιώθηκε με επιτυχία. Καλωσήρθες στο ScruManiac!' });
     })
     .catch((err) => {
+      console.log(err);
       res.status(400).json({ message: err });
     })
 });
@@ -322,17 +322,22 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
     // Find the user that answered the invitation
     const user = await User.findById(invitation.receiver);
 
-    if(req.query.answer) {
+    // If no such user in the db
+    if(!user) {
+      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+    }
+
+    // Find project in db
+    const project = await Project.findById(invitation.project);
+
+    // If no such project in db
+    if(!project) {
+      return res.status(400).json({ message: 'Σφάλμα: δεν βρέθηκε το αντίστοιχο project.' });
+    }
+
+    if(req.query.answer) {      
       // If the user accepted the invitation
       if(req.query.answer === 'accept') {
-        // Find project in db
-        const project = await Project.findById(invitation.project);
-
-        // If no such project in db
-        if(!project) {
-          return res.status(400).json({ message: 'Σφάλμα: δεν βρέθηκε το αντίστοιχο project.' });
-        }
-
         // Add current user to the project's members
         const members = project.members;
         members.push(user._id);
@@ -393,19 +398,33 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
 // router.delete('/delete-user/:userId', async (req, res) => {
 //   try {
 //     // // Delete user from db
-//     // const removedUser = await User.deleteOne({ id: req.params.id });
+//     // const removedUser = await User.deleteOne({ _id: req.params.userId });
 
-//     // // // Mark user's auth token as invalid
-//     // // const token = new InvalidToken({ value: utils.extractToken(req) });
-//     // // await token.save();
+//     // // Mark user's auth token as invalid
+//     // const token = new InvalidToken({ value: utils.extractToken(req) });
+//     // await token.save();
 //     // // Log out user
 //     // req.logout();
+    
 //     const user = await User.updateOne({ _id: req.params.userId }, { $set: { invitations: [] } }, { new: true });
-//     console.log(user);
+//     // console.log(user);
 
 //     res.json({
 //       // result: removedUser,
 //       message: 'Deleted user successfully'
+//     });
+//   } catch (error) {
+//     res.status(400).json({ message: error });
+//   }
+// })
+
+// router.delete('/delete-project/:projectId', async (req, res) => {
+//   try {
+//     // Delete project from db
+//     const removedproject = await Project.deleteOne({ _id: req.params.projectId });
+    
+//     res.json({
+//       result: removedproject,
 //     });
 //   } catch (error) {
 //     res.status(400).json({ message: error });
