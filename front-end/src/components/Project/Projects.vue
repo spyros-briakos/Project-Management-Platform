@@ -37,7 +37,7 @@ export default {
           hiddenOnCollapse: true,
         },
         {
-          href: "/projects/scrumboard",
+          href: "/projects/boards/d033c156-5972-4767-ceb0-8a91a5c282db",
           title: "Πίνακας Scrum",
           icon: "fa fa-layer-group",
         },

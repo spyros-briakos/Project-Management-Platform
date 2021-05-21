@@ -7,7 +7,8 @@ import Roadmap from "../components/Project/Roadmap.vue";
 import Comments from "../components/Project/Comments.vue";
 import History from "../components/Project/History.vue";
 import Kanban from "../components/Project/Kanban.vue";
-import Scrumboard from "../components/Project/Scrumboard.vue";
+import Dashboard from "../components/Project/Scrumboard/Dashboard.vue";
+import TaskBoard from "../components/Project/Scrumboard/TaskBoard.vue";
 import Chart from "../components/Project/Chart.vue";
 import SignIn from "../components/Sign/SignIn.vue";
 import SignUp from "../components/Sign/SignUp.vue";
@@ -24,6 +25,7 @@ import ProfOpts from "../components/profile/prof_opts.vue";
     import profLogout from "../components/profile/prof_logout.vue";
     import profUpgrade from "../components/profile/prof_upgrade.vue"
 
+    
 Vue.use(VueRouter);
 Vue.use(VueSidebarMenu);
 
@@ -45,13 +47,19 @@ const routes = [
   },
   {
     path: "/projects",
+    redirect:"/projects/boards/d033c156-5972-4767-ceb0-8a91a5c282db",
     name: "Projects",
     component: Projects,
     children: [
       {
-        path: "scrumboard",
-        name: "Scrumboard",
-        component: Scrumboard,
+        path: "dashboard",
+        name: "dashboard",
+        component: Dashboard,
+      },
+      {
+        path: "boards/:id",
+        name: "task-board",
+        component: TaskBoard
       },
       {
         path: "roadmap",

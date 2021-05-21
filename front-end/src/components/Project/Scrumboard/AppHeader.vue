@@ -1,0 +1,42 @@
+<template>
+  <nav class="navbar navbar-light bg-faded">
+    <!-- <router-link to="/projects/dashboard" class="navbar-brand"> -->
+    <div class="navbar-brand">
+      <label>
+        Scrum Board
+        <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
+      </label>
+    </div>  
+    <!-- </router-link> -->
+    <div class="d-flex justify-content-end" v-if="!isLoading">
+      <TaskListRestore></TaskListRestore>
+      <TaskListEdit></TaskListEdit>
+      <TaskBoardEdit></TaskBoardEdit>
+      <TaskListArchive></TaskListArchive>
+    </div>
+  </nav>
+</template>
+<script>
+import { mapGetters } from "vuex"
+import TaskBoardEdit from "./Boards/TaskBoardEdit"
+import TaskListEdit from "./Lists/TaskListEdit"
+import TaskListRestore from "./Lists/TaskListRestore"
+import TaskListArchive from "./Lists/TaskListArchive"
+export default {
+  components: {
+    TaskBoardEdit,
+    TaskListEdit,
+    TaskListRestore,
+    TaskListArchive
+  },
+  computed: {
+    ...mapGetters({
+      activeBoard: "activeBoard",
+      isLoading: "isLoading"
+    }),
+    boardName() {
+      return this.activeBoard ? this.activeBoard.name : ""
+    }
+  }
+}
+</script>
