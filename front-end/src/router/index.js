@@ -22,7 +22,7 @@ import ProfOpts from "../components/profile/prof_opts.vue";
     import profProjects from "../components/profile/prof_projects.vue";
     import profCoWorkers from "../components/profile/prof_coworkers.vue";
     import profLogout from "../components/profile/prof_logout.vue";
-
+    import profUpgrade from "../components/profile/prof_upgrade.vue"
 
 Vue.use(VueRouter);
 Vue.use(VueSidebarMenu);
@@ -114,7 +114,7 @@ const routes = [
       {
         path: "upgrade",
         name: "Upgrade",
-        component: Prices,
+        component: profUpgrade,
       },
       {
         path: "co_workers",

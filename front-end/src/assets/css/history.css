@@ -96,9 +96,6 @@
     opacity:0.1;
 }
 
-.history_wrap .sprints_wrap .row_divider_wrap:hover > .mydivider{
-    /* display:none; */
-}
 
 .history_wrap .sprints_wrap{
     display: flex;
@@ -110,5 +107,6 @@
 
     box-shadow:
         /* rgba(50, 50, 93, 0.25) 0px 10px 24px -12px inset, */
-        rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+        rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset,
+        rgba(100, 100, 100, 0.3) 0px -18px 36px -18px inset;
 }
