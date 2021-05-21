@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "datejs": "*",
     "mdbvue": "^5.4.1"
   }
 }

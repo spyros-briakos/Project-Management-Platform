@@ -15,11 +15,11 @@
     width:80%;
     margin-left: 10vh;
     align-content: flex-start;
-    /* background-color: rgba(121, 179,140,0.3); */
-
-    background-color: whitesmoke;
+    background-color: rgba(130, 202, 154, 0.2);
+    padding: 5px 0px 0 0px;
+    /* background-color: whitesmoke; */
     border-radius: 20px;
-    overflow-y: scroll;
+    overflow-y: hidden;
     box-shadow: 0 7px 12px rgba(0,0,0,0.6);
 }
 
@@ -31,10 +31,16 @@
     padding: 0px 10px 0 10px;
     height: 100%;
     justify-content: space-between;
+    /* border: 2px solid red; */
 }
 
 .history_wrap .myflex_row:hover{
-    background-color:rgba(0,0,0,0.1);
+    /* background-color:rgba(0,0,0,0.1); */
+}
+
+.history_wrap .sprints_wrap .row_divider_wrap .myflex_row:hover{
+    background: radial-gradient(circle, rgba(174,238,202,1) 0%, rgba(194,233,148,1) 100%);
+    /* background-image: linear-gradient(to right,transparent, rgba(0,0,0,0.1), transparent); */
 }
 
 .history_wrap .labels:hover{
@@ -46,6 +52,7 @@
     flex-flow: column;
     width:100%;
     height: 20vh;
+    /* border: 2px solid blue; */
 }
 
 .history_wrap .myflex_row .myflex_item{
@@ -82,8 +89,26 @@
     border-bottom: 2px solid black;
 }
 
-.history_wrap .row_divider_wrap .mydivider{
-    width: 95%;
+.history_wrap .sprints_wrap .row_divider_wrap .mydivider{
+    width: 100%;
     margin: 0 auto 0 auto;
     border-bottom: 2px solid black;
+    opacity:0.1;
+}
+
+.history_wrap .sprints_wrap .row_divider_wrap:hover > .mydivider{
+    /* display:none; */
+}
+
+.history_wrap .sprints_wrap{
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    height: 80%;
+    background-color: whitesmoke;
+    align-content: flex-start;
+
+    box-shadow:
+        /* rgba(50, 50, 93, 0.25) 0px 10px 24px -12px inset, */
+        rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }

@@ -45,13 +45,40 @@ module.exports.changePassword = (name, email, verificationCode) => {
 
 // Send email to invite a user to a project
 module.exports.sendInvitation = (email, sender, project, invitationCode) => {
+  // const content = fs.readFileSync('./auth/try.html','utf-8').toString();
+  // console.log(content);
+
   transport.sendMail({
     from: process.env.SENDER_EMAIL,
     to: email,
     subject: 'ScruManiac: Πρόσκληση σε project',
+    // html: `<h3>Ο χρήστης ${sender} σε προσκαλεί να συμμετέχεις στο project του με όνομα ${project}!</h3>
+    //       Επίλεξε αν θες να κάνεις <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/?answer=accept'>ΑΠΟΔΟΧΗ</a> 
+    //        ή <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/?answer=reject'>ΑΠΟΡΡΙΨΗ</a> της πρόσκλησης.`
     html: `<h3>Ο χρήστης ${sender} σε προσκαλεί να συμμετέχεις στο project του με όνομα ${project}!</h3>
           Επίλεξε αν θες να κάνεις <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/answer-invitation/${invitationCode}?answer=accept'>ΑΠΟΔΟΧΗ</a> 
           ή <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/answer-invitation/${invitationCode}?answer=reject'>ΑΠΟΡΡΙΨΗ</a> της πρόσκλησης.`
+    // headers: { "Authorization": `Bearer ${token}` }
+    // html: `<h3>Ο χρήστης ${sender} σε προσκαλεί να συμμετέχεις στο project του με όνομα ${project}!</h3>
+    //       Επίλεξε αν θες να κάνεις <button onclick=xmlRequest()>ΑΠΟΔΟΧΗ</button> 
+    //       ή <button onclick=xmlRequest()>ΑΠΟΡΡΙΨΗ</button> της πρόσκλησης.
+    //       <script type="text/javascript" src="temp.js"></script>`
+    // html: `<script type="text/javascript" src="./temp.js"></script>`
+    // html: content
+    // html: `<h3>Ο χρήστης ${sender} σε προσκαλεί να συμμετέχεις στο project του με όνομα ${project}!</h3>
+    //       Επίλεξε αν θες να κάνεις
+    //       <form id='accept'><input type='hidden' name='token' value=${token}><button onclick="setHeaders()">ΑΠΟΔΟΧΗ</button></form> 
+    //       ή <form id='reject'><input type='hidden' name='token' value=${token}><button onclick="setHeaders()">ΑΠΟΡΡΙΨΗ</button></form> 
+    //       <script> function setHeaders() { 
+    //         axios({
+    //           method: 'post',
+    //           url: 'http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/answer-invitation/${invitationCode}?answer=accept',
+    //           headers: { "Authorization": Bearer ${token} },
+    //           error: function(err) {
+    //             console.log(err);
+    //           }
+    //         })
+    //       } </script>`
   }).catch(err => {
     console.log(err);
     return null;

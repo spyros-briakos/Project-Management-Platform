@@ -9,9 +9,10 @@
                             }">
                         {{label}}
                 </div>
-                <div class="mydivider"></div>
-            </div>
+                <!-- <div class="mydivider"></div> -->
 
+        </div>
+        <div class="sprints_wrap">
             <div v-for="item in menu.items" :key="item.id" class="row_divider_wrap">
                 <div class="myflex_row">
                     <div class="myflex_item sprint">
@@ -55,6 +56,7 @@
                 </div>
                 <div v-if="item.id != 1" class="mydivider"></div>
             </div>
+        </div>
         </div>
         <router-view></router-view> 
     </div>

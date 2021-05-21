@@ -269,12 +269,13 @@ router.post('/project-invite/:projectId', async(req, res) => {
         invitations.push(invitation._id);
         await User.updateOne({ username: username }, { $set: { invitations: invitations } }, { runValidators: true });
 
-        // Also send the invitation to the user's email
+        // Send the invitation to the user's email
         send_email.sendInvitation(user.email, req.user.username, req.body.project, invitationCode);
 
         // Keep usernames that will receive an invitation, to report them to the user in case of an error
         sent.push(username);
       } catch (err) {
+        console.log('1',err);
         return res.status(400).json({ message: err });
       }
     }
@@ -285,6 +286,7 @@ router.post('/project-invite/:projectId', async(req, res) => {
       res.json({ message: `Όλες οι προσκλήσεις μελών στο project ${req.body.project} στάλθηκαν με επιτυχία!` });
     }
   } catch (error) {
+    console.log('2',error);
     res.status(400).json({ message: error });
   }
 });
