@@ -10,23 +10,7 @@
     "name": "Product Backlog",
     "headerColor": "#607d8b",
     "archived": false,
-    "items": [
-    {
-      "id": "6fb2c8e6-5980-9403-f847-51407ab4597a",
-      "text": "Build the feature #1"
-    },
-    {
-      "id": "c7f25d4b-6a72-d0d5-7d03-fc0b8794fb94",
-      "text": "Test the feature #1"
-    },
-    {
-      "id": "78ab7725-ddee-ba6a-c039-b581ea10e20e",
-      "text": "Commit feature #1 to the repository"
-    },
-    {
-      "id": "49ad2dd1-5c3e-42e7-c2f0-5c9b193fb676",
-      "text": "Deploy the feature #1"
-    }]
+    "items": []
   }
   ]
 }]
