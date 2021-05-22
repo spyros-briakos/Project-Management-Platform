@@ -83,7 +83,7 @@ export default {
     };
   },
   mounted() {
-    this.onResize();
+    // this.onResize();
     window.addEventListener("resize", this.onResize);
   },
   methods: {
@@ -148,10 +148,10 @@ pre {
 //   height: 400px;
 //   margin: 0 auto;
 // }
-#app {
+// #app {
   // padding-left: 350px ;
-}
-#app.collapsed {
+// }
+// #app.collapsed {
   // padding-left: 50px;
-}
+// }
 </style>
