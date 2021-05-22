@@ -32,7 +32,8 @@
                 <prof-projects v-bind:seen="invites.seen_invites" v-on:update-seen="updateSeen($event)" :coWorkers="coWorkers" :invites="invites.inv_list" :user="name" v-if="selected_id == 1"/>
                 <profCoWorkers :coWorkers="coWorkers" v-if="selected_id == 2" />
                 <profSettings v-if="selected_id == 3" />
-                <Prices v-if="selected_id == 4" />
+                <!-- <Prices v-if="selected_id == 4" /> -->
+                <profUpgrade v-if="selected_id == 4" />
                 <profLogout v-if="selected_id == 5" />
             </div>
         </div>
@@ -44,7 +45,8 @@
     
     import profSettings from "./prof_settings.vue";
     import profProjects from "./prof_projects.vue";
-    import Prices from "../pricing/Prices.vue";
+    // import Prices from "../pricing/Prices.vue";
+    import profUpgrade from "./prof_upgrade.vue"
     import profCoWorkers from "./prof_coworkers.vue";
     import profLogout from "./prof_logout.vue";
 
@@ -74,7 +76,8 @@
     components:{
         profSettings,
         profProjects,
-        Prices,
+        // Prices,
+        profUpgrade,
         profCoWorkers,
         profLogout,
     },
