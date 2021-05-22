@@ -10,3 +10,4 @@ cli-app/node_modules/
 cli-app/package-lock.json
 node_modules/
 package-lock.json
+data-model/
