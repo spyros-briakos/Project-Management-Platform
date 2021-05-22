@@ -7,7 +7,7 @@ import Roadmap from "../components/Project/Roadmap.vue";
 import Comments from "../components/Project/Comments.vue";
 import History from "../components/Project/History.vue";
 import Kanban from "../components/Project/Kanban.vue";
-import Dashboard from "../components/Project/Scrumboard/Dashboard.vue";
+// import Dashboard from "../components/Project/Scrumboard/Dashboard.vue";
 import TaskBoard from "../components/Project/Scrumboard/TaskBoard.vue";
 import Chart from "../components/Project/Chart.vue";
 import SignIn from "../components/Sign/SignIn.vue";
@@ -51,11 +51,11 @@ const routes = [
     name: "Projects",
     component: Projects,
     children: [
-      {
-        path: "dashboard",
-        name: "dashboard",
-        component: Dashboard,
-      },
+      // {
+      //   path: "dashboard",
+      //   name: "dashboard",
+      //   component: Dashboard,
+      // },
       {
         path: "boards/:id",
         name: "task-board",
