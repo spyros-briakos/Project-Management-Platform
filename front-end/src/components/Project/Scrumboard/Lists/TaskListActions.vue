@@ -1,8 +1,10 @@
 <template>
   <DetailsDropdown style="position: absolute;top: 12px;right: 10px; max-width: 100%;" ref="dropdown">
-    <template v-slot:handle
-      >...</template
-    >
+    <template class v-slot:handle>
+      <div style="font-size: 1.5em; position: relative; top: -2px; left:6px;">
+      &#65049;
+      </div>
+    </template>
     <template v-slot:content>
       <label class="content-item" @click="showListEditPopup">Edit</label>
       <label class="content-item" @click="showArchiveListPopup">Archive</label>
@@ -32,3 +34,10 @@ export default {
   }
 }
 </script>
+
+<style scope>
+.yy {
+  font-size: 30em;
+  padding-left: 10px;
+}
+</style>
