@@ -6,13 +6,17 @@
     
     <AppHeader v-if="['dashboard','task-board'].includes($route.name)"></AppHeader>
      
-    <transition name="page" mode="out-in" v-if="['dashboard','task-board'].includes($route.name)">
+    <!-- <transition name="page" mode="out-in" v-if="['dashboard','task-board'].includes($route.name)">
       <router-view></router-view>
     </transition> 
 
     <v-content transition="slide-x-transition" v-if="!['dashboard','task-board'].includes($route.name)"> 
       <router-view></router-view>
-    </v-content>  
+    </v-content>   -->
+
+    <v-content transition="slide-x-transition"> 
+      <router-view></router-view>
+    </v-content>   
   
     <AppLoadingIndicator v-if="['dashboard','task-board'].includes($route.name)"></AppLoadingIndicator>
 
