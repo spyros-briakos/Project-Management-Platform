@@ -50,6 +50,7 @@
   left: 70px;
   width: 95%;
   z-index: 1;
+  // background-color: #81bbaa;
 }
 
 .navbar-brand {
@@ -70,7 +71,7 @@
 }
 
 .navbar-brand label span {
-  color: #39515d;
+  color: #418B75;
 }
 
 .card-body {
@@ -109,7 +110,7 @@
 
 .heading {
   padding: 15px 0 5px 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(17, 16, 16, 0.89);
   font-family: "Gugi", cursive;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -146,7 +147,7 @@
 
 .ghost {
   opacity: 0.5;
-  background-color: rgba(223, 238, 242, 0.4);
+  background-color: rgba(223, 238, 242, 0.4); 
 }
 ////////////////////////////////////////////////
 .cards.cards-list {
@@ -156,8 +157,19 @@
   // position: fixed;
 }
 
+// .heading {
+//   background-color: #FD8D37;
+// }
+
 //////////////////////////////////////////
 // .col-3.list-column.list-width {
 //   position: fixed;
 //   z-index: 0;
 // }
+
+// .nav-item.btn.btn-sm.btn-app.mr-2 {
+//   color: #FF914D;
+// }
+.nav-item.btn.btn-sm.btn-app.mr-2 {
+  background-color: #fff;
+}

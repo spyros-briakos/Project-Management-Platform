@@ -1,6 +1,7 @@
 <template>
   <div class="col-3 list-column list-width">
-    <div class="heading" :style="{ backgroundColor: list.headerColor }">
+    <div class="heading" :style="{ backgroundColor: '#FF914D' }">
+    <!-- <div class="heading" :style="{ backgroundColor: list.headerColor }"> -->
       <h4 class="heading-text text-center">{{ list.name }}</h4>
       <TaskListActions :board="board" :list="list"></TaskListActions>
     </div>

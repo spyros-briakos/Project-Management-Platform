@@ -68,16 +68,6 @@ export default {
         },
       ],
       collapsed: true,
-      // themes: [
-      //   {
-      //     name: 'Default theme',
-      //     input: ''
-      //   },
-      //   {
-      //     name: 'White theme',
-      //     input: 'white-theme'
-      //   }
-      // ],
       selectedTheme: "white-theme",
       isOnMobile: false,
     };
