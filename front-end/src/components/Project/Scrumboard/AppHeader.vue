@@ -11,20 +11,20 @@
       <div class="d-flex justify-content-end" v-if="!isLoading">
         <TaskListRestore></TaskListRestore>
         <TaskListEdit></TaskListEdit>
-        <TaskBoardEdit></TaskBoardEdit>
+        <!-- <TaskBoardEdit></TaskBoardEdit> -->
         <TaskListArchive></TaskListArchive>
       </div>
     </nav>
 </template>
 <script>
 import { mapGetters } from "vuex"
-import TaskBoardEdit from "./Boards/TaskBoardEdit"
+// import TaskBoardEdit from "./Boards/TaskBoardEdit"
 import TaskListEdit from "./Lists/TaskListEdit"
 import TaskListRestore from "./Lists/TaskListRestore"
 import TaskListArchive from "./Lists/TaskListArchive"
 export default {
   components: {
-    TaskBoardEdit,
+    // TaskBoardEdit,
     TaskListEdit,
     TaskListRestore,
     TaskListArchive
@@ -35,7 +35,7 @@ export default {
       isLoading: "isLoading"
     }),
     boardName() {
-      return this.activeBoard ? this.activeBoard.name : ""
+      return this.activeBoard ? this.activeBoard.name : "empty"
     }
   }
 }

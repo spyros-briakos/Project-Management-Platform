@@ -1,5 +1,5 @@
 <template>
-  <DetailsDropdown style="position: absolute;top: 12px;right: 10px;" ref="dropdown">
+  <DetailsDropdown style="position: absolute;top: 12px;right: 10px; max-width: 100%;" ref="dropdown">
     <template v-slot:handle
       >...</template
     >
