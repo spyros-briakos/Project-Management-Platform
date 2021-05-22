@@ -67,7 +67,7 @@ export default {
 
 <style>
 .hc {
-  padding-left: 50px;
+  padding-left: 50  px;
   padding-top: 50px;
 }
 </style>
