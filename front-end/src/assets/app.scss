@@ -30,6 +30,16 @@
   max-width: 200px;
 }
 
+.navbar.navbar-light.bg-faded {
+  position: fixed;
+  display: flex;
+  top: 63px;
+  left: 70px;
+  width: 95%;
+
+  // bottom: 0;
+}
+
 .navbar-brand {
   font-family: "Gugi", cursive;
   font-size: 50px;

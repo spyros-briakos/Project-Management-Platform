@@ -1,20 +1,20 @@
 <template>
-  <nav class="navbar navbar-light bg-faded">
-    <!-- <router-link to="/projects/dashboard" class="navbar-brand"> -->
-    <div class="navbar-brand">
-      <label>
-        Scrum Board
-        <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
-      </label>
-    </div>  
-    <!-- </router-link> -->
-    <div class="d-flex justify-content-end" v-if="!isLoading">
-      <TaskListRestore></TaskListRestore>
-      <TaskListEdit></TaskListEdit>
-      <TaskBoardEdit></TaskBoardEdit>
-      <TaskListArchive></TaskListArchive>
-    </div>
-  </nav>
+    <nav class="navbar navbar-light bg-faded">
+      <!-- <router-link to="/projects/dashboard" class="navbar-brand"> -->
+      <div class="navbar-brand">
+        <label>
+          Scrum Board
+          <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
+        </label>
+      </div>  
+      <!-- </router-link> -->
+      <div class="d-flex justify-content-end" v-if="!isLoading">
+        <TaskListRestore></TaskListRestore>
+        <TaskListEdit></TaskListEdit>
+        <TaskBoardEdit></TaskBoardEdit>
+        <TaskListArchive></TaskListArchive>
+      </div>
+    </nav>
 </template>
 <script>
 import { mapGetters } from "vuex"
