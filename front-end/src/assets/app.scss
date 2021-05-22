@@ -5,7 +5,24 @@
   overflow-x: scroll;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+
+  position:fixed;
+  // display:flex;
+  top: 160px;
+  // padding-left: 100px;
+  left: 70px;
+  // height: 20%;
+  // max-height: 50%;
+  //   width: 100%;
+  // margin-bottom: 1000px;
+  // padding-bottom: 1000px;
 }
+
+.row.flex-nowrap.mt-1 {
+  // position: relative;
+  // height: 1px;
+}
+
 .scrolling-wrapper::-webkit-scrollbar {
   display: none;
 }
@@ -135,4 +152,23 @@
 .ghost {
   opacity: 0.5;
   background-color: rgba(223, 238, 242, 0.4);
+}
+
+.col-3.list-column.list-width {
+  // position:fixed;
+  // display:flex;
+  // top: 170px;
+  // padding-left: 1000px;
+  // left: 53px;
+  // height: 1px;
+  // width: 100%;
+  // bottom: 1000px;
+  // max-height: 10px;
+  // padding-bottom: 100px;
+  // border: 1px;
+}
+
+.cards.cards-list {
+  max-height: 68%;
+  max-width: 100%;
 }
