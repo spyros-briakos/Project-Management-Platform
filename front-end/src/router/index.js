@@ -24,7 +24,6 @@ import profLogout from "../components/profile/prof_logout.vue";
 import profUpgrade from "../components/profile/prof_upgrade.vue"
 // import "custom-var.scss"
 
-    
 Vue.use(VueRouter);
 Vue.use(VueSidebarMenu);
 
@@ -50,11 +49,6 @@ const routes = [
     name: "Projects",
     component: Projects,
     children: [
-      // {
-      //   path: "dashboard",
-      //   name: "dashboard",
-      //   component: Dashboard,
-      // },
       {
         path: "boards/:id",
         name: "Task-board",
