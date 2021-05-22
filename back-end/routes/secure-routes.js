@@ -18,9 +18,55 @@ const Project = require('../models/Project');
 router.get('/user', async (req, res) => {
   try {
     // Find user in db
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).populate('invitations').populate('projects')
+                                                  .populate({ path: 'invitations', populate: { path: 'receiver', model: 'User' } })
+                                                  .populate({ path: 'invitations', populate: { path: 'sender', model: 'User' } })
+                                                  .populate({ path: 'invitations', populate: { path: 'project', model: 'Project' } })
+                                                  .populate({ path: 'projects', populate: { path: 'members', model: 'User' } })
+                                                  .populate({ path: 'projects', populate: { path: 'productOwner', model: 'User' } })
+                                                  .populate({ path: 'projects', populate: { path: 'scrumMaster', model: 'User' } });
 
-    res.json(user);
+    // Will keep from user's projects only the needed info
+    const projects = [];
+    for(var i=0; i< user.projects.length; i++) {
+      projects[i] = {
+        _id: user.projects[i]._id,
+        name: user.projects[i].name,
+        description: user.projects[i].description,
+        productOwner: user.projects[i].productOwner.username,
+        scrumMaster: user.projects[i].scrumMaster.username,
+        status: user.projects[i].status,
+        plan_in_use: user.projects[i].plan_in_use,
+        startingDate: user.projects[i].startingDate,
+        endingDate: user.projects[i].endingDate,
+        members: []
+      }
+      // Keep only the username of each member
+      for(var j=0; j < user.projects[i].members.length; j++)
+        projects[i].members[j] = user.projects[i].members[j].username;
+    }
+
+    // Will keep from user's invitations only the needed info
+    const invitations = []
+    for(var i=0; i < user.invitations.length; i++) {
+      invitations[i] = {
+        receiver: user.invitations[i].receiver.username,
+        sender: user.invitations[i].sender.username,
+        project: user.invitations[i].project.name,
+        date: user.invitations[i].date,
+        invitationCode: user.invitations[i].invitationCode
+      }
+    }
+
+    res.json({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      projects: projects,
+      invitations: invitations,
+      plan_in_use: user.plan_in_use
+    });
   } catch (error) {
     res.status(400).json({ message: error });
   }
