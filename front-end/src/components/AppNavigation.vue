@@ -35,9 +35,9 @@ export default {
       right: true,
 
       items: [
-        { title: "Πώς δουλεύει", url: "/how_it_works" },
-        { title: "Profile", url: "/profile" },
         { title: "Projects", url: "/projects" },
+        { title: "Profile", url: "/profile" },
+        { title: "Πώς δουλεύει", url: "/how_it_works" },
         { title: "Τιμές", url: "/prices" },
         { title: "Σύνδεση", url: "/sign/in" },
       ],
