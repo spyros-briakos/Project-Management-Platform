@@ -10,7 +10,14 @@
   top: 160px;
   left: 70px;
   width: 96%;
+  // z-index: 1;
 }
+
+///////////////////////
+// .row.flex-nowrap.mt-1 {
+  // position: fixed;
+  // z-index: 0;
+// }
 
 .scrolling-wrapper::-webkit-scrollbar {
   display: none;
@@ -42,6 +49,7 @@
   top: 63px;
   left: 70px;
   width: 95%;
+  z-index: 1;
 }
 
 .navbar-brand {
@@ -144,4 +152,12 @@
 .cards.cards-list {
   max-height: 68%;
   max-width: 100%;
+  // z-index: -1;
+  // position: fixed;
 }
+
+//////////////////////////////////////////
+// .col-3.list-column.list-width {
+//   position: fixed;
+//   z-index: 0;
+// }
