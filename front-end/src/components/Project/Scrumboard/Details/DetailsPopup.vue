@@ -48,7 +48,7 @@ details.popup summary::-webkit-details-marker {
 
 details.popup div {
   position: fixed;
-  top: 50%;
+  top: 400%;
   left: 50%;
   animation: fadein 200ms ease-in-out;
   transform: translate(-50%, -50%);
