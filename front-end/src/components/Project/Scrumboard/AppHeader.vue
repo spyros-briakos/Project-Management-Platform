@@ -34,7 +34,7 @@ export default {
       isLoading: "isLoading"
     }),
     boardName() {
-      return this.activeBoard.name
+      return this.activeBoard ? this.activeBoard.name : ""
     }
   }
 }
