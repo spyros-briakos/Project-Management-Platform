@@ -1,7 +1,7 @@
 <template>
   <DetailsDropdown style="position: absolute;top: 12px;right: 10px; max-width: 100%;" ref="dropdown">
     <template class v-slot:handle>
-      <div style="font-size: 1.5em; position: relative; top: -2px; left:6px;">
+      <div style="font-size: 1.5em; position: relative; top: -2px; left:6px; color: black;">
       &#65049;
       </div>
     </template>

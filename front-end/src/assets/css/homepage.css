@@ -51,6 +51,7 @@ html, body{
     margin-bottom: 3%;
     /* border: 2px solid red; */
     font-weight: bold;
+    color: rgba(0, 0, 0, 0.76);
 }
 
 .box .title, .box .subtitle{
