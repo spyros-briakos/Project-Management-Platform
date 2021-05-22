@@ -4,7 +4,7 @@
 
     <app-navigation v-if="!['SignIn','SignUp','ForgotPassword'].includes($route.name)"></app-navigation>
     
-    <AppHeader v-if="['dashboard','task-board'].includes($route.name)"></AppHeader>
+    <AppHeader v-if="['task-board'].includes($route.name)"></AppHeader>
      
     <!-- <transition name="page" mode="out-in" v-if="['dashboard','task-board'].includes($route.name)">
       <router-view></router-view>
@@ -18,9 +18,9 @@
       <router-view></router-view>
     </v-content>   
   
-    <AppLoadingIndicator v-if="['dashboard','task-board'].includes($route.name)"></AppLoadingIndicator>
+    <AppLoadingIndicator v-if="['task-board'].includes($route.name)"></AppLoadingIndicator>
 
-    <myFooter v-if="!['SignIn','SignUp','profile','profSettings','coWorkers','myProjects','Upgrade','ForgotPassword','Projects','Roadmap','Chart', 'Comments','History', 'dashboard','task-board', 'Kanban'].includes($route.name)"></myFooter>
+    <myFooter v-if="!['SignIn','SignUp','profile','profSettings','coWorkers','myProjects','Upgrade','ForgotPassword','Projects','Roadmap','Chart', 'Comments','History','task-board', 'Kanban'].includes($route.name)"></myFooter>
   
   </v-app>
 

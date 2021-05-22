@@ -1,4 +1,5 @@
-import { sign } from 'crypto';
+// import { sign } from 'crypto';
+const util = require('util');
 
 const program = require('commander');
 const axios = require('axios');
@@ -275,36 +276,98 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	} else {
-	  // Get current user and the requested project
-      let user = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'));
-	  let projects = user.projects.filter(p => p.name == command.project);
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
+	}
 
-	  // If no such project was found
-	  if (projects.length == 0)
-	    return console.log('Δεν βρέθηκε κάποιο project με το όνομα \''+command.project+'\'');
+	// Get current user and the requested project
+    let user = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'));
+	let projects = user.projects.filter(p => p.name == command.project);
 
-	  let project = projects[0];
+	// If no such project was found
+	if (projects.length == 0)
+	  return console.log('Δεν βρέθηκε κάποιο project με το όνομα \''+command.project+'\'');
 
-	  // Invite the requested user(s)
-	  axios.post(`${apiUrl}/secure-routes/project-invite/${project._id}`, {
-		users: [command.username].concat(command.args),
-		project: command.project
-	  }, { headers: { "Authorization": `Bearer ${token}` }
+	let project = projects[0];
+
+	// Invite the requested user(s)
+	axios.post(`${apiUrl}/secure-routes/project-invite/${project._id}`, {
+	  users: [command.username].concat(command.args),
+	  project: command.project
+	}, { headers: { "Authorization": `Bearer ${token}` }
+	}, { httpsAgent: agent })
+	.then((response) => {
+	  console.log(response.data.message);
+	})
+	.catch((err) => {
+	  if (err.response && err.response.data.message)
+	    console.log('Η πρόσκληση μελών απέτυχε: ', err.response.data.message);
+	  else
+		console.log('Η πρόσκληση μελών απέτυχε: ', err.message);
+	});
+  });
+
+program
+  .command('answer-invitation')
+  .requiredOption('-p, --project <value>', 'Project name')
+  .requiredOption('-a, --answer <value>', 'Answer to invitation (accept | reject)')
+  .action((command) => {
+	if(command.answer !== 'accept' && command.answer !== 'reject') {
+		return console.log('Λανθασμένη απάντηση σε πρόσκληση. Επίλεξε είτε \'accept\' για αποδοχή είτε \'reject\' για απόρριψη.');
+	}
+
+	// Get user's token to pass authentication
+	const token = utils.getToken('/tmp/token.json');
+	// If an error occured
+	if(token instanceof Error) {
+	  const error = token;
+	  if(error.code === 'ENOENT')
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
+	}
+
+    // Get current user
+    let user = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'));
+	// Get user's invitations to the requested project
+	let invitations = user.invitations.filter(invitation => invitation.project == command.project);
+
+	// If no such invitation was found
+	if (invitations.length == 0)
+	  return console.log('Δεν βρέθηκε κάποια πρόσκληση στο project με το όνομα \''+command.project+'\'');
+
+	let invitation = invitations[0];
+
+	// Answer to the invitation
+	axios.get(`${apiUrl}/users/answer-invitation/${invitation.invitationCode}?answer=${command.answer}`, {},
+	  { headers: { "Authorization": `Bearer ${token}` }
+	}, { httpsAgent: agent })
+	.then((response) => {
+	  console.log(response.data.message);
+
+	  // Get user from db to update the cli file
+	  axios.get(`${apiUrl}/secure-routes/user`, {
+		headers: { "Authorization": `Bearer ${token}` }
 	  }, { httpsAgent: agent })
-	  .then((response) => {
-		console.log(response.data.message);
+	  .then((res) => {
+		fs.writeFile('/tmp/user.json', JSON.stringify(res.data), function(err) {
+		  if(err) return console.log('Writing user failed:', err);
+		});
 	  })
 	  .catch((err) => {
-		if (err.response && err.response.data.message)
-		  console.log('Η πρόσκληση μελών απέτυχε: ', err.response.data.message);
+	  	if (err.response && err.response.data.message)
+		  console.log(`Προέκυψε σφάλμα: ${err.response.data.message}`);
 		else
-		  console.log('Η πρόσκληση μελών απέτυχε: ', err.message);
-	  });
-	}
+		  console.log(`Προέκυψε σφάλμα: ${err.message}`);
+	  })
+	})
+	.catch((error) => {
+	  if (error.response && error.response.data.message)
+		console.log('Η απάντηση της πρόσκλησης σε project απέτυχε: ', error.response.data.message);
+	  else
+		console.log('Η απάντηση της πρόσκλησης σε project απέτυχε: ', error.message);
+	});
   });
 
 	program
@@ -437,29 +500,29 @@ program
 	// Check if the user can log in
 	const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
 	if(check.result === false){
-		console.log(check.message);
-	} else {
-	  axios.post(`${apiUrl}/users/login?format=${command.format}`, {
-		username: command.username,
-		password: command.password
-	  }, { httpsAgent: agent })
-	  .then(function (response) {
-		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
-		  if(err) return console.log('Writing user failed:', err);
-		});
-		fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
-		  if(err) return console.log('Writing token failed:', err);
-		});
-		console.log(response.data.message);
-	  })
-	  .catch(function (error) {
-		if (error.response && error.response.data.message) {
-		  console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
-		} else {
-		  console.log('Η σύνδεση απέτυχε: ', error.message);
-		}
-	  });
+	  return console.log(check.message);
 	}
+
+	axios.post(`${apiUrl}/users/login?format=${command.format}`, {
+	  username: command.username,
+	  password: command.password
+	}, { httpsAgent: agent })
+	.then(function (response) {
+	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		if(err) return console.log('Writing user failed:', err);
+	  });
+	  fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
+		if(err) return console.log('Writing token failed:', err);
+	  });
+	  console.log(response.data.message);
+	})
+	.catch(function (error) {
+	  if (error.response && error.response.data.message) {
+		console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
+	  } else {
+		console.log('Η σύνδεση απέτυχε: ', error.message);
+	  }
+	});
   });
 
 program
@@ -505,30 +568,30 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	} else {
-	  // Call log out on the server side
-	  axios.get(`${apiUrl}/secure-routes/logout`, {
-		headers: { "Authorization": `Bearer ${token}` }
-	  }, { httpsAgent: agent })
-	  .then(function(response){
-		fs.unlink('/tmp/user.json', function(err) {
-		  if(err) return console.log('Removing user failed:', err);
-		});
-		fs.unlink('/tmp/token.json', function(err) {
-		  if(err) return console.log('Removing token failed:', err);
-	    });
-	    console.log(response.data.message);
-	  })
-	  .catch(function(error) {
-		if(error.response && error.response.data.message)
-		  console.log('Η αποσύνδεση απέτυχε.',error.response.data.message);
-		else
-		  console.log('Η αποσύνδεση απέτυχε.',error.message);
-	  });
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
 	}
+
+    // Call log out on the server side
+	axios.get(`${apiUrl}/secure-routes/logout`, {
+	  headers: { "Authorization": `Bearer ${token}` }
+	}, { httpsAgent: agent })
+	.then(function(response){
+	  fs.unlink('/tmp/user.json', function(err) {
+		if(err) return console.log('Removing user failed:', err);
+	  });
+	  fs.unlink('/tmp/token.json', function(err) {
+		if(err) return console.log('Removing token failed:', err);
+	  });
+	  console.log(response.data.message);
+	})
+	.catch(function(error) {
+	  if(error.response && error.response.data.message)
+		console.log('Η αποσύνδεση απέτυχε.',error.response.data.message);
+	  else
+		console.log('Η αποσύνδεση απέτυχε.',error.message);
+	});
   })
 
 program
@@ -541,23 +604,26 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	} else {
-	  axios.get(`${apiUrl}/secure-routes/user?format=${command.format}/`, {
-	    headers: { "Authorization": `Bearer ${token}` }
-	  }, { httpsAgent: agent })
-	  .then(function(response){
-		console.log(response.data);
-	  })
-	  .catch(function(error) {
-		if(error.response && error.response.data.message)
-	      console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.response.data.message}`);
-		else
-	      console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.message}`);
-	  });
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
 	}
+
+	axios.get(`${apiUrl}/secure-routes/user?format=${command.format}/`, {
+	  headers: { "Authorization": `Bearer ${token}` }
+	}, { httpsAgent: agent })
+	.then(function(response){
+	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data), function(err) {
+		if(err) return console.log('Writing user failed:', err);
+	  });
+	  console.log(util.inspect(response.data, { depth: null, colors: true }));
+	})
+	.catch(function(error) {
+	  if(error.response && error.response.data.message)
+	    console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.response.data.message}`);
+	  else
+	    console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.message}`);
+	});
   })
 
 program
@@ -574,43 +640,43 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	} else {
-	  axios.patch(`${apiUrl}/secure-routes/edit-user?format=${command.format}/`, {
-		username: command.username,
-		firstName: command.firstName,
-		lastName: command.lastName,
-		email: command.email,
-		plan_in_use: command.plan
-	  }, { headers: { "Authorization": `Bearer ${token}` }
-	  }, { httpsAgent: agent })
-	  .then(function (response) {
-		// Update user's info
-		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
-		  if(err) return console.log('Writing user failed:', err);
-		});
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
+	}
 
-		console.log(response.data.message);
-
-    	// If a new email was given by the user
-		if(response.data.email){
-		  // Log out the user until the new email is verified
-		  fs.unlink('/tmp/token.json', function(err) {
-			if(err) return console.log('Removing token failed:', err);
-		  });
-		  console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
-		}
-	  })
-	  .catch(function (error) {
-		console.log(error);
-		if(error.response && error.response.data.message)
-		  console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.response.data.message}`);
-		else
-		  console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.message}`);
+	axios.patch(`${apiUrl}/secure-routes/edit-user?format=${command.format}/`, {
+	  username: command.username,
+	  firstName: command.firstName,
+	  lastName: command.lastName,
+	  email: command.email,
+	  plan_in_use: command.plan
+	}, { headers: { "Authorization": `Bearer ${token}` }
+	}, { httpsAgent: agent })
+	.then(function (response) {
+	  // Update user's info
+	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		if(err) return console.log('Writing user failed:', err);
 	  });
-    }
+
+	  console.log(response.data.message);
+
+      // If a new email was given by the user
+	  if(response.data.email){
+		// Log out the user until the new email is verified
+		fs.unlink('/tmp/token.json', function(err) {
+		  if(err) return console.log('Removing token failed:', err);
+		});
+		console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
+	  }
+	})
+	.catch(function (error) {
+	  console.log(error);
+	  if(error.response && error.response.data.message)
+		console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.response.data.message}`);
+	  else
+		console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.message}`);
+	});
   })
 
 program
@@ -626,26 +692,26 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	} else {
-	  axios.patch(`${apiUrl}/secure-routes/reset-password?format=${command.format}/`, {
-		old: command.oldPassword,
-		new: command.newPassword,
-		confirm: command.confirmPassword
-	  }, { headers: { "Authorization": `Bearer ${token}` }
-	  }, { httpsAgent: agent })
-	  .then(function (response) {
-		console.log(response.data.message);
-	  })
-	  .catch(function (error) {
-	    if(error.response && error.response.data.message)
-		  console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
-	    else
-		  console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
-	  });
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
 	}
+
+	axios.patch(`${apiUrl}/secure-routes/reset-password?format=${command.format}/`, {
+	  old: command.oldPassword,
+	  new: command.newPassword,
+	  confirm: command.confirmPassword
+	}, { headers: { "Authorization": `Bearer ${token}` }
+	}, { httpsAgent: agent })
+	.then(function (response) {
+	  console.log(response.data.message);
+	})
+	.catch(function (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
+	  else
+		console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
+	});
   })
 
 // NOT GOOD WITH CLI-APP
@@ -656,21 +722,21 @@ program
   .requiredOption('-e, --email <value>','User\'s email')
   .action(function(command) {
 	if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
-		console.log('Είσαι ήδη συνδεδεμένος/-η.\nΑν ξέχασες τον κωδικό σου και θες να ορίσεις καινούριο, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
-	} else {
-	  axios.patch(`${apiUrl}/users/forgot-password?format=${command.format}/`,{
-	    email: command.email
-	  }, { httpsAgent: agent })
-	  .then(function (response) {
-	    console.log(response.data.message);
-	  })
-	  .catch(function (error) {
-	    if(error.response && error.response.data.message)
-		  console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
-	    else
-		  console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
-	  });
+		return console.log('Είσαι ήδη συνδεδεμένος/-η.\nΑν ξέχασες τον κωδικό σου και θες να ορίσεις καινούριο, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
 	}
+
+	axios.patch(`${apiUrl}/users/forgot-password?format=${command.format}/`,{
+	  email: command.email
+	}, { httpsAgent: agent })
+	.then(function (response) {
+	  console.log(response.data.message);
+	})
+	.catch(function (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
+	  else
+		console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
+	});
   })
 
 program
@@ -684,29 +750,29 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	} else {
-	  axios.patch(`${apiUrl}/secure-routes/upgrade-plan?format=${command.format}/`, {
-		plan_in_use: command.type
-	  }, { headers: { "Authorization": `Bearer ${token}` }
-	  }, { httpsAgent: agent })
-	  .then(function (response) {
-		// Update user's info
-		fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
-		  if(err) return console.log('Writing user failed:', err);
-		});
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
+	}
 
-		console.log(response.data.message);
-	  })
-	  .catch(function (error) {
-		if(error.response && error.response.data.message)
-		  console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.response.data.message}`);
-		else
-		  console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.message}`);
+    axios.patch(`${apiUrl}/secure-routes/upgrade-plan?format=${command.format}/`, {
+	  plan_in_use: command.type
+	}, { headers: { "Authorization": `Bearer ${token}` }
+	}, { httpsAgent: agent })
+	.then(function (response) {
+	  // Update user's info
+	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		if(err) return console.log('Writing user failed:', err);
 	  });
-    }
+
+	  console.log(response.data.message);
+	})
+	.catch(function (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.response.data.message}`);
+	  else
+		console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.message}`);
+	});
   })
 
 program
@@ -719,30 +785,30 @@ program
 	if(token instanceof Error) {
 	  const error = token;
 	  if(error.code === 'ENOENT')
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	} else {
-	  axios.delete(`${apiUrl}/secure-routes/delete-user?format=${command.format}/`, {
-		headers: { "Authorization": `Bearer ${token}` }
-	  }, { httpsAgent: agent })
-	  .then(function(response) {
-		fs.unlink('/tmp/user.json', function(err) {
-		  if(err) return console.log('Removing user failed:', err);
-		});
-		fs.unlink('/tmp/token.json', function(err) {
-		  if(err) return console.log('Removing token failed:', err);
-		});
-
-		console.log(response.data.message);
-	  })
-	  .catch(function (error) {
-		if(error.response && error.response.data.message)
-		  console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.response.data.message}`);
-		else
-		  console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.message}`);
-		});
+	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
 	}
+
+	axios.delete(`${apiUrl}/secure-routes/delete-user?format=${command.format}/`, {
+	  headers: { "Authorization": `Bearer ${token}` }
+	}, { httpsAgent: agent })
+	.then(function(response) {
+	  fs.unlink('/tmp/user.json', function(err) {
+		if(err) return console.log('Removing user failed:', err);
+	  });
+	  fs.unlink('/tmp/token.json', function(err) {
+		if(err) return console.log('Removing token failed:', err);
+	  });
+
+	  console.log(response.data.message);
+	})
+	.catch(function (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.response.data.message}`);
+	  else
+		console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.message}`);
+	});
   })
 
 // NOT GOOD WITH CLI-APP
