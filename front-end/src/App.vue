@@ -10,7 +10,8 @@
       <router-view></router-view>
     </v-content>   
   
-    <AppLoadingIndicator v-if="['Task-board'].includes($route.name)"></AppLoadingIndicator>
+    <!-- <AppLoadingIndicator v-if="['Task-board'].includes($route.name)"></AppLoadingIndicator> -->
+    <AppLoadingIndicator></AppLoadingIndicator>
 
     <myFooter v-if="!['SignIn','SignUp','profile','profSettings','coWorkers','myProjects','Upgrade','ForgotPassword','Projects','Roadmap','Chart', 'Comments','History','Task-board', 'Kanban'].includes($route.name)"></myFooter>
   
