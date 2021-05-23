@@ -344,23 +344,12 @@ program
 	  { headers: { "Authorization": `Bearer ${token}` }
 	}, { httpsAgent: agent })
 	.then((response) => {
-	  console.log(response.data.message);
+	  // Update user's info
+	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		if(err) return console.log('Writing user failed:', err);
+	  });
 
-	  // Get user from db to update the cli file
-	  axios.get(`${apiUrl}/secure-routes/user`, {
-		headers: { "Authorization": `Bearer ${token}` }
-	  }, { httpsAgent: agent })
-	  .then((res) => {
-		fs.writeFile('/tmp/user.json', JSON.stringify(res.data), function(err) {
-		  if(err) return console.log('Writing user failed:', err);
-		});
-	  })
-	  .catch((err) => {
-	  	if (err.response && err.response.data.message)
-		  console.log(`Προέκυψε σφάλμα: ${err.response.data.message}`);
-		else
-		  console.log(`Προέκυψε σφάλμα: ${err.message}`);
-	  })
+	  console.log(response.data.message);
 	})
 	.catch((error) => {
 	  if (error.response && error.response.data.message)
