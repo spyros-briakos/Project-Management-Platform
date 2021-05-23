@@ -3,8 +3,8 @@
 
       <div class="navbar-brand">
         <label>
-          Scrum Board
-          <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
+          Scrum Board:
+          <span class="text-uppercase" v-show="this.activeBoard">  {{ boardName }} </span>
         </label>
       </div>  
       
