@@ -1,6 +1,7 @@
 <template>
   <span>
-    <v-toolbar id="header" app color="var(--light_green)" dark>
+    <v-toolbar id="header" app color="#FAFFFF" dark>
+    <!-- <v-toolbar id="header" app color="var(--light_green)" dark> -->
       <router-link to="/">
         <v-toolbar-title :to="appurl" class="purple--text" data-cy="titleBtn">{{
           appTitle
@@ -35,9 +36,9 @@ export default {
       right: true,
 
       items: [
-        { title: "Πώς δουλεύει", url: "/how_it_works" },
-        { title: "Profile", url: "/profile" },
         { title: "Projects", url: "/projects" },
+        { title: "Profile", url: "/profile" },
+        { title: "Πώς δουλεύει", url: "/how_it_works" },
         { title: "Τιμές", url: "/prices" },
         { title: "Σύνδεση", url: "/sign/in" },
       ],
@@ -51,6 +52,6 @@ export default {
   text-transform: none !important;
 }
 .v-btn__content{
-  color: black !important;
+  color: #000000 !important;
 }
 </style>

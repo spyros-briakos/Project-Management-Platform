@@ -48,7 +48,7 @@ details.popup summary::-webkit-details-marker {
 
 details.popup div {
   position: fixed;
-  top: 50%;
+  top: 500%;
   left: 50%;
   animation: fadein 200ms ease-in-out;
   transform: translate(-50%, -50%);
@@ -66,10 +66,12 @@ details.popup div {
 
 details[open].popup summary:before {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  top:-90px;
+  right: -20px;
+  bottom: -750px;
+  left: -70px;
+  max-height: 2000px;
+  max-width: 900%;
   animation: fadein 200ms ease-in-out;
   cursor: default;
   content: "";

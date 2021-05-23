@@ -1,7 +1,7 @@
 <template>
   <DetailsPopup ref="restoreListpopup" v-show="this.activeBoard">
     <template v-slot:handle>
-      <span class="nav-item btn btn-sm btn-app mr-2">Archived Lists ({{ archivedLists.length }})</span>
+      <span class="nav-item btn btn-sm btn-app mr-2" >Archived Lists ({{ archivedLists.length }})</span>
     </template>
     <template v-slot:content>
       <h4>Restore your lists for {{ boardName }}</h4>

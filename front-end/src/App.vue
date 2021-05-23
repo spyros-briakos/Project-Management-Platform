@@ -4,23 +4,16 @@
 
     <app-navigation v-if="!['SignIn','SignUp','ForgotPassword'].includes($route.name)"></app-navigation>
     
-    <AppHeader v-if="['task-board'].includes($route.name)"></AppHeader>
-     
-    <!-- <transition name="page" mode="out-in" v-if="['dashboard','task-board'].includes($route.name)">
-      <router-view></router-view>
-    </transition> 
+    <AppHeader v-if="['Task-board'].includes($route.name)"></AppHeader>
 
-    <v-content transition="slide-x-transition" v-if="!['dashboard','task-board'].includes($route.name)"> 
-      <router-view></router-view>
-    </v-content>   -->
-
-    <v-content transition="slide-x-transition"> 
+    <v-content transition="slide-x-transition" style="background-color: #9bc9bb;"> 
       <router-view></router-view>
     </v-content>   
   
-    <AppLoadingIndicator v-if="['task-board'].includes($route.name)"></AppLoadingIndicator>
+    <!-- <AppLoadingIndicator v-if="['Task-board'].includes($route.name)"></AppLoadingIndicator> -->
+    <AppLoadingIndicator></AppLoadingIndicator>
 
-    <myFooter v-if="!['SignIn','SignUp','profile','profSettings','coWorkers','myProjects','Upgrade','ForgotPassword','Projects','Roadmap','Chart', 'Comments','History','task-board', 'Kanban'].includes($route.name)"></myFooter>
+    <myFooter v-if="!['SignIn','SignUp','profile','profSettings','coWorkers','myProjects','Upgrade','ForgotPassword','Projects','Roadmap','Chart', 'Comments','History','Task-board', 'Kanban'].includes($route.name)"></myFooter>
   
   </v-app>
 
@@ -74,4 +67,3 @@ body {
   opacity: 0;
 }
 </style>
-

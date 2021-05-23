@@ -2,7 +2,7 @@
   <div
     class="box"
     :class="{ master_center: center }"
-    :style="{ 'background-color': green ? 'var(--blue_grey)' : 'transparent' }"
+    :style="{ 'background-color': green ? '#56BA9D' : '#ffff' }"
   >
     <div
       class="text_box_flex"
@@ -15,7 +15,7 @@
       <div class="mytitle" v-if="B_title.length">{{ B_title }}</div>
       <div class="subtitle" v-if="B_subtitle.length > 0"
         :style="{
-          'color': green ? '' : 'var(--blue_grey)',
+          'color': green ? '' : '#418B75',
         }"
       >
         {{ B_subtitle }}
@@ -62,3 +62,4 @@ export default {
 <style scoped>
 @import url(../../assets/css/homepage.css);
 </style>
+
