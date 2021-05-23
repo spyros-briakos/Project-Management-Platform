@@ -6,7 +6,7 @@
     
     <AppHeader v-if="['Task-board'].includes($route.name)"></AppHeader>
 
-    <v-content transition="slide-x-transition" style="background-color: #81bbaa;"> 
+    <v-content transition="slide-x-transition" style="background-color: #9bc9bb;"> 
       <router-view></router-view>
     </v-content>   
   

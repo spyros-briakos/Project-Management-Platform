@@ -6,6 +6,12 @@
           Scrum Board:
           <span class="text-uppercase" v-show="this.activeBoard">  {{ boardName }} </span>
         </label>
+        <div id="searching">
+          <div class="search-wrapper">
+            <input type="text" v-model="search" placeholder="Search title.."/>
+                <!-- <label>Search title:</label> -->
+          </div>
+        </div>
       </div>  
       
       <div class="d-flex justify-content-end" v-if="!isLoading">
