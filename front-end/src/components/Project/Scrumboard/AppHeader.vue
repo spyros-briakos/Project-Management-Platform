@@ -1,10 +1,11 @@
 <template>
+    <!-- <nav class="navbar"> -->
     <nav class="navbar navbar-light bg-faded">
 
       <div class="navbar-brand">
         <label>
-          Scrum Board:
-          <span class="text-uppercase" v-show="this.activeBoard">  {{ boardName }} </span>
+          Scrum Board
+          <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
         </label>
       </div>  
       
@@ -39,3 +40,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  /* .navbar {
+    position: fixed;
+    display: flex;
+    top: 80px;
+    left: 70px;
+    width: 95%;
+    z-index: 1;
+    background-color: #ffffff; 
+  }  */
+</style>
