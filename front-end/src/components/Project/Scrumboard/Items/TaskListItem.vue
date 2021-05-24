@@ -1,4 +1,5 @@
 <template>
+  
   <div class="card tasklist-item" v-if="!isEditing" @click.prevent="startEditing">
     <div class="card-body">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
@@ -41,6 +42,7 @@
       </form>
     </div>
   </div>
+
 </template>
 <script>
 import { mapActions } from "vuex"
