@@ -1,8 +1,11 @@
 <template>
+<<<<<<< HEAD
     <!-- <nav class="navbar"> -->
       <!-- <head>
     <meta name="viewport" content="initial-scale = 1.0"/>
       </head> -->
+=======
+>>>>>>> 127a21bd4ff06c1c3f3a72d7ab5e58a32ea2985a
     <nav class="navbar navbar-light bg-faded">
 
       <div class="navbar-brand">
@@ -10,16 +13,21 @@
           Scrum Board
           <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
         </label>
-        
-        <div id="searching">
+        <!-- <div id="searching">
           <div class="search-wrapper">
             <input type="text" v-model="search" placeholder="Search title.."/>
           </div>
-        </div>
-
+        </div> -->
       </div>  
-      
+
+        <div>
+          <div class="form-outline">
+            <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
+          </div>
+        </div>
+        
       <div class="d-flex justify-content-end" v-if="!isLoading">
+          
         <TaskListRestore></TaskListRestore>
         <TaskListEdit></TaskListEdit>
         <TaskListArchive></TaskListArchive>
