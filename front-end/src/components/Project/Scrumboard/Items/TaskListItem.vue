@@ -1,20 +1,34 @@
 <template>
   <!-- <div class="card tasklist-item" v-if="!isEditing" @click.prevent="startEditing"> -->
-  <div class="card tasklist-item">
+  <div class="card tasklist-item">    
+    <BacklogPopup ref="newItemPopup" v-show="isEditing" @popup-toggled="handlePopupToggled">
+      
+      <template v-slot:handle>
+        <div class="edit" v-if="!isNewItem"> 
+          <div> <i class="fas fa-pen" @click="startEditing"></i> </div>
+        </div> 
+      </template>
 
-    <div class="edit" v-if="!isNewItem">
-      <a>
-        <i class="fas fa-pen" @click="startEditing">
-          <!-- Here must be the Popup instead of h3 -->
-          
-          <h3 v-if="isEditing"> 
-
-          </h3>
-          
-        </i>
-      </a>
-    </div>
-    
+      <template v-slot:content>
+        <form>
+          <h4>{{ heading }}</h4>
+          <input
+            name="listName"
+            type="text"
+            class="form-control my-1"
+            v-model.trim="listForm.name"
+            v-validate="'required'"
+            data-vv-as="List Name"
+            placeholder="Enter your list name"
+          />
+          <small class="text-danger" style="display:block">{{ errors.first("listName") }}</small>
+          <button class="btn btn-sm btn-app mt-2" @click.prevent="handleTaskListSave">
+            Save List
+          </button>
+        </form>
+      </template>
+    </BacklogPopup>
+  
     <div class="card-body">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
         <span> {{ displayText }} </span>
@@ -63,11 +77,11 @@
 
 <script>
 import { mapActions } from "vuex"
-// import BacklogPopup from '../Details/BacklogPopup.vue'
+import BacklogPopup from '../Details/BacklogPopup.vue'
 
 export default {
   components: { 
-    // BacklogPopup 
+    BacklogPopup 
     },
   props: ["item", "list", "board"],
   computed: {
@@ -92,6 +106,7 @@ export default {
       saveTaskListItem: "saveTaskListItem",
       deleteTaskListItem: "deleteTaskListItem"
     }),
+
     startEditing() {
       this.form.id = this.item.id
       this.form.text = this.item.text
@@ -103,6 +118,7 @@ export default {
       this.form.id = ""
       this.form.text = ""
     },
+
     save() {
       this.$validator.validateAll().then(result => {
         if (result) {
@@ -121,10 +137,12 @@ export default {
         }
       })
     },
+
     cancel() {
       this.isEditing = false
       this.$emit("item-cancelled")
     },
+
     remove() {
       this.deleteTaskListItem({
         boardId: this.board.id,
@@ -133,6 +151,7 @@ export default {
       })
       this.$emit("item-deleted")
     },
+
     handlePopupToggled(isOpen) {
       if (!isOpen) {
         this.form.id = 0
