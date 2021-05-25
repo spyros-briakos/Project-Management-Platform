@@ -4,14 +4,33 @@
 
     <div class="edit" v-if="!isNewItem">
       <a>
-        <i class="fas fa-pen" @click="startEditing">
+        <!-- <i class="fas fa-pen" @click="startEditing"> -->
           <!-- Here must be the Popup instead of h3 -->
           
-          <h3 v-if="isEditing"> 
-
-          </h3>
-          
-        </i>
+          <BacklogPopup v-if="isEditing" @popup-toggled="handlePopupToggled">
+            <template v-slot:handle>
+              <span class="nav-item btn btn-sm btn-app mr-2"><i class="fas fa-pen" @click="startEditing"></i></span>
+            </template>
+            <template v-slot:content>
+              <form>
+                <h4>{{ heading }}</h4>
+                <input
+                  name="listName"
+                  type="text"
+                  class="form-control my-1"
+                  v-model.trim="form.name"
+                  v-validate="'required'"
+                  data-vv-as="List Name"
+                  placeholder="Enter your list name"
+                />
+                <small class="text-danger" style="display:block">{{ errors.first("listName") }}</small>
+                <button class="btn btn-sm btn-app mt-2" @click.prevent="save">
+                  Save
+                </button>
+              </form>
+            </template>
+          </BacklogPopup>          
+        <!-- </i> -->
       </a>
     </div>
     
@@ -63,11 +82,11 @@
 
 <script>
 import { mapActions } from "vuex"
-// import BacklogPopup from '../Details/BacklogPopup.vue'
+import BacklogPopup from '../Details/BacklogPopup.vue'
 
 export default {
-  components: { 
-    // BacklogPopup 
+  components: {
+    BacklogPopup 
     },
   props: ["item", "list", "board"],
   computed: {
