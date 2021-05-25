@@ -8,6 +8,7 @@
     </template>
   </DetailsPopup>
 </template>
+
 <script>
 import DetailsPopup from "../Details/DetailsPopup"
 import { mapActions } from "vuex"
