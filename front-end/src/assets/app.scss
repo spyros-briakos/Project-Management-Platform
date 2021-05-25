@@ -9,7 +9,7 @@
   position:fixed;
   top: 160px;
   left: 70px;
-  width: 100%;
+  width: 95%;
   // z-index: 1;
 }
 
@@ -176,18 +176,18 @@
 
 
 div#searching {
-  position: fixed;
+  position: relative;
   display: flex;
   // align-items: center;
   // justify-content: center;
   // flex-direction: column;
-  left: 1180px;
-  top: 8.5px;
+  left: 1160px;
+  top: -49px;
   font-size:x-small;
   height: 0px;
   
   .search-wrapper {
-    position: fixed;
+    position: relative;
     label {
       position: absolute;
       font-size: 12px;
@@ -241,4 +241,9 @@ div#searching {
 
 .fas.fa-pen {
   color:#418B75;
+}
+
+.form-outline {
+  padding-left: 850px;
+  padding-top: 3px;
 }
