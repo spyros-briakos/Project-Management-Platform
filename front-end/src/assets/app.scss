@@ -9,7 +9,7 @@
   position:fixed;
   top: 160px;
   left: 70px;
-  width: 96%;
+  width: 100%;
   // z-index: 1;
 }
 
@@ -75,7 +75,7 @@
 }
 
 .card-body {
-  padding: 1rem !important;
+  padding: 1.5rem !important;
 }
 
 .board-item {
@@ -181,8 +181,8 @@ div#searching {
   // align-items: center;
   // justify-content: center;
   // flex-direction: column;
-  left: 1150px;
-  top: -48px;
+  left: 1160px;
+  top: -49px;
   font-size:x-small;
   height: 0px;
   
@@ -219,4 +219,26 @@ div#searching {
       }
     }
   }
+}
+
+.card.tasklist-item:hover .edit {
+	display: block;
+}
+
+.edit {
+	padding-top: 7px;	
+	padding-right: 7px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	display: none;
+  font-size: medium;
+}
+
+.edit a {
+	color: #000;
+}
+
+.fas.fa-pen {
+  color:#418B75;
 }

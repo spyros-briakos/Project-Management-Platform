@@ -1,5 +1,7 @@
 <template>
-  <div class="card tasklist-item" v-if="!isEditing" @click.prevent="startEditing">
+  <div class="card tasklist-item" v-if="!isEditing">
+  <!-- <div class="card tasklist-item" v-if="!isEditing" @click.prevent="startEditing"> -->
+    <div class="edit" v-if="!isNewItem"><a href="https://www.google.com/search?q=david+damiano&ei=nWWrYMiWG5fbkgW1sKuoDg&gs_ssp=eJzj4tVP1zc0TDOuKjI0y6o0YPTiTUksy0xRSEnMzUzMywcAilcJlw&oq=davi&gs_lcp=Cgdnd3Mtd2l6EAMYATIECAAQQzIICC4QsQMQgwEyBAguEEMyAggAMgIIADIFCC4QsQMyBQguELEDMgIILjIFCAAQsQMyCAguELEDEIMBOgcIABCwAxBDOggIABCxAxCwAzoLCAAQsQMQgwEQsAM6BQgAELADOggIABCxAxCDAToICAAQxwEQowI6CAgAEMcBEK8BOgcILhBDEJMCOgoIABDHARCvARBDOgcILhCxAxBDUK4eWL4nYKk0aAJwAHgAgAHMAYgBywaSAQUwLjQuMZgBAKABAaoBB2d3cy13aXrIAQrAAQE&sclient=gws-wiz"><i class="fas fa-pen"></i></a></div>
     <div class="card-body">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
         <span> {{ displayText }} </span>
