@@ -1,9 +1,18 @@
 <template>
-  <!-- <div class="card tasklist-item" v-if="!isEditing"> -->
+  <!-- <div class="card tasklist-item" v-if="!isEditing" @click.prevent="startEditing"> -->
   <div class="card tasklist-item">
 
-    <div class="edit" v-if="!isNewItem" >
-      <a><i class="fas fa-pen" @click="startEditing"></i></a>
+    <div class="edit" v-if="!isNewItem">
+      <a>
+        <i class="fas fa-pen" @click="startEditing">
+          <!-- Here must be the Popup instead of h3 -->
+          
+          <h3 v-if="isEditing"> 
+
+          </h3>
+          
+        </i>
+      </a>
     </div>
     
     <div class="card-body">
@@ -14,6 +23,7 @@
   
   </div>
 
+  
   <!-- <div class="card" v-else>
     <div class="card-body">
       <form class="form">
