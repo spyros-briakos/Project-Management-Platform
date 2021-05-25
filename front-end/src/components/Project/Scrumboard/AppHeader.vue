@@ -1,11 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <!-- <nav class="navbar"> -->
-      <!-- <head>
-    <meta name="viewport" content="initial-scale = 1.0"/>
-      </head> -->
-=======
->>>>>>> 127a21bd4ff06c1c3f3a72d7ab5e58a32ea2985a
     <nav class="navbar navbar-light bg-faded">
 
       <div class="navbar-brand">
