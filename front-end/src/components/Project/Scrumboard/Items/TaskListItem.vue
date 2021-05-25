@@ -1,32 +1,33 @@
 <template>
   <!-- <div class="card tasklist-item" v-if="!isEditing" @click.prevent="startEditing"> -->
-  <div class="card tasklist-item">    
-    <BacklogPopup ref="newItemPopup" v-show="isEditing" @popup-toggled="handlePopupToggled">
-      
-      <template v-slot:handle>
-        <div class="edit" v-if="!isNewItem"> 
-          <span class="nav-item btn btn-sm btn-app mr-2"> <i class="fas fa-pen"></i> </span>
-        </div> 
-      </template>
+  <div class="card tasklist-item" >    
+    <BacklogPopup ref="newItemPopup" @popup-toggled="handlePopupToggled">
+      <!-- <span class="nav-item btn btn-sm btn-app mr-2"> <i class="fas fa-pen"></i></span> -->
+        <template v-slot:handle>
+      <!-- <h1>hiii</h1> -->
+          <div class="edit" v-if="!isNewItem"> 
+            <span><i class="fas fa-pen"></i></span>
+          </div> 
+        </template>
 
-      <template v-slot:content>
+      <!-- <template v-slot:content>
         <form>
           <h4>{{ heading }}</h4>
           <input
             name="listName"
             type="text"
             class="form-control my-1"
-            v-model.trim="listForm.name"
+            v-model.trim="form.name"
             v-validate="'required'"
             data-vv-as="List Name"
             placeholder="Enter your list name"
           />
           <small class="text-danger" style="display:block">{{ errors.first("listName") }}</small>
-          <button class="btn btn-sm btn-app mt-2" @click.prevent="handleTaskListSave">
-            Save List
+          <button class="btn btn-sm btn-app mt-2" @click.prevent="save">
+            Save
           </button>
         </form>
-      </template>
+      </template> -->
     </BacklogPopup>
   
     <div class="card-body">
@@ -153,6 +154,7 @@ export default {
     },
 
     handlePopupToggled(isOpen) {
+      alert('hi')
       if (!isOpen) {
         this.form.id = 0
         this.form.text = ""
