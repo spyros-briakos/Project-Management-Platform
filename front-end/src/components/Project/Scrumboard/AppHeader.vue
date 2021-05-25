@@ -15,7 +15,6 @@
         </div>
         
       <div class="d-flex justify-content-end" v-if="!isLoading">
-          
         <TaskListRestore></TaskListRestore>
         <TaskListEdit></TaskListEdit>
         <TaskListArchive></TaskListArchive>
