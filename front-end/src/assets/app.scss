@@ -176,18 +176,18 @@
 
 
 div#searching {
-  position: relative;
+  position: fixed;
   display: flex;
   // align-items: center;
   // justify-content: center;
   // flex-direction: column;
-  left: 1160px;
-  top: -49px;
+  left: 1180px;
+  top: 8.5px;
   font-size:x-small;
   height: 0px;
   
   .search-wrapper {
-    position: relative;
+    position: fixed;
     label {
       position: absolute;
       font-size: 12px;

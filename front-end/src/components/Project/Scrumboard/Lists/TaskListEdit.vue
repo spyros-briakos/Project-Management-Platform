@@ -28,9 +28,11 @@
 import DetailsPopup from "../Details/DetailsPopup"
 import { mapGetters, mapActions } from "vuex"
 import { Bus } from "@/utils/bus"
+// import BacklogPopup from '../Details/BacklogPopup.vue'
 export default {
   components: {
-    DetailsPopup
+    DetailsPopup,
+    // BacklogPopup
   },
   data() {
     return {
@@ -81,7 +83,7 @@ export default {
           this.$refs.newListPopup.close()
         }
       })
-    }
+    },
   }
 }
 </script>
