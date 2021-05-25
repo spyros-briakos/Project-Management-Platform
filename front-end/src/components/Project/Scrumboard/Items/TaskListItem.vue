@@ -5,7 +5,9 @@
       
       <template v-slot:handle>
         <div class="edit" v-if="!isNewItem"> 
-          <div> <i class="fas fa-pen" @click="startEditing"></i> </div>
+          <div> 
+            <i class="fas fa-pen" @click="startEditing"></i> 
+          </div>
         </div> 
       </template>
 
@@ -27,6 +29,7 @@
           </button>
         </form>
       </template>
+      
     </BacklogPopup>
   
     <div class="card-body">
@@ -36,7 +39,6 @@
     </div>
   
   </div>
-
   
   <!-- <div class="card" v-else>
     <div class="card-body">
