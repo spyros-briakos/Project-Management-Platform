@@ -4,7 +4,7 @@ const express = require("express");
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const moment = require("moment");
-const { updateOne, findById } = require("../models/Project");
+const serializers = require("../serializers");
 
 // Import Project model
 const Project = require("../models/Project");
@@ -36,12 +36,20 @@ router.post("/", async (req, res) => {
     project.plan_in_use = req.body.plan_in_use == 'premium' && user.plan_in_use == 'premium' ? req.body.plan_in_use : 'standard';
     const savedProject = await project.save();
 
+    // Get serialiazed project
+    const result = serializers.serializeProject(projectObject=project);
+
+    // If there was an error
+    if(result.error) {
+      return res.status(400).json({ message: result.error });
+    }
+
     // Add new project to user's projects
     const projects = user.projects;
     projects.push(savedProject._id);
     await User.updateOne({ _id: user._id }, { $set: { projects: projects } }, { runValidators: true });
 
-    res.json(savedProject);
+    res.json(result.project);
   } catch (error) {
     console.log(error)
     res.status(400).json({ message: error });
@@ -51,8 +59,15 @@ router.post("/", async (req, res) => {
 // Get specific project
 router.get('/:projectId', async (req, res) => {
   try {
-    const project = await Project.findById(req.params.projectId);
-    res.json(project);
+    // Get serialiazed project
+    const result = serializers.serializeProject(id=req.params.projectId);
+
+    // If there was an error
+    if(result.error) {
+      return res.status(400).json({ message: result.error });
+    }
+
+    res.json(result.project);
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -119,8 +134,17 @@ router.patch('/:projectId', async (req, res) => {
         return res.status(400).json({ message: "Can\'t update project to premium, if you have not unlocked the premium plan." });
       }
     }
-    const updatedProject = await Project.updateOne({ _id: req.params.projectId }, { $set: req.body });
-    res.json(updatedProject);
+    const updatedProject = await Project.findByIdAndUpdate(req.params.projectId, req.body, { runValidators: true, new: true });
+
+    // Get serialiazed project
+    const result = serializers.serializeProject(projectObject=updatedProject);
+
+    // If there was an error
+    if(result.error) {
+      return res.status(400).json({ message: result.error });
+    }
+
+    res.json(result.project);
   } catch (error) {
     res.status(400).json({ message: error });
   }

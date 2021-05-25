@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 const utils = require("../auth/utils");
 const send_email = require("../auth/send_email");
-const jwt = require('jsonwebtoken');
+const serializers = require("../serializers");
 
 // Import User model
 const { User } = require("../models/User");
@@ -17,56 +18,15 @@ const Project = require('../models/Project');
 // Get specific user
 router.get('/user', async (req, res) => {
   try {
-    // Find user in db
-    const user = await User.findById(req.user._id).populate('invitations').populate('projects')
-                                                  .populate({ path: 'invitations', populate: { path: 'receiver', model: 'User' } })
-                                                  .populate({ path: 'invitations', populate: { path: 'sender', model: 'User' } })
-                                                  .populate({ path: 'invitations', populate: { path: 'project', model: 'Project' } })
-                                                  .populate({ path: 'projects', populate: { path: 'members', model: 'User' } })
-                                                  .populate({ path: 'projects', populate: { path: 'productOwner', model: 'User' } })
-                                                  .populate({ path: 'projects', populate: { path: 'scrumMaster', model: 'User' } });
+    // Get serialized user
+    const result = await serializers.serializeUser(id=req.user._id);
 
-    // Will keep from user's projects only the needed info
-    const projects = [];
-    for(var i=0; i< user.projects.length; i++) {
-      projects[i] = {
-        _id: user.projects[i]._id,
-        name: user.projects[i].name,
-        description: user.projects[i].description,
-        productOwner: user.projects[i].productOwner.username,
-        scrumMaster: user.projects[i].scrumMaster.username,
-        status: user.projects[i].status,
-        plan_in_use: user.projects[i].plan_in_use,
-        startingDate: user.projects[i].startingDate,
-        endingDate: user.projects[i].endingDate,
-        members: []
-      }
-      // Keep only the username of each member
-      for(var j=0; j < user.projects[i].members.length; j++)
-        projects[i].members[j] = user.projects[i].members[j].username;
+    // If there was an error
+    if(result.error) {
+      return res.status(400).json({ message: result.error });
     }
 
-    // Will keep from user's invitations only the needed info
-    const invitations = []
-    for(var i=0; i < user.invitations.length; i++) {
-      invitations[i] = {
-        receiver: user.invitations[i].receiver.username,
-        sender: user.invitations[i].sender.username,
-        project: user.invitations[i].project.name,
-        date: user.invitations[i].date,
-        invitationCode: user.invitations[i].invitationCode
-      }
-    }
-
-    res.json({
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      projects: projects,
-      invitations: invitations,
-      plan_in_use: user.plan_in_use
-    });
+    res.json(result.user);
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -112,8 +72,16 @@ router.patch('/edit-user', async (req, res) => {
       // Update user
       const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
 
+      // Get serialized user
+      const result = await serializers.serializeUser(userObject=updatedUser);
+
+      // If there was an error
+      if(result.error) {
+        return res.status(400).json({ message: result.error });
+      }
+
       // Send verification to the user's email
-      send_email.sendVerificationEmail(req.user.username, req.body.email, verificationCode);
+      send_email.sendVerificationEmail(result.user.username, result.user.email, verificationCode);
 
       // Log out the user until the new email is verified
       const token = new InvalidToken({ value: utils.extractToken(req) });
@@ -122,14 +90,7 @@ router.patch('/edit-user', async (req, res) => {
 
       res.json({
         message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.\nΣου στείλαμε email επιβεβαίωσης. Παρακαλούμε δες το Gmail σου!',
-        user: {
-          username: updatedUser.username,
-          firstName: updatedUser.firstName,
-          lastName: updatedUser.lastName,
-          email: updatedUser.email,
-          projects: updatedUser.projects,
-          plan_in_use: updatedUser.plan_in_use
-        },
+        user: result.user,
         email: 'updated'
       });
     }
@@ -137,16 +98,17 @@ router.patch('/edit-user', async (req, res) => {
       // Update user
       const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
 
+      // Get serialized user
+      const result = await serializers.serializeUser(userObject=updatedUser);
+
+      // If there was an error
+      if(result.error) {
+        return res.status(400).json({ message: result.error });
+      }
+  
       res.json({
         message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.',
-        user: {
-          username: updatedUser.username,
-          firstName: updatedUser.firstName,
-          lastName: updatedUser.lastName,
-          email: updatedUser.email,
-          projects: updatedUser.projects,
-          plan_in_use: updatedUser.plan_in_use
-        }
+        user: result.user
       });
     }
   } catch (error) {
@@ -225,16 +187,17 @@ router.patch('/upgrade-plan', async (req, res) => {
     // Upgrade user's plan
     const updatedUser = await User.findByIdAndUpdate(req.user._id, { plan_in_use: req.body.plan_in_use, premium_ending_date: req.body.premium_ending_date }, { runValidators: true, new: true });
 
+    // Get serialized user
+    const result = await serializers.serializeUser(userObject=updatedUser);
+
+    // If there was an error
+    if(result.error) {
+      return res.status(400).json({ message: result.error });
+    }
+
     res.json({
       message: 'Ο λογαριασμός σου αναβαθμίστηκε με επιτυχία σε προνομιούχος!',
-      user: {
-        username: updatedUser.username,
-        firstName: updatedUser.firstName,
-        lastName: updatedUser.lastName,
-        email: updatedUser.email,
-        projects: updatedUser.projects,
-        plan_in_use: updatedUser.plan_in_use
-      }
+      user: result.user
     });
   } catch (error) {
     res.status(400).json({ message: error });
