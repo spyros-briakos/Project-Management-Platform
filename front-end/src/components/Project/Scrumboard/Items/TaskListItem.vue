@@ -1,8 +1,9 @@
 <template>
   <div class="card tasklist-item">   
 
-    <!-- <BacklogPopup ref="newItemPopup"> -->
-    <BacklogPopup ref="newItemPopup" @popup-toggled="handlePopupToggled">
+    <!-- Doesn't matter if we have popup-toggled or not? -->
+    <!-- <BacklogPopup ref="newItemPopup" @popup-toggled="handlePopupToggled"> -->
+    <BacklogPopup ref="newItemPopup">
       <template v-slot:handle>
         <span class="edit" v-if="!isNewItem"> 
           <!-- With startEditing stucks -->
@@ -46,7 +47,7 @@
             </form>
           </div>
         </div>
-      </template>
+      </template> 
 
     </BacklogPopup>
 
@@ -135,7 +136,5 @@ export default {
 </script>
 
 <style scoped>
-.card-body {
-  z-index: 1;
-}
+
 </style>
