@@ -11,10 +11,9 @@
         <div id="searching">
           <div class="search-wrapper">
             <input type="text" v-model="search" placeholder="Search title.."/>
-                <!-- <label>Search title:</label> -->
           </div>
-        
         </div>
+
       </div>  
       
       <div class="d-flex justify-content-end" v-if="!isLoading">
@@ -48,15 +47,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  /* .navbar {
-    position: fixed;
-    display: flex;
-    top: 80px;
-    left: 70px;
-    width: 95%;
-    z-index: 1;
-    background-color: #ffffff; 
-  }  */
-</style>
