@@ -3,9 +3,9 @@
     <v-toolbar id="header" app color="#FAFFFF" dark>
     <!-- <v-toolbar id="header" app color="var(--light_green)" dark> -->
       <router-link to="/">
-        <v-toolbar-title :to="appurl" class="purple--text" data-cy="titleBtn">{{
-          appTitle
-        }}</v-toolbar-title>
+        <v-toolbar-title :to="appurl" class="purple--text" data-cy="titleBtn">
+          {{ appTitle }}
+        </v-toolbar-title>
       </router-link>
       <template v-for="(item, index) in items">
         <template v-if="index <= 3">
