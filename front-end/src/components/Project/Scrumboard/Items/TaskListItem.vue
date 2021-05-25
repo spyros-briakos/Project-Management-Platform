@@ -1,36 +1,10 @@
 <template>
-  <div class="card tasklist-item" v-if="!isEditing">
-  <!-- <div class="card tasklist-item" v-if="!isEditing" @click.prevent="startEditing"> -->
+  <!-- <div class="card tasklist-item" v-if="!isEditing"> -->
+  <div class="card tasklist-item" v-if="!isEditing" @click.prevent="startEditing">
+
     <div class="edit" v-if="!isNewItem">
-      <a href="https://www.google.com/search?q=david+damiano&ei=nWWrYMiWG5fbkgW1sKuoDg&gs_ssp=eJzj4tVP1zc0TDOuKjI0y6o0YPTiTUksy0xRSEnMzUzMywcAilcJlw&oq=davi&gs_lcp=Cgdnd3Mtd2l6EAMYATIECAAQQzIICC4QsQMQgwEyBAguEEMyAggAMgIIADIFCC4QsQMyBQguELEDMgIILjIFCAAQsQMyCAguELEDEIMBOgcIABCwAxBDOggIABCxAxCwAzoLCAAQsQMQgwEQsAM6BQgAELADOggIABCxAxCDAToICAAQxwEQowI6CAgAEMcBEK8BOgcILhBDEJMCOgoIABDHARCvARBDOgcILhCxAxBDUK4eWL4nYKk0aAJwAHgAgAHMAYgBywaSAQUwLjQuMZgBAKABAaoBB2d3cy13aXrIAQrAAQE&sclient=gws-wiz"><i class="fas fa-pen"></i>
-      <!-- <BacklogPopup ref="newListPopup" v-show="this.activeBoard" @popup-toggled="handlePopupToggled">
-        <template v-slot:handle>
-          <span>
-            <i class="fas fa-pen"></i>
-          </span>
-        </template>
-        <template v-slot:content>
-          <form>
-            <h4>{{ heading }}</h4>
-            <input
-              name="listName"
-              type="text"
-              class="form-control my-1"
-              v-model.trim="listForm.name"
-              v-validate="'required'"
-              data-vv-as="List Name"
-              placeholder="Enter your list name"
-            />
-            <small class="text-danger" style="display:block">{{ errors.first("listName") }}</small>
-            <button class="btn btn-sm btn-app mt-2" @click.prevent="handleTaskListSave">
-              Save List
-            </button>
-          </form>
-        </template>
-      </BacklogPopup> -->
-      </a>
+      <a href="https://www.google.com/search?q=david+damiano&ei=nWWrYMiWG5fbkgW1sKuoDg&gs_ssp=eJzj4tVP1zc0TDOuKjI0y6o0YPTiTUksy0xRSEnMzUzMywcAilcJlw&oq=davi&gs_lcp=Cgdnd3Mtd2l6EAMYATIECAAQQzIICC4QsQMQgwEyBAguEEMyAggAMgIIADIFCC4QsQMyBQguELEDMgIILjIFCAAQsQMyCAguELEDEIMBOgcIABCwAxBDOggIABCxAxCwAzoLCAAQsQMQgwEQsAM6BQgAELADOggIABCxAxCDAToICAAQxwEQowI6CAgAEMcBEK8BOgcILhBDEJMCOgoIABDHARCvARBDOgcILhCxAxBDUK4eWL4nYKk0aAJwAHgAgAHMAYgBywaSAQUwLjQuMZgBAKABAaoBB2d3cy13aXrIAQrAAQE&sclient=gws-wiz"><i class="fas fa-pen"></i></a>
     </div>
-    
     
     <div class="card-body">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
@@ -76,13 +50,15 @@
   </div>
 
 </template>
+
 <script>
-import { mapGetters, mapActions } from "vuex"
+import { mapActions } from "vuex"
 // import BacklogPopup from '../Details/BacklogPopup.vue'
-import { Bus } from "@/utils/bus"
 
 export default {
-  // components: { BacklogPopup },
+  components: { 
+    // BacklogPopup 
+    },
   props: ["item", "list", "board"],
   computed: {
     isNewItem() {
@@ -91,17 +67,6 @@ export default {
     displayText() {
       return this.isNewItem ? "+ New Item" : this.item.text
     },
-
-    ////////////////////////////////
-    ...mapGetters({
-    activeBoard: "activeBoard"
-    }),
-    boardName() {
-      return this.activeBoard ? this.activeBoard.name : ""
-    },
-    heading() {
-      return this.listForm.id ? "Update list name" : "Create new list"
-    }
   },
   data() {
     return {
@@ -109,20 +74,9 @@ export default {
       form: {
         id: "",
         text: ""
-      },
-      listForm: {
-        id: "",
-        name: ""
       }
     }
   },
-
-  ////////////////////////////////
-  mounted() {
-    Bus.$on("tasklist-editing", this.handleTaskListEditing)
-  },
-  ////////////////////////////////
-
   methods: {
     ...mapActions({
       saveTaskListItem: "saveTaskListItem",
@@ -169,31 +123,12 @@ export default {
       })
       this.$emit("item-deleted")
     },
-
-    //////////////////////////////
     handlePopupToggled(isOpen) {
       if (!isOpen) {
-        this.listForm.id = 0
-        this.listForm.name = ""
+        this.form.id = 0
+        this.form.text = ""
         this.$validator.reset()
       }
-    },
-    handleTaskListEditing(list) {
-      this.listForm.id = list.id
-      this.listForm.name = list.name
-      this.$refs.newListPopup.open()
-    },
-    handleTaskListSave() {
-      this.$validator.validateAll().then(async result => {
-        if (result) {
-          await this.saveTaskList({
-            boardId: this.activeBoard.id,
-            listId: this.listForm.id,
-            name: this.listForm.name
-          })
-          this.$refs.newListPopup.close()
-        }
-      })
     },
   }
 }

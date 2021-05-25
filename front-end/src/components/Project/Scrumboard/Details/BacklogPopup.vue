@@ -8,6 +8,7 @@
     </div>
   </details>
 </template>
+
 <script>
 export default {
   methods: {
@@ -20,10 +21,11 @@ export default {
     popupToggled() {
       const isOpen = this.$refs.details.getAttribute("open") !== null ? true : false
       this.$emit("popup-toggled", isOpen)
-    }
+    }   
   }
 }
 </script>
+
 <style scope>
 /* Experimental : Details implementation */
 details.popup summary {

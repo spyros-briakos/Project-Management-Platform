@@ -1,5 +1,8 @@
 <template>
     <!-- <nav class="navbar"> -->
+      <!-- <head>
+    <meta name="viewport" content="initial-scale = 1.0"/>
+      </head> -->
     <nav class="navbar navbar-light bg-faded">
 
       <div class="navbar-brand">
