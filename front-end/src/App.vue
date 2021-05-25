@@ -2,7 +2,7 @@
 
   <v-app id="app">
 
-    <app-navigation v-if="!['SignIn','SignUp','ForgotPassword'].includes($route.name)"></app-navigation>
+    <AppNavigation v-if="!['SignIn','SignUp','ForgotPassword'].includes($route.name)"></AppNavigation>
     
     <AppHeader v-if="['Task-board'].includes($route.name)"></AppHeader>
 

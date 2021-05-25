@@ -26,6 +26,7 @@
     </template>
   </DetailsPopup>
 </template>
+
 <script>
 import DetailsPopup from "../Details/DetailsPopup"
 import { mapGetters, mapActions } from "vuex"
