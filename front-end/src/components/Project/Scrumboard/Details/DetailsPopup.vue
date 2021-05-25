@@ -8,6 +8,7 @@
     </div>
   </details>
 </template>
+
 <script>
 export default {
   methods: {
@@ -24,6 +25,7 @@ export default {
   }
 }
 </script>
+
 <style scope>
 /* Experimental : Details implementation */
 details.popup summary {

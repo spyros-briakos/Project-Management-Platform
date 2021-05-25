@@ -37,6 +37,7 @@
         <span> {{ displayText }} </span>
       </div>
     </div>
+  
   </div>
 
   <div class="card" v-else>
