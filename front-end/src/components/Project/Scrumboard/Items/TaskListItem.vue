@@ -2,8 +2,9 @@
   <div class="card tasklist-item">   
 
     <!-- <BacklogPopup ref="newItemPopup"> -->
-    <BacklogPopup ref="newItemPopup" @popup-toggled="handlePopupToggled">
-      <template v-slot:handle>
+    <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
+    <!-- <BacklogPopup ref="newItemPopup"> -->
+      <template v-slot:handle1>
         <span class="edit" v-if="!isNewItem"> 
           <!-- With startEditing stucks -->
           <!-- <i class="fas fa-pen" @click="startEditing"></i>  -->
@@ -11,7 +12,7 @@
         </span> 
       </template>
 
-      <template v-slot:content>
+      <!-- <template v-slot:content1>
         <div class="card">
           <div class="card-body">
             <form class="form">
@@ -46,7 +47,26 @@
             </form>
           </div>
         </div>
-      </template>
+      </template>  -->
+
+      <!-- <template v-slot:content1>
+      <form>
+        <h4>{{ heading }}</h4>
+        <input
+          name="listName"
+          type="text"
+          class="form-control my-1"
+          v-model.trim="form.text"
+          v-validate="'required'"
+          data-vv-as="List Name"
+          placeholder="Enter your list name"
+        />
+        <small class="text-danger" style="display:block">{{ errors.first("listName") }}</small>
+        <button class="btn btn-sm btn-app mt-2" >
+          Save List
+        </button>
+      </form>
+    </template> -->
 
     </BacklogPopup>
 
@@ -130,12 +150,17 @@ export default {
       })
       this.$emit("item-deleted")
     },
+    handlePopupToggled1(isOpen) {
+      if (!isOpen) {
+        this.form.id = 0
+        this.form.text = ""
+        this.$validator.reset()
+      }
+    },
   }
 }
 </script>
 
 <style scoped>
-.card-body {
-  z-index: 1;
-}
+
 </style>

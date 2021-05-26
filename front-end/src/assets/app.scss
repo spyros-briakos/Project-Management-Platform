@@ -16,8 +16,9 @@
 
 ///////////////////////
 // .row.flex-nowrap.mt-1 {
-  // position: fixed;
-  // z-index: 0;
+//   position: fixed;
+//   display: flex;
+//   z-index: 0;
 // }
 
 .scrolling-wrapper::-webkit-scrollbar {
@@ -167,7 +168,8 @@
 
 //////////////////////////////////////////
 // .col-3.list-column.list-width {
-//   position: fixed;
+//   position: relative;
+//   // display: flex;
 //   z-index: 0;
 // }
 
