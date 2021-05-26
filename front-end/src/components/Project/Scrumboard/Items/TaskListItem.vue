@@ -165,9 +165,6 @@ export default {
         this.$validator.reset()
       }
     },
-    terminate() {
-      this.isEditing = false
-    }
   }
 }
 </script>
