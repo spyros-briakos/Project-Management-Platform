@@ -4,8 +4,6 @@
 
     <AppNavigation v-if="!['SignIn','SignUp','ForgotPassword'].includes($route.name)"></AppNavigation>
     
-    <AppHeader v-if="['Task-board'].includes($route.name)"></AppHeader>
-
     <v-content transition="slide-x-transition" style="background-color: #9bc9bb;"> 
       <router-view></router-view>
     </v-content>   
@@ -22,7 +20,7 @@
 <script>
 import AppNavigation from "./components/AppNavigation.vue"
 import myFooter from "./components/homepage/footer.vue"
-import AppHeader from "./components/Project/Scrumboard/AppHeader"
+// import AppHeader from "./components/Project/Scrumboard/AppHeader"
 import AppLoadingIndicator from "./components/Project/Scrumboard/AppLoadingIndicator"
 import { mapGetters } from "vuex"
 
@@ -31,7 +29,7 @@ export default {
   components: {
       AppNavigation,
       myFooter,
-      AppHeader,
+      // AppHeader,
       AppLoadingIndicator
   },  
   beforeCreate() {
