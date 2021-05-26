@@ -3,6 +3,7 @@
 
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
       <template v-slot:handle1>
+        
         <span class="edit" v-if="!isNewItem"> 
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
@@ -47,8 +48,17 @@
 
       <template v-slot:content1>
       <form>
-        <h4>{{ heading }}</h4>
-        <input
+        <!-- <h4>{{ heading }}</h4> -->
+        
+        <!-- <dropdown class="my-dropdown-toggle"
+          :options="arrayOfObjects" 
+          :selected="object" 
+          v-on:updateOption="methodToRunOnSelect" 
+          :placeholder="'Select an Item'"
+          :closeOnOutsideClick="boolean">
+        </dropdown> -->
+        
+        <input style="margin-top: 100px;"
           name="itemDetails"
           rows="3"
           class="form-control"
@@ -60,15 +70,15 @@
         <small class="text-danger" style="display:block">{{ errors.first("itemDetails") }}</small>
         <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
         <!-- <div> -->
-          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 350px; left:250px;" @click.prevent="save">
+          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 350px; left:230px;" @click.prevent="save">
             Save
           </button> 
-          <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 350px; left:340px;"  @click.prevent="cancel">
+          <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 350px; left:320px;"  @click.prevent="cancel">
             Cancel
           </button>
         <!-- </div> -->
         <!-- <div v-show="!isNewItem"> -->
-          <button class="btn btn-sm text-danger"  style="position:fixed; top: 350px; left:460px;" @click.prevent="remove">
+          <button class="btn btn-sm text-danger"  style="position:fixed; top: 350px; left:420px;" @click.prevent="remove">
             Delete
           </button>
         <!-- </div> -->
@@ -90,10 +100,12 @@
 <script>
 import { mapActions } from "vuex"
 import BacklogPopup from '../Details/BacklogPopup.vue'
+// import dropdown from 'vue-dropdowns';
 
 export default {
   components: { 
-    BacklogPopup 
+    BacklogPopup,
+    // 'dropdown': dropdown,
     },
   props: ["item", "list", "board"],
   computed: {
@@ -110,6 +122,10 @@ export default {
       form: {
         id: "",
         text: ""
+      },
+      arrayOfObjects: [],
+      object: {
+        name: 'Object Name',
       }
     }
   },
@@ -169,6 +185,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.my-dropdown-toggle {
+  border-radius: 5px;
 
+  ::v-deep .dropdown-toggle {
+    color: tomato;
+    font-size: 25px;
+    font-weight: 800;
+  }
+
+  ::v-deep .dropdown-toggle-placeholder {
+    color: #c4c4c4;
+  }
+}
 </style>
