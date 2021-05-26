@@ -9,20 +9,18 @@ const UserStorySchema = new mongoose.Schema({
     required: true
   },
   description: String,
+  // Type of user story. 'Issue' is referred to small user stories and 'epic' is referred to all the others
   label: {
     type: String,
     enum: ['issue', 'epic']
   },
+  // Tasks that are needed for the story to be implemented
   tasks: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Task"
     }
   ],
-//   creator: {     // Project's Product Owner
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "User"
-//   },
   status: {
       type: String,
       enum: ['toDo', 'inProgress', 'done'],
@@ -34,6 +32,7 @@ const UserStorySchema = new mongoose.Schema({
     type: Number,
     // required: true
   },
+  // Sprints in which the user story is predicted to be implemented
   sprints: [
     {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,3 +1,6 @@
+'use strict'
+
+// IMPORT PACKAGES
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');

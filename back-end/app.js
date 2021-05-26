@@ -1,16 +1,16 @@
 'use strict'
 
-// IMPORT PACKAGED
-const express = require("express");             // Basic Package for API structure
-const mongoose = require("mongoose");           // MongoDB
-const logger = require('./middlewares/logger'); // Print logger on requests
-// const bodyParser = require('body-parser');   // ...
+// IMPORT PACKAGES
+const express = require("express");               // Basic Package for API structure
+const mongoose = require("mongoose");             // MongoDB
+const logger = require('./middlewares/logger');   // Print logger on requests
+// const bodyParser = require('body-parser');     // ...
 const session = require("express-session");
-const passport = require("passport");           // For user authentication
-const localStradegy = require("passport-local");// For user authentication
+const passport = require("passport");             // For user authentication
+const localStradegy = require("passport-local");  // For user authentication
 
-require("dotenv/config");                       // Protect sensitive information
-require('./auth/auth');                         // For user authentication
+require("dotenv/config");                         // Protect sensitive information
+require('./auth/auth');                           // For user authentication
 
 // Authentication middleware (for user's secure routes)
 const authenticate = require("./middlewares/authenticate");
@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));  // Instead of bodyParser
 app.use(logger);
 
 app.use(session({
+  // ?secret: process.env.SESSION_SECRET,
   secret: 'could_be_anything',
   resave: false,
   saveUninitialized: true
@@ -34,19 +35,19 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Import User model
-const { User } = require("./models/User");
-
 // ROUTES
 const userRoutes = require('./routes/users');
 const user_storyRoutes = require('./routes/user_stories');
 const projectRoutes = require('./routes/projects');
+const secureRoute = require('./routes/secure-routes');
+
+// MAKE ROUTES AVAILABLE
+// Public routes
 app.use('/api-control/users', userRoutes);
 app.use('/api-control/user-stories', user_storyRoutes);
+// Routes for logged users
+// Plug in the JWT strategy as a middleware, so only verified users can access these routes.
 app.use('/api-control/projects', authenticate, projectRoutes);
-
-const secureRoute = require('./routes/secure-routes');
-// Plug in the JWT strategy as a middleware so only verified users can access this route.
 app.use('/api-control/secure-routes', authenticate, secureRoute);
 
 // // DECLARE VARS
