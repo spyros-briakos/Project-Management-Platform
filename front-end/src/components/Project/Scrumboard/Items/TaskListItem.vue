@@ -1,6 +1,7 @@
 <template>
   <div class="card tasklist-item">   
 
+    <!-- Doesn't matter if we have popup-toggled or not? -->
     <!-- <BacklogPopup ref="newItemPopup"> -->
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
     <!-- <BacklogPopup ref="newItemPopup"> -->
