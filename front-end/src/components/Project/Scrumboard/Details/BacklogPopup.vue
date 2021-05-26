@@ -55,9 +55,10 @@ details.popupp div {
   animation: fadein 200ms ease-in-out;
   transform: translate(-50%, -50%);
   max-height: calc(100vh - 80px);
-  max-width: 600px;
+  max-width: 700px;
+  /* width: 1000px; */
   width: calc(100% - 80px);
-  height: 200px;
+  height: 400px;
   overflow-y: auto;
   z-index: 999;
   color: #000;

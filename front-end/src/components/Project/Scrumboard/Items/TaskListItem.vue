@@ -50,24 +50,36 @@
         </div>
       </template>  -->
 
-      <!-- <template v-slot:content1>
+      <template v-slot:content1>
       <form>
         <h4>{{ heading }}</h4>
         <input
-          name="listName"
-          type="text"
-          class="form-control my-1"
+          name="itemDetails"
+          rows="3"
+          class="form-control"
           v-model.trim="form.text"
           v-validate="'required'"
-          data-vv-as="List Name"
-          placeholder="Enter your list name"
+          data-vv-as="Item Details"
+          placeholder="Your item description"
         />
-        <small class="text-danger" style="display:block">{{ errors.first("listName") }}</small>
-        <button class="btn btn-sm btn-app mt-2" >
-          Save List
-        </button>
+        <small class="text-danger" style="display:block">{{ errors.first("itemDetails") }}</small>
+        <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
+        <!-- <div> -->
+          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 350px; left:250px;" @click.prevent="save">
+            Save
+          </button> 
+          <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 350px; left:340px;"  @click.prevent="cancel">
+            Cancel
+          </button>
+        <!-- </div> -->
+        <!-- <div v-show="!isNewItem"> -->
+          <button class="btn btn-sm text-danger"  style="position:fixed; top: 350px; left:460px;" @click.prevent="remove">
+            Delete
+          </button>
+        <!-- </div> -->
+      <!-- </div> -->
       </form>
-    </template> -->
+    </template>
 
     </BacklogPopup>
 
