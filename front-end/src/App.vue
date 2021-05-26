@@ -8,8 +8,7 @@
       <router-view></router-view>
     </v-content>   
   
-    <!-- <AppLoadingIndicator v-if="['Task-board'].includes($route.name)"></AppLoadingIndicator> -->
-    <AppLoadingIndicator></AppLoadingIndicator>
+    <LoadingIndicator></LoadingIndicator>
 
     <myFooter v-if="!['SignIn','SignUp','profile','profSettings','coWorkers','myProjects','Upgrade','ForgotPassword','Projects','Roadmap','Chart', 'Comments','History','Task-board', 'Kanban'].includes($route.name)"></myFooter>
   
@@ -20,8 +19,7 @@
 <script>
 import AppNavigation from "./components/AppNavigation.vue"
 import myFooter from "./components/homepage/footer.vue"
-// import AppHeader from "./components/Project/Scrumboard/AppHeader"
-import AppLoadingIndicator from "./components/Project/Scrumboard/AppLoadingIndicator"
+import LoadingIndicator from "./components/Project/Scrumboard/LoadingIndicator"
 import { mapGetters } from "vuex"
 
 export default {
@@ -29,8 +27,7 @@ export default {
   components: {
       AppNavigation,
       myFooter,
-      // AppHeader,
-      AppLoadingIndicator
+      LoadingIndicator
   },  
   beforeCreate() {
     this.$store.dispatch("fetchData")

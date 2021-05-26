@@ -1,7 +1,6 @@
 <template>
   <div class="scrolling-wrapper">   
-    <AppHeader v-if="['Task-board'].includes($route.name)"></AppHeader>
-
+    <Header v-if="['Task-board'].includes($route.name)"></Header>
     <draggable v-model="lists" class="row flex-nowrap mt-1" v-bind="getDragOptions">
       <TaskList v-for="(listItem, index) in lists" :key="index" :board="getBoard" :list="listItem"></TaskList>
     </draggable>
@@ -10,7 +9,7 @@
 
 <script>
 import TaskList from "../Scrumboard/Lists/TaskList.vue"
-import AppHeader from "../Scrumboard/AppHeader.vue"
+import Header from "./Header.vue"
 import Draggable from "vuedraggable"
 import { mapGetters, mapActions } from "vuex"
 export default {
@@ -18,7 +17,7 @@ export default {
   components: {
     TaskList,
     Draggable,
-    AppHeader
+    Header
   },
   computed: {
     ...mapGetters({

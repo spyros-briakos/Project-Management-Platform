@@ -1,18 +1,11 @@
 <template>
   <div class="card tasklist-item">   
 
-    <!-- Doesn't matter if we have popup-toggled or not? -->
-    <!-- <BacklogPopup ref="newItemPopup"> -->
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
-    <!-- <BacklogPopup ref="newItemPopup"> -->
-      
       <template v-slot:handle1>
         
         <span class="edit" v-if="!isNewItem"> 
-          <!-- With startEditing stucks -->
-          <!-- <i class="fas fa-pen" @click="startEditing"></i>  -->
-
-          <i class="fas fa-pen"></i> 
+          <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
       </template>
 
@@ -144,7 +137,6 @@ export default {
     startEditing() {
       this.form.id = this.item.id
       this.form.text = this.item.text
-      this.isEditing = true
       this.$emit("item-editing")
     },
     clearForm() {
@@ -152,7 +144,7 @@ export default {
       this.form.text = ""
     },
     save() {
-      this.$validator.validateAll().then(result => {
+        this.$validator.validateAll().then(result => {
         if (result) {
           const updatedItem = {
             id: this.form.id,
@@ -163,15 +155,15 @@ export default {
             listId: this.list.id,
             item: updatedItem
           })
-          this.isEditing = false
           this.$emit("item-edited")
           this.$validator.reset()
         }
+        this.$refs.newItemPopup.close()
       })
     },
     cancel() {
-      this.isEditing = false
       this.$emit("item-cancelled")
+      this.$refs.newItemPopup.close()
     },
     remove() {
       this.deleteTaskListItem({
@@ -180,6 +172,7 @@ export default {
         item: this.item
       })
       this.$emit("item-deleted")
+      this.$refs.newItemPopup.close()
     },
     handlePopupToggled1(isOpen) {
       if (!isOpen) {
@@ -188,8 +181,8 @@ export default {
         this.$validator.reset()
       }
     },
-    methodToRunOnSelect(payload) {
-      this.object = payload;
+    terminate() {
+      this.isEditing = false
     }
   }
 }
