@@ -1,7 +1,6 @@
 <template>
   <div class="col-3 list-column list-width">
     <div class="heading" :style="{ backgroundColor: '#FF914D' }">
-    <!-- <div class="heading" :style="{ backgroundColor: list.headerColor }"> -->
       <h4 class="heading-text text-center">{{ list.name }}</h4>
       <TaskListActions :board="board" :list="list"></TaskListActions>
     </div>
@@ -16,6 +15,7 @@
           @item-edited="itemEdited"
           @item-cancelled="itemCancelled"
           @item-editing="itemEditing"
+          @item-deleted="itemDeleted"
         ></TaskListItem>
       </draggable>
       <TaskListItem
@@ -90,6 +90,9 @@ export default {
       this.isEditing = false
     },
     itemCancelled() {
+      this.isEditing = false
+    },
+    itemDeleted() {
       this.isEditing = false
     }
   }

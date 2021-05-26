@@ -1,10 +1,10 @@
 <template>
-  <details class="popup" ref="details" v-on:toggle="popupToggled()">
+  <details class="popupp" ref="details1" v-on:toggle="popupToggled1()">
     <summary>
-      <slot name="handle"></slot>
+      <slot name="handle1"></slot>
     </summary>
     <div>
-      <slot name="content">Put your contents here</slot>
+      <slot name="content1">Put your contents here</slot>
     </div>
   </details>
 </template>
@@ -13,28 +13,31 @@
 export default {
   methods: {
     open() {
-      this.$refs.details.setAttribute("open", "")
+      this.$refs.details1.setAttribute("open", "")
     },
     close() {
-      this.$refs.details.removeAttribute("open")
+      this.$refs.details1.removeAttribute("open")
     },
-    popupToggled() {
-      const isOpen = this.$refs.details.getAttribute("open") !== null ? true : false
-      this.$emit("popup-toggled", isOpen)
-    }   
+    popupToggled1() {
+      const isOpen = this.$refs.details1.getAttribute("open") !== null ? true : false
+      this.$emit("popup-toggled1", isOpen)
+    },
+    terminate() {
+      this.isEditing = false
+    }
   }
 }
 </script>
 
 <style scope>
 /* Experimental : Details implementation */
-details.popup summary {
+details.popupp summary {
   outline: none;
   cursor: pointer;
   display: inline-block;
 }
 
-details.popup summary::-webkit-details-marker {
+details.popupp summary::-webkit-details-marker {
   display: none;
 }
 
@@ -48,15 +51,17 @@ details.popup summary::-webkit-details-marker {
   }
 }
 
-details.popup div {
+details.popupp div {
   position: fixed;
-  top: 500%;
+  top: 50%;
   left: 50%;
   animation: fadein 200ms ease-in-out;
   transform: translate(-50%, -50%);
   max-height: calc(100vh - 80px);
-  max-width: 600px;
+  max-width: 700px;
+  /* width: 1000px; */
   width: calc(100% - 80px);
+  height: 400px;
   overflow-y: auto;
   z-index: 999;
   color: #000;
@@ -66,7 +71,7 @@ details.popup div {
   border-radius: 5px;
 }
 
-details[open].popup summary:before {
+details[open].popupp summary:before {
   position: fixed;
   top:-90px;
   right: -20px;
