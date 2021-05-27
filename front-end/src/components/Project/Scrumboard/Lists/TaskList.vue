@@ -55,6 +55,8 @@ export default {
       }
     },
     dragOptions() {
+      // console.log("TaskList.dragOptions isEditing:", this.isEditing)
+      
       return {
         animation: "200",
         ghostClass: "ghost",
@@ -85,6 +87,8 @@ export default {
     }),
     itemEditing() {
       this.isEditing = true
+      // console.log("TaskList.itemEditing ", this.isEditing)
+      
     },
     itemEdited() {
       this.isEditing = false

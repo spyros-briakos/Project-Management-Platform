@@ -137,6 +137,8 @@ export default {
     startEditing() {
       this.form.id = this.item.id
       this.form.text = this.item.text
+      this.isEditing = true
+      // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
       this.$emit("item-editing")
     },
     clearForm() {
@@ -180,6 +182,10 @@ export default {
         this.form.text = ""
         this.$validator.reset()
       }
+      this.isEditing = isOpen
+      if(!isOpen)
+        this.$emit("item-cancelled")
+      // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
     },
   }
 }
