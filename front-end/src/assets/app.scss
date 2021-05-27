@@ -240,6 +240,7 @@ div#searching {
 	top: 0;
 	display: none;
   font-size: medium;
+  // max-width: 100px;
 }
 
 .edit a {
@@ -248,6 +249,8 @@ div#searching {
 
 .fas.fa-pen {
   color:#418B75;
+  // position: relative;
+  // right: 10px;
 }
 
 .form-outline {
@@ -278,4 +281,22 @@ div#searching {
 .btn.btn-sm.text-danger {
   // padding-top:290px;
   // margin-right: -20px;
+}
+
+// .editt {
+//   position: fixed;
+//   padding-left:100px;
+// }
+
+#popupheader {
+  position: fixed;
+  display: flex;
+  // max-height: 1px;
+  // padding-top: 10px;
+  // padding-top: 10px;
+  // max-height: 10%;
+  top:30px;
+  height: 60px;
+  width: 100%;
+  background-color:#6eb8a2;
 }

@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <Box
       :left="true"
