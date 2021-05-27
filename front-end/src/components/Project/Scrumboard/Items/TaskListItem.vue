@@ -7,6 +7,10 @@
         <span class="edit" v-if="!isNewItem"> 
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
+        <span class="edit_2" v-else> 
+          <i class="fas fa-plus-circle" @click="startEditing"></i> 
+        </span> 
+
       </template>
 
       <template v-slot:content1>
@@ -23,7 +27,6 @@
 
       <form style="position: relative; height:38px; top:80px;">
         <!-- <h4>{{ heading }}</h4> -->
-        
         
         <input style="position:fixed; top: 100px; width: 660px"
           name="itemDetails"
@@ -80,7 +83,8 @@ export default {
       return this.item.id == ""
     },
     displayText() {
-      return this.isNewItem ? "+ New Item" : this.item.text
+      // return this.isNewItem ? "+ New Item" : this.item.text
+      return this.isNewItem ? "" : this.item.text
     },
   },
   data() {

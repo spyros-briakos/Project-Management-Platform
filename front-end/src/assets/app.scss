@@ -242,17 +242,28 @@ div#searching {
 	top: 0;
 	display: none;
   font-size: medium;
-  // max-width: 100px;
 }
 
 .edit a {
 	color: #000;
 }
 
+.edit_2 {
+  padding-top: 7px;	
+	padding-right: 7px;
+	position: absolute;
+	right: 43%;
+	top: 10%;
+	// display: none;
+  font-size: medium;
+}
+
 .fas.fa-pen {
   color:#418B75;
-  // position: relative;
-  // right: 10px;
+}
+
+.fas.fa-plus-circle {
+  color:#418B75;
 }
 
 .form-outline {
@@ -290,17 +301,16 @@ div#searching {
 //   padding-left:100px;
 // }
 
-.popupheader {
+#popupheader {
   position: fixed;
   display: flex;
   // max-height: 1px;
   // padding-top: 10px;
   // padding-top: 10px;
   // max-height: 10%;
-  top: 0px;
-  height: 70px;
+  top:30px;
+  height: 60px;
   width: 100%;
-  right: 0px;
   background-color:#6eb8a2;
 }
 
