@@ -7,6 +7,10 @@
         <span class="edit" v-if="!isNewItem"> 
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
+        <span class="edit" v-else> 
+        <i class="fas fa-plus-circle" @click="startEditing"></i> 
+        </span> 
+
       </template>
 
       <template v-slot:content1>
