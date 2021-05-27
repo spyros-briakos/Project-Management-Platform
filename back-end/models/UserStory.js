@@ -26,8 +26,8 @@ const UserStorySchema = new mongoose.Schema({
       enum: ['toDo', 'inProgress', 'done'],
       default: 'toDo'
   },
-  starting_date: Date,
-  ending_date: Date,
+  startingDate: Date,
+  endingDate: Date,
   estimated_duration: {
     type: Number,
     // required: true
@@ -38,7 +38,7 @@ const UserStorySchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Sprint"
     }
-  ]
+  ],
 });
 
 // User Story model

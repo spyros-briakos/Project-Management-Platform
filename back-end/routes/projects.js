@@ -9,12 +9,19 @@ const serializers = require("../serializers");
 // Import Project model
 const Project = require("../models/Project");
 const { User } = require("../models/User");
+const { projectDetailsSerializer } = require("../serializers/projects");
+const UserStory = require("../models/UserStory");
 
 // Get all projects
 router.get("/", async (req, res) => {
   try {
     const projects = await Project.find({});
-    res.json(projects);
+    context = []
+    for (let i in projects) {
+      context.push(projectDescriptionSerializer(projects[i]))
+    }
+
+    res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -26,8 +33,152 @@ router.post("/get-sprints", async (req, res) => {
     // const user = req.user;
     // const projectName = req.project;
     const project = await Project.find({name: req.body.project});
+    for (let i in project.sprints) {
+      let members = []
+      for (let j in project.sprints[i].members) {
+        members.push(project.sprints[i].members[j].username)
+      }
+      project.sprints[i].members = members
+    }
     
     res.json(project.sprints);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// Get all projects
+router.post("/get-userstories", async (req, res) => {
+  try {
+    const project = await Project.find({name: req.body.project});
+    
+    res.json(project.userStories);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// Get all projects
+router.post("/get-details", async (req, res) => {
+  try {
+    const project = await Project.find({name: req.body.project});
+    context = projectDetailsSerializer(project)
+
+    res.json(context);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// ADD USERSTORY/ SPRINT/ TASK
+
+router.post("/add-userstory", async (req, res) => {
+  try {
+    const project = await Project.find({name: req.body.project});
+    const user = req.user;
+    if (project.productOwner !== user._id) throw 'Unauthorized action'
+
+    const userStory = new UserStory(req.body.userStory);
+    userStory.tasks = []
+    userStory.sprints = []
+    const savedUserStory = await userStory.save();
+    project.userStories.push(savedUserStory._id)
+
+    res.json(savedUserStory);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+router.post("/add-sprint", async (req, res) => {
+  try {
+    const project = await Project.find({name: req.body.project});
+    const user = req.user;
+    if (project.productOwner !== user._id) throw 'Unauthorized action'
+
+    const sprint = new Sprint(req.body.sprint);
+    const savedSprint = await sprint.save();
+    project.sprints.push(savedSprint._id)
+
+    res.json(savedSprint);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+router.post("/add-task", async (req, res) => {
+  try {
+    const project = await Project.find({name: req.body.project});
+    const user = req.user;
+    if (!project.members.includes(user._id)) throw 'Unauthorized action'
+
+    const userStory = await UserStory.find({name: req.body.userStory});
+
+    const task = new Task(req.body.task);
+    const savedTask = await task.save();
+    if (savedTask.sprint) {
+      const sprint = await Sprint.findById(savedTask.sprint);
+      sprint.tasks.push(savedTask._id)
+    }
+    userStory.tasks.push(savedTask._id)
+
+    res.json(savedTask);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// EDIT USERSTORY/ SPRINT/ TASK
+
+router.post("/edit-userstory", async (req, res) => {
+  try {
+    const project = await Project.find({name: req.body.project});
+    const user = req.user;
+    const userStory = await UserStory.findById(req.body.userStory.id);
+    if (!project.userStories.includes(userStory._id) && project.productOwner !== user._id) throw 'Unauthorized action'
+    
+    if (req.body.userStory.status == 'done' && req.body.userStory.status != userStory.status) {
+      req.body.userStory.endingDate = Date.now();
+    }
+    const updatedUserStory = await UserStory.findByIdAndUpdate(req.body.userStory.id, req.body.userStory, { runValidators: true, new: true });
+
+    res.json(updatedUserStory);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+router.post("/edit-sprint", async (req, res) => {
+  try {
+    const project = await Project.find({name: req.body.project});
+    const user = req.user;
+    const sprint = await Sprint.findById(req.body.sprint.id);
+    if (!project.userStories.includes(sprint._id) && project.productOwner !== user._id) throw 'Unauthorized action'
+    
+    if (req.body.sprint.status == 'done' && req.body.sprint.status != sprint.status) {
+      req.body.sprint.endingDate = Date.now();
+    }
+    const updatedSprint = await Sprint.findByIdAndUpdate(req.body.sprint.id, req.body.sprint, { runValidators: true, new: true });
+
+    res.json(updatedSprint);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+router.post("/edit-task", async (req, res) => {
+  try {
+    const project = await Project.find({name: req.body.project});
+    const user = req.user;
+    const task = await Task.findById(req.body.task.id);
+    if (!project.userStories.includes(task._id) && project.productOwner !== user._id) throw 'Unauthorized action'
+    
+    if (req.body.task.status == 'done' && req.body.task.status != task.status) {
+      req.body.task.endingDate = Date.now();
+    }
+    const updatedTask = await Task.findByIdAndUpdate(req.body.task.id, req.body.task, { runValidators: true, new: true });
+
+    res.json(updatedTask);
   } catch (error) {
     res.status(400).json({ message: error });
   }

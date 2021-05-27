@@ -232,7 +232,6 @@ router.post('/project-invite/:projectId', async(req, res) => {
 
     // For each user specified in the request
     for (let username of req.body.users) {
-      try {
         // Find user in the db
         const user = await User.findOne({ username: username }).exec();
 
@@ -286,10 +285,6 @@ router.post('/project-invite/:projectId', async(req, res) => {
 
         // Keep usernames that will receive an invitation, to report them to the user in case of an error
         sent.push(username);
-      } catch (err) {
-        console.log('1',err);
-        return res.status(400).json({ message: err });
-      }
     }
 
     if(req.body.users.length == 1) {
@@ -298,7 +293,6 @@ router.post('/project-invite/:projectId', async(req, res) => {
       res.json({ message: `Όλες οι προσκλήσεις μελών στο project ${req.body.project} στάλθηκαν με επιτυχία!` });
     }
   } catch (error) {
-    console.log('2',error);
     res.status(400).json({ message: error });
   }
 });

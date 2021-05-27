@@ -21,8 +21,8 @@ const SprintSchema = new mongoose.Schema({
     enum: ['toDo', 'inProgress', 'done'],
     default: 'toDo',
   },
-  starting_date: Date,
-  ending_date: Date,
+  startingDate: Date,
+  endingDate: Date,
   // Estimated duration of sprint. Counting in days
   estimated_duration: {
     type: Number,

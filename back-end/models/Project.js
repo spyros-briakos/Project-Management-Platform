@@ -25,6 +25,12 @@ const ProjectSchema = new mongoose.Schema({
 			ref: "Sprint"
 		}
   ],
+  userStories: [
+    {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "UserStory"
+		}
+  ],
   members: [
     {
 			type: mongoose.Schema.Types.ObjectId,

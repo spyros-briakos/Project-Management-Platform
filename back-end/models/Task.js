@@ -12,7 +12,8 @@ const TaskSchema = new mongoose.Schema({
   // User story in which task is contained
   userStory: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "UserStory"
+    ref: "UserStory",
+    required: true
   },
   // Sprint in which task is contained
   Sprint: {
@@ -28,8 +29,8 @@ const TaskSchema = new mongoose.Schema({
     enum: ['toDo', 'inProgress', 'done'],
     default: 'toDo',
   },
-  starting_date: Date,
-  ending_date: Date,
+  startingDate: Date,
+  endingDate: Date,
   estimated_duration:  Number,
   // Members of the team on who the task is assigned
   members: [
