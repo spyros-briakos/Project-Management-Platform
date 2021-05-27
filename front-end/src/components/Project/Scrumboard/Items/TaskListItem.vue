@@ -204,12 +204,6 @@ export default {
         this.$validator.reset()
       }
     },
-    terminate() {
-      this.isEditing = false
-    },
-    setNewSelectedOption(selectedOption) {
-      this.config.placeholder = selectedOption.value;
-    }
   }
 }
 </script>

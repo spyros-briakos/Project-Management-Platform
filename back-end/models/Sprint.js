@@ -6,36 +6,28 @@ const mongoose = require("mongoose");
 const SprintSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: false
   },
   description: String,
+  // Tasks that are scheduled to be done in the specific sprint
   tasks: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Task"
     }
   ],
-//   creator: {     // Project's Product Owner
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "User"
-//   },
   status: {
     type: String,
     enum: ['toDo', 'inProgress', 'done'],
     default: 'toDo',
   },
-  starting_date: Date,
-  ending_date: Date,
+  startingDate: Date,
+  endingDate: Date,
+  // Estimated duration of sprint. Counting in days
   estimated_duration: {
     type: Number,
     default: 14
   },
-  // members: [
-  //     {
-  //         type: mongoose.Schema.Types.ObjectId,
-  //         ref: "User"
-  //     }
-  // ]
 });
 
 // Sprint model

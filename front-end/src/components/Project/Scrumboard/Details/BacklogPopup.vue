@@ -21,7 +21,10 @@ export default {
     popupToggled1() {
       const isOpen = this.$refs.details1.getAttribute("open") !== null ? true : false
       this.$emit("popup-toggled1", isOpen)
-    }   
+    },
+    terminate() {
+      this.isEditing = false
+    }
   }
 }
 </script>
