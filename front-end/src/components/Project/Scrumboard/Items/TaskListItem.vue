@@ -7,58 +7,28 @@
         <span class="edit" v-if="!isNewItem"> 
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
+        <span class="edit_2" v-else> 
+          <i class="fas fa-plus-circle" @click="startEditing"></i> 
+        </span> 
+
       </template>
 
-      <!-- <template v-slot:content1>
-        <div class="card">
-          <div class="card-body">
-            <form class="form">
-              <div class="form-group">
-                <textarea
-                  name="itemDetails"
-                  rows="3"
-                  class="form-control"
-                  v-model.trim="form.text"
-                  v-validate="'required'"
-                  data-vv-as="Item Details"
-                  placeholder="Your item description"
-                ></textarea>
-                <small class="text-danger">{{ errors.first("itemDetails") }}</small>
-              </div>
-
-              <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']">
-                <div>
-                  <button class="btn btn-outline-secondary btn-sm mr-2" @click.prevent="save">
-                    Save
-                  </button>
-                  <button class="btn btn-outline-secondary btn-sm" @click.prevent="cancel">
-                    Cancel
-                  </button>
-                </div>
-                <div v-show="!isNewItem">
-                  <button class="btn btn-sm text-danger" @click.prevent="remove">
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </template>  -->
-
       <template v-slot:content1>
-      <form>
+       
+      <div class="popupheader">
+        <!-- <h3>hii</h3> -->
+        <div style="z-index:9999;">
+          <vue-dropdown 
+            :config="config"
+            @setSelectedOption="setNewSelectedOption($event);"
+          ></vue-dropdown>
+        </div>
+      </div>
+
+      <form style="position: relative; height:38px; top:80px;">
         <!-- <h4>{{ heading }}</h4> -->
         
-        <!-- <dropdown class="my-dropdown-toggle"
-          :options="arrayOfObjects" 
-          :selected="object" 
-          v-on:updateOption="methodToRunOnSelect" 
-          :placeholder="'Select an Item'"
-          :closeOnOutsideClick="boolean">
-        </dropdown> -->
-        
-        <input style="margin-top: 100px;"
+        <input style="position:fixed; top: 100px; width: 660px"
           name="itemDetails"
           rows="3"
           class="form-control"
@@ -100,12 +70,12 @@
 <script>
 import { mapActions } from "vuex"
 import BacklogPopup from '../Details/BacklogPopup.vue'
-// import dropdown from 'vue-dropdowns';
+import VueDropdown from 'vue-dynamic-dropdown'
 
 export default {
   components: { 
     BacklogPopup,
-    // 'dropdown': dropdown,
+    VueDropdown
     },
   props: ["item", "list", "board"],
   computed: {
@@ -113,7 +83,8 @@ export default {
       return this.item.id == ""
     },
     displayText() {
-      return this.isNewItem ? "+ New Item" : this.item.text
+      // return this.isNewItem ? "+ New Item" : this.item.text
+      return this.isNewItem ? "" : this.item.text
     },
   },
   data() {
@@ -126,6 +97,25 @@ export default {
       arrayOfObjects: [],
       object: {
         name: 'Object Name',
+      },
+      config: {
+        options: [
+          {
+            value: "option 1"
+          },
+          {
+            value: "option 2"
+          },
+          {
+            value: "option 3"
+          }
+        ],
+        placeholder: "Placeholder",
+        backgroundColor: "#cde4f5",
+        textColor: "black",
+        borderRadius: "1.5em",
+        border: "1px solid gray",
+        width: 180,
       }
     }
   },
@@ -137,6 +127,8 @@ export default {
     startEditing() {
       this.form.id = this.item.id
       this.form.text = this.item.text
+      this.isEditing = true
+      // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
       this.$emit("item-editing")
     },
     clearForm() {
@@ -180,23 +172,14 @@ export default {
         this.form.text = ""
         this.$validator.reset()
       }
+      this.isEditing = isOpen
+      if(!isOpen)
+        this.$emit("item-cancelled")
+      // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
     },
+    setNewSelectedOption(selectedOption) {
+      this.config.placeholder = selectedOption.value;
+    }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.my-dropdown-toggle {
-  border-radius: 5px;
-
-  ::v-deep .dropdown-toggle {
-    color: tomato;
-    font-size: 25px;
-    font-weight: 800;
-  }
-
-  ::v-deep .dropdown-toggle-placeholder {
-    color: #c4c4c4;
-  }
-}
-</style>

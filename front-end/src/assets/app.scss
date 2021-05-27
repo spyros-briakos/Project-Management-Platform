@@ -158,6 +158,8 @@
 .cards.cards-list {
   max-height: 68%;
   max-width: 100%;
+  background: rgba(0, 0, 0, 0.158);
+  // background-color: #FD8D37;
   // z-index: -1;
   // position: fixed;
 }
@@ -246,7 +248,21 @@ div#searching {
 	color: #000;
 }
 
+.edit_2 {
+  padding-top: 7px;	
+	padding-right: 7px;
+	position: absolute;
+	right: 43%;
+	top: 10%;
+	// display: none;
+  font-size: medium;
+}
+
 .fas.fa-pen {
+  color:#418B75;
+}
+
+.fas.fa-plus-circle {
   color:#418B75;
 }
 
@@ -278,4 +294,31 @@ div#searching {
 // .btn.btn-sm.text-danger {
   // padding-top:290px;
   // margin-right: -20px;
+// }
+
+// .editt {
+//   position: fixed;
+//   padding-left:100px;
+// }
+
+#popupheader {
+  position: fixed;
+  display: flex;
+  // max-height: 1px;
+  // padding-top: 10px;
+  // padding-top: 10px;
+  // max-height: 10%;
+  top:30px;
+  height: 60px;
+  width: 100%;
+  background-color:#6eb8a2;
+}
+
+// #dropdownn {
+  // font-family: "Avenir", Helvetica, Arial, sans-serif;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+  // text-align: center;
+  // color: #2c3e50;
+  // margin-top: 60px;
 // }

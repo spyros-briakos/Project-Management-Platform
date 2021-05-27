@@ -3,7 +3,7 @@
     <summary>
       <slot name="handle1"></slot>
     </summary>
-    <div>
+    <div class="p">
       <slot name="content1">Put your contents here</slot>
     </div>
   </details>
@@ -20,16 +20,15 @@ export default {
     },
     popupToggled1() {
       const isOpen = this.$refs.details1.getAttribute("open") !== null ? true : false
-      this.$emit("popup-toggled1", isOpen)
+      this.isEditing = isOpen
+      // console.log("BacklogPopup isEditing here: ", this.isEditing, " and isOpen here: ", isOpen)
+      this.$emit("popuptoggled1", isOpen)
     },
-    terminate() {
-      this.isEditing = false
-    }
   }
 }
 </script>
 
-<style scope>
+<style lang="scss" scope>
 /* Experimental : Details implementation */
 details.popupp summary {
   outline: none;
@@ -51,15 +50,14 @@ details.popupp summary::-webkit-details-marker {
   }
 }
 
-details.popupp div {
+.p {
   position: fixed;
-  top: 50%;
+  top:  50%;
   left: 50%;
   animation: fadein 200ms ease-in-out;
   transform: translate(-50%, -50%);
   max-height: calc(100vh - 80px);
   max-width: 700px;
-  /* width: 1000px; */
   width: calc(100% - 80px);
   height: 400px;
   overflow-y: auto;
@@ -85,4 +83,8 @@ details[open].popupp summary:before {
   z-index: 99;
   background: rgba(27, 31, 35, 0.5);
 }
+
+  details.popupp {
+    font-size: 0px;
+  }
 </style>

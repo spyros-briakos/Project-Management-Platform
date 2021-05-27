@@ -58,7 +58,7 @@ details.popup div {
   max-width: 600px;
   width: calc(100% - 80px);
   overflow-y: auto;
-  z-index: 999;
+  z-index: 999; 
   color: #000;
   background-color: #fff;
   padding: 20px;
