@@ -3,7 +3,7 @@
     <summary>
       <slot name="handle1"></slot>
     </summary>
-    <div>
+    <div class="p">
       <slot name="content1">Put your contents here</slot>
     </div>
   </details>
@@ -29,7 +29,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style lang="scss" scope>
 /* Experimental : Details implementation */
 details.popupp summary {
   outline: none;
@@ -51,9 +51,9 @@ details.popupp summary::-webkit-details-marker {
   }
 }
 
-details.popupp div {
+.p {
   position: fixed;
-  top: 50%;
+  top:  50%;
   left: 50%;
   animation: fadein 200ms ease-in-out;
   transform: translate(-50%, -50%);
@@ -86,6 +86,6 @@ details[open].popupp summary:before {
 }
 
 details.popupp {
-  padding: 0rem !important;
+  font-size: 0px;
 }
 </style>

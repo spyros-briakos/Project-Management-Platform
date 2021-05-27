@@ -48,7 +48,7 @@
 
       <template v-slot:content1>
        
-      <div id="popupheader">
+      <div class="popupheader">
         <!-- <h3>hii</h3> -->
         
         <vue-dropdown

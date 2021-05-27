@@ -158,6 +158,8 @@
 .cards.cards-list {
   max-height: 68%;
   max-width: 100%;
+  // background: rgba(0, 0, 0, 0.274);
+  // background-color: #FD8D37;
   // z-index: -1;
   // position: fixed;
 }
@@ -281,22 +283,23 @@ div#searching {
 // .btn.btn-sm.text-danger {
   // padding-top:290px;
   // margin-right: -20px;
-}
+// }
 
 // .editt {
 //   position: fixed;
 //   padding-left:100px;
 // }
 
-#popupheader {
+.popupheader {
   position: fixed;
   display: flex;
   // max-height: 1px;
   // padding-top: 10px;
   // padding-top: 10px;
   // max-height: 10%;
-  top:30px;
-  height: 60px;
+  top: 0px;
+  height: 70px;
   width: 100%;
+  right: 0px;
   background-color:#6eb8a2;
 }
