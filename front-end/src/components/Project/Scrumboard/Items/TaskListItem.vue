@@ -1,37 +1,93 @@
 <template>
-  <div class="card tasklist-item" v-if="!isEditing">
-  <!-- <div class="card tasklist-item" v-if="!isEditing" @click.prevent="startEditing"> -->
-    <div class="edit" v-if="!isNewItem">
-      <a href="https://www.google.com/search?q=david+damiano&ei=nWWrYMiWG5fbkgW1sKuoDg&gs_ssp=eJzj4tVP1zc0TDOuKjI0y6o0YPTiTUksy0xRSEnMzUzMywcAilcJlw&oq=davi&gs_lcp=Cgdnd3Mtd2l6EAMYATIECAAQQzIICC4QsQMQgwEyBAguEEMyAggAMgIIADIFCC4QsQMyBQguELEDMgIILjIFCAAQsQMyCAguELEDEIMBOgcIABCwAxBDOggIABCxAxCwAzoLCAAQsQMQgwEQsAM6BQgAELADOggIABCxAxCDAToICAAQxwEQowI6CAgAEMcBEK8BOgcILhBDEJMCOgoIABDHARCvARBDOgcILhCxAxBDUK4eWL4nYKk0aAJwAHgAgAHMAYgBywaSAQUwLjQuMZgBAKABAaoBB2d3cy13aXrIAQrAAQE&sclient=gws-wiz"><i class="fas fa-pen"></i>
-      <!-- <BacklogPopup ref="newListPopup" v-show="this.activeBoard" @popup-toggled="handlePopupToggled">
-        <template v-slot:handle>
-          <span>
-            <i class="fas fa-pen"></i>
-          </span>
-        </template>
-        <template v-slot:content>
-          <form>
-            <h4>{{ heading }}</h4>
-            <input
-              name="listName"
-              type="text"
-              class="form-control my-1"
-              v-model.trim="listForm.name"
-              v-validate="'required'"
-              data-vv-as="List Name"
-              placeholder="Enter your list name"
-            />
-            <small class="text-danger" style="display:block">{{ errors.first("listName") }}</small>
-            <button class="btn btn-sm btn-app mt-2" @click.prevent="handleTaskListSave">
-              Save List
-            </button>
-          </form>
-        </template>
-      </BacklogPopup> -->
-      </a>
-    </div>
-    
-    
+  <div class="card tasklist-item">   
+
+    <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
+      <template v-slot:handle1>
+        
+        <span class="edit" v-if="!isNewItem"> 
+          <i class="fas fa-pen" @click="startEditing"></i> 
+        </span> 
+      </template>
+
+      <!-- <template v-slot:content1>
+        <div class="card">
+          <div class="card-body">
+            <form class="form">
+              <div class="form-group">
+                <textarea
+                  name="itemDetails"
+                  rows="3"
+                  class="form-control"
+                  v-model.trim="form.text"
+                  v-validate="'required'"
+                  data-vv-as="Item Details"
+                  placeholder="Your item description"
+                ></textarea>
+                <small class="text-danger">{{ errors.first("itemDetails") }}</small>
+              </div>
+
+              <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']">
+                <div>
+                  <button class="btn btn-outline-secondary btn-sm mr-2" @click.prevent="save">
+                    Save
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm" @click.prevent="cancel">
+                    Cancel
+                  </button>
+                </div>
+                <div v-show="!isNewItem">
+                  <button class="btn btn-sm text-danger" @click.prevent="remove">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </template>  -->
+
+      <template v-slot:content1>
+      <form>
+        <!-- <h4>{{ heading }}</h4> -->
+        
+        <!-- <dropdown class="my-dropdown-toggle"
+          :options="arrayOfObjects" 
+          :selected="object" 
+          v-on:updateOption="methodToRunOnSelect" 
+          :placeholder="'Select an Item'"
+          :closeOnOutsideClick="boolean">
+        </dropdown> -->
+        
+        <input style="margin-top: 100px;"
+          name="itemDetails"
+          rows="3"
+          class="form-control"
+          v-model.trim="form.text"
+          v-validate="'required'"
+          data-vv-as="Item Details"
+          placeholder="Your item description"
+        />
+        <small class="text-danger" style="display:block">{{ errors.first("itemDetails") }}</small>
+        <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
+        <!-- <div> -->
+          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 350px; left:230px;" @click.prevent="save">
+            Save
+          </button> 
+          <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 350px; left:320px;"  @click.prevent="cancel">
+            Cancel
+          </button>
+        <!-- </div> -->
+        <!-- <div v-show="!isNewItem"> -->
+          <button class="btn btn-sm text-danger"  style="position:fixed; top: 350px; left:420px;" @click.prevent="remove">
+            Delete
+          </button>
+        <!-- </div> -->
+      <!-- </div> -->
+      </form>
+    </template>
+
+    </BacklogPopup>
+
     <div class="card-body">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
         <span> {{ displayText }} </span>
@@ -39,50 +95,18 @@
     </div>
   
   </div>
-
-  <div class="card" v-else>
-    <div class="card-body">
-      <form class="form">
-        <div class="form-group">
-          <textarea
-            name="itemDetails"
-            rows="3"
-            class="form-control"
-            v-model.trim="form.text"
-            v-validate="'required'"
-            data-vv-as="Item Details"
-            placeholder="Your item description"
-          ></textarea>
-          <small class="text-danger">{{ errors.first("itemDetails") }}</small>
-        </div>
-
-        <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']">
-          <div>
-            <button class="btn btn-outline-secondary btn-sm mr-2" @click.prevent="save">
-              Save
-            </button>
-            <button class="btn btn-outline-secondary btn-sm" @click.prevent="cancel">
-              Cancel
-            </button>
-          </div>
-          <div v-show="!isNewItem">
-            <button class="btn btn-sm text-danger" @click.prevent="remove">
-              Delete
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-
 </template>
+
 <script>
-import { mapGetters, mapActions } from "vuex"
-// import BacklogPopup from '../Details/BacklogPopup.vue'
-import { Bus } from "@/utils/bus"
+import { mapActions } from "vuex"
+import BacklogPopup from '../Details/BacklogPopup.vue'
+// import dropdown from 'vue-dropdowns';
 
 export default {
-  // components: { BacklogPopup },
+  components: { 
+    BacklogPopup,
+    // 'dropdown': dropdown,
+    },
   props: ["item", "list", "board"],
   computed: {
     isNewItem() {
@@ -91,17 +115,6 @@ export default {
     displayText() {
       return this.isNewItem ? "+ New Item" : this.item.text
     },
-
-    ////////////////////////////////
-    ...mapGetters({
-    activeBoard: "activeBoard"
-    }),
-    boardName() {
-      return this.activeBoard ? this.activeBoard.name : ""
-    },
-    heading() {
-      return this.listForm.id ? "Update list name" : "Create new list"
-    }
   },
   data() {
     return {
@@ -110,19 +123,12 @@ export default {
         id: "",
         text: ""
       },
-      listForm: {
-        id: "",
-        name: ""
+      arrayOfObjects: [],
+      object: {
+        name: 'Object Name',
       }
     }
   },
-
-  ////////////////////////////////
-  mounted() {
-    Bus.$on("tasklist-editing", this.handleTaskListEditing)
-  },
-  ////////////////////////////////
-
   methods: {
     ...mapActions({
       saveTaskListItem: "saveTaskListItem",
@@ -131,16 +137,14 @@ export default {
     startEditing() {
       this.form.id = this.item.id
       this.form.text = this.item.text
-      this.isEditing = true
       this.$emit("item-editing")
     },
-
     clearForm() {
       this.form.id = ""
       this.form.text = ""
     },
     save() {
-      this.$validator.validateAll().then(result => {
+        this.$validator.validateAll().then(result => {
         if (result) {
           const updatedItem = {
             id: this.form.id,
@@ -151,15 +155,15 @@ export default {
             listId: this.list.id,
             item: updatedItem
           })
-          this.isEditing = false
           this.$emit("item-edited")
           this.$validator.reset()
         }
+        this.$refs.newItemPopup.close()
       })
     },
     cancel() {
-      this.isEditing = false
       this.$emit("item-cancelled")
+      this.$refs.newItemPopup.close()
     },
     remove() {
       this.deleteTaskListItem({
@@ -168,33 +172,31 @@ export default {
         item: this.item
       })
       this.$emit("item-deleted")
+      this.$refs.newItemPopup.close()
     },
-
-    //////////////////////////////
-    handlePopupToggled(isOpen) {
+    handlePopupToggled1(isOpen) {
       if (!isOpen) {
-        this.listForm.id = 0
-        this.listForm.name = ""
+        this.form.id = 0
+        this.form.text = ""
         this.$validator.reset()
       }
-    },
-    handleTaskListEditing(list) {
-      this.listForm.id = list.id
-      this.listForm.name = list.name
-      this.$refs.newListPopup.open()
-    },
-    handleTaskListSave() {
-      this.$validator.validateAll().then(async result => {
-        if (result) {
-          await this.saveTaskList({
-            boardId: this.activeBoard.id,
-            listId: this.listForm.id,
-            name: this.listForm.name
-          })
-          this.$refs.newListPopup.close()
-        }
-      })
     },
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.my-dropdown-toggle {
+  border-radius: 5px;
+
+  ::v-deep .dropdown-toggle {
+    color: tomato;
+    font-size: 25px;
+    font-weight: 800;
+  }
+
+  ::v-deep .dropdown-toggle-placeholder {
+    color: #c4c4c4;
+  }
+}
+</style>

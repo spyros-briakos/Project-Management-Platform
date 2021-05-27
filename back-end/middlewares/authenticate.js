@@ -1,8 +1,7 @@
 'use strict'
 
+// IMPORT PACKAGES
 const passport = require('passport');
-
-// Import InvalidToken model (created after a user logs out)
 const { InvalidToken } = require("../models/User");
 const utils = require("../auth/utils");
 

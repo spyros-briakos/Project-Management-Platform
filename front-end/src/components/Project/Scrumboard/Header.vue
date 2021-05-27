@@ -1,5 +1,4 @@
 <template>
-    <!-- <nav class="navbar"> -->
     <nav class="navbar navbar-light bg-faded">
 
       <div class="navbar-brand">
@@ -7,15 +6,14 @@
           Scrum Board
           <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
         </label>
-        
-        <div id="searching">
-          <div class="search-wrapper">
-            <input type="text" v-model="search" placeholder="Search title.."/>
+      </div>  
+
+        <div>
+          <div class="form-outline">
+            <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
           </div>
         </div>
-
-      </div>  
-      
+        
       <div class="d-flex justify-content-end" v-if="!isLoading">
         <TaskListRestore></TaskListRestore>
         <TaskListEdit></TaskListEdit>

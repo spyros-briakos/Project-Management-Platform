@@ -12,6 +12,8 @@ const agent = new https.Agent({
   rejectUnauthorized: false,
 });
 
+const restAPI = require('../../../rest-api-client/restAPI');
+
 export function cli(args) {
 
   program
@@ -408,21 +410,44 @@ program
 		})
   });
 
-  program
+	program
   .command('sprints')
-  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .requiredOption('-p, --project <value>', 'Project name')
   .action((command) => {
-    axios.get(`${apiUrl}/sprints/`, {
-			headers: { "Authorization": `Bearer ${command.token}` }
-		})
+		let token = ''
+		try {
+			const data = fs.readFileSync('/tmp/token.json', 'utf8')
+			token = JSON.parse(data).token
+		} catch (err) {
+				return console.log('Reading token failed:', err);
+		}
+		try {
+			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
+			let projects = data.projects.filter(p => p.name == command.project)
+			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
+			project = projects[0]
+		} catch (err) {
+				return console.log('Reading projects failed:', err);
+		}
+    axios.post(`${apiUrl}/project-sprints/`, {
+			project: command.project
+		},
+		{ headers: { "Authorization": token } })
 		.then((response) => {
 			console.log(response.data);
+
+			project.sprints = response.data
+			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+				if(err) return console.log('Writing data failed:', err);
+			});
 		})
-		.catch(() => {
+		.catch((err) => {
 			if (err.code === 'ECONNREFUSED') {
 				console.log('Unable to connect to server.')
 			} else if (err.response && err.response.status === 500){
 				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
 			}
 		})
   });
@@ -485,33 +510,43 @@ program
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
-  .action(function (command) {
-	// Check if the user can log in
-	const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
-	if(check.result === false){
-	  return console.log(check.message);
+  .action(async function (command) {
+	const client = restAPI.client;
+	console.log(client);
+	try {
+	  let message = await restAPI.actions.login(command.username, command.password);
+	  console.log(message);
+	  console.log(client);
+	  console.log(restAPI.client);
+	} catch(error) {
+		console.log(error.message);
 	}
+	// // Check if the user can log in
+	// const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
+	// if(check.result === false){
+	//   return console.log(check.message);
+	// }
 
-	axios.post(`${apiUrl}/users/login?format=${command.format}`, {
-	  username: command.username,
-	  password: command.password
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
-		if(err) return console.log('Writing user failed:', err);
-	  });
-	  fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
-		if(err) return console.log('Writing token failed:', err);
-	  });
-	  console.log(response.data.message);
-	})
-	.catch(function (error) {
-	  if (error.response && error.response.data.message) {
-		console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
-	  } else {
-		console.log('Η σύνδεση απέτυχε: ', error.message);
-	  }
-	});
+	// axios.post(`${apiUrl}/users/login?format=${command.format}`, {
+	//   username: command.username,
+	//   password: command.password
+	// }, { httpsAgent: agent })
+	// .then(function (response) {
+	//   fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+	// 	if(err) return console.log('Writing user failed:', err);
+	//   });
+	//   fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
+	// 	if(err) return console.log('Writing token failed:', err);
+	//   });
+	//   console.log(response.data.message);
+	// })
+	// .catch(function (error) {
+	//   if (error.response && error.response.data.message) {
+	// 	console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
+	//   } else {
+	// 	console.log('Η σύνδεση απέτυχε: ', error.message);
+	//   }
+	// });
   });
 
 program
