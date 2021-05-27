@@ -92,3 +92,5 @@ class User {
     return this.premium_ending_date;
   }
 }
+
+module.exports = User;

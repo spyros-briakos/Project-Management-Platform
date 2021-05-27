@@ -101,3 +101,5 @@ class Project {
     return this.endingDate;
   }
 }
+
+module.exports = Project;
