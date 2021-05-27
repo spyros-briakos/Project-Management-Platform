@@ -84,7 +84,7 @@ details[open].popupp summary:before {
   background: rgba(27, 31, 35, 0.5);
 }
 
-details.popupp {
-  font-size: 0px;
-}
+  details.popupp {
+    font-size: 0px;
+  }
 </style>
