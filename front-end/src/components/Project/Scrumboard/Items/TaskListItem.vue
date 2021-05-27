@@ -17,12 +17,12 @@
        
       <div class="popupheader">
         <!-- <h3>hii</h3> -->
-        
-        <vue-dropdown
-          :config="config"
-          @setSelectedOption="setNewSelectedOption($event);"
-        ></vue-dropdown>
-
+        <div style="z-index: 9999;">
+          <vue-dropdown
+            :config="config"
+            @setSelectedOption="setNewSelectedOption($event);"
+          ></vue-dropdown>
+        </div>
       </div>
 
       <form style="position: relative; height:38px; top:80px;">
@@ -177,6 +177,9 @@ export default {
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
     },
+    setNewSelectedOption(selectedOption) {
+      this.config.placeholder = selectedOption.value;
+    }
   }
 }
 </script>
