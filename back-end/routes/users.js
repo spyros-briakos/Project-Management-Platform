@@ -9,7 +9,7 @@ const queryString = require("query-string");
 const utils = require("../auth/utils");
 const send_email = require("../auth/send_email");
 const googleUtil = require("../auth/google-util");
-const serializers = require("../serializers");
+const serializer = require("../serializers/users");
 
 // Import User model
 const { User } = require("../models/User");
@@ -51,16 +51,11 @@ router.post('/signup', [upload.single('image'), passport.authenticate('signup', 
     send_email.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
 
     // Get serialized user
-    const result = await serializers.serializeUser(userObject=req.user);
-
-    // If there was an error
-    if(result.error) {
-      return res.status(400).json({ message: result.error });
-    }
+    const context = serializer.userSerializer(req.user);
 
     res.json({
       message: 'Επιτυχής εγγραφή!\nΣου στείλαμε email επιβεβαίωσης. Παρακαλούμε δες το Gmail σου!',
-      user: result.user
+      user: context
     });
 });
 
@@ -106,16 +101,11 @@ router.post('/login', async (req, res, next) => {
       const tokenObject = utils.issueJWT(user);
 
       // Get serialized user
-      const result = await serializers.serializeUser(userObject=user);
-
-      // If there was an error
-      if(result.error) {
-        return res.status(400).json({ message: result.error });
-      }
+      const context = serializer.userSerializer(user);
 
       return res.json({
         message: info.message,
-        user: result.user,
+        user: context,
         token: tokenObject
       });
     } catch (error) {
@@ -166,16 +156,11 @@ router.get('/oauth2callback/signup', async(req, res) => {
       const tokenObject = utils.issueJWT(savedUser);
 
       // Get serialized user
-      const result = await serializers.serializeUser(userObject=user);
-
-      // If there was an error
-      if(result.error) {
-        return res.status(400).json({ message: result.error });
-      }
+      const context = serializer.userSerializer(user);
 
       res.json({
         message: 'Ο λογαριασμός σου δημιουργήθηκε με επιτυχία! Είσαι πλέον συνδεδεμένος/-η στο ScruManiac.',
-        user: result.user,
+        user: context,
         token: tokenObject.token
       });
     } catch (error) {
@@ -218,16 +203,11 @@ router.get('/oauth2callback/login', async(req, res) => {
       const tokenObject = utils.issueJWT(user);
 
       // Get serialized user
-      const result = await serializers.serializeUser(userObject=user);
-
-      // If there was an error
-      if(result.error) {
-        return res.status(400).json({ message: result.error });
-      }
+      const context = serializer.userSerializer(user);
 
       res.json({
         message: 'Η σύνδεσή σου ολοκληρώθηκε με επιτυχία.',
-        user: result.user,
+        user: context,
         token: tokenObject.token
       });
     } catch (error) {
@@ -294,16 +274,11 @@ router.post('/set-password/:verificationCode', async(req, res) => {
     const tokenObject = utils.issueJWT(user);
 
     // Get serialized user
-    const result = await serializers.serializeUser(userObject=user);
-
-    // If there was an error
-    if(result.error) {
-      return res.status(400).json({ message: result.error });
-    }
+    const context = serializer.userSerializer(user);
 
     res.json({
       message: 'Ο νέος σου κωδικός δημιουργήθηκε με επιτυχία! Είσαι πλέον συνδεδεμένος/-η στο ScruManiac.',
-      user: result.user,
+      user: context,
       token: tokenObject
     });
   } catch(error) {
@@ -361,16 +336,11 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
         await Invitation.deleteOne({ _id: invitation._id });
 
         // Get serialized user
-        const result = await serializers.serializeUser(userObject=updatedUser);
-
-        // If there was an error
-        if(result.error) {
-          return res.status(400).json({ message: result.error });
-        }
+        const context = serializer.userSerializer(updatedUser);
 
         return res.json({
           message: `Επιτυχής αποδοχή πρόσκλησης. Είσαι πλέον μέλος στο project ${project.name}!`,
-          user: result.user
+          user: context
         });
       }
       // If the user rejected the invitation
@@ -385,18 +355,13 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
         const updatedUser = await User.findByIdAndUpdate(user._id, { invitations: invitations }, { runValidators: true, new: true });
 
         // Get serialized user
-        const result = await serializers.serializeUser(userObject=updatedUser);
-
-        // If there was an error
-        if(result.error) {
-          return res.status(400).json({ message: result.error });
-        }
+        const context = serializer.userSerializer(updatedUser);
 
         // Delete invtitation from the db as well
         await Invitation.deleteOne({ _id: invitation._id });
         return res.json({
           message: `Η πρόσκληση στο project ${project.name} απορρίφθηκε με επιτυχία.`,
-          user: result.user
+          user: context
         });
       } else{
         return res.status(400).json({ message: 'Προέκυψε κάποιο σφάλμα.' });
