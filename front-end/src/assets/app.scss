@@ -158,6 +158,8 @@
 .cards.cards-list {
   max-height: 68%;
   max-width: 100%;
+  background: rgba(0, 0, 0, 0.158);
+  // background-color: #FD8D37;
   // z-index: -1;
   // position: fixed;
 }
@@ -240,17 +242,28 @@ div#searching {
 	top: 0;
 	display: none;
   font-size: medium;
-  // max-width: 100px;
 }
 
 .edit a {
 	color: #000;
 }
 
+.edit_2 {
+  padding-top: 7px;	
+	padding-right: 7px;
+	position: absolute;
+	right: 43%;
+	top: 10%;
+	// display: none;
+  font-size: medium;
+}
+
 .fas.fa-pen {
   color:#418B75;
-  // position: relative;
-  // right: 10px;
+}
+
+.fas.fa-plus-circle {
+  color:#418B75;
 }
 
 .form-outline {
@@ -300,3 +313,12 @@ div#searching {
   width: 100%;
   background-color:#6eb8a2;
 }
+
+// #dropdownn {
+  // font-family: "Avenir", Helvetica, Arial, sans-serif;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+  // text-align: center;
+  // color: #2c3e50;
+  // margin-top: 60px;
+// }

@@ -7,60 +7,26 @@
         <span class="edit" v-if="!isNewItem"> 
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
+        <span class="edit_2" v-else> 
+          <i class="fas fa-plus-circle" @click="startEditing"></i> 
+        </span> 
+
       </template>
-
-      <!-- <template v-slot:content1>
-        <div class="card">
-          <div class="card-body">
-            <form class="form">
-              <div class="form-group">
-                <textarea
-                  name="itemDetails"
-                  rows="3"
-                  class="form-control"
-                  v-model.trim="form.text"
-                  v-validate="'required'"
-                  data-vv-as="Item Details"
-                  placeholder="Your item description"
-                ></textarea>
-                <small class="text-danger">{{ errors.first("itemDetails") }}</small>
-              </div>
-
-              <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']">
-                <div>
-                  <button class="btn btn-outline-secondary btn-sm mr-2" @click.prevent="save">
-                    Save
-                  </button>
-                  <button class="btn btn-outline-secondary btn-sm" @click.prevent="cancel">
-                    Cancel
-                  </button>
-                </div>
-                <div v-show="!isNewItem">
-                  <button class="btn btn-sm text-danger" @click.prevent="remove">
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </template>  -->
 
       <template v-slot:content1>
        
-      <div id="popupheader">
+      <div class="popupheader">
         <!-- <h3>hii</h3> -->
-        
-        <vue-dropdown
-          :config="config"
-          @setSelectedOption="setNewSelectedOption($event);"
-        ></vue-dropdown>
-
+        <div style="z-index:9999;">
+          <vue-dropdown 
+            :config="config"
+            @setSelectedOption="setNewSelectedOption($event);"
+          ></vue-dropdown>
+        </div>
       </div>
 
       <form style="position: relative; height:38px; top:80px;">
         <!-- <h4>{{ heading }}</h4> -->
-        
         
         <input style="position:fixed; top: 100px; width: 660px"
           name="itemDetails"
@@ -117,7 +83,8 @@ export default {
       return this.item.id == ""
     },
     displayText() {
-      return this.isNewItem ? "+ New Item" : this.item.text
+      // return this.isNewItem ? "+ New Item" : this.item.text
+      return this.isNewItem ? "" : this.item.text
     },
   },
   data() {
@@ -148,7 +115,7 @@ export default {
         textColor: "black",
         borderRadius: "1.5em",
         border: "1px solid gray",
-        width: 180
+        width: 180,
       }
     }
   },
@@ -210,6 +177,9 @@ export default {
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
     },
+    setNewSelectedOption(selectedOption) {
+      this.config.placeholder = selectedOption.value;
+    }
   }
 }
 </script>
