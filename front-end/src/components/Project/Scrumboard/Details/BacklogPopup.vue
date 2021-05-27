@@ -20,11 +20,10 @@ export default {
     },
     popupToggled1() {
       const isOpen = this.$refs.details1.getAttribute("open") !== null ? true : false
-      this.$emit("popup-toggled1", isOpen)
+      this.isEditing = isOpen
+      // console.log("BacklogPopup isEditing here: ", this.isEditing, " and isOpen here: ", isOpen)
+      this.$emit("popuptoggled1", isOpen)
     },
-    terminate() {
-      this.isEditing = false
-    }
   }
 }
 </script>
@@ -59,7 +58,6 @@ details.popupp div {
   transform: translate(-50%, -50%);
   max-height: calc(100vh - 80px);
   max-width: 700px;
-  /* width: 1000px; */
   width: calc(100% - 80px);
   height: 400px;
   overflow-y: auto;
@@ -84,5 +82,9 @@ details[open].popupp summary:before {
   content: "";
   z-index: 99;
   background: rgba(27, 31, 35, 0.5);
+}
+
+details.popupp {
+  padding: 0rem !important;
 }
 </style>
