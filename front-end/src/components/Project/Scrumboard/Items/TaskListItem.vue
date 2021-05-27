@@ -9,43 +9,6 @@
         </span> 
       </template>
 
-      <!-- <template v-slot:content1>
-        <div class="card">
-          <div class="card-body">
-            <form class="form">
-              <div class="form-group">
-                <textarea
-                  name="itemDetails"
-                  rows="3"
-                  class="form-control"
-                  v-model.trim="form.text"
-                  v-validate="'required'"
-                  data-vv-as="Item Details"
-                  placeholder="Your item description"
-                ></textarea>
-                <small class="text-danger">{{ errors.first("itemDetails") }}</small>
-              </div>
-
-              <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']">
-                <div>
-                  <button class="btn btn-outline-secondary btn-sm mr-2" @click.prevent="save">
-                    Save
-                  </button>
-                  <button class="btn btn-outline-secondary btn-sm" @click.prevent="cancel">
-                    Cancel
-                  </button>
-                </div>
-                <div v-show="!isNewItem">
-                  <button class="btn btn-sm text-danger" @click.prevent="remove">
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </template>  -->
-
       <template v-slot:content1>
        
       <div class="popupheader">
@@ -160,6 +123,8 @@ export default {
     startEditing() {
       this.form.id = this.item.id
       this.form.text = this.item.text
+      this.isEditing = true
+      // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
       this.$emit("item-editing")
     },
     clearForm() {
@@ -203,6 +168,10 @@ export default {
         this.form.text = ""
         this.$validator.reset()
       }
+      this.isEditing = isOpen
+      if(!isOpen)
+        this.$emit("item-cancelled")
+      // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
     },
   }
 }

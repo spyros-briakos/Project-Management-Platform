@@ -20,11 +20,10 @@ export default {
     },
     popupToggled1() {
       const isOpen = this.$refs.details1.getAttribute("open") !== null ? true : false
-      this.$emit("popup-toggled1", isOpen)
+      this.isEditing = isOpen
+      // console.log("BacklogPopup isEditing here: ", this.isEditing, " and isOpen here: ", isOpen)
+      this.$emit("popuptoggled1", isOpen)
     },
-    terminate() {
-      this.isEditing = false
-    }
   }
 }
 </script>
