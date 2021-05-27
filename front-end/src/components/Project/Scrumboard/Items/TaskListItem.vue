@@ -13,8 +13,8 @@
        
       <div class="popupheader">
         <!-- <h3>hii</h3> -->
-        <div style="z-index: 9999;">
-          <vue-dropdown
+        <div style="z-index:9999;">
+          <vue-dropdown 
             :config="config"
             @setSelectedOption="setNewSelectedOption($event);"
           ></vue-dropdown>
@@ -111,7 +111,7 @@ export default {
         textColor: "black",
         borderRadius: "1.5em",
         border: "1px solid gray",
-        width: 180
+        width: 180,
       }
     }
   },
