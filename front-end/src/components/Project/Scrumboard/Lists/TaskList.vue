@@ -19,7 +19,7 @@
         ></TaskListItem>
       </draggable>
       <TaskListItem
-        class="fixed-card"
+        class="fixed-card1"
         :item="defaultItem"
         :list="list"
         :board="board"

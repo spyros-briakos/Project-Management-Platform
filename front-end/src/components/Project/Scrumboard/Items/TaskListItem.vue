@@ -22,28 +22,61 @@
 
       <form style="position: relative; height:38px; top:180px;">
         <input style="position:fixed; top: 80px; width: 660px"
-          name="itemDetails"
+        <h3 class="titlospopup"> {{ list.name }} </h3>
+        <div style="z-index:999;">
+          <vue-dropdown 
+            :config="config"
+            @setSelectedOption="setNewSelectedOption($event);"
+          ></vue-dropdown>
+        </div>
+      </div>
+
+      <form style="position: relative; height:38px; top:80px;">
+        <!-- <h4>{{ heading }}</h4> -->
+        <h4 class="title1"> Τίτλος </h4>
+
+        <input style="position:fixed; top: 95px; width: 660px"
+          name="itemTitle"
           rows="3"
           class="form-control"
-          v-model.trim="form.text"
+          v-model.trim="form.title"
           v-validate="'required'"
           data-vv-as="Item Details"
-          placeholder="Your item description"
+          placeholder="Γράψε έναν τίτλο"
         />
-        <small class="text-danger" style="display:block">{{ errors.first("itemDetails") }}</small>
+
+        <h4 class= "title2"> Περιγραφή </h4>
+
+        <textarea style="position:fixed; top: 170px; width: 660px; resize: none; max-height: 80px;"
+          name="itemDetails"
+          rows="3"
+          maxlength='250'
+          class="form-control"
+          v-model.trim="form.text"
+          data-vv-as="Item Details"
+          placeholder="Γράψε μία περιγραφή"
+        />
+
+        <h6 class="title3">Εκτιμώμενη διάρκεια: <span class="subtitle1">4 ημέρες</span></h6>
+        <h6 class="title3">Κατηγορία: <span class="subtitle1">Εκκρεμεί</span></h6>        
+        <h6 class="title3">User Story: <span class="subtitle1">Τελικό</span></h6>        
+        <h6 class="title3">Μέλη</h6>        
+
+        <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
+        <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
         <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
         <!-- <div> -->
-          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 350px; left:230px;" @click.prevent="save">
-            Save
-          </button> 
-          <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 350px; left:320px;"  @click.prevent="cancel">
-            Cancel
-          </button>
+        <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save">
+          Save
+        </button> 
+        <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 400px; left:320px;"  @click.prevent="cancel">
+          Cancel
+        </button>
         <!-- </div> -->
         <!-- <div v-show="!isNewItem"> -->
-          <button class="btn btn-sm text-danger"  style="position:fixed; top: 350px; left:420px;" @click.prevent="remove">
-            Delete
-          </button>
+        <button class="btn btn-sm text-danger"  style="position:fixed; top: 400px; left:420px;" @click.prevent="remove">
+          Delete
+        </button>
         <!-- </div> -->
       <!-- </div> -->
       </form>
@@ -52,9 +85,12 @@
 
     </BacklogPopup>
 
-    <div class="card-body">
+    <div class="card-body" v-if="!isNewItem">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
-        <span> {{ displayText }} </span>
+        <span style = "font-weight: bold;" v-if="!isNewItem"> {{ config.placeholder }} </span> 
+        <br v-if="!isNewItem">
+        <span v-if="!isNewItem"> {{ displayTitle }} </span>
+        <!-- <span > {{ displayText }} </span> -->
       </div>
     </div>
   
@@ -79,13 +115,17 @@ export default {
     displayText() {
       return this.isNewItem ? "" : this.item.text
     },
+    displayTitle() {
+      return this.isNewItem ? "" : this.item.title
+    }
   },
   data() {
     return {
       isEditing: false,
       form: {
         id: "",
-        text: ""
+        text: "",
+        title: ""
       },
       selected: null,
       options: ['Epic','Issue']
@@ -98,6 +138,7 @@ export default {
     }),
     startEditing() {
       this.form.id = this.item.id
+      this.form.title = this.item.title
       this.form.text = this.item.text
       this.isEditing = true
       // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
@@ -105,6 +146,7 @@ export default {
     },
     clearForm() {
       this.form.id = ""
+      this.form.title = ""
       this.form.text = ""
     },
     save() {
@@ -112,6 +154,7 @@ export default {
         if (result) {
           const updatedItem = {
             id: this.form.id,
+            title: this.form.title,
             text: this.form.text
           }
           this.saveTaskListItem({
@@ -141,6 +184,7 @@ export default {
     handlePopupToggled1(isOpen) {
       if (!isOpen) {
         this.form.id = 0
+        this.form.title = ""
         this.form.text = ""
         this.$validator.reset()
       }
@@ -151,6 +195,7 @@ export default {
     },
     setNewSelectedOption(selectedOption) {
       this.config.placeholder = selectedOption.value;
+      this.config.val = selectedOption.value;
     }
   }
 }
