@@ -1,6 +1,5 @@
 const { usernameSerializer } = require("../serializers/users");
 
-// Projects
 async function projectDescriptionSerializer(query) {
   try {
     if (typeof query !== 'object') {
@@ -12,8 +11,8 @@ async function projectDescriptionSerializer(query) {
       description: query.description,
       productOwner: query.productOwner.username,
       scrumMaster: query.scrumMaster.username,
-      // sprints: query.sprints,
-      // tasks: query.tasks,
+      // sprints: query.scrumMaster.sprints,
+      // tasks: query.scrumMaster.tasks,
       status: query.status,
       plan_in_use: query.plan_in_use,
       startingDate: query.startingDate,
@@ -41,8 +40,8 @@ async function projectDetailsSerializer(query) {
       description: query.description,
       productOwner: query.productOwner.username,
       scrumMaster: query.scrumMaster.username,
-      sprints: query.sprints,
-      userStories: query.userStories,
+      sprints: query.scrumMaster.sprints,
+      userStories: query.scrumMaster.userStories,
       status: query.status,
       plan_in_use: query.plan_in_use,
       startingDate: query.startingDate,
@@ -145,7 +144,3 @@ async function taskSerializer(query) {
 // Export
 module.exports.projectDescriptionSerializer = projectDescriptionSerializer;
 module.exports.projectDetailsSerializer = projectDetailsSerializer;
-
-module.exports.sprintSerializer = sprintSerializer;
-module.exports.userStorySerializer = userStorySerializer;
-module.exports.taskSerializer = taskSerializer;
