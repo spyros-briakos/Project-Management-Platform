@@ -14,83 +14,72 @@
 
       <template v-slot:content1>
 
-      <div class="popupheader">
-        <div class="temp">
-          <multiselect v-model="selected" :options="options" :show-labels="false" placeholder="User Story"></multiselect>
+        <div class="popupheader">
+          <h3 class="titlospopup"> {{ list.name }} </h3>
+          <div class="temp">
+            <multiselect v-model="selected" :options="options" :show-labels="true" placeholder="User Story"></multiselect>
+          </div>
         </div>
-      </div>
+        
+        <form style="position: relative; height:38px; top:80px;">
+          <!-- <h4>{{ heading }}</h4> -->
+          <h4 class="title1"> Τίτλος </h4>
 
-      <form style="position: relative; height:38px; top:180px;">
-        <input style="position:fixed; top: 80px; width: 660px"
-        <h3 class="titlospopup"> {{ list.name }} </h3>
-        <div style="z-index:999;">
-          <vue-dropdown 
-            :config="config"
-            @setSelectedOption="setNewSelectedOption($event);"
-          ></vue-dropdown>
-        </div>
-      </div>
+          <input style="position:fixed; top: 95px; width: 660px"
+            name="itemTitle"
+            rows="3"
+            class="form-control"
+            v-model.trim="form.title"
+            v-validate="'required'"
+            data-vv-as="Item Details"
+            placeholder="Γράψε έναν τίτλο"
+          />
 
-      <form style="position: relative; height:38px; top:80px;">
-        <!-- <h4>{{ heading }}</h4> -->
-        <h4 class="title1"> Τίτλος </h4>
+          <h4 class= "title2"> Περιγραφή </h4>
 
-        <input style="position:fixed; top: 95px; width: 660px"
-          name="itemTitle"
-          rows="3"
-          class="form-control"
-          v-model.trim="form.title"
-          v-validate="'required'"
-          data-vv-as="Item Details"
-          placeholder="Γράψε έναν τίτλο"
-        />
+          <textarea style="position:fixed; top: 170px; width: 660px; resize: none; max-height: 80px;"
+            name="itemDetails"
+            rows="3"
+            maxlength='250'
+            class="form-control"
+            v-model.trim="form.text"
+            data-vv-as="Item Details"
+            placeholder="Γράψε μία περιγραφή"
+          />
 
-        <h4 class= "title2"> Περιγραφή </h4>
+          <h6 class="title3">Εκτιμώμενη διάρκεια: <span class="subtitle1">4 ημέρες</span></h6>
+          <h6 class="title3">Κατηγορία: <span class="subtitle1">Εκκρεμεί</span></h6>        
+          <h6 class="title3">User Story: <span class="subtitle1">Τελικό</span></h6>        
+          <h6 class="title3">Μέλη</h6>        
 
-        <textarea style="position:fixed; top: 170px; width: 660px; resize: none; max-height: 80px;"
-          name="itemDetails"
-          rows="3"
-          maxlength='250'
-          class="form-control"
-          v-model.trim="form.text"
-          data-vv-as="Item Details"
-          placeholder="Γράψε μία περιγραφή"
-        />
-
-        <h6 class="title3">Εκτιμώμενη διάρκεια: <span class="subtitle1">4 ημέρες</span></h6>
-        <h6 class="title3">Κατηγορία: <span class="subtitle1">Εκκρεμεί</span></h6>        
-        <h6 class="title3">User Story: <span class="subtitle1">Τελικό</span></h6>        
-        <h6 class="title3">Μέλη</h6>        
-
-        <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
-        <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
-        <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
-        <!-- <div> -->
-        <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save">
-          Save
-        </button> 
-        <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 400px; left:320px;"  @click.prevent="cancel">
-          Cancel
-        </button>
+          <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
+          <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
+          <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
+          <!-- <div> -->
+          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save">
+            Save
+          </button> 
+          <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 400px; left:320px;"  @click.prevent="cancel">
+            Cancel
+          </button>
+          <!-- </div> -->
+          <!-- <div v-show="!isNewItem"> -->
+          <button class="btn btn-sm text-danger"  style="position:fixed; top: 400px; left:420px;" @click.prevent="remove">
+            Delete
+          </button>
+          <!-- </div> -->
         <!-- </div> -->
-        <!-- <div v-show="!isNewItem"> -->
-        <button class="btn btn-sm text-danger"  style="position:fixed; top: 400px; left:420px;" @click.prevent="remove">
-          Delete
-        </button>
-        <!-- </div> -->
-      <!-- </div> -->
-      </form>
-      
-    </template>
+        </form>
+        
+      </template>
 
     </BacklogPopup>
 
     <div class="card-body" v-if="!isNewItem">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
-        <span style = "font-weight: bold;" v-if="!isNewItem"> {{ config.placeholder }} </span> 
+        <span style = "font-weight: bold;" v-if="!isNewItem"> {{ this.selected }} </span> 
         <br v-if="!isNewItem">
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
-        <!-- <span > {{ displayText }} </span> -->
       </div>
     </div>
   
@@ -127,8 +116,8 @@ export default {
         text: "",
         title: ""
       },
-      selected: null,
-      options: ['Epic','Issue']
+      selected: 'Task',
+      options: ['Epic','Issue','Task']
     }
   },
   methods: {
@@ -193,10 +182,6 @@ export default {
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
     },
-    setNewSelectedOption(selectedOption) {
-      this.config.placeholder = selectedOption.value;
-      this.config.val = selectedOption.value;
-    }
   }
 }
 </script>
