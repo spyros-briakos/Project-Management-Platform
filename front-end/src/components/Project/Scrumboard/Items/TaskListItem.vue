@@ -10,24 +10,18 @@
         <span class="edit_2" v-else> 
           <i class="fas fa-plus-circle" @click="startEditing"></i> 
         </span> 
-
       </template>
 
       <template v-slot:content1>
-       
+
       <div class="popupheader">
-        <div style="z-index: 9999;">
-          <vue-dropdown
-            :config="config"
-            @setSelectedOption="setNewSelectedOption($event);"
-          ></vue-dropdown>
+        <div class="temp">
+          <multiselect v-model="selected" :options="options" :show-labels="false" placeholder="User Story"></multiselect>
         </div>
       </div>
 
-      <form style="position: relative; height:38px; top:80px;">
-        <!-- <h4>{{ heading }}</h4> -->
-        
-        <input style="position:fixed; top: 100px; width: 660px"
+      <form style="position: relative; height:38px; top:180px;">
+        <input style="position:fixed; top: 80px; width: 660px"
           name="itemDetails"
           rows="3"
           class="form-control"
@@ -53,6 +47,7 @@
         <!-- </div> -->
       <!-- </div> -->
       </form>
+      
     </template>
 
     </BacklogPopup>
@@ -69,12 +64,12 @@
 <script>
 import { mapActions } from "vuex"
 import BacklogPopup from '../Details/BacklogPopup.vue'
-import VueDropdown from 'vue-dynamic-dropdown'
+import Multiselect from 'vue-multiselect'
 
 export default {
   components: { 
     BacklogPopup,
-    VueDropdown
+    Multiselect,
     },
   props: ["item", "list", "board"],
   computed: {
@@ -82,7 +77,6 @@ export default {
       return this.item.id == ""
     },
     displayText() {
-      // return this.isNewItem ? "+ New Item" : this.item.text
       return this.isNewItem ? "" : this.item.text
     },
   },
@@ -93,29 +87,8 @@ export default {
         id: "",
         text: ""
       },
-      arrayOfObjects: [],
-      object: {
-        name: 'Object Name',
-      },
-      config: {
-        options: [
-          {
-            value: "option 1"
-          },
-          {
-            value: "option 2"
-          },
-          {
-            value: "option 3"
-          }
-        ],
-        placeholder: "Placeholder",
-        backgroundColor: "#cde4f5",
-        textColor: "black",
-        borderRadius: "1.5em",
-        border: "1px solid gray",
-        width: 180
-      }
+      selected: null,
+      options: ['Epic','Issue']
     }
   },
   methods: {
@@ -182,3 +155,6 @@ export default {
   }
 }
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css">
+</style>
