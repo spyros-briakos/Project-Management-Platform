@@ -6,7 +6,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const utils = require("../auth/utils");
 const send_email = require("../auth/send_email");
-const serializers = require("../serializers");
+const serializer = require("../serializers/users");
 
 // Import User model
 const { User } = require("../models/User");
@@ -16,20 +16,19 @@ const { InvalidToken } = require("../models/User");
 const { Invitation } = require("../models/User");
 // Import Project model
 const Project = require('../models/Project');
+const { findByIdAndUpdate } = require('../models/Project');
 
 
 // Get specific user
 router.get('/user', async (req, res) => {
   try {
+    // Get user from db
+    const user = await findById(req.user._id);
+
     // Get serialized user
-    const result = await serializers.serializeUser(id=req.user._id);
+    const context = serializer.userSerializer(user);
 
-    // If there was an error
-    if(result.error) {
-      return res.status(400).json({ message: result.error });
-    }
-
-    res.json(result.user);
+    res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -76,15 +75,10 @@ router.patch('/edit-user', async (req, res) => {
       const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
 
       // Get serialized user
-      const result = await serializers.serializeUser(userObject=updatedUser);
-
-      // If there was an error
-      if(result.error) {
-        return res.status(400).json({ message: result.error });
-      }
+      const context = serializer.userSerializer(updatedUser);
 
       // Send verification to the user's email
-      send_email.sendVerificationEmail(result.user.username, result.user.email, verificationCode);
+      send_email.sendVerificationEmail(context.username, context.email, verificationCode);
 
       // Log out the user until the new email is verified
       const token = new InvalidToken({ value: utils.extractToken(req) });
@@ -93,7 +87,7 @@ router.patch('/edit-user', async (req, res) => {
 
       res.json({
         message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.\nΣου στείλαμε email επιβεβαίωσης. Παρακαλούμε δες το Gmail σου!',
-        user: result.user,
+        user: context,
         email: 'updated'
       });
     }
@@ -102,16 +96,11 @@ router.patch('/edit-user', async (req, res) => {
       const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
 
       // Get serialized user
-      const result = await serializers.serializeUser(userObject=updatedUser);
+      const context = serializer.userSerializer(updatedUser);
 
-      // If there was an error
-      if(result.error) {
-        return res.status(400).json({ message: result.error });
-      }
-  
       res.json({
         message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.',
-        user: result.user
+        user: context
       });
     }
   } catch (error) {
@@ -191,16 +180,11 @@ router.patch('/upgrade-plan', async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(req.user._id, { plan_in_use: req.body.plan_in_use, premium_ending_date: req.body.premium_ending_date }, { runValidators: true, new: true });
 
     // Get serialized user
-    const result = await serializers.serializeUser(userObject=updatedUser);
-
-    // If there was an error
-    if(result.error) {
-      return res.status(400).json({ message: result.error });
-    }
+    const context = await serializer.userSerializer(updatedUser);
 
     res.json({
       message: 'Ο λογαριασμός σου αναβαθμίστηκε με επιτυχία σε προνομιούχος!',
-      user: result.user
+      user: context
     });
   } catch (error) {
     res.status(400).json({ message: error });
