@@ -61,6 +61,7 @@ const routes = [
       },
       {
         path: "kanban",
+        redirect:"/projects/boards/0319aa8a-e1f4-6e8a-9717-c6f93e7d68b2",
         name: "Kanban",
         component: Kanban,
       },
