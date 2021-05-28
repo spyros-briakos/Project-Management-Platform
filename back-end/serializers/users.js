@@ -24,23 +24,22 @@ async function userSerializer(query) {
       query = await User.findById(query)
     }
     const projects = [];
-    let project;
-    for (let i=0; i< user.projects.length; i++) {
+    for (let i=0; i< query.projects.length; i++) {
       // Get serialized project
-      const result = projectDescriptionSerializer(user.projects[i]);
+      projects.push(await projectDescriptionSerializer(query.projects[i]));
 
-      // If there was an error
-      if (result.error) {
-        return { error: error };
-      } else {
-        projects[i] = result.project;
-      }
+      // // If there was an error
+      // if (result.error) {
+      //   return { error: error };
+      // } else {
+      //   projects[i] = result.project;
+      // }
     }
 
     // Will keep from user's invitations only the needed info
     const invitations = []
-    for (let i=0; i < user.invitations.length; i++) {
-      invitations.push(invitationSerializer(user.invitations[i]))
+    for (let i=0; i < query.invitations.length; i++) {
+      invitations.push(await invitationSerializer(query.invitations[i]))
     }
 
     const context = {

@@ -20,7 +20,7 @@ async function projectDescriptionSerializer(query) {
       members: []
     }
     for (let i=0; i < query.members.length; i++) {
-      context.members[i] = usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
+      context.members[i] = await usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
     }
 
     return context
@@ -49,7 +49,7 @@ async function projectDetailsSerializer(query) {
       members: []
     }
     for (let i=0; i < query.members.length; i++) {
-      context.members[i] = usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
+      context.members[i] = await usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
     }
 
     return context
@@ -75,7 +75,7 @@ async function sprintSerializer(query) {
       estimated_duration: query.estimated_duration,
     }
     for (let i=0; i < query.tasks.length; i++) {
-      context.tasks[i] = taskSerializer(query.tasks[i]);
+      context.tasks[i] = await taskSerializer(query.tasks[i]);
     }
 
     return context
@@ -102,10 +102,10 @@ async function userStorySerializer(query) {
       estimated_duration: query.estimated_duration,
     }
     for (let i=0; i < query.tasks.length; i++) {
-      context.tasks[i] = taskSerializer(query.tasks[i]);
+      context.tasks[i] = await taskSerializer(query.tasks[i]);
     }
     for (let i=0; i < query.sprints.length; i++) {
-      context.sprints[i] = sprintSerializer(query.sprints[i]);
+      context.sprints[i] = await sprintSerializer(query.sprints[i]);
     }
 
     return context
@@ -132,7 +132,7 @@ async function taskSerializer(query) {
       members: []
     }
     for (let i=0; i < query.members.length; i++) {
-      context.members[i] = usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
+      context.members[i] = await usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
     }
 
     return context
@@ -144,3 +144,7 @@ async function taskSerializer(query) {
 // Export
 module.exports.projectDescriptionSerializer = projectDescriptionSerializer;
 module.exports.projectDetailsSerializer = projectDetailsSerializer;
+
+module.exports.sprintSerializer = sprintSerializer;
+module.exports.userStorySerializer = userStorySerializer;
+module.exports.taskSerializer = taskSerializer;

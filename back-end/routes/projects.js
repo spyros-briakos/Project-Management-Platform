@@ -4,18 +4,20 @@ const express = require("express");
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const moment = require("moment");
-const serializers = require("../serializers");
 
 // Import Project model
 const Project = require("../models/Project");
 const { User } = require("../models/User");
-const { projectDetailsSerializer, sprintSerializer, userStorySerializer, taskSerializer } = require("../serializers/projects");
 const UserStory = require("../models/UserStory");
+const serializer = require("../serializers/users");
+
+// GETTERS
 
 // Get all projects
-router.get("/", async (req, res) => {
+router.post("/get-projects", async (req, res) => {
   try {
-    const projects = await Project.find({});
+    const user = req.user;
+    const projects = user.projects;
     context = []
     for (let i in projects) {
       context.push(projectDescriptionSerializer(projects[i]))
@@ -27,12 +29,76 @@ router.get("/", async (req, res) => {
   }
 })
 
-// Create project
-router.post("/", async (req, res) => {
+// Get all sprints
+router.post("/get-sprints", async (req, res) => {
+  try {
+    const project = await Project.findById(req.body.projectID);
+    // If no such project found
+    if(!project) {
+      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
+    }
+    // Check if user is authorized for that action
+    const user = req.user;
+    if (!project.members.includes(user._id)) {
+      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
+    }
+
+    context = await serializer.sprintSerializer(project.sprints);
+    res.json(context);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// Get all user stories
+router.post("/get-userstories", async (req, res) => {
+  try {
+    const project = await Project.findById(req.body.projectID);
+    // If no such project found
+    if(!project) {
+      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
+    }
+    // Check if user is authorized for that action
+    const user = req.user;
+    if (!project.members.includes(user._id)) {
+      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
+    }
+
+    context = await serializer.userStorySerializer(project.userStories);
+    res.json(context);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// Get details of project
+router.post("/get-details", async (req, res) => {
+  try {
+    const project = await Project.findById(req.body.projectID);
+    // If no such project found
+    if(!project) {
+      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
+    }
+    // Check if user is authorized for that action
+    const user = req.user;
+    if (!project.members.includes(user._id)) {
+      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
+    }
+
+    context = await serializer.projectDetailsSerializer(project);
+    res.json(context);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// ADD PROJECT/ USERSTORY/ SPRINT/ TASK
+
+router.post("/add-project", async (req, res) => {
   try {
     const user = req.user;
     // console.log(user)
-    const project = new Project(req.body);
+    const project = new Project(req.body.project);
     // If no such project found
     if(!project) {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
@@ -49,7 +115,7 @@ router.post("/", async (req, res) => {
     user.projects.push(savedProject._id);
     await User.findByIdAndUpdate(user._id, user, { runValidators: true, new: true });
     
-    const context = projectDetailsSerializer(savedProject);
+    const context = await serializer.projectDetailsSerializer(savedProject);
     res.json(context);
   } catch (error) {
     console.log(error)
@@ -57,44 +123,108 @@ router.post("/", async (req, res) => {
   }
 })
 
-// Delete specific project
-router.delete('/:projectId', async (req, res) => {
+router.post("/add-userstory", async (req, res) => {
   try {
-    const user = req.user;
-    // Find project in the db
-    const project = await Project.findById(req.params.projectId);
+    const project = await Project.findById(req.body.projectID);
     // If no such project found
     if(!project) {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
     }
 
-    // Check if is the product owner is the user that sends the request
-    if (user._id !== project.productOwner){
+    // Check if user is authorized for that action
+    const user = req.user;
+    if (project.productOwner !== user._id) {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
-    // Remove project from user's projects list
-    user.projects = user.projects.filter((pID) => { return pID !== req.params.projectId });
+    const userStory = new UserStory(req.body.userStory);
+    userStory.tasks = []
+    userStory.sprints = []
+    const savedUserStory = await userStory.save();
+    project.userStories.push(savedUserStory._id);
 
-    // Update user's info
-    await User.findByIdAndUpdate(user._id, user, { runValidators: true, new: true });
-
-    // Remobe project from its table
-    const removedProject = await Project.deleteOne({ _id: req.params.projectId });
-
-    const context = projectDetailsSerializer(removedProject);
+    context = await serializer.userStorySerializer(savedUserStory);
     res.json(context);
-  } catch (err) {
-    return res.status(400).json({ message: err });
+  } catch (error) {
+    res.status(400).json({ message: error });
   }
-
 })
 
-// Update specific project
-router.patch('/:projectId', async (req, res) => {
+router.post("/add-sprint", async (req, res) => {
+  try {
+    const project = await Project.findById(req.body.projectID);
+    // If no such project found
+    if(!project) {
+      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
+    }
+
+    // Check if user is authorized for that action
+    const user = req.user;
+    if (project.productOwner !== user._id) {
+      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
+    }
+
+    const sprint = new Sprint(req.body.sprint);
+    sprint.tasks = []
+    const savedSprint = await sprint.save();
+    project.sprints.push(savedSprint._id);
+
+    context = await serializer.sprintSerializer(savedSprint);
+    res.json(context);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+router.post("/add-task", async (req, res) => {
+  try {
+    const project = await Project.findById(req.body.projectID);
+    // If no such project found
+    if(!project) {
+      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
+    }
+
+    // Check if user is authorized for that action
+    const user = req.user;
+    if (!project.members.includes(user._id)) {
+      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
+    }
+
+    const userStory = await UserStory.findById({name: req.body.userStory});
+    // If no such userStory found
+    if(!userStory) {
+      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το user story.' });
+    }
+
+    const task = new Task(req.body.task);
+    var sprint = null;
+    if (savedTask.sprint) {
+      sprint = await Sprint.findById(req.body.task.sprint);
+      // If no such sprint found
+      if(!sprint) {
+        return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το sprint.' });
+      }
+    }
+    task.members = [user._id];
+    task.beforeTasks = [];
+    task.afterTasks = [];
+    const savedTask = await task.save();
+    if (sprint) sprint.tasks.push(savedTask._id)
+    userStory.tasks.push(savedTask._id)
+
+    context = await serializer.taskSerializer(savedTask);
+    res.json(context);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
+// EDIT PROJECT/ USERSTORY/ SPRINT/ TASK
+
+router.post('/edit-project', async (req, res) => {
   try {
     const user = req.user;
-    const project = await Project.findById(req.params.projectId);
+    const project = await Project.findById(req.body.projectId);
     // If no such project found
     if(!project) {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
@@ -139,175 +269,12 @@ router.patch('/:projectId', async (req, res) => {
     delete req.body.userStories;
     const updatedProject = await Project.findByIdAndUpdate(req.params.projectId, req.body, { runValidators: true, new: true });
 
-    const context = projectDetailsSerializer(updatedProject);
+    const context = await serializer.projectDetailsSerializer(updatedProject);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
   }
 })
-
-// Get all projects
-router.post("/get-sprints", async (req, res) => {
-  try {
-    const project = await Project.findById(req.body.projectID);
-    // If no such project found
-    if(!project) {
-      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
-    }
-    // Check if user is authorized for that action
-    const user = req.user;
-    if (!project.members.includes(user._id)) {
-      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
-    }
-
-    context = sprintSerializer(project.sprints);
-    res.json(context);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-// Get all projects
-router.post("/get-userstories", async (req, res) => {
-  try {
-    const project = await Project.findById(req.body.projectID);
-    // If no such project found
-    if(!project) {
-      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
-    }
-    // Check if user is authorized for that action
-    const user = req.user;
-    if (!project.members.includes(user._id)) {
-      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
-    }
-
-    context = userStorySerializer(project.userStories);
-    res.json(context);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-// Get all projects
-router.post("/get-details", async (req, res) => {
-  try {
-    const project = await Project.findById(req.body.projectID);
-    // If no such project found
-    if(!project) {
-      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
-    }
-    // Check if user is authorized for that action
-    const user = req.user;
-    if (!project.members.includes(user._id)) {
-      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
-    }
-
-    context = projectDetailsSerializer(project);
-    res.json(context);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-// ADD USERSTORY/ SPRINT/ TASK
-
-router.post("/add-userstory", async (req, res) => {
-  try {
-    const project = await Project.findById(req.body.projectID);
-    // If no such project found
-    if(!project) {
-      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
-    }
-
-    // Check if user is authorized for that action
-    const user = req.user;
-    if (project.productOwner !== user._id) {
-      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
-    }
-
-    const userStory = new UserStory(req.body.userStory);
-    userStory.tasks = []
-    userStory.sprints = []
-    const savedUserStory = await userStory.save();
-    project.userStories.push(savedUserStory._id);
-
-    context = userStorySerializer(savedUserStory);
-    res.json(context);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-router.post("/add-sprint", async (req, res) => {
-  try {
-    const project = await Project.findById(req.body.projectID);
-    // If no such project found
-    if(!project) {
-      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
-    }
-
-    // Check if user is authorized for that action
-    const user = req.user;
-    if (project.productOwner !== user._id) {
-      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
-    }
-
-    const sprint = new Sprint(req.body.sprint);
-    sprint.tasks = []
-    const savedSprint = await sprint.save();
-    project.sprints.push(savedSprint._id);
-
-    context = sprintSerializer(savedSprint);
-    res.json(context);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-router.post("/add-task", async (req, res) => {
-  try {
-    const project = await Project.findById(req.body.projectID);
-    // If no such project found
-    if(!project) {
-      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
-    }
-
-    // Check if user is authorized for that action
-    const user = req.user;
-    if (!project.members.includes(user._id)) {
-      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
-    }
-
-    const userStory = await UserStory.findById({name: req.body.userStory});
-    // If no such userStory found
-    if(!userStory) {
-      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το user story.' });
-    }
-
-    const task = new Task(req.body.task);
-    var sprint = null;
-    if (savedTask.sprint) {
-      sprint = await Sprint.findById(req.body.task.sprint);
-      // If no such sprint found
-      if(!sprint) {
-        return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το sprint.' });
-      }
-    }
-    task.members = [user._id];
-    task.beforeTasks = [];
-    task.afterTasks = [];
-    const savedTask = await task.save();
-    if (sprint) sprint.tasks.push(savedTask._id)
-    userStory.tasks.push(savedTask._id)
-
-    context = taskSerializer(savedTask);
-    res.json(context);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
-
-// EDIT USERSTORY/ SPRINT/ TASK
 
 router.post("/edit-userstory", async (req, res) => {
   try {
@@ -335,7 +302,7 @@ router.post("/edit-userstory", async (req, res) => {
     delete req.body.userStory.sprints
     const updatedUserStory = await UserStory.findByIdAndUpdate(req.body.userStory.id, req.body.userStory, { runValidators: true, new: true });
 
-    context = userStorySerializer(updatedUserStory);
+    context = await serializer.userStorySerializer(updatedUserStory);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -366,7 +333,7 @@ router.post("/edit-sprint", async (req, res) => {
     delete req.body.sprint.tasks
     const updatedSprint = await Sprint.findByIdAndUpdate(req.body.sprint.id, req.body.sprint, { runValidators: true, new: true });
 
-    context = sprintSerializer(updatedSprint);
+    context = await serializer.sprintSerializer(updatedSprint);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -416,14 +383,46 @@ router.post("/edit-task", async (req, res) => {
     delete req.body.task.afterTasks;
     const updatedTask = await Task.findByIdAndUpdate(req.body.task.id, req.body.task, { runValidators: true, new: true });
 
-    context = taskSerializer(updatedTask);
+    context = await serializer.taskSerializer(updatedTask);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
   }
 })
 
-// DELETE USERSTORY/ SPRINT/ TASK
+// DELETE PROJECT/ USERSTORY/ SPRINT/ TASK
+
+router.post('/delete-project', async (req, res) => {
+  try {
+    const user = req.user;
+    // Find project in the db
+    const project = await Project.findById(req.body.projectId);
+    // If no such project found
+    if(!project) {
+      return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
+    }
+
+    // Check if is the product owner is the user that sends the request
+    if (user._id !== project.productOwner){
+      return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
+    }
+
+    // Remove project from user's projects list
+    user.projects = user.projects.filter((pID) => { return pID !== req.params.projectId });
+
+    // Update user's info
+    await User.findByIdAndUpdate(user._id, user, { runValidators: true, new: true });
+
+    // Remobe project from its table
+    const removedProject = await Project.deleteOne({ _id: req.params.projectId });
+
+    const context = await serializer.projectDetailsSerializer(removedProject);
+    res.json(context);
+  } catch (err) {
+    return res.status(400).json({ message: err });
+  }
+
+})
 
 router.post("/delete-userstory", async (req, res) => {
   try {
@@ -457,7 +456,7 @@ router.post("/delete-userstory", async (req, res) => {
     // Remobe sprint from its table
     const removedUserStory = await UserStory.deleteOne({ _id: userStory._id });
 
-    const context = userStorySerializer(removedUserStory);
+    const context = await serializer.userStorySerializer(removedUserStory);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -501,7 +500,7 @@ router.post("/delete-sprint", async (req, res) => {
     // Remobe sprint from its table
     const removedSprint = await Task.deleteOne({ _id: sprint._id });
 
-    const context = taskSerializer(removedSprint);
+    const context = await serializer.taskSerializer(removedSprint);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -558,7 +557,7 @@ router.post("/delete-task", async (req, res) => {
     // Remobe task from its table
     const removedTask = await Task.deleteOne({ _id: task._id });
 
-    const context = taskSerializer(removedTask);
+    const context = await serializer.taskSerializer(removedTask);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -588,7 +587,7 @@ router.post("/join-task", async (req, res) => {
     }
     const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true, new: true });
 
-    context = taskSerializer(updatedTask);
+    context = await serializer.taskSerializer(updatedTask);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -618,7 +617,7 @@ router.post("/leave-task", async (req, res) => {
     }
     const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true, new: true });
 
-    context = taskSerializer(updatedTask);
+    context = await serializer.taskSerializer(updatedTask);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
