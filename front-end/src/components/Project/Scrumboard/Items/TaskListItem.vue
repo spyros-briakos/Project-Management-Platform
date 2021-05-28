@@ -17,7 +17,7 @@
        
       <div class="popupheader">
         <!-- <h3>hii</h3> -->
-        <div style="z-index:9999;">
+        <div>
           <vue-dropdown 
             :config="config"
             @setSelectedOption="setNewSelectedOption($event);"
