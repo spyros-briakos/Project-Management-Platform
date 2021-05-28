@@ -1,7 +1,11 @@
+const { User, Invitation } = require("../models/User");
 const { projectDescriptionSerializer } = require("../serializers/projects");
 
 async function usernameSerializer(query) {
   try {
+    if (typeof query !== 'object') {
+      query = await User.findById(query)
+    }
     const context = {
       id: query._id,
       username: query.username
@@ -16,7 +20,11 @@ async function usernameSerializer(query) {
 
 async function userSerializer(query) {
   try {
+    if (typeof query !== 'object') {
+      query = await User.findById(query)
+    }
     const projects = [];
+    let project;
     for (let i=0; i< user.projects.length; i++) {
       // Get serialized project
       const result = projectDescriptionSerializer(user.projects[i]);
@@ -32,13 +40,7 @@ async function userSerializer(query) {
     // Will keep from user's invitations only the needed info
     const invitations = []
     for (let i=0; i < user.invitations.length; i++) {
-      invitations[i] = {
-        receiver: user.invitations[i].receiver.username,
-        sender: user.invitations[i].sender.username,
-        project: user.invitations[i].project.name,
-        date: user.invitations[i].date,
-        invitationCode: user.invitations[i].invitationCode
-      }
+      invitations.push(invitationSerializer(user.invitations[i]))
     }
 
     const context = {
@@ -55,6 +57,26 @@ async function userSerializer(query) {
       premium_ending_date: query.premium_ending_date
     }
 
+    return context
+  } catch (error) {
+    return { error };
+  }
+}
+async function invitationSerializer(query) {
+  try {
+    if (typeof query !== 'object') {
+      query = await Invitation.findById(query)
+        .populate('receiver')
+        .populate('sender')
+        .populate('project');
+    }
+    context = {
+      receiver: query.receiver.username,
+      sender: query.sender.username,
+      project: query.project.name,
+      date: query.date,
+      invitationCode: query.invitationCode
+    }
     return context
   } catch (error) {
     return { error };

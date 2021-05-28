@@ -38,7 +38,19 @@ const TaskSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     }
-  ]
+  ],
+  beforeTasks: [
+    {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Task"
+		}
+  ],
+  afterTasks: [
+    {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Task"
+		}
+  ],
 });
 
 // Task model

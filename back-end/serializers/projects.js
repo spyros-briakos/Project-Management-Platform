@@ -3,6 +3,9 @@ const { usernameSerializer } = require("../serializers/users");
 // Projects
 async function projectDescriptionSerializer(query) {
   try {
+    if (typeof query !== 'object') {
+      query = await Project.findById(query)
+    }
     const context = {
       _id: query._id,
       name: query.name,
@@ -18,8 +21,7 @@ async function projectDescriptionSerializer(query) {
       members: []
     }
     for (let i=0; i < query.members.length; i++) {
-      // context.members[i] = usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
-      context.members[i] = query.members[i].username;
+      context.members[i] = usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
     }
 
     return context
@@ -27,8 +29,12 @@ async function projectDescriptionSerializer(query) {
     return { error };
   }
 }
+
 async function projectDetailsSerializer(query) {
   try {
+    if (typeof query !== 'object') {
+      query = await Project.findById(query)
+    }
     const context = {
       _id: query._id,
       name: query.name,
@@ -44,8 +50,7 @@ async function projectDetailsSerializer(query) {
       members: []
     }
     for (let i=0; i < query.members.length; i++) {
-      // context.members[i] = usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
-      context.members[i] = query.members[i].username;
+      context.members[i] = usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
     }
 
     return context
@@ -57,6 +62,9 @@ async function projectDetailsSerializer(query) {
 // Sprints
 async function sprintSerializer(query) {
   try {
+    if (typeof query !== 'object') {
+      query = await Sprint.findById(query)
+    }
     const context = {
       _id: query._id,
       name: query.name,
@@ -79,6 +87,9 @@ async function sprintSerializer(query) {
 // UserStories
 async function userStorySerializer(query) {
   try {
+    if (typeof query !== 'object') {
+      query = await UserStory.findById(query)
+    }
     const context = {
       _id: query._id,
       name: query.name,
@@ -106,6 +117,9 @@ async function userStorySerializer(query) {
 // Tasks
 async function taskSerializer(query) {
   try {
+    if (typeof query !== 'object') {
+      query = await Task.findById(query)
+    }
     const context = {
       _id: query._id,
       name: query.name,
@@ -119,8 +133,7 @@ async function taskSerializer(query) {
       members: []
     }
     for (let i=0; i < query.members.length; i++) {
-      // context.members[i] = usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
-      context.members[i] = query.members[i].username;
+      context.members[i] = usernameSerializer(query.members[i]); // {id: query.members[i]._id, username: query.members[i].username};
     }
 
     return context
