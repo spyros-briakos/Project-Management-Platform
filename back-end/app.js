@@ -89,4 +89,4 @@ app.listen(PORT, () => {
 // server = https.createServer(options, app).listen(port, function(){
 //   console.log(`Server listening at http://${process.env.HOSTNAME}:${PORT}/`);
 // });
-// module.exports = server;
+module.exports = app;

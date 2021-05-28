@@ -101,7 +101,7 @@ router.post('/login', async (req, res, next) => {
       const tokenObject = utils.issueJWT(user);
 
       // Get serialized user
-      const context = serializer.userSerializer(user);
+      const context = await serializer.userSerializer(user);
 
       return res.json({
         message: info.message,

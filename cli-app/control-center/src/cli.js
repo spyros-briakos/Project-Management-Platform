@@ -511,42 +511,43 @@ program
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(async function (command) {
-	const client = restAPI.client;
-	console.log(client);
-	try {
-	  let message = await restAPI.actions.login(command.username, command.password);
-	  console.log(message);
-	  console.log(client);
-	  console.log(restAPI.client);
-	} catch(error) {
-		console.log(error.message);
-	}
-	// // Check if the user can log in
-	// const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
-	// if(check.result === false){
-	//   return console.log(check.message);
+	// const client = restAPI.client;
+	// console.log(client);
+	// try {
+	//   let message = await restAPI.actions.login(command.username, command.password);
+	//   console.log(message);
+	//   console.log(client);
+	//   console.log(restAPI.client);
+	// } catch(error) {
+	// 	console.log(error.message);
 	// }
 
-	// axios.post(`${apiUrl}/users/login?format=${command.format}`, {
-	//   username: command.username,
-	//   password: command.password
-	// }, { httpsAgent: agent })
-	// .then(function (response) {
-	//   fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
-	// 	if(err) return console.log('Writing user failed:', err);
-	//   });
-	//   fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
-	// 	if(err) return console.log('Writing token failed:', err);
-	//   });
-	//   console.log(response.data.message);
-	// })
-	// .catch(function (error) {
-	//   if (error.response && error.response.data.message) {
-	// 	console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
-	//   } else {
-	// 	console.log('Η σύνδεση απέτυχε: ', error.message);
-	//   }
-	// });
+	// Check if the user can log in
+	const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
+	if(check.result === false){
+	  return console.log(check.message);
+	}
+
+	axios.post(`${apiUrl}/users/login?format=${command.format}`, {
+	  username: command.username,
+	  password: command.password
+	}, { httpsAgent: agent })
+	.then(function (response) {
+	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+		if(err) return console.log('Writing user failed:', err);
+	  });
+	  fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
+		if(err) return console.log('Writing token failed:', err);
+	  });
+	  console.log(response.data.message);
+	})
+	.catch(function (error) {
+	  if (error.response && error.response.data.message) {
+		console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
+	  } else {
+		console.log('Η σύνδεση απέτυχε: ', error.message);
+	  }
+	});
   });
 
 program
