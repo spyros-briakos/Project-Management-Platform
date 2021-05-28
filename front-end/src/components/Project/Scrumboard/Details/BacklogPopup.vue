@@ -59,7 +59,7 @@ details.popupp summary::-webkit-details-marker {
   max-height: calc(100vh - 80px);
   max-width: 700px;
   width: calc(100% - 80px);
-  height: 400px;
+  height: 450px;
   overflow-y: auto;
   z-index: 999;
   color: #000;
@@ -84,7 +84,7 @@ details[open].popupp summary:before {
   background: rgba(27, 31, 35, 0.5);
 }
 
-  details.popupp {
-    font-size: 0px;
-  }
+details.popupp {
+  font-size: 0px;
+}
 </style>
