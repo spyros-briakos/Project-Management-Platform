@@ -323,6 +323,7 @@ div#searching {
   width: 100%;
   background-color:#6eb8a2;
   z-index: 1;
+  box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.3);
 }
 
 .temp {
@@ -333,7 +334,7 @@ div#searching {
 
 .titlospopup {
   position: fixed;
-  top:15px;
+  top:10px;
   right: 30px;
   color: #3d5852;
   font-weight: bold;

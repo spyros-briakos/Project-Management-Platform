@@ -147,7 +147,7 @@
 
     <div class="card-body" v-if="!isNewItem">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
-        <span style = "font-weight: bold;" v-if="!isNewItem"> {{ this.selected }} </span> 
+        <span style = "font-weight: bold; font-size:15px;" v-if="!isNewItem"> {{ this.selected }} </span> 
         <br v-if="!isNewItem">
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
@@ -187,7 +187,7 @@ export default {
         title: ""
       },
       selected: 'Task',
-      options: ['Epic','Issue','Task']
+      options: ['User Story', 'Epic','Issue','Task']
     }
   },
   methods: {
