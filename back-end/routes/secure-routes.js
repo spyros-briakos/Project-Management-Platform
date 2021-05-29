@@ -16,28 +16,19 @@ const { InvalidToken } = require("../models/User");
 const { Invitation } = require("../models/User");
 // Import Project model
 const Project = require('../models/Project');
-const { findByIdAndUpdate } = require('../models/Project');
 
 
-// Get specific user
-router.get('/user', async (req, res) => {
-  try {
-    // Get user from db
-    const user = await findById(req.user._id).populate('invitations').populate('projects')
-                                             .populate({ path: 'invitations', populate: { path: 'receiver', model: 'User' } })
-                                             .populate({ path: 'invitations', populate: { path: 'sender', model: 'User' } })
-                                             .populate({ path: 'invitations', populate: { path: 'project', model: 'Project' } })
-                                             .populate({ path: 'projects', populate: { path: 'productOwner', model: 'User' } })
-                                             .populate({ path: 'projects', populate: { path: 'scrumMaster', model: 'User' } });
+// // Get specific user
+// router.get('/user', async (req, res) => {
+//   try {
+//     // Get serialized user
+//     const context = await serializer.userSerializer(req.user._id);
 
-    // Get serialized user
-    const context = serializer.userSerializer(user);
-
-    res.json(context);
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-})
+//     res.json(context);
+//   } catch (error) {
+//     res.status(400).json({ message: error });
+//   }
+// })
 
 // Log out user
 router.get('/logout', async(req, res) => {
@@ -80,7 +71,7 @@ router.patch('/edit-user', async (req, res) => {
       const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
 
       // Get serialized user
-      const context = serializer.userSerializer(updatedUser);
+      const context = await serializer.userSerializer(updatedUser);
 
       // Send verification to the user's email
       send_email.sendVerificationEmail(context.username, context.email, verificationCode);
@@ -101,7 +92,7 @@ router.patch('/edit-user', async (req, res) => {
       const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
 
       // Get serialized user
-      const context = serializer.userSerializer(updatedUser);
+      const context = await serializer.userSerializer(updatedUser);
 
       res.json({
         message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.',
@@ -199,6 +190,29 @@ router.patch('/upgrade-plan', async (req, res) => {
 // Delete specific user
 router.delete('/delete-user', async (req, res) => {
   try {
+    // Serialize user
+    const user = await serializer.userSerializer(req.user);
+
+    // For the user's each project
+    for(var project of user.projects) {
+      // Remove user from current project
+      project.members = project.members.filter((member) => { return !member._id.equals(user._id) });
+
+      // Keep only the ids of the rest of the members
+      const members = [];
+      for(var member of project.members)
+        members.push(member._id);
+
+      // Update project
+      await Project.findByIdAndUpdate(project._id, { members: members }, { runValidators: true });
+    }
+
+    // For the user's each invitation
+    for(var invitationId of req.user.invitations) {
+      // Delete invitation from the db
+      await Invitation.deleteOne({ _id: invitationId });
+    }
+
     // Delete user from db
     const removedUser = await User.deleteOne({ _id: req.user._id });
 
@@ -210,6 +224,7 @@ router.delete('/delete-user', async (req, res) => {
 
     res.json({ message: 'Επιτυχής διαγραφή λογαριασμού.' });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: error });
   }
 })

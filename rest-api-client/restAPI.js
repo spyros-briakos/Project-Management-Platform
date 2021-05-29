@@ -100,6 +100,41 @@ export const actions = {
     .catch(function(error) { throw error })    
   },
 
+  // Update user
+  async updateUser(data) {
+    return requests.updateUserRequest(data, client.tokenObject.token)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+      return {
+        message: response.message,
+        email: response.email
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  // Reset user's password
+  async resetPassword(data) {
+    return requests.resetPasswordRequest(data, client.tokenObject.token)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+      return response.message;
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  // Delete user
+  async deleteUser() {
+    return requests.deleteUserRequest(client.tokenObject.token)
+    .then(function(response) {
+      // Empty client object
+      client = initClient();
+      return response.message;
+    })
+    .catch(function(error) { throw error })
+  },
 }
 
 const requests = {
@@ -127,6 +162,31 @@ const requests = {
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
+
+  async updateUserRequest(data, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('PATCH', 'secure-routes/edit-user', data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async resetPasswordRequest(data, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('PATCH', 'secure-routes/reset-password', data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async deleteUserRequest(token) {
+    let headers = { "Authorization": `${token}` };
+  
+    return requests.send('DELETE', 'secure-routes/delete-user', {}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
 
   async send(method, url, data, headers) {
     switch(method) {

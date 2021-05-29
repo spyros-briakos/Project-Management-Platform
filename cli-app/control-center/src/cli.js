@@ -547,7 +547,7 @@ program
   .requiredOption('-ln, --lastName <value>', 'User\'s last name')
   .requiredOption('-e, --email <value>', 'User\'s email')
   .option('--plan <value>', 'User\'s plan (standard | premium-monthly | premium-year)')
-  .action(function(command) {
+  .action(async function(command) {
 	try {
 	  let data = {
 		username: command.username,
@@ -605,7 +605,7 @@ program
 	  // Set client
 	  restAPI.actions.setClient(clientData);
 
-	  // Log out client
+	  // Log out user
 	  let message = await restAPI.actions.logout();
 
 	  fs.unlink('/tmp/user.json', function(err) {
@@ -626,124 +626,105 @@ program
 	}
   })
 
-program
+  program
   .command('get-user')
-  .option('--format <value>', 'Give format', 'json')
-  .action(function(command) {
-	// Get user's token to pass authentication
-	const token = utils.getToken('/tmp/token.json');
-	// If an error occured
-	if(token instanceof Error) {
-	  const error = token;
+  .action(async function() {
+	try {
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Print user's data
+	  console.log(util.inspect(clientData.user, { depth: null, colors: true }));
+	} catch (error) {
 	  if(error.code === 'ENOENT')
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	}
-
-	axios.get(`${apiUrl}/secure-routes/user?format=${command.format}/`, {
-	  headers: { "Authorization": `Bearer ${token}` }
-	}, { httpsAgent: agent })
-	.then(function(response){
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data), function(err) {
-		if(err) return console.log('Writing user failed:', err);
-	  });
-	  console.log(util.inspect(response.data, { depth: null, colors: true }));
-	})
-	.catch(function(error) {
-	  if(error.response && error.response.data.message)
-	    console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.response.data.message}`);
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
 	    console.log(`Η ανάκτηση των δεδομένων του χρήστη απέτυχε: ${error.message}`);
-	});
+	}
   })
 
-program
+  program
   .command('update-user')
   .option('--format <value>', 'Give format', 'json')
   .option('-u, --username <value>', 'User\'s username')
   .option('-fn, --firstName <value>', 'User\'s firstName')
   .option('-ln, --lastName <value>', 'User\'s lastName')
   .option('-e, --email <value>', 'User\'s email')
-  .action(function(command) {
-	// Get user's token to pass authentication
-	const token = utils.getToken('/tmp/token.json');
-	// If an error occured
-	if(token instanceof Error) {
-	  const error = token;
-	  if(error.code === 'ENOENT')
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	}
+  .action(async function(command) {
+	try {
+	  let data = {
+		username: command.username,
+		firstName: command.firstName,
+		lastName: command.lastName,
+		email: command.email
+	  };
+  
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
 
-	axios.patch(`${apiUrl}/secure-routes/edit-user?format=${command.format}/`, {
-	  username: command.username,
-	  firstName: command.firstName,
-	  lastName: command.lastName,
-	  email: command.email,
-	  plan_in_use: command.plan
-	}, { headers: { "Authorization": `Bearer ${token}` }
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  // Update user's info
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+	  // Update user
+	  let response = await restAPI.actions.updateUser(data);
+  
+	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 		if(err) return console.log('Writing user failed:', err);
 	  });
-
-	  console.log(response.data.message);
+  
+	  console.log(response.message);
 
       // If a new email was given by the user
-	  if(response.data.email){
+	  if(response.email){
 		// Log out the user until the new email is verified
 		fs.unlink('/tmp/token.json', function(err) {
 		  if(err) return console.log('Removing token failed:', err);
 		});
 		console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
 	  }
-	})
-	.catch(function (error) {
-	  console.log(error);
-	  if(error.response && error.response.data.message)
+	} catch(error) {
+	  if (error.response && error.response.data.message)
 		console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
 		console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.message}`);
-	});
+	}
   })
 
-program
+  program
   .command('reset-password')
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('-op, --oldPassword <value>','User\'s old password')
   .requiredOption('-np, --newPassword <value>','User\'s new password')
   .requiredOption('-cp, --confirmPassword <value>','User\'s password confrimation')
-  .action(function(command) {
-	// Get user's token to pass authentication
-	const token = utils.getToken('/tmp/token.json');
-	// If an error occured
-	if(token instanceof Error) {
-	  const error = token;
-	  if(error.code === 'ENOENT')
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	}
-
-	axios.patch(`${apiUrl}/secure-routes/reset-password?format=${command.format}/`, {
-	  old: command.oldPassword,
-	  new: command.newPassword,
-	  confirm: command.confirmPassword
-	}, { headers: { "Authorization": `Bearer ${token}` }
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  console.log(response.data.message);
-	})
-	.catch(function (error) {
-	  if(error.response && error.response.data.message)
+  .action(async function(command) {
+	try {
+	  let data = {
+		old: command.oldPassword,
+		new: command.newPassword,
+		confirm: command.confirmPassword
+	  };
+	
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+  
+	  // Reset user's password
+	  let message = await restAPI.actions.resetPassword(data);
+	
+	  console.log(message);
+	} catch(error) {
+	  if (error.response && error.response.data.message)
 		console.log(`Η ενημέρωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
 		console.log(`Η ενημέρωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
-	});
+	}
   })
 
 // NOT GOOD WITH CLI-APP
@@ -807,40 +788,34 @@ program
 	});
   })
 
-program
+  program
   .command('delete-user')
-  .option('--format <value>', 'Give format', 'json')
-  .action(function(command) {
-	// Get user's token to pass authentication
-	const token = utils.getToken('/tmp/token.json');
-	// If an error occured
-	if(token instanceof Error) {
-	  const error = token;
-	  if(error.code === 'ENOENT')
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	}
-
-	axios.delete(`${apiUrl}/secure-routes/delete-user?format=${command.format}/`, {
-	  headers: { "Authorization": `Bearer ${token}` }
-	}, { httpsAgent: agent })
-	.then(function(response) {
+  .action(async function() {
+	try {
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+  
+	  // Delete user
+	  let message = await restAPI.actions.deleteUser();
+  
 	  fs.unlink('/tmp/user.json', function(err) {
 		if(err) return console.log('Removing user failed:', err);
 	  });
 	  fs.unlink('/tmp/token.json', function(err) {
 		if(err) return console.log('Removing token failed:', err);
 	  });
-
-	  console.log(response.data.message);
-	})
-	.catch(function (error) {
+  
+	  console.log(message);
+	} catch (error) {
 	  if(error.response && error.response.data.message)
 		console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
 		console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.message}`);
-	});
+	}
   })
 
 // NOT GOOD WITH CLI-APP
