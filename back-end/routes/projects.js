@@ -4,7 +4,6 @@ const express = require("express");
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const moment = require("moment");
-const serializers = require("../serializers");
 
 // Import Project model
 const Project = require("../models/Project");

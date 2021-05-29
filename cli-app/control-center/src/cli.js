@@ -511,20 +511,37 @@ program
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(async function (command) {
-	const client = restAPI.client;
-	console.log(client);
+	// const client = restAPI.client;
+	// console.log(client);
+	// console.log(require.cache[require.resolve('../../../rest-api-client/restAPI')].exports.client);
 	try {
-	  let message = await restAPI.actions.login(command.username, command.password);
-	  console.log(message);
-	  console.log(client);
-	  console.log(restAPI.client);
+	//   let message = await restAPI.actions.login(command.username, command.password);
+	//   console.log(message);
+	  console.log(global.myClient);
+	//   console.log(restAPI.client);
 	} catch(error) {
-		console.log(error.message);
+		console.log(error);
 	}
-	// // Check if the user can log in
+
+	// Check if the user can log in
 	// const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
 	// if(check.result === false){
 	//   return console.log(check.message);
+	// }
+
+	// try {
+	//   let message = await restAPI.actions.login(command.username, command.password);
+ 
+	//   fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+	// 	if(err) return console.log('Writing user failed:', err);
+	//   });
+	//   fs.writeFile('/tmp/token.json', JSON.stringify(client.tokenObject), function(err) {
+	// 	if(err) return console.log('Writing token failed:', err);
+	//   });
+
+	//   console.log(message);
+	// } catch(error) {
+	//   console.log(error);
 	// }
 
 	// axios.post(`${apiUrl}/users/login?format=${command.format}`, {

@@ -1,6 +1,6 @@
 const { projectDescriptionSerializer } = require("../serializers/projects");
 
-async function usernameSerializer(query) {
+function usernameSerializer(query) {
   const context = {
     id: query._id,
     username: query.username
@@ -10,7 +10,7 @@ async function usernameSerializer(query) {
 }
 
 
-async function userSerializer(user) {
+function userSerializer(user) {
   const projects = [];
   for (let i=0; i< user.projects.length; i++) {
     // Get serialized project

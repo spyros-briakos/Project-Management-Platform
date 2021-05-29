@@ -23,7 +23,12 @@ const { findByIdAndUpdate } = require('../models/Project');
 router.get('/user', async (req, res) => {
   try {
     // Get user from db
-    const user = await findById(req.user._id);
+    const user = await findById(req.user._id).populate('invitations').populate('projects')
+                                             .populate({ path: 'invitations', populate: { path: 'receiver', model: 'User' } })
+                                             .populate({ path: 'invitations', populate: { path: 'sender', model: 'User' } })
+                                             .populate({ path: 'invitations', populate: { path: 'project', model: 'Project' } })
+                                             .populate({ path: 'projects', populate: { path: 'productOwner', model: 'User' } })
+                                             .populate({ path: 'projects', populate: { path: 'scrumMaster', model: 'User' } });
 
     // Get serialized user
     const context = serializer.userSerializer(user);
