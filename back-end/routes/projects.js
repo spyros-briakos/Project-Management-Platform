@@ -1,15 +1,15 @@
 'use strict'
 
 const express = require("express");
-const jwt = require('jsonwebtoken');
 const router = express.Router();
-const moment = require("moment");
 
 // Import Project model
-const Project = require("../models/Project");
+const serializer = require("../serializers/projects");
 const { User } = require("../models/User");
+const Project = require("../models/Project");
+const Sprint = require("../models/Sprint");
 const UserStory = require("../models/UserStory");
-const serializer = require("../serializers/users");
+const Task = require("../models/Task");
 
 // GETTERS
 
@@ -18,13 +18,14 @@ router.post("/get-projects", async (req, res) => {
   try {
     const user = req.user;
     const projects = user.projects;
-    context = []
+    const context = []
     for (let i in projects) {
-      context.push(projectDescriptionSerializer(projects[i]))
+      context.push(await serializer.projectDescriptionSerializer(projects[i]))
     }
 
     res.json(context);
   } catch (error) {
+    // console.log(error)
     res.status(400).json({ message: error });
   }
 })
@@ -43,7 +44,7 @@ router.post("/get-sprints", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
-    context = await serializer.sprintSerializer(project.sprints);
+    const context = await serializer.sprintSerializer(project.sprints);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -64,7 +65,7 @@ router.post("/get-userstories", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
-    context = await serializer.userStorySerializer(project.userStories);
+    const context = await serializer.userStorySerializer(project.userStories);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -85,7 +86,7 @@ router.post("/get-details", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
-    context = await serializer.projectDetailsSerializer(project);
+    const context = await serializer.projectDetailsSerializer(project);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -97,7 +98,6 @@ router.post("/get-details", async (req, res) => {
 router.post("/add-project", async (req, res) => {
   try {
     const user = req.user;
-    // console.log(user)
     const project = new Project(req.body.project);
     // If no such project found
     if(!project) {
@@ -118,7 +118,6 @@ router.post("/add-project", async (req, res) => {
     const context = await serializer.projectDetailsSerializer(savedProject);
     res.json(context);
   } catch (error) {
-    console.log(error)
     res.status(400).json({ message: error });
   }
 })
@@ -143,7 +142,7 @@ router.post("/add-userstory", async (req, res) => {
     const savedUserStory = await userStory.save();
     project.userStories.push(savedUserStory._id);
 
-    context = await serializer.userStorySerializer(savedUserStory);
+    const context = await serializer.userStorySerializer(savedUserStory);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -169,7 +168,7 @@ router.post("/add-sprint", async (req, res) => {
     const savedSprint = await sprint.save();
     project.sprints.push(savedSprint._id);
 
-    context = await serializer.sprintSerializer(savedSprint);
+    const context = await serializer.sprintSerializer(savedSprint);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -212,7 +211,7 @@ router.post("/add-task", async (req, res) => {
     if (sprint) sprint.tasks.push(savedTask._id)
     userStory.tasks.push(savedTask._id)
 
-    context = await serializer.taskSerializer(savedTask);
+    const context = await serializer.taskSerializer(savedTask);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -302,7 +301,7 @@ router.post("/edit-userstory", async (req, res) => {
     delete req.body.userStory.sprints
     const updatedUserStory = await UserStory.findByIdAndUpdate(req.body.userStory.id, req.body.userStory, { runValidators: true, new: true });
 
-    context = await serializer.userStorySerializer(updatedUserStory);
+    const context = await serializer.userStorySerializer(updatedUserStory);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -333,7 +332,7 @@ router.post("/edit-sprint", async (req, res) => {
     delete req.body.sprint.tasks
     const updatedSprint = await Sprint.findByIdAndUpdate(req.body.sprint.id, req.body.sprint, { runValidators: true, new: true });
 
-    context = await serializer.sprintSerializer(updatedSprint);
+    const context = await serializer.sprintSerializer(updatedSprint);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -383,7 +382,7 @@ router.post("/edit-task", async (req, res) => {
     delete req.body.task.afterTasks;
     const updatedTask = await Task.findByIdAndUpdate(req.body.task.id, req.body.task, { runValidators: true, new: true });
 
-    context = await serializer.taskSerializer(updatedTask);
+    const context = await serializer.taskSerializer(updatedTask);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -587,7 +586,7 @@ router.post("/join-task", async (req, res) => {
     }
     const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true, new: true });
 
-    context = await serializer.taskSerializer(updatedTask);
+    const context = await serializer.taskSerializer(updatedTask);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -617,7 +616,7 @@ router.post("/leave-task", async (req, res) => {
     }
     const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true, new: true });
 
-    context = await serializer.taskSerializer(updatedTask);
+    const context = await serializer.taskSerializer(updatedTask);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
@@ -656,7 +655,7 @@ router.post("/leave-project", async (req, res) => {
 
     const updatedProject = await Project.findByIdAndUpdate(project._id, project, { runValidators: true, new: true });
 
-    context = projectDetailSerializer(updatedProject);
+    const context = projectDetailSerializer(updatedProject);
     res.json(context);
   } catch (error) {
     res.status(400).json({ message: error });
