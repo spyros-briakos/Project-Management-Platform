@@ -1,11 +1,9 @@
 const { User, Invitation } = require("../models/User");
-const { projectDescriptionSerializer } = require("../serializers/projects");
+const { projectDescriptionSerializer } = require("./projects");
 
 async function usernameSerializer(query) {
   try {
-    if (typeof query !== 'object') {
-      query = await User.findById(query)
-    }
+    query = await User.findById(query)
     const context = {
       id: query._id,
       username: query.username
@@ -17,23 +15,13 @@ async function usernameSerializer(query) {
   }
 }
 
-
 async function userSerializer(query) {
   try {
-    if (typeof query !== 'object') {
-      query = await User.findById(query)
-    }
+    query = await User.findById(query)
     const projects = [];
     for (let i=0; i< query.projects.length; i++) {
       // Get serialized project
       projects.push(await projectDescriptionSerializer(query.projects[i]));
-
-      // // If there was an error
-      // if (result.error) {
-      //   return { error: error };
-      // } else {
-      //   projects[i] = result.project;
-      // }
     }
 
     // Will keep from user's invitations only the needed info
@@ -61,15 +49,14 @@ async function userSerializer(query) {
     return { error };
   }
 }
+
 async function invitationSerializer(query) {
   try {
-    if (typeof query !== 'object') {
-      query = await Invitation.findById(query)
-        .populate('receiver')
-        .populate('sender')
-        .populate('project');
-    }
-    context = {
+    query = await Invitation.findById(query)
+      .populate('receiver')
+      .populate('sender')
+      .populate('project');
+    const context = {
       receiver: query.receiver.username,
       sender: query.sender.username,
       project: query.project.name,
@@ -82,5 +69,5 @@ async function invitationSerializer(query) {
   }
 }
 
-module.exports.userSerializer = userSerializer;
 module.exports.usernameSerializer = usernameSerializer;
+module.exports.userSerializer = userSerializer;

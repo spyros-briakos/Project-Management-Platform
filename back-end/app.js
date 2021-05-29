@@ -44,10 +44,10 @@ const secureRoute = require('./routes/secure-routes');
 // MAKE ROUTES AVAILABLE
 // Public routes
 app.use('/api-control/users', userRoutes);
-app.use('/api-control/user-stories', user_storyRoutes);
+// app.use('/api-control/user-stories', user_storyRoutes);
 // Routes for logged users
 // Plug in the JWT strategy as a middleware, so only verified users can access these routes.
-app.use('/api-control/projects', authenticate, projectRoutes);
+app.use('/api-control', authenticate, projectRoutes);
 app.use('/api-control/secure-routes', authenticate, secureRoute);
 
 // // DECLARE VARS
