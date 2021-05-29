@@ -1,5 +1,5 @@
 fs = require('fs');
-// require('datejs');
+require('datejs');
 
 function getToken(path) {
   try {
@@ -57,5 +57,20 @@ function checkLogInfo(username, userPath, tokenPath) {
   }
 }
 
+function fileToClient(userPath, tokenPath) {
+  try {
+    const userData = fs.readFileSync(userPath);
+    const tokenData = fs.readFileSync(tokenPath);
+
+    return {
+      user: JSON.parse(userData),
+      token: JSON.parse(tokenData)
+    }
+  } catch(error) {
+    throw error;
+  }
+}
+
 module.exports.getToken = getToken;
 module.exports.checkLogInfo = checkLogInfo;
+module.exports.fileToClient = fileToClient;

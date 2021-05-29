@@ -505,68 +505,40 @@ program
 	})
   });
 
-program
+  program
   .command('login')
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(async function (command) {
-	// const client = restAPI.client;
-	// console.log(client);
-	// console.log(require.cache[require.resolve('../../../rest-api-client/restAPI')].exports.client);
-	try {
-	//   let message = await restAPI.actions.login(command.username, command.password);
-	//   console.log(message);
-	  console.log(global.myClient);
-	//   console.log(restAPI.client);
-	} catch(error) {
-		console.log(error);
+	// Check if the user can log in
+	const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
+	if(check.result === false){
+	  return console.log(check.message);
 	}
 
-	// Check if the user can log in
-	// const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
-	// if(check.result === false){
-	//   return console.log(check.message);
-	// }
-
-	// try {
-	//   let message = await restAPI.actions.login(command.username, command.password);
+	try {
+	  const client = restAPI.client;
+	  let message = await restAPI.actions.login(command.username, command.password);
  
-	//   fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
-	// 	if(err) return console.log('Writing user failed:', err);
-	//   });
-	//   fs.writeFile('/tmp/token.json', JSON.stringify(client.tokenObject), function(err) {
-	// 	if(err) return console.log('Writing token failed:', err);
-	//   });
+	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+		if(err) return console.log('Writing user failed:', err);
+	  });
+	  fs.writeFile('/tmp/token.json', JSON.stringify(client.tokenObject), function(err) {
+		if(err) return console.log('Writing token failed:', err);
+	  });
 
-	//   console.log(message);
-	// } catch(error) {
-	//   console.log(error);
-	// }
-
-	// axios.post(`${apiUrl}/users/login?format=${command.format}`, {
-	//   username: command.username,
-	//   password: command.password
-	// }, { httpsAgent: agent })
-	// .then(function (response) {
-	//   fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
-	// 	if(err) return console.log('Writing user failed:', err);
-	//   });
-	//   fs.writeFile('/tmp/token.json', JSON.stringify(response.data.token), function(err) {
-	// 	if(err) return console.log('Writing token failed:', err);
-	//   });
-	//   console.log(response.data.message);
-	// })
-	// .catch(function (error) {
-	//   if (error.response && error.response.data.message) {
-	// 	console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
-	//   } else {
-	// 	console.log('Η σύνδεση απέτυχε: ', error.message);
-	//   }
-	// });
+	  console.log(message);
+	} catch(error) {
+	  if (error.response && error.response.data.message) {
+		console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
+	  } else {
+		console.log('Η σύνδεση απέτυχε: ', error.message);
+	  }
+	}
   });
 
-program
+  program
   .command('signup')
   .option('--format <value>', 'Give format', 'json')
   .requiredOption('-u, --username <value>', 'User\'s username')
@@ -576,63 +548,82 @@ program
   .requiredOption('-e, --email <value>', 'User\'s email')
   .option('--plan <value>', 'User\'s plan (standard | premium-monthly | premium-year)')
   .action(function(command) {
-	axios.post(`${apiUrl}/users/signup?format=${command.format}/`, {
-	  username: command.username,
-	  password: command.password,
-	  firstName: command.firstName,
-	  lastName: command.lastName,
-	  email: command.email,
-	  plan_in_use: command.plan
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+	try {
+	  let data = {
+		username: command.username,
+		password: command.password,
+		firstName: command.firstName,
+		lastName: command.lastName,
+		email: command.email,
+		plan_in_use: command.plan
+	  };
+
+	  const client = restAPI.client;
+	  let message = await restAPI.actions.signup(data);
+
+	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 	    if(err) return console.log('Writing user failed:', err);
 	  });
-	  console.log(response.data.message);
+
+	  console.log(message);
 	  console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
-	})
-	.catch(function (error) {
+	} catch(error) {
 	  if (error.response && error.response.data.message)
 		console.log('Η εγγραφή απέτυχε: ', error.response.data.message);
 	  else
 		console.log('Η εγγραφή απέτυχε: ', error.message);
-	});
+	}
+	// axios.post(`${apiUrl}/users/signup?format=${command.format}/`, {
+	//   username: command.username,
+	//   password: command.password,
+	//   firstName: command.firstName,
+	//   lastName: command.lastName,
+	//   email: command.email,
+	//   plan_in_use: command.plan
+	// }, { httpsAgent: agent })
+	// .then(function (response) {
+	//   fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+	//     if(err) return console.log('Writing user failed:', err);
+	//   });
+	//   console.log(response.data.message);
+	//   console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
+	// })
+	// .catch(function (error) {
+	//   if (error.response && error.response.data.message)
+	// 	console.log('Η εγγραφή απέτυχε: ', error.response.data.message);
+	//   else
+	// 	console.log('Η εγγραφή απέτυχε: ', error.message);
+	// });
   });
 
-program
+  program
   .command('logout')
-  .option('--format <value>', 'Give format', 'json')
-  .action(function(command) {
-	// Get user's token to pass authentication
-	const token = utils.getToken('/tmp/token.json');
-	// If an error occured
-	if(token instanceof Error) {
-	  const error = token;
-	  if(error.code === 'ENOENT')
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	}
+  .action(async function() {
+	try {
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
 
-    // Call log out on the server side
-	axios.get(`${apiUrl}/secure-routes/logout`, {
-	  headers: { "Authorization": `Bearer ${token}` }
-	}, { httpsAgent: agent })
-	.then(function(response){
+	  // Log out client
+	  let message = await restAPI.actions.logout();
+
 	  fs.unlink('/tmp/user.json', function(err) {
-		if(err) return console.log('Removing user failed:', err);
+	    if(err) return console.log('Removing user failed:', err);
 	  });
 	  fs.unlink('/tmp/token.json', function(err) {
-		if(err) return console.log('Removing token failed:', err);
+	    if(err) return console.log('Removing token failed:', err);
 	  });
-	  console.log(response.data.message);
-	})
-	.catch(function(error) {
+
+	  console.log(message);
+	} catch (error) {
 	  if(error.response && error.response.data.message)
 		console.log('Η αποσύνδεση απέτυχε.',error.response.data.message);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
 		console.log('Η αποσύνδεση απέτυχε.',error.message);
-	});
+	}
   })
 
 program
@@ -749,9 +740,9 @@ program
 	})
 	.catch(function (error) {
 	  if(error.response && error.response.data.message)
-		console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
+		console.log(`Η ενημέρωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
 	  else
-		console.log(`Η ενμηέρωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
+		console.log(`Η ενημέρωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
 	});
   })
 

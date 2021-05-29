@@ -2,8 +2,7 @@
 
 const https = require('https');
 const axios = require('axios');
-require('dotenv').config();
-// const clientObj = require('./client').clientObj;
+// require('dotenv').config();
 
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
 const apiUrl = `http://127.0.0.1:3000/api-control`;
@@ -14,87 +13,96 @@ const agent = new https.Agent({
 // console.log(apiUrl);
 
 // Create empty client object
-function clientInit() {
-  // console.log('!',typeof client);
-  // if(!client) {
-    return {
-      user: {
-        username: null,
-        firstName: null,
-        lastName: null,
-        email: null,
-        status: null,
-        image: null,
-        projects: [],
-        invitations: [],
-        plan_in_use: null,
-        premium_ending_date: null
-      },
-      project: {
-        name: null,
-        description: null,
-        productOwner: null,
-        scrumMaster: null,
-        sprints: [],
-        userStories: [],
-        members: [],
-        status: null,
-        plan_in_use: null,
-        startingDate: null,
-        endingDate: null
-      },
-      tokenObject: {
-        token: null,
-        expires: null
-      }
-    }
-  // } else {
-    // return client;
-  // }
+export function initClient() {
+  return {
+    user: {
+      username: null,
+      firstName: null,
+      lastName: null,
+      email: null,
+      status: null,
+      image: null,
+      projects: [],
+      invitations: [],
+      plan_in_use: null,
+      premium_ending_date: null
+    },
+    tokenObject: {
+      token: null,
+      expires: null
+    },
+    project: null
+  }
 }
-console.log()
-// export const client = clientInit();
+
+export function initProject() {
+  return {
+    name: null,
+    description: null,
+    productOwner: null,
+    scrumMaster: null,
+    sprints: [],
+    userStories: [],
+    members: [],
+    status: null,
+    plan_in_use: null,
+    startingDate: null,
+    endingDate: null
+  }
+}
+
+// Initialize client object
+export var client = initClient();
 
 export const actions = {
-  createClient(data) {
-    const client = clientInit();
-    client.user = data.user;
-    client.tokenObject = data.token;
-    global.myClient = client;
-  },
-  deleteClient() {
-    // client.user = null;
-    // client.project = null;
-    // client.tokenObject = null;
-    delete global.myClient;
-  },
-  getToken() {
-    return client.tokenObject.token;
+  // Set client object
+  setClient(data) {
+    if(data.user)
+      client.user = data.user;
+
+    if(data.token)
+      client.tokenObject = data.token;
+
+    if(data.project)
+      client.project = data.project;
   },
 
+  // Login user
   async login(username, password) {
     return requests.loginRequest(username, password)
     .then(function(response) {
-      actions.createClient(response);
+      // Set client object
+      actions.setClient(response);
       return response.message;
     })
     .catch(function(error) { throw error })    
   },
 
+  // Log out user
   async logout() {
-    let token = getToken();
-
-    await requests.logoutRequest(token)
+    return requests.logoutRequest(client.tokenObject.token)
     .then(function(response) {
-      deleteClient();
-      return response.data.message;
+      // Empty client object
+      client = initClient();
+      return response.message;
     })
     .catch(function(error) { throw error })
-  }
+  },
+
+  // Sign up user
+  async signup(data) {
+    return requests.signupRequest(data)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+      return response.message;
+    })
+    .catch(function(error) { throw error })    
+  },
 
 }
 
-export const requests = {
+const requests = {
   async loginRequest(username, password) {
     let data = {
       username: username,
@@ -107,36 +115,37 @@ export const requests = {
   },
 
   async logoutRequest(token) {
-    let headers = { "Authorization": `Bearer ${token}` }
+    let headers = { "Authorization": `${token}` };
   
-    await this.send('GET', 'secure-routes/logout', {}, headers)
+    return requests.send('GET', 'secure-routes/logout', {}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async signupRequest(data) {
+    return requests.send('POST', 'users/signup', data)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
 
   async send(method, url, data, headers) {
-    let result;
     switch(method) {
       case('POST'):
-        return axios.post(`${apiUrl}/${url}`, data, headers, { httpsAgent: agent })
+        return axios.post(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
         .then(function(response) { return response.data })
         .catch(function(error) { throw error })
-        break;
       case('GET'):
-        axios.get(`${apiUrl}/${url}`, data, headers, { httpsAgent: agent })
-        .then(function(response) { return response })
+        return axios.get(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
+        .then(function(response) { return response.data })
         .catch(function(error) { throw error })
-        break;
       case('PATCH'):
-        axios.get(`${apiUrl}/${url}`, data, headers, { httpsAgent: agent })
-        .then(function(response) { return response })
+        return axios.patch(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
+        .then(function(response) { return response.data })
         .catch(function(error) { throw error })
-        break;
       case('DELETE'):
-        axios.delete(`${apiUrl}/${url}`, data, headers, { httpsAgent: agent })
-        .then(function(response) { return response })
+        return axios.delete(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
+        .then(function(response) { return response.data })
         .catch(function(error) { throw error })
-        break;
     }
 
   }
