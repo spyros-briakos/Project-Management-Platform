@@ -320,7 +320,7 @@ div#searching {
   // max-height: 10%;
   top:0px;
   right: 0px;
-  height: 40px;
+  height: 50px;
   width: 100%;
   background-color:#6eb8a2;
   z-index: 1;
@@ -329,7 +329,7 @@ div#searching {
 
 .temp {
   padding-top: 0%;
-  width: 4cm;
+  width: 3.5cm;
   height: 40px;
   // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.3);
 }
@@ -367,11 +367,13 @@ div#searching {
 }
 
 .title3 {
+  // display: inline;
   text-align: left; 
-  width: 100%; 
+  // width: 100%; 
   position:relative; 
   top: 100px;
-  color: rgba(20, 121, 104, 0.904); 
+  color: rgba(20, 121, 104, 0.904);
+  // float: left;
 }
 
 .subtitle1 {
