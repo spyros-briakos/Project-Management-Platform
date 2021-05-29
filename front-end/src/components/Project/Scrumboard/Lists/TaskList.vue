@@ -19,7 +19,7 @@
         ></TaskListItem>
       </draggable>
       <TaskListItem
-        class="fixed-card"
+        class="fixed-card1"
         :item="defaultItem"
         :list="list"
         :board="board"
@@ -88,7 +88,6 @@ export default {
     itemEditing() {
       this.isEditing = true
       // console.log("TaskList.itemEditing ", this.isEditing)
-      
     },
     itemEdited() {
       this.isEditing = false

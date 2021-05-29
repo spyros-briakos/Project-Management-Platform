@@ -80,7 +80,7 @@
 }
 
 .card-body {
-  padding: 1.5rem !important;
+  padding: 1rem !important;
 }
 
 .board-item {
@@ -135,6 +135,15 @@
   cursor: pointer;
   color: #ccc;
   border: 1px dotted #ccc;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.fixed-card1 {
+  // cursor: pointer;
+  color: #ccc;
+  background-color: rgba(223, 238, 242, 0);
+  border: 1px dotted rgba(223, 238, 242, 0);
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -255,7 +264,7 @@ div#searching {
 	right: 43%;
 	top: 10%;
 	// display: none;
-  font-size: medium;
+  font-size: large;
 }
 
 .fas.fa-pen {
@@ -263,11 +272,11 @@ div#searching {
 }
 
 .fas.fa-plus-circle {
-  color:#418B75;
+  color:#27463c;
 }
 
 .form-outline {
-  padding-left: 850px;
+  padding-left: 750px;
   padding-top: 3px;
 }
 
@@ -301,24 +310,73 @@ div#searching {
 //   padding-left:100px;
 // }
 
-#popupheader {
+.popupheader {
   position: fixed;
   display: flex;
   // max-height: 1px;
   // padding-top: 10px;
   // padding-top: 10px;
   // max-height: 10%;
-  top:30px;
-  height: 60px;
+  top:0px;
+  right: 0px;
+  height: 50px;
   width: 100%;
   background-color:#6eb8a2;
+  z-index: 1;
+  box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.3);
 }
 
-// #dropdownn {
-  // font-family: "Avenir", Helvetica, Arial, sans-serif;
-  // -webkit-font-smoothing: antialiased;
-  // -moz-osx-font-smoothing: grayscale;
-  // text-align: center;
-  // color: #2c3e50;
-  // margin-top: 60px;
-// }
+.temp {
+  padding-top: 0%;
+  width: 4cm;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.3);
+}
+
+.titlospopup {
+  position: fixed;
+  top:10px;
+  right: 30px;
+  color: #3d5852;
+  font-weight: bold;
+  text-align: right;
+  width: 100%;
+  z-index: 0;
+}
+
+#drop1 {
+  position: fixed;
+  text-align: left;
+}
+
+.title1 {
+  text-align: center; 
+  width: 100%; 
+  position:relative; 
+  top: -35px;
+  color: rgba(49, 61, 59, 0.904); 
+}
+
+.title2 {
+  text-align: center; 
+  width: 100%; 
+  position:relative; 
+  top: 3px;
+  color: rgba(49, 61, 59, 0.904); 
+}
+
+.title3 {
+  text-align: left; 
+  width: 100%; 
+  position:relative; 
+  top: 100px;
+  color: rgba(20, 121, 104, 0.904); 
+}
+
+.subtitle1 {
+  text-align: left; 
+  width: 100%; 
+  position:relative; 
+  top: 0px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.904); 
+}

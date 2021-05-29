@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
 /* Experimental : Details implementation */
 details.popup summary {
   outline: none;
