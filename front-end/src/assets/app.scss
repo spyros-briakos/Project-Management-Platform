@@ -276,8 +276,9 @@ div#searching {
 }
 
 .form-outline {
-  padding-left: 750px;
-  padding-top: 3px;
+  position: fixed;
+  left: 1165px;
+  top: 15px;
 }
 
 
@@ -323,13 +324,14 @@ div#searching {
   width: 100%;
   background-color:#6eb8a2;
   z-index: 1;
-  box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.3);
+  // box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.3);
 }
 
 .temp {
   padding-top: 0%;
-  width: 4cm;
-  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.3);
+  width: 3.5cm;
+  height: 40px;
+  // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.3);
 }
 
 .titlospopup {
@@ -365,11 +367,13 @@ div#searching {
 }
 
 .title3 {
+  // display: inline;
   text-align: left; 
-  width: 100%; 
+  // width: 100%; 
   position:relative; 
   top: 100px;
-  color: rgba(20, 121, 104, 0.904); 
+  color: rgba(20, 121, 104, 0.904);
+  // float: left;
 }
 
 .subtitle1 {
@@ -379,4 +383,14 @@ div#searching {
   top: 0px;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.904); 
+}
+
+.dropdown-menu {
+  width: 100%;
+}
+
+.scrollable-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
 }
