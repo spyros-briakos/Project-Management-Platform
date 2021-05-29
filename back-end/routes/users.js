@@ -51,7 +51,7 @@ router.post('/signup', [upload.single('image'), passport.authenticate('signup', 
     send_email.sendVerificationEmail(req.user.username, req.user.email, req.user.verificationCode);
 
     // Get serialized user
-    const context = serializer.userSerializer(req.user);
+    const context = await serializer.userSerializer(req.user);
 
     res.json({
       message: 'Επιτυχής εγγραφή!\nΣου στείλαμε email επιβεβαίωσης. Παρακαλούμε δες το Gmail σου!',
@@ -156,7 +156,7 @@ router.get('/oauth2callback/signup', async(req, res) => {
       const tokenObject = utils.issueJWT(savedUser);
 
       // Get serialized user
-      const context = serializer.userSerializer(user);
+      const context = await serializer.userSerializer(user);
 
       res.json({
         message: 'Ο λογαριασμός σου δημιουργήθηκε με επιτυχία! Είσαι πλέον συνδεδεμένος/-η στο ScruManiac.',
@@ -203,7 +203,7 @@ router.get('/oauth2callback/login', async(req, res) => {
       const tokenObject = utils.issueJWT(user);
 
       // Get serialized user
-      const context = serializer.userSerializer(user);
+      const context = await serializer.userSerializer(user);
 
       res.json({
         message: 'Η σύνδεσή σου ολοκληρώθηκε με επιτυχία.',
@@ -274,7 +274,7 @@ router.post('/set-password/:verificationCode', async(req, res) => {
     const tokenObject = utils.issueJWT(user);
 
     // Get serialized user
-    const context = serializer.userSerializer(user);
+    const context = await serializer.userSerializer(user);
 
     res.json({
       message: 'Ο νέος σου κωδικός δημιουργήθηκε με επιτυχία! Είσαι πλέον συνδεδεμένος/-η στο ScruManiac.',
@@ -336,7 +336,7 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
         await Invitation.deleteOne({ _id: invitation._id });
 
         // Get serialized user
-        const context = serializer.userSerializer(updatedUser);
+        const context = await serializer.userSerializer(updatedUser);
 
         return res.json({
           message: `Επιτυχής αποδοχή πρόσκλησης. Είσαι πλέον μέλος στο project ${project.name}!`,
@@ -355,7 +355,7 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
         const updatedUser = await User.findByIdAndUpdate(user._id, { invitations: invitations }, { runValidators: true, new: true });
 
         // Get serialized user
-        const context = serializer.userSerializer(updatedUser);
+        const context = await serializer.userSerializer(updatedUser);
 
         // Delete invtitation from the db as well
         await Invitation.deleteOne({ _id: invitation._id });
