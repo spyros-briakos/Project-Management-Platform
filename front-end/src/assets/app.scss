@@ -330,7 +330,7 @@ div#searching {
 .temp {
   padding-top: 0%;
   width: 3.5cm;
-  height: 40px;
+  height: 80px;
   // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.3);
 }
 
@@ -374,6 +374,7 @@ div#searching {
   top: 100px;
   color: rgba(20, 121, 104, 0.904);
   // float: left;
+  z-index: 0;
 }
 
 .subtitle1 {
@@ -393,4 +394,90 @@ div#searching {
   height: auto;
   max-height: 200px;
   overflow-x: hidden;
+}
+
+.multiselect__tags {
+  // background-color: #f0f5f3;
+  background-color:#6eb8a2;
+  height: 51px;
+  border-radius: 5px;
+  border-color: #41b88300
+}
+
+.multiselect__select {
+  // background-color: #f0f5f3;
+  background-color:#6eb8a2;
+  color:#000;
+  // height: 50px;
+  top: 8px;
+  right:15px;
+}
+
+.multiselect__single {
+  // background-color: #f0f5f3;
+  background-color:#6eb8a2;
+  // height: 50px;
+  padding-top: 6px;
+  color: rgba(46, 40, 40, 0.959);
+  font-size: large;
+}
+
+.multiselect__select:before {
+  position: relative;
+  right: 0;
+  top: 65%;
+  color: #999;
+  margin-top: 4px;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: rgba(46, 40, 40, 0.959) transparent transparent transparent;
+  content: "";
+}
+
+.multiselect__content {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  left: -25px;
+  min-width: 100%;
+  width: 130px;
+  vertical-align:auto
+}
+
+.multiselect__element {
+  display: block;
+  // width: 100%;
+  width: 149px;
+}
+
+
+/////////
+.multiselect__option--selected.multiselect__option--highlight {
+  background: #6eb8a2;
+  color: #fff;
+}
+
+.multiselect__option--selected.multiselect__option--highlight:after {
+  background: #6eb8a2;
+  content: attr(data-deselect);
+  color: #fff;
+}
+
+.multiselect__option--group-selected.multiselect__option--highlight {
+  background: #6eb8a2;
+  color: #fff;
+}
+
+.multiselect__option--highlight {
+  background: #FF8E37;
+  outline: none;
+  color: white;
+}
+
+.multiselect__option--highlight:after {
+  content: attr(data-select);
+  background: #FF8E37;
+  color: white;
 }
