@@ -17,7 +17,7 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="selected" :options="options" :show-labels="true" placeholder="User Story"></multiselect>
+            <multiselect v-model="selected" :options="options" :show-labels="false" placeholder="User Story"></multiselect>
           </div>
         </div>
         
@@ -92,7 +92,7 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="selected" :options="options" :show-labels="true" placeholder="User Story"></multiselect>
+            <multiselect v-model="selected" :options="options" :show-labels="false" placeholder="User Story"></multiselect>
           </div>
         </div>
         
