@@ -30,6 +30,31 @@ const Project = require('../models/Project');
 //   }
 // })
 
+// Get user's invitations
+router.get('/invitations', async(req, res) => {
+  try {
+    // Get serialized user
+    const context = await serializer.userSerializer(req.user._id);
+
+    // Keep only the needed info for each invitation
+    let invitations = [];
+    for(var invitation of context.invitations) {
+      invitations.push({
+        sender: invitation.sender,
+        project: invitation.project,
+        date: invitation.date
+      });
+    }
+
+    res.json({
+      invitations: invitations,
+      user: context
+    });
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+
 // Log out user
 router.get('/logout', async(req, res) => {
   try {
