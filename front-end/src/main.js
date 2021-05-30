@@ -5,6 +5,7 @@ import vuetify from "./plugins/vuetify";
 import "@babel/polyfill";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/assets/css/main.css";
+import VeeValidate from 'vee-validate';
 // import "./quasar";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -24,6 +25,8 @@ import Gantt from "highcharts/modules/gantt";
 import "./assets/app.scss"; 
 import "./plugins";
 import store from "./store";
+
+Vue.use(VeeValidate);
 
 Gantt(Highcharts);
 Vue.use(HighchartsVue);

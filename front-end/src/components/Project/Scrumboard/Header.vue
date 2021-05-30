@@ -15,14 +15,16 @@
       </div>  
 
       <div>
-        <div class="form-outline">
+        <div class="form-outline"  v-if="this.activeBoard.id=='d033c156-5972-4767-ceb0-8a91a5c282db'">
+          <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
+        </div>
+        <div class="form-outline"  v-else style="left:1400px">
           <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
         </div>
       </div>
       
       <!-- Only show above options on ScrumBoard -->
       <div class="d-flex justify-content-end" v-if="!isLoading && this.activeBoard.id=='d033c156-5972-4767-ceb0-8a91a5c282db'" >
-        <TaskListRestore></TaskListRestore>
         <TaskListEdit></TaskListEdit>
         <TaskListArchive></TaskListArchive>
       </div>
@@ -33,12 +35,10 @@
 <script>
 import { mapGetters } from "vuex"
 import TaskListEdit from "./Lists/TaskListEdit"
-import TaskListRestore from "./Lists/TaskListRestore"
 import TaskListArchive from "./Lists/TaskListArchive"
 export default {
   components: {
     TaskListEdit,
-    TaskListRestore,
     TaskListArchive
   },
   computed: {

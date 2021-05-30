@@ -125,7 +125,7 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind"></multiselect>
+            <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
         </div>
         
@@ -139,9 +139,12 @@
             class="form-control"
             v-model.trim="form.title"
             v-validate="'required'"
-            data-vv-as="Item Details"
+            data-vv-as="field"
             placeholder="Γράψε έναν τίτλο"
-          />
+            type="text"
+          >
+
+          <p v-if="errors.has('form.title')">{{errors.first('form.title')}}</p>
 
           <h4 class= "title2"> Περιγραφή </h4>
 
@@ -155,7 +158,7 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
-          <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
+          <small class="text-danger" style="display:block" v-if="errors.itemTitle">{{ errors.first("itemTitle") }}</small>
           <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
           <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
           <!-- <div> -->

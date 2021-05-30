@@ -1,5 +1,7 @@
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import url("https://fonts.googleapis.com/css?family=Gugi");
+@import url("https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.js");
 
 .scrolling-wrapper {
   overflow-x: scroll;
@@ -9,9 +11,10 @@
   position:fixed;
   // display: flex;
   top: 160px;
-  left: 70px;
+  left: 80px;
   width: 95%;
   z-index: 0;
+  // margin: auto;
 }
 
 ///////////////////////
@@ -277,7 +280,7 @@ div#searching {
 
 .form-outline {
   position: fixed;
-  left: 1165px;
+  left: 1280px;
   top: 15px;
 }
 
@@ -480,4 +483,8 @@ div#searching {
   content: attr(data-select);
   background: #FF8E37;
   color: white;
+}
+
+.error {
+  color: red;
 }
