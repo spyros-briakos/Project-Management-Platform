@@ -64,8 +64,11 @@ export const actions = {
       client.tokenObject = data.token;
 
     if(data.project)
-      client.project = data.project;
+    console.log(error);
+    client.project = data.project;
   },
+
+  // USER -----------------------------------------------
 
   // Login user
   async login(username, password) {
@@ -125,6 +128,26 @@ export const actions = {
     .catch(function(error) { throw error })    
   },
 
+  // Send email to the user to create new password
+  async forgotPassword(email) {
+    return requests.forgotPasswordRequest(email)
+    .then(function(response) {
+      return response.message;
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  // Update user's plan to premium
+  async getPremium(plan) {
+    return requests.getPremiumRequest(plan, client.tokenObject.token)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+      return response.message;
+    })
+    .catch(function(error) { throw error })    
+  },
+
   // Delete user
   async deleteUser() {
     return requests.deleteUserRequest(client.tokenObject.token)
@@ -135,9 +158,63 @@ export const actions = {
     })
     .catch(function(error) { throw error })
   },
+
+  // Get user's invitations to projects
+  async getInvitations() {
+    return requests.getInvitationsRequest(client.tokenObject.token)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+      return response.invitations;
+    })
+    .catch(function(error) { throw error }) 
+  },
+
+  // Sign up with google
+  async signupGoogle() {
+    return requests.signupGoogleRequest()
+    .then(function(response) {
+      return response.url;
+    })
+    .catch(function(error) { throw error })
+  },
+
+  // Login with google
+  async loginGoogle() {
+    return requests.loginGoogleRequest()
+    .then(function(response) {
+      return response.url;
+    })
+    .catch(function(error) { throw error })
+  },
+
+  // PROJECT -----------------------------------------------
+
+  // Invite user(s) to a project
+  async inviteUser(projectId, data) {
+    return requests.inviteUserRequest(projectId, data, client.tokenObject.token)
+    .then(function(response) {
+      return response.message;
+    })
+    .catch(function(error) { throw error })
+  },
+
+  // Answer to invitation to a project
+  async answerInvitation(answer, invitationCode) {
+    return requests.answerInvitationRequest(answer, invitationCode, client.tokenObject.token)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+      return response.message;
+    })
+    .catch(function(error) { throw error })    
+  },
 }
 
 const requests = {
+
+  // USER -----------------------------------------------
+
   async loginRequest(username, password) {
     let data = {
       username: username,
@@ -179,6 +256,23 @@ const requests = {
     .catch(function(error) { throw error })
   },
 
+  async forgotPasswordRequest(email) {
+    let data = { email: email };
+
+    return requests.send('PATCH', 'users/forgot-password', data)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async getPremiumRequest(plan, token) {
+    let data = { plan_in_use: plan };
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('PATCH', 'secure-routes/upgrade-plan', data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+  
   async deleteUserRequest(token) {
     let headers = { "Authorization": `${token}` };
   
@@ -187,7 +281,48 @@ const requests = {
     .catch(function(error) { throw error })
   },
 
+  async getInvitationsRequest(token) {
+    let headers = { "Authorization": `${token}` };
 
+    return requests.send('GET', 'secure-routes/invitations', {}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async signupGoogleRequest() {
+    return requests.send('GET', 'users/signup-google', {})
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async loginGoogleRequest() {
+    return requests.send('GET', 'users/login-google', {})
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  // PROJECT -----------------------------------------------
+
+  async inviteUserRequest(projectId, data, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `secure-routes/project-invite/${projectId}`, data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async answerInvitationRequest(answer, invitationCode, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('GET', `users/answer-invitation/${invitationCode}?answer=${answer}`, {}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+
+  // --------------------------------------------------------------
+
+  // Send request
   async send(method, url, data, headers) {
     switch(method) {
       case('POST'):

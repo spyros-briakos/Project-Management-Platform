@@ -216,7 +216,7 @@ router.get('/oauth2callback/login', async(req, res) => {
   }
 });
 
-// Send email to the user to change set a new password
+// Send email to the user to set a new password
 router.patch('/forgot-password', async(req, res) => {
   try{
     // Find user in db
@@ -255,7 +255,7 @@ router.post('/set-password/:verificationCode', async(req, res) => {
 
     // If no such user
     if(!user) {
-      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+      return res.status(400).json({ message: 'Μη έγκυρο αίτημα για ανανέωση κωδικού πρόσβασης. Έλεγξε αν έχεις ήδη ανανεώσει τον κωδικό σου.' });
     }
 
     // If the new password and the confirmation don't match
@@ -286,6 +286,7 @@ router.post('/set-password/:verificationCode', async(req, res) => {
   }
 })
 
+// Answer to invitation to a project
 router.get('/answer-invitation/:invitationCode', async(req, res) => {
   try {
     // Find invitation in the db by the invitationCode

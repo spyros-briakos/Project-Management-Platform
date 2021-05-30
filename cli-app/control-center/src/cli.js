@@ -267,98 +267,92 @@ export function cli(args) {
 		})
   });
 
-program
+  program
   .command('invite-user')
   .requiredOption('-p, --project <value>', 'Project name')
   .requiredOption('-u, --username <value...>', 'Username')
-  .action((command) => {
-	// Get user's token to pass authentication
-	const token = utils.getToken('/tmp/token.json');
-	// If an error occured
-	if(token instanceof Error) {
-	  const error = token;
-	  if(error.code === 'ENOENT')
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+  .action(async (command) => {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+
+	  // Get current user and the requested project
+	  let user = client.user;
+	  let projects = user.projects.filter(p => p.name == command.project);
+
+	  // If no such project was found
+	  if (projects.length == 0)
+	    return console.log('Δεν βρέθηκε κάποιο project με το όνομα \''+command.project+'\'');
+
+	  let project = projects[0];
+
+	  // Invite the requested user(s)
+	  let data = {
+		users: [command.username].concat(command.args),
+		project: command.project
+	  };
+	  let message = await restAPI.actions.inviteUser(project._id, data);
+
+	  console.log(message);
+	} catch (error) {
+	  if(error.response && error.response.data.message)
+		console.log('Η πρόσκληση μελών απέτυχε: ', error.response.data.message);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
+		console.log('Η πρόσκληση μελών απέτυχε: ', error.message);
 	}
-
-	// Get current user and the requested project
-    let user = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'));
-	let projects = user.projects.filter(p => p.name == command.project);
-
-	// If no such project was found
-	if (projects.length == 0)
-	  return console.log('Δεν βρέθηκε κάποιο project με το όνομα \''+command.project+'\'');
-
-	let project = projects[0];
-
-	// Invite the requested user(s)
-	axios.post(`${apiUrl}/secure-routes/project-invite/${project._id}`, {
-	  users: [command.username].concat(command.args),
-	  project: command.project
-	}, { headers: { "Authorization": `Bearer ${token}` }
-	}, { httpsAgent: agent })
-	.then((response) => {
-	  console.log(response.data.message);
-	})
-	.catch((err) => {
-	  if (err.response && err.response.data.message)
-	    console.log('Η πρόσκληση μελών απέτυχε: ', err.response.data.message);
-	  else
-		console.log('Η πρόσκληση μελών απέτυχε: ', err.message);
-	});
   });
 
-program
+  program
   .command('answer-invitation')
   .requiredOption('-p, --project <value>', 'Project name')
   .requiredOption('-a, --answer <value>', 'Answer to invitation (accept | reject)')
-  .action((command) => {
-	if(command.answer !== 'accept' && command.answer !== 'reject') {
+  .action(async (command) => {
+	try {
+	  if(command.answer !== 'accept' && command.answer !== 'reject') {
 		return console.log('Λανθασμένη απάντηση σε πρόσκληση. Επίλεξε είτε \'accept\' για αποδοχή είτε \'reject\' για απόρριψη.');
-	}
+	  }
 
-	// Get user's token to pass authentication
-	const token = utils.getToken('/tmp/token.json');
-	// If an error occured
-	if(token instanceof Error) {
-	  const error = token;
-	  if(error.code === 'ENOENT')
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	}
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+  
+	  // Get current user
+	  let user = client.user;
+	  // Get user's invitations to the requested project
+	  let invitations = user.invitations.filter(invitation => invitation.project == command.project);
 
-    // Get current user
-    let user = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'));
-	// Get user's invitations to the requested project
-	let invitations = user.invitations.filter(invitation => invitation.project == command.project);
+	  // If no such invitation was found
+	  if (invitations.length == 0)
+	    return console.log('Δεν βρέθηκε κάποια πρόσκληση στο project με το όνομα \''+command.project+'\'');
+  
+	  let invitation = invitations[0];
+  
+	  // Answer to the invitation
+	  let message = await restAPI.actions.answerInvitation(command.answer, invitation.invitationCode);
 
-	// If no such invitation was found
-	if (invitations.length == 0)
-	  return console.log('Δεν βρέθηκε κάποια πρόσκληση στο project με το όνομα \''+command.project+'\'');
-
-	let invitation = invitations[0];
-
-	// Answer to the invitation
-	axios.get(`${apiUrl}/users/answer-invitation/${invitation.invitationCode}?answer=${command.answer}`, {},
-	  { headers: { "Authorization": `Bearer ${token}` }
-	}, { httpsAgent: agent })
-	.then((response) => {
 	  // Update user's info
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 		if(err) return console.log('Writing user failed:', err);
 	  });
 
-	  console.log(response.data.message);
-	})
-	.catch((error) => {
-	  if (error.response && error.response.data.message)
+	  console.log(message);
+	} catch (error) {
+	  if(error.response && error.response.data.message)
 		console.log('Η απάντηση της πρόσκλησης σε project απέτυχε: ', error.response.data.message);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
 		console.log('Η απάντηση της πρόσκλησης σε project απέτυχε: ', error.message);
-	});
+	}
   });
 
 	program
@@ -507,7 +501,6 @@ program
 
   program
   .command('login')
-  .option('--format <value>', 'Give format', 'json')
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(async function (command) {
@@ -540,7 +533,6 @@ program
 
   program
   .command('signup')
-  .option('--format <value>', 'Give format', 'json')
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .requiredOption('-fn, --firstName <value>', 'User\'s first name')
@@ -643,8 +635,38 @@ program
   })
 
   program
+  .command('get-invitations')
+  .action(async function() {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+
+	  let invitations = await restAPI.actions.getInvitations();
+
+	  // Update user's info
+	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+	    if(err) return console.log('Writing user failed:', err);
+	  });
+
+	  // Print invitations
+	//   console.log(util.inspect(invitations, { depth: null, colors: true }));
+	  console.log(invitations);
+	} catch (error) {
+	  if(error.response && error.response.data.message)
+		console.log('Η ανάκτηση δεδομένων απέτυχε.',error.response.data.message);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+		console.log('Η ανάκτηση δεδομένων απέτυχε.',error.message);
+	}
+  })
+
+  program
   .command('update-user')
-  .option('--format <value>', 'Give format', 'json')
   .option('-u, --username <value>', 'User\'s username')
   .option('-fn, --firstName <value>', 'User\'s firstName')
   .option('-ln, --lastName <value>', 'User\'s lastName')
@@ -694,7 +716,6 @@ program
 
   program
   .command('reset-password')
-  .option('--format <value>', 'Give format', 'json')
   .requiredOption('-op, --oldPassword <value>','User\'s old password')
   .requiredOption('-np, --newPassword <value>','User\'s new password')
   .requiredOption('-cp, --confirmPassword <value>','User\'s password confrimation')
@@ -727,65 +748,62 @@ program
 	}
   })
 
-// NOT GOOD WITH CLI-APP
-// An email will be sent so the user can set a new password & be logged in again
-program
+  // NOT GOOD WITH CLI-APP
+  // An email will be sent so the user can set a new password & be logged in again
+  program
   .command('forgot-password')
-  .option('--format <value>', 'Give format', 'json')
   .requiredOption('-e, --email <value>','User\'s email')
-  .action(function(command) {
-	if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
-		return console.log('Είσαι ήδη συνδεδεμένος/-η.\nΑν ξέχασες τον κωδικό σου και θες να ορίσεις καινούριο, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
-	}
+  .action(async function(command) {
+	try {
+	  if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
+	  	return console.log('Είσαι ήδη συνδεδεμένος/-η.\nΑν ξέχασες τον κωδικό σου και θες να ορίσεις καινούριο, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
+	  }
 
-	axios.patch(`${apiUrl}/users/forgot-password?format=${command.format}/`,{
-	  email: command.email
-	}, { httpsAgent: agent })
-	.then(function (response) {
-	  console.log(response.data.message);
-	})
-	.catch(function (error) {
+	  // Ask to receive email to create new password
+	  let message = await restAPI.actions.forgotPassword(command.email);
+	  console.log(message);
+	  console.log('Αφού δημιουργήσεις τον νέο κωδικό σου, συνδέσου για να συνεχίσεις στην εφαρμογή.');
+	} catch (error) {
 	  if(error.response && error.response.data.message)
-		console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
+	    console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
 	  else
-		console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
-	});
+	    console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
+	}
   })
 
-program
+  program
   .command('get-premium')
-  .option('--format <value>', 'Give format', 'json')
   .requiredOption('-t, --type <value>', 'Premium plan type (month or year)')
-  .action(function(command) {
-	// Get user's token to pass authentication
-	const token = utils.getToken('/tmp/token.json');
-	// If an error occured
-	if(token instanceof Error) {
-	  const error = token;
-	  if(error.code === 'ENOENT')
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-	    return console.log('Ο ελεγχος ταυτότητας απέτυχε: ',error.message);
-	}
+  .action(async function(command) {
+	try {
+	  if(command.type !== 'month' && command.type !== 'year') {
+		return console.log('Σφάλμα: Eπίλεξε είτε \'month\' για μηνιαίο είτε \'year\' για ετήσιο πλάνο στο SruManiac.')
+	  }
 
-    axios.patch(`${apiUrl}/secure-routes/upgrade-plan?format=${command.format}/`, {
-	  plan_in_use: command.type
-	}, { headers: { "Authorization": `Bearer ${token}` }
-	}, { httpsAgent: agent })
-	.then(function (response) {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+	
+	  // Update user's plan to premium
+	  let message = await restAPI.actions.getPremium(command.type);
+	
 	  // Update user's info
-	  fs.writeFile('/tmp/user.json', JSON.stringify(response.data.user), function(err) {
+	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 		if(err) return console.log('Writing user failed:', err);
 	  });
 
-	  console.log(response.data.message);
-	})
-	.catch(function (error) {
-	  if(error.response && error.response.data.message)
+	  console.log(message);
+	} catch(error) {
+	  if (error.response && error.response.data.message)
 		console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
 		console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.message}`);
-	});
+	}
   })
 
   program
@@ -818,32 +836,37 @@ program
 	}
   })
 
-// NOT GOOD WITH CLI-APP
-program
+  // NOT GOOD WITH CLI-APP
+  program
   .command('signup-google')
-  .option('--format <value>', 'Give format', 'json')
-  .action(function(command) {
-	axios.get(`${apiUrl}/users/signup-google?format=${command.format}/`, {}, { httpsAgent: agent })
-	.then(function(response){
-	  console.log(response.data.url);
-	})
-	.catch(function(error){
+  .action(async function() {
+	try {
+	  if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
+		return console.log('Είσαι ήδη συνδεδεμένος/-η.\nΓια να δημιουργήσεις άλλο λογαριασμό, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
+	  }
+
+	  let url = await restAPI.actions.signupGoogle();
+	  console.log(url);
+	} catch (error) {
 	  console.log(error);
-	});
+	}
   })
 
 // NOT GOOD WITH CLI-APP
-program
+  program
   .command('login-google')
-  .option('--format <value>', 'Give format', 'json')
-  .action(function(command) {
-	axios.get(`${apiUrl}/users/login-google?format=${command.format}/`, {}, { httpsAgent: agent })
-	.then(function(response){
-	  console.log(response.data.url);
-	})
-	.catch(function(error){
+  .action(async function() {
+	try {
+	  // Check if the user can log in
+	  if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
+		return console.log('Είσαι ήδη συνδεδεμένος/-η.');
+	  }
+  
+	  let url = await restAPI.actions.loginGoogle();
+	  console.log(url);
+	} catch (error) {
 	  console.log(error);
-	});
+	}
   })
 
 // program
