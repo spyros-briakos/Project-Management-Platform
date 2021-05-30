@@ -17,7 +17,7 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind"></multiselect>
+            <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
         </div>
         
@@ -71,8 +71,10 @@
               <option value="4">Τελικό</option>
             </select>
           </h6>       
-          <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div> 
-          <h6 class="title3" style="padding-left:480px; top:-17px;">Μέλη Task:
+            <!-- <v-list-item-title class="headline mb-1" style=" positive:fixed; right:100px; top:-117px;">
+          Headline 5
+        </v-list-item-title> -->
+          <h6 class="title3" style="padding-left:480px; top:-17px; height: 0px;">Μέλη Task:
             <br>
             <i class="fas fa-user-circle" style="position:fixed; font-size:30px; right:200px; top:305px; color: #cc99ff; cursor: pointer;"></i>            
             <i class="fas fa-id-card" style="position:fixed; font-size:30px; right:150px; top:305px; cursor: pointer;"></i>            
@@ -81,6 +83,7 @@
             <i class="fas fa-user-circle" style="position:fixed; font-size:30px; right:150px; top:345px; color:blue; cursor: pointer;"></i>            
             <i class="fas fa-plus-circle" style="position:fixed; font-size:30px; right:100px; top:345px; cursor: pointer;"></i>            
           </h6>        
+          <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div> 
 
           <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
           <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
