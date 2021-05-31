@@ -54,10 +54,20 @@
 .pict_wrap .design{
     background-image: url(../../img/design_2.svg);
     background-size: 50px 50px;
+    position: relative;
     height: 50px;
     width: 50px;
     align-self: flex-end;
+    display: flex;
     margin-left: -50px;
+    overflow: hidden;
+}
+.wrap .big_wrap .opts_wrap .pict_wrap .design input[type='file']{
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+    margin-top: -50px;
+    opacity: 0;
 }
 
 .prof_opts{

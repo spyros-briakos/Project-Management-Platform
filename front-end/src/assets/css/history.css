@@ -2,7 +2,7 @@
     display:flex;
     height:91.5vh;
     justify-content: center;
-    background-color: rgba(230, 230, 230, 0.815);
+    /* background-color: rgba(230, 230, 230, 0.815); */
 }
 
 .history_wrap{
@@ -15,7 +15,8 @@
     width:80%;
     margin-left: 10vh;
     align-content: flex-start;
-    background-color: rgba(130, 202, 154, 0.2);
+    background-color: rgb(255, 145, 77);
+    /* background-color: rgba(130, 202, 154, 0.3); */
     padding: 5px 0px 0 0px;
     /* background-color: whitesmoke; */
     border-radius: 20px;

@@ -14,13 +14,12 @@
         </label>
       </div>  
 
-      <div>
-        <div class="form-outline"  v-if="this.activeBoard.id=='d033c156-5972-4767-ceb0-8a91a5c282db'">
-          <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
-        </div>
-        <div class="form-outline"  v-else style="left:1400px">
-          <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
-        </div>
+      
+      <div class="form-outline"  v-if="this.activeBoard.id=='d033c156-5972-4767-ceb0-8a91a5c282db'">
+        <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
+      </div>
+      <div class="form-outline"  v-else>
+        <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
       </div>
       
       <!-- Only show above options on ScrumBoard -->

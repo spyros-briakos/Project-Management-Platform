@@ -5,9 +5,17 @@
 
                 <div class="opts_wrap">
                     <div class="pict_wrap">
-                        <img class="prof_pict" :src="require('../../assets/img/' + def + '')">
-                        <button class="design">
-                        </button>
+                        <img class="prof_pict" :src="img ? require(img) : require('../../assets/img/' + def_img + '')">
+                        <!-- <button class="design" v-on:click="$('.file-upload-input')"> -->
+                        <div class="design">
+                            <input type="file" @change="uploadImg"/>
+                        </div>
+                <!-- <v-file-input
+                    class="design"
+                    accept="image/png, image/jpeg, image/bmp"
+                    label=""
+                ></v-file-input> -->
+                        <!-- </button> -->
                     </div>
                     <div class="name">
                         {{name}}
@@ -56,7 +64,8 @@
     data() {
         // this.seturl("profSettings");
         return{
-            def: 'prof_default.svg',
+            img: '',
+            def_img: 'prof_default.svg',
             selected_id: 3,
             name: "Vasilis Goulas",
             opts:[
@@ -131,6 +140,17 @@
                 }
             }
             return false;
+        },
+        uploadImg(data){
+            const image = data.target.files[0];
+            const reader = new FileReader();
+            
+            reader.readAsDataURL(image);
+            reader.onload = data =>{
+                this.img = data.target.result;
+                console.log(this.previewImage);
+            };
+            alert(image);
         }
     },
     computed:{
