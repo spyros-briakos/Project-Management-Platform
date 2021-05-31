@@ -66,7 +66,7 @@ router.get('/verify/:verificationCode', async (req, res) => {
     .then(async (user) => {
       // If no such user in the db
       if(!user) {
-        return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+        return res.status(400).json({ message: 'Σφάλμα: Δεν βρέθηκε τέτοιος χρήστης.' });
       }
       // If the account is already active
       if(user.status == 'Active') {
@@ -196,7 +196,7 @@ router.get('/oauth2callback/login', async(req, res) => {
 
       // If no such user in the db
       if(!user) {
-        return res.status(500).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+        return res.status(500).json({ message: 'Σφάλμα: Δεν βρέθηκε τέτοιος χρήστης.' });
       }
 
       // Create user's authentication token (to log in user)
@@ -224,7 +224,7 @@ router.patch('/forgot-password', async(req, res) => {
 
     // If no such user
     if(!user) {
-      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+      return res.status(400).json({ message: 'Σφάλμα: Δεν βρέθηκε τέτοιος χρήστης.' });
     }
 
     // If the user's account is still pending, refuse to send email to change password
@@ -255,7 +255,7 @@ router.post('/set-password/:verificationCode', async(req, res) => {
 
     // If no such user
     if(!user) {
-      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+      return res.status(400).json({ message: 'Σφάλμα: Δεν βρέθηκε τέτοιος χρήστης.' });
     }
 
     // If the new password and the confirmation don't match
@@ -301,7 +301,7 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
 
     // If no such user in the db
     if(!user) {
-      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+      return res.status(400).json({ message: 'Σφάλμα: Δεν βρέθηκε τέτοιος χρήστης.' });
     }
 
     // Find project in db

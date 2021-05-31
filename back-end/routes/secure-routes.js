@@ -18,7 +18,6 @@ const { Invitation } = require("../models/User");
 const Project = require('../models/Project');
 const { findByIdAndUpdate } = require('../models/Project');
 
-
 // Get specific user
 router.get('/user', async (req, res) => {
   try {
@@ -117,7 +116,7 @@ router.patch('/reset-password', async (req, res) => {
 
     // If no such user
     if(!user) {
-      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+      return res.status(400).json({ message: 'Σφάλμα: Δεν βρέθηκε τέτοιος χρήστης.' });
     }
 
     // Check the right password was passed
@@ -153,7 +152,7 @@ router.patch('/upgrade-plan', async (req, res) => {
 
     // If no such user in the db
     if(!user) {
-      return res.status(400).json({ message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
+      return res.status(400).json({ message: 'Σφάλμα: Δεν βρέθηκε τέτοιος χρήστης.' });
     }
 
     // If user's plan is already premium

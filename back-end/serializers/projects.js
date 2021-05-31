@@ -30,7 +30,6 @@ async function projectDescriptionSerializer(query) {
 
     return context
   } catch (error) {
-    console.log(error)
     return { error };
   }
 }
@@ -135,6 +134,8 @@ async function taskSerializer(query) {
       startingDate: query.startingDate,
       endingDate: query.endingDate,
       estimated_duration: query.estimated_duration,
+      beforeTasks: query.beforeTasks,
+      afterTasks: query.afterTasks,
       members: []
     }
     for (let i=0; i < query.members.length; i++) {

@@ -16,7 +16,7 @@ const TaskSchema = new mongoose.Schema({
     required: true
   },
   // Sprint in which task is contained
-  Sprint: {
+  sprint: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Sprint"
   },
