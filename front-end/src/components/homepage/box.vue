@@ -1,4 +1,5 @@
 <template>
+
   <div
     class="box"
     :class="{ master_center: center }"

@@ -5,7 +5,7 @@ async function usernameSerializer(query) {
   try {
     query = await User.findById(query)
     const context = {
-      id: query._id,
+      _id: query._id,
       username: query.username
     }
 
@@ -17,7 +17,11 @@ async function usernameSerializer(query) {
 
 async function userSerializer(query) {
   try {
-    query = await User.findById(query)
+    // If an id was passed and not a User object
+    if(!(query instanceof User)){
+      query = await User.findById(query);
+    }
+
     const projects = [];
     for (let i=0; i< query.projects.length; i++) {
       // Get serialized project
@@ -31,7 +35,7 @@ async function userSerializer(query) {
     }
 
     const context = {
-      id: query._id,
+      _id: query._id,
       username: query.username,
       firstName: query.firstName,
       lastName: query.lastName,
