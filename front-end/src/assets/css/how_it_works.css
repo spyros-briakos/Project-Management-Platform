@@ -134,7 +134,7 @@
     width: 100%;
     height: 100%;
     padding: 8px 7px 0px 8px;
-    color: green;
+    color: black;
 }
 
 .txt_title{
@@ -168,11 +168,13 @@
     display: flex;
     flex-flow: column wrap;
     width: 100%;
-    color: green;
+    color: black;
+    font-size: 100%;
 }
 
 .txt_wrap li .txt_title{
-    font-weight: 430;
+    font-weight: 400;
+    font-size: 110%;
     color: rgb(138, 56, 138);
 }
 
