@@ -23,7 +23,7 @@ router.post("/get-projects", async (req, res) => {
       context.push(await serializer.projectDescriptionSerializer(projects[i]))
     }
 
-    res.json(context);
+    res.json({status: 'OK', projects: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -47,7 +47,7 @@ router.post("/get-sprints", async (req, res) => {
     for (let i in project.sprints) {
       context.push(await serializer.sprintSerializer(project.sprints));
     }
-    res.json(context);
+    res.json({status: 'OK', sprints: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -71,7 +71,7 @@ router.post("/get-userstories", async (req, res) => {
     for (let i in project.userStories) {
       context.push(await serializer.userStorySerializer(project.userStories));
     }
-    res.json(context);
+    res.json({status: 'OK', userStories: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -92,7 +92,7 @@ router.post("/get-details", async (req, res) => {
     }
 
     const context = await serializer.projectDetailsSerializer(project);
-    res.json(context);
+    res.json({status: 'OK', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -121,7 +121,7 @@ router.post("/add-project", async (req, res) => {
     await User.findByIdAndUpdate(user._id, user, { runValidators: true });
     
     const context = await serializer.projectDetailsSerializer(savedProject);
-    res.json(context);
+    res.json({status: 'OK', message: 'Το Project δημιουργηθηκε με επιτυχία.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -149,7 +149,7 @@ router.post("/add-userstory", async (req, res) => {
     await Project.findByIdAndUpdate(project._id, project, { runValidators: true });
 
     const context = await serializer.userStorySerializer(savedUserStory);
-    res.json(context);
+    res.json({status: 'OK', message: 'Το UserStory δημιουργήθηκε με επιτυχία.', userStory: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -176,7 +176,7 @@ router.post("/add-sprint", async (req, res) => {
     await Project.findByIdAndUpdate(project._id, project, { runValidators: true });
 
     const context = await serializer.sprintSerializer(savedSprint);
-    res.json(context);
+    res.json({status: 'OK', message: 'Το Sprint δημιουργήθηκε με επιτυχία.', sprint: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -223,7 +223,7 @@ router.post("/add-task", async (req, res) => {
     await UserStory.findByIdAndUpdate(userStory._id, userStory, { runValidators: true });
 
     const context = await serializer.taskSerializer(savedTask);
-    res.json(context);
+    res.json({status: 'OK', message: 'Το Task δημιουργήθηκε με επιτυχία.', task: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -280,7 +280,7 @@ router.post('/edit-project', async (req, res) => {
     const updatedProject = await Project.findByIdAndUpdate(project._id, req.body.project, { runValidators: true });
 
     const context = await serializer.projectDetailsSerializer(updatedProject);
-    res.json(context);
+    res.json({status: 'OK', message: 'Το Project τροποποιήθηκε με επιτυχία.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -313,7 +313,7 @@ router.post("/edit-userstory", async (req, res) => {
     const updatedUserStory = await UserStory.findByIdAndUpdate(req.body.userStory._id, req.body.userStory, { runValidators: true });
 
     const context = await serializer.userStorySerializer(updatedUserStory);
-    res.json(context);
+    res.json({status: 'OK', message: 'Το UserStory τροποποιήθηκε με επιτυχία.', userStory: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -344,7 +344,7 @@ router.post("/edit-sprint", async (req, res) => {
     const updatedSprint = await Sprint.findByIdAndUpdate(req.body.sprint._id, req.body.sprint, { runValidators: true });
 
     const context = await serializer.sprintSerializer(updatedSprint);
-    res.json(context);
+    res.json({status: 'OK', message: 'Το Sprint τροποποιήθηκε με επιτυχία.', sprint: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -394,7 +394,7 @@ router.post("/edit-task", async (req, res) => {
     const updatedTask = await Task.findByIdAndUpdate(req.body.task._id, req.body.task, { runValidators: true });
 
     const context = await serializer.taskSerializer(updatedTask);
-    res.json(context);
+    res.json({status: 'OK', message: 'Το Task τροποποιήθηκε με επιτυχία.', task: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -436,8 +436,7 @@ router.post('/delete-project', async (req, res) => {
     // Remove project from its table
     const removedProject = await Project.deleteOne({ _id: project._id });
 
-    const context = await serializer.projectDetailsSerializer(removedProject);
-    res.json({ status: 'OK', ...context });
+    res.json({ status: 'OK', message: 'Το UserStory διαγράγθηκε με επιτυχία.' });
   } catch (err) {
     return res.status(400).json({ message: err });
   }
@@ -477,10 +476,10 @@ router.post("/delete-userstory", async (req, res) => {
     }
 
     // Remobe sprint from its table
-    const removedUserStory = await UserStory.deleteOne({ _id: userStory._id });
+    await UserStory.deleteOne({ _id: userStory._id });
 
-    const context = await serializer.userStorySerializer(removedUserStory);
-    res.json({status: 'OK', ...context});
+    const context = await serializer.projectDetailsSerializer(project);
+    res.json({status: 'OK', message: 'Το UserStory διαγράγθηκε με επιτυχία.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -522,10 +521,10 @@ router.post("/delete-sprint", async (req, res) => {
     }
 
     // Remobe sprint from its table
-    const removedSprint = await Task.deleteOne({ _id: sprint._id });
+    await Task.deleteOne({ _id: sprint._id });
 
-    const context = await serializer.taskSerializer(removedSprint);
-    res.json({status: 'OK', ...context});
+    const context = await serializer.projectDetailsSerializer(project);
+    res.json({status: 'OK', message: 'Το Sprint διαγράγθηκε με επιτυχία.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -578,10 +577,10 @@ router.post("/delete-task", async (req, res) => {
       await Task.findByIdAndUpdate(linkedTask._id, linkedTask, { runValidators: true });
     }
 
-    const removedTask = await Task.deleteOne({ _id: task._id });
+    await Task.deleteOne({ _id: task._id });
 
-    const context = await serializer.taskSerializer(removedTask);
-    res.json({status: 'OK', ...context});
+    const context = await serializer.projectDetailsSerializer(project);
+    res.json({status: 'OK', message: 'Το Task διαγράγθηκε με επιτυχία.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -611,7 +610,7 @@ router.post("/join-task", async (req, res) => {
     const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true });
 
     const context = await serializer.taskSerializer(updatedTask);
-    res.json(context);
+    res.json({status: 'OK', message: 'Ο χρήστης έγινε μέλος του Task.', task: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -641,7 +640,7 @@ router.post("/leave-task", async (req, res) => {
     const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true });
 
     const context = await serializer.taskSerializer(updatedTask);
-    res.json(context);
+    res.json({status: 'OK', message: 'Ο χρήστης αποχώρησε από το Task.', task: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -669,9 +668,9 @@ router.post("/leave-project", async (req, res) => {
     }
     let userStory, task
     for (let i in project.userStories) {
-      userStory = await UserStory.findById(project.userStories[i]._id);
+      userStory = await UserStory.findById(project.userStories[i]);
       for (let j in userStory.tasks) {
-        task = Task.findById(userStory.tasks[j]._id);
+        task = Task.findById(userStory.tasks[j]);
         task.members = task.members.filter((mID) => { !mID.equals(user._id) });
         await Task.findByIdAndUpdate(task._id, task, { runValidators: true });
       }
@@ -679,8 +678,12 @@ router.post("/leave-project", async (req, res) => {
 
     const updatedProject = await Project.findByIdAndUpdate(project._id, project, { runValidators: true });
 
+    user.projects = user.projects.filter((pID) => { !pID.equals(project._id) });
+    await User.findByIdAndUpdate(user._id, user, { runValidators: true });
+
+
     const context = projectDetailSerializer(updatedProject);
-    res.json(context);
+    res.json({status: 'OK', message: 'Ο χρήστης αποχώρησε από το Project.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -742,7 +745,7 @@ router.post("/connect-task-sprint", async (req, res) => {
 
     const context1 = await serializer.userStorySerializer(userStory);
     const context2 = await serializer.sprintSerializer(sprint);
-    res.json({status: 'OK', userStory: context1, sprint: context2});
+    res.json({status: 'OK', message: 'Το Task συνδέθηκε στο Sprint.', userStory: context1, sprint: context2});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -789,7 +792,7 @@ router.post("/disconnect-task-sprint", async (req, res) => {
       
       const context1 = await serializer.userStorySerializer(userStory);
       const context2 = await serializer.sprintSerializer(sprint);
-      res.json({status: 'OK', userStory: context1, sprint: context2});
+      res.json({status: 'OK', message: 'Το Task αποδεσμεύτηκε από το Sprint.', userStory: context1, sprint: context2});
     } else {
       return res.status(400).json({ message: 'Σφάλμα: Το task δεν είναι συνδεδεμένο με κάποιο sprint.' });
     }
@@ -846,7 +849,7 @@ router.post("/connect-task-task", async (req, res) => {
 
     const context1 = await serializer.taskSerializer(task1);
     const context2 = await serializer.taskSerializer(task2);
-    res.json({status: 'OK', task1: context1, task2: context2});
+    res.json({status: 'OK', message: 'Τα Tasks συνδέθηκαν μεταξύ τους.', task1: context1, task2: context2});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -893,7 +896,7 @@ router.post("/disconnect-task-task", async (req, res) => {
 
     const context1 = await serializer.taskSerializer(task1);
     const context2 = await serializer.taskSerializer(task2);
-    res.json({status: 'OK', task1: context1, task2: context2});
+    res.json({status: 'OK', message: 'Τα Tasks αποδεσμεύτηκαν.', task1: context1, task2: context2});
   } catch (error) {
     res.status(400).json({ message: error });
   }
