@@ -214,6 +214,7 @@ router.post("/add-task", async (req, res) => {
     // task.members = [user._id];
     task.beforeTasks = [];
     task.afterTasks = [];
+    task.members = [user._id];
     const savedTask = await task.save();
     if (sprint) {
       sprint.tasks.push(savedTask._id)
@@ -571,12 +572,12 @@ router.post("/delete-task", async (req, res) => {
     let linkedTask
     for (let i in task.beforeTasks) {
       linkedTask = await Task.findById(task.beforeTasks[i]);
-      linkedTask.afterTasks = linkedTask.afterTasks.filter((tID) => { !tID.equals(task._id) })
+      linkedTask.afterTasks = linkedTask.afterTasks.filter((tID) => { return !tID.equals(task._id) })
       await Task.findByIdAndUpdate(linkedTask._id, linkedTask, { runValidators: true });
     }
     for (let i in task.afterTasks) {
       linkedTask = await Task.findById(task.afterTasks[i]);
-      linkedTask.beforeTasks = linkedTask.beforeTasks.filter((tID) => { !tID.equals(task._id) })
+      linkedTask.beforeTasks = linkedTask.beforeTasks.filter((tID) => { return !tID.equals(task._id) })
       await Task.findByIdAndUpdate(linkedTask._id, linkedTask, { runValidators: true });
     }
 
@@ -638,7 +639,7 @@ router.post("/leave-task", async (req, res) => {
     }
 
     if (task.members.includes(user._id)) {
-      task.members = task.members.filter((mID) => { !mID.equals(user._id) });
+      task.members = task.members.filter((mID) => { return !mID.equals(user._id) });
     }
     const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true });
 
@@ -663,7 +664,7 @@ router.post("/leave-project", async (req, res) => {
     }
 
     if (project.members.includes(user._id)) {
-      project.members = project.members.filter((mID) => { !mID.equals(user._id) });
+      project.members = project.members.filter((mID) => { return !mID.equals(user._id) });
 
       if (project.scrumMaster === user._id) {
         project.scrumMaster = project.productOwner
@@ -674,14 +675,14 @@ router.post("/leave-project", async (req, res) => {
       userStory = await UserStory.findById(project.userStories[i]);
       for (let j in userStory.tasks) {
         task = Task.findById(userStory.tasks[j]);
-        task.members = task.members.filter((mID) => { !mID.equals(user._id) });
+        task.members = task.members.filter((mID) => { return !mID.equals(user._id) });
         await Task.findByIdAndUpdate(task._id, task, { runValidators: true });
       }
     }
 
     const updatedProject = await Project.findByIdAndUpdate(project._id, project, { runValidators: true });
 
-    user.projects = user.projects.filter((pID) => { !pID.equals(project._id) });
+    user.projects = user.projects.filter((pID) => { return !pID.equals(project._id) });
     await User.findByIdAndUpdate(user._id, user, { runValidators: true });
 
 
@@ -718,7 +719,7 @@ router.post("/connect-task-sprint", async (req, res) => {
     
     if (task.sprint && !task.sprint.equals(sprint._id)) {
       const taskSprint = await Sprint.findById(task.sprint);
-      taskSprint.tasks = taskSprint.tasks.filter((tID) => { !tID.equals(task._id) })
+      taskSprint.tasks = taskSprint.tasks.filter((tID) => { return !tID.equals(task._id) })
       await Sprint.findByIdAndUpdate(taskSprint._id, taskSprint, { runValidators: true });
       let userStoryTask
       let flag = false
@@ -730,7 +731,7 @@ router.post("/connect-task-sprint", async (req, res) => {
         }
       }
       if (!flag) {
-        userStory.sprints = userStory.sprints.filter((sID) => { !sID.equals(task.sprint) })
+        userStory.sprints = userStory.sprints.filter((sID) => { return !sID.equals(task.sprint) })
       }
     } else if (task.sprint) {
       return res.status(400).json({ message: 'Σφάλμα: Το task είναι ήδη συνδεδεμένο με το sprint.' });
@@ -775,7 +776,7 @@ router.post("/disconnect-task-sprint", async (req, res) => {
     if (task.sprint) {
       const sprint = await Sprint.findById(task.sprint);
       const userStory = await UserStory.findById(task.userStory);
-      sprint.tasks = sprint.tasks.filter((tID) => { !tID.equals(task._id) })
+      sprint.tasks = sprint.tasks.filter((tID) => { return !tID.equals(task._id) })
       let userStoryTask
       let flag = false
       for (let i in userStory.tasks) {
@@ -786,7 +787,7 @@ router.post("/disconnect-task-sprint", async (req, res) => {
         }
       }
       if (!flag) {
-        userStory.sprints = userStory.sprints.filter((sID) => { !sID.equals(task.sprint) })
+        userStory.sprints = userStory.sprints.filter((sID) => { return !sID.equals(task.sprint) })
       }
       task.sprint = null
       await Sprint.findByIdAndUpdate(sprint._id, sprint, { runValidators: true });
@@ -882,13 +883,13 @@ router.post("/disconnect-task-task", async (req, res) => {
     }
     if (req.body.conn === 'before') {
       if (task1.beforeTasks.includes(task2._id)) {
-        task1.beforeTasks = task1.beforeTasks.filter((tID) => { !tID.equals(task2._id) });
-        task2.afterTasks = task2.afterTasks.filter((tID) => { !tID.equals(task1._id) });
+        task1.beforeTasks = task1.beforeTasks.filter((tID) => { return !tID.equals(task2._id) });
+        task2.afterTasks = task2.afterTasks.filter((tID) => { return !tID.equals(task1._id) });
       }
     } else if (req.body.conn === 'after') {
       if (task1.afterTasks.includes(task2._id)) {
-        task1.afterTasks = task1.afterTasks.filter((tID) => { !tID.equals(task2._id) });
-        task2.beforeTasks = task2.beforeTasks.filter((tID) => { !tID.equals(task1._id) });
+        task1.afterTasks = task1.afterTasks.filter((tID) => { return !tID.equals(task2._id) });
+        task2.beforeTasks = task2.beforeTasks.filter((tID) => { return !tID.equals(task1._id) });
       }
     } else {
       return res.status(400).json({ message: 'Σφάλμα: Η παρούσα σύνδεση μεταξύ tasks είναι αδύνατη.' });

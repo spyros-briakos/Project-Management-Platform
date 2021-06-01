@@ -53,5 +53,28 @@ const TaskSchema = new mongoose.Schema({
   ],
 });
 
+// Hash given password to check if it is valid
+TaskSchema.methods.add = async function(password) {
+  return //...;
+}
+TaskSchema.methods.edit = async function(password) {
+  return //...;
+}
+TaskSchema.methods.delete = async function(password) {
+  return //...;
+}
+TaskSchema.methods.assignSprint = async function(password) {
+  return //...;
+}
+TaskSchema.methods.unassignSprint = async function(password) {
+  return //...;
+}
+TaskSchema.methods.connectTask = async function(password) {
+  return //...;
+}
+TaskSchema.methods.disconnectTask = async function(password) {
+  return //...;
+}
+
 // Task model
 module.exports = mongoose.model('Task', TaskSchema);
