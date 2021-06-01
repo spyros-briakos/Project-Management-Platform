@@ -6,7 +6,11 @@ const Task = require("../models/Task");
 
 async function projectDescriptionSerializer(query) {
   try {
-    query = await Project.findById(query)
+    // If an id was passed and not a Project object
+    if(!(query instanceof Project)){
+      query = await Project.findById(query)
+    }
+
     const productOwner = await serializer.usernameSerializer(query.productOwner)
     const scrumMaster = await serializer.usernameSerializer(query.scrumMaster)
     const context = {
@@ -36,7 +40,11 @@ async function projectDescriptionSerializer(query) {
 
 async function projectDetailsSerializer(query) {
   try {
-    query = await Project.findById(query)
+    // If an id was passed and not a Project object
+    if(!(query instanceof Project)){
+      query = await Project.findById(query)
+    }
+
     const productOwner = await serializer.usernameSerializer(query.productOwner)
     const scrumMaster = await serializer.usernameSerializer(query.scrumMaster)
     const context = {
@@ -72,7 +80,11 @@ async function projectDetailsSerializer(query) {
 // Sprints
 async function sprintSerializer(query) {
   try {
-    query = await Sprint.findById(query)
+    // If an id was passed and not a Sprint object
+    if(!(query instanceof Sprint)){
+      query = await Sprint.findById(query)
+    }
+
     const context = {
       _id: query._id,
       name: query.name,
@@ -95,7 +107,11 @@ async function sprintSerializer(query) {
 // UserStories
 async function userStorySerializer(query) {
   try {
-    query = await UserStory.findById(query)
+    // If an id was passed and not a UserStory object
+    if(!(query instanceof UserStory)){
+      query = await UserStory.findById(query)
+    }
+
     const context = {
       _id: query._id,
       name: query.name,
@@ -123,7 +139,11 @@ async function userStorySerializer(query) {
 // Tasks
 async function taskSerializer(query) {
   try {
-    query = await Task.findById(query)
+    // If an id was passed and not a Task object
+    if(!(query instanceof Task)){
+      query = await Task.findById(query)
+    }
+
     const context = {
       _id: query._id,
       name: query.name,

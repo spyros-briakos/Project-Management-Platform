@@ -18,7 +18,6 @@
     "bootstrap": "^4.6.0",
     "core-js": "^3.6.5",
     "css-container-queries": "^0.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.9.0",
     "extglob": "^2.0.4",
     "highcharts": "^9.0.1",
@@ -36,6 +35,7 @@
     "vue-dynamic-dropdown": "^1.0.12",
     "vue-loader": "^15.9.6",
     "vue-multiselect": "^2.1.6",
+    "vue-plugin-load-script": "^1.3.2",
     "vue-router": "^3.2.0",
     "vue-select": "^3.11.2",
     "vue-share-social": "^0.3.2",
@@ -52,7 +52,6 @@
     "@vue/cli-plugin-unit-jest": "^4.5.4",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "^4.1.1",
-    "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "aggregate-error": "^4.0.0",
     "babel-core": "7.0.0-bridge.0",
@@ -60,12 +59,10 @@
     "babel-jest": "^23.6.0",
     "coveralls": "^3.0.4",
     "eslint": "^6.7.2",
-    "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-vue": "^6.2.2",
     "flush-promises": "^1.0.2",
     "node-sass": "^4.13.0",
     "pnp-webpack-plugin": "^1.6.4",
-    "prettier": "^2.2.1",
     "purgecss": "^1.4.2",
     "sass": "^1.26.5",
     "sass-brunch": "^3.0.0",
@@ -83,9 +80,7 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended",
-      "@vue/prettier"
+      "plugin:vue/essential"
     ],
     "parserOptions": {
       "parser": "babel-eslint"

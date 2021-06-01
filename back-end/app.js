@@ -5,6 +5,7 @@ const fs = require("fs");
 const http = require("http");
 const express = require("express");               // Basic Package for API structure
 const mongoose = require("mongoose");             // MongoDB
+mongoose.set('useFindAndModify', false);
 const logger = require('./middlewares/logger');   // Print logger on requests
 // const bodyParser = require('body-parser');     // ...
 const session = require("express-session");

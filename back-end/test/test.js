@@ -49,7 +49,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      user.projects = res.body;
+      expect(res.body.status).to.be.eql('OK');
+      user.projects = res.body.projects;
       await fs.writeFile('/tmp/admin-user.json', JSON.stringify(user), function(err){});
     });
   });
@@ -71,9 +72,10 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(res.body), function(err){});
+      expect(res.body.status).to.be.eql('OK');
+      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(res.body.project), function(err){});
 
-      user.projects.push(res.body);
+      user.projects.push(res.body.project);
       await fs.writeFile('/tmp/admin-user.json', JSON.stringify(user), function(err){});
     });
   });
@@ -92,7 +94,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body);
-      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(res.body), function(err){});
+      expect(res.body.status).to.be.eql('OK');
+      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(res.body.project), function(err){});
     });
   });
 
@@ -114,7 +117,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body);
-      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(res.body), function(err){});
+      expect(res.body.status).to.be.eql('OK');
+      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(res.body.project), function(err){});
     });
   });
 
@@ -132,7 +136,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body);
-      project.sprints = res.body;
+      expect(res.body.status).to.be.eql('OK');
+      project.sprints = res.body.sprints;
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -151,7 +156,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body);
-      project.userStories = res.body;
+      expect(res.body.status).to.be.eql('OK');
+      project.userStories = res.body.userStories;
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -175,7 +181,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      project.sprints.push(res.body);
+      expect(res.body.status).to.be.eql('OK');
+      project.sprints.push(res.body.sprint);
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -199,7 +206,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      project.sprints[0] = res.body;
+      expect(res.body.status).to.be.eql('OK');
+      project.sprints[0] = res.body.sprint;
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -222,7 +230,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      project.userStories.push(res.body);
+      expect(res.body.status).to.be.eql('OK');
+      project.userStories.push(res.body.userStory);
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -246,7 +255,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      project.userStories[0] = res.body;
+      expect(res.body.status).to.be.eql('OK');
+      project.userStories[0] = res.body.userStory;
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -270,7 +280,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      project.userStories[0].tasks.push(res.body);
+      expect(res.body.status).to.be.eql('OK');
+      project.userStories[0].tasks.push(res.body.task);
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -294,7 +305,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      project.userStories[0].tasks.push(res.body);
+      expect(res.body.status).to.be.eql('OK');
+      project.userStories[0].tasks.push(res.body.task);
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -314,7 +326,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      project.userStories[0].tasks[0] = res.body;
+      expect(res.body.status).to.be.eql('OK');
+      project.userStories[0].tasks[0] = res.body.task;
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -338,7 +351,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      project.userStories[0].tasks[0] = res.body;
+      expect(res.body.status).to.be.eql('OK');
+      project.userStories[0].tasks[0] = res.body.task;
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -475,7 +489,8 @@ describe('API Test', () => {
     .expect(200)
     .then(async (res) => {
       // console.log(res.body)
-      project.userStories[0].tasks[0] = res.body;
+      expect(res.body.status).to.be.eql('OK');
+      project.userStories[0].tasks[0] = res.body.task;
       await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
     });
   });
@@ -497,8 +512,7 @@ describe('API Test', () => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
 
-      project.sprints = project.sprints.filter((pID) => { pID !== project.sprints[0] });
-      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
+      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(res.body.project), function(err){});
     });
   });
 
@@ -519,8 +533,7 @@ describe('API Test', () => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
 
-      // project.tasks = project.tasks.filter((pID) => { pID !== project.tasks[0] });
-      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
+      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(res.body.project), function(err){});
     });
   });
 
@@ -529,7 +542,7 @@ describe('API Test', () => {
     const data = await fs.readFileSync('/tmp/curr-project.json', 'utf8');
     const project = JSON.parse(data)
     await request(server)
-    .post('/api-control/delete-userStory')
+    .post('/api-control/delete-userstory')
     .trustLocalhost()
     .send({
       projectID: project._id,
@@ -541,8 +554,7 @@ describe('API Test', () => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
 
-      project.userStories = project.userStories.filter((pID) => { pID !== project.userStories[0] });
-      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(project), function(err){});
+      await fs.writeFile('/tmp/curr-project.json', JSON.stringify(res.body.project), function(err){});
     });
   });
 
@@ -563,10 +575,10 @@ describe('API Test', () => {
     .then(async (res) => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
-      await fs.unlinkSync('/tmp/curr-project.json');
-
+      
       user.projects = user.projects.filter((pID) => { pID !== project._id });
       await fs.writeFile('/tmp/admin-user.json', JSON.stringify(user), function(err){});
+      await fs.unlinkSync('/tmp/curr-project.json');
     });
   });
 
