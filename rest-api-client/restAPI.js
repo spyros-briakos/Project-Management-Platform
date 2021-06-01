@@ -83,6 +83,7 @@ export const actions = {
     return project._id;
   },
 
+
   // USER -----------------------------------------------
 
   // Login user
@@ -258,12 +259,9 @@ export const actions = {
   async addProject(project) {
     return requests.addProjectRequest(project, client.tokenObject.token)
     .then(function(response) {
-      try {
-        client.user.projects.push(response.project);
-        client.project = response.project;
-      } catch (error) {
-        throw error;
-      }
+      client.user.projects.push(response.project);
+      client.project = response.project;
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
@@ -307,11 +305,8 @@ export const actions = {
   async addSprint(sprint) {
     return requests.addSprintRequest(client.project._id, sprint, client.tokenObject.token)
     .then(function(response) {
-      try {
-        client.project.sprints.push(response.sprint);
-      } catch (error) {
-        throw error;
-      }
+      client.project.sprints.push(response.sprint);
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
@@ -319,11 +314,8 @@ export const actions = {
   async addUserStory(userStory) {
     return requests.addUserStoryRequest(client.project._id, userStory, client.tokenObject.token)
     .then(function(response) {
-      try {
-        client.project.userStories.push(response.userStory);
-      } catch (error) {
-        throw error;
-      }
+      client.project.userStories.push(response.userStory);
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
@@ -334,7 +326,7 @@ export const actions = {
       try {
         const currUserStory = client.project.userStories.filter((p) => {p._id === task.userStory})[0];
         if (!currUserStory) throw 'Invalid UserStory id';
-        currUserStory.tasks.push(response.task)
+        currUserStory.tasks.push(response.task);
       } catch (error) {
         throw error;
       }
@@ -546,6 +538,8 @@ export const actions = {
             {member._id === client.user._id})
          }) 
        })
+
+    return myTasks;
   }
 }
 
@@ -681,10 +675,10 @@ const requests = {
     .catch(function(error) { throw error })
   },
 
-  async addProjectRequest(projectID, project, token) {
+  async addProjectRequest(project, token) {
     let headers = { "Authorization": `${token}` };
 
-    return requests.send('POST', `add-project`, {projectID, project}, headers)
+    return requests.send('POST', 'add-project', {project}, headers)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },

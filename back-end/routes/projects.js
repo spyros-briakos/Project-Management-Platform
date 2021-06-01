@@ -121,7 +121,7 @@ router.post("/add-project", async (req, res) => {
     await User.findByIdAndUpdate(user._id, user, { runValidators: true });
     
     const context = await serializer.projectDetailsSerializer(savedProject);
-    res.json({status: 'OK', message: 'Το Project δημιουργηθηκε με επιτυχία.', project: context});
+    res.json({status: 'OK', message: 'Το Project δημιουργήθηκε με επιτυχία.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }

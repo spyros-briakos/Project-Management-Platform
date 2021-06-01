@@ -29,7 +29,7 @@ router.get('/user', async (req, res) => {
     // Get serialized user
     const context = await serializer.userSerializer(req.user._id);
 
-    res.json(context);
+    res.json({ user: context });
   } catch (error) {
     res.status(400).json({ message: error });
   }
