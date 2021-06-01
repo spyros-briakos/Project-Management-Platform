@@ -4,18 +4,18 @@
     <img id="image2" src="../../assets/img/scrum4.png">
 
     <div class="inner-block">
-      <form>
+      <form v-on:submit.prevent="login()">
         <h3>Συνδέσου με τον λογαριασμό σου!</h3>
 
         <div class="form-group">
-          <label>Email</label>
+          <label>Username</label>
           <input
-            type="email"
+            type="username"
             required
-            v-model="email"
+            v-model="username"
             class="form-control form-control-lg"
           />
-          <!-- <input type="email" required v-model="email" class="form-control form-control-lg" placeholder="Email"/> -->
+          <!-- <input type="username" required v-model="username" class="form-control form-control-lg" placeholder="Username"/> -->
         </div>
 
         <div class="form-group">
@@ -29,7 +29,7 @@
           <!-- <input type="password" required v-model="password" class="form-control form-control-lg" placeholder="Κωδικός"/> -->
         </div>
       
-        <p class="forgot-password text-right mt-2 mb-4">
+        <p class="forgot-password texlogint-right mt-2 mb-4">
           <router-link to="/sign/forgot"
             >Ξέχασες τον κωδικό σου;</router-link
           >
@@ -38,7 +38,11 @@
         <button
           type="submit"
           class="btn btn-dark btn-lg btn-block"
+<<<<<<< HEAD
           @click="login()"
+=======
+          
+>>>>>>> 40ff3d50401bd4a953276d17dc29b3a911f4664d
         >
           Σύνδεση<router-link :to="{ name: 'Home' }"></router-link>
         </button>
@@ -83,7 +87,7 @@
 export default {
   data() {
     return {
-      email: "",
+      username: "",
       password: ""
     };
   },
@@ -100,6 +104,8 @@ export default {
       //         }
       //     } else {
       //         console.log("A username and password must be present");
+      // username, password
+
     },
   },
 };

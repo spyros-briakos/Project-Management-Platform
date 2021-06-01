@@ -16,6 +16,7 @@ const agent = new https.Agent({
 function initClient() {
   return {
     user: {
+      _id: null,
       username: null,
       firstName: null,
       lastName: null,
@@ -35,21 +36,22 @@ function initClient() {
   }
 }
 
-// function initProject() {
-//   return {
-//     name: null,
-//     description: null,
-//     productOwner: null,
-//     scrumMaster: null,
-//     sprints: [],
-//     userStories: [],
-//     members: [],
-//     status: null,
-//     plan_in_use: null,
-//     startingDate: null,
-//     endingDate: null
-//   }
-// }
+function initProject() {
+  return {
+    _id: null,
+    name: null,
+    description: null,
+    productOwner: null,
+    scrumMaster: null,
+    sprints: [],
+    userStories: [],
+    members: [],
+    status: null,
+    plan_in_use: null,
+    startingDate: null,
+    endingDate: null
+  }
+}
 
 // Initialize client object
 export var client = initClient();
@@ -531,6 +533,15 @@ export const actions = {
     })
     .catch(function(error) { throw error })    
   },
+
+  getMyTasks() {
+    var myTasks = client.project.userStories.filter(userStory =>
+       {userStory.tasks.filter(task =>
+         {task.members.filter(member =>
+            {member._id === client.user._id})
+         }) 
+       })
+  }
 }
 
 const requests = {
