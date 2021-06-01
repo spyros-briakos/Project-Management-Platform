@@ -50,7 +50,8 @@ export function cli(args) {
 	  client.user.projects = client.user.projects;
 
 	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
-		if(err) return console.log('Writing data failed:', err);
+			
+			if(err) return console.log('Writing data failed:', err);
 	  });
 
 	} catch(error) {

@@ -38,7 +38,11 @@
         <button
           type="submit"
           class="btn btn-dark btn-lg btn-block"
+<<<<<<< HEAD
+          @click="login()"
+=======
           
+>>>>>>> 40ff3d50401bd4a953276d17dc29b3a911f4664d
         >
           Σύνδεση<router-link :to="{ name: 'Home' }"></router-link>
         </button>
@@ -89,8 +93,9 @@ export default {
   },
   methods: {
     login() {
-      console.log("Geiaaaaaaa",this.password, this.username);
-      //     if(this.username != "" && this.password != "") {
+      console.log("USER HAS SIGNED IN!");
+      this.$actions.test();
+      //     if(this.email != "" && this.password != "") {
       //         if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
       //             this.$emit("authenticated", true);
       //             this.$router.replace({ name: "secure" });

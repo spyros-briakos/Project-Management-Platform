@@ -25,6 +25,8 @@ import Gantt from "highcharts/modules/gantt";
 import "./assets/app.scss"; 
 import "./plugins";
 import store from "./store";
+import { client, actions } from './modules/store'
+// import { client, actions } from '../../rest-api-client/restAPI'
 
 Vue.use(VeeValidate);
 
@@ -36,6 +38,9 @@ library.add(faUserSecret, faUser, faTimesCircle, faCheckCircle, faBell, faChartP
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false;
+
+Vue.prototype.$client = client
+Vue.prototype.$actions = actions
 
 new Vue({
   store,

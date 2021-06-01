@@ -16,7 +16,6 @@ const agent = new https.Agent({
 function initClient() {
   return {
     user: {
-      _id: null,
       username: null,
       firstName: null,
       lastName: null,
@@ -38,7 +37,6 @@ function initClient() {
 
 function initProject() {
   return {
-    _id: null,
     name: null,
     description: null,
     productOwner: null,
@@ -57,6 +55,9 @@ function initProject() {
 export var client = initClient();
 
 export const actions = {
+  test() {
+    console.log('testtest')
+  },
   // Set client object
   setClient(data) {
     if(data.user)
@@ -66,22 +67,9 @@ export const actions = {
       client.tokenObject = data.token;
 
     if(data.project)
-      client.project = data.project;
+    console.log(error);
+    client.project = data.project;
   },
-
-  // Get a project's id
-  getProjectId(projectName) {
-    // If the user has chosen a project
-    if(client.project && client.project.name == projectName) {
-      return client.project._id;
-    }
-
-    // Find project
-    let project = client.user.projects.filter(p => p.name == projectName)[0];
-
-    return project._id;
-  },
-
 
   // USER -----------------------------------------------
 
@@ -215,15 +203,6 @@ export const actions = {
 
   // PROJECT -----------------------------------------------
 
-  // Get user's projects
-  async getProjects() {
-    return requests.getProjectsRequest(client.tokenObject.token)
-    .then(function(response) {
-      client.user.projects = response.projects;
-    })
-    .catch(function(error) { throw error })    
-  },
-
   // Invite user(s) to a project
   async inviteUser(projectId, data) {
     return requests.inviteUserRequest(projectId, data, client.tokenObject.token)
@@ -244,13 +223,28 @@ export const actions = {
     .catch(function(error) { throw error })    
   },
 
-  // Get a specific project
-  async getProject(projectName) {
-    let projectId = actions.getProjectId(projectName);
-
-    return requests.getProjectRequest(projectId, client.tokenObject.token)
+  async getProjects() {
+    return requests.getProjectsRequest(client.tokenObject.token)
     .then(function(response) {
-      client.project = response.project;
+      try {
+        client.user.projects = response.projects;
+        return response.message;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async getProject(projectID) {
+    return requests.getProjectRequest(projectID, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project = response.project;
+        return response.message;
+      } catch (error) {
+        throw error;
+      }
     })
     .catch(function(error) { throw error })    
   },
@@ -258,9 +252,13 @@ export const actions = {
   async addProject(project) {
     return requests.addProjectRequest(project, client.tokenObject.token)
     .then(function(response) {
-      client.user.projects.push(response.project);
-      client.project = response.project;
-      return response.message;
+      try {
+        client.user.projects.push(response.project);
+        client.project = response.project;
+        return response.message;
+      } catch (error) {
+        throw error;
+      }
     })
     .catch(function(error) { throw error })    
   },
@@ -291,12 +289,14 @@ export const actions = {
     .catch(function(error) { throw error })    
   },
 
-  async getUserStories(projectName) {
-    let projectId = actions.getProjectId(projectName);
-  
-    return requests.getUserStoriesRequest(projectId, client.tokenObject.token)
+  async getUserStories() {
+    return requests.getUserStoriesRequest(client.project._id, client.tokenObject.token)
     .then(function(response) {
-      client.project.userStories = response.userStories;
+      try {
+        client.project.userStories = response.userStories;
+      } catch (error) {
+        throw error;
+      }
     })
     .catch(function(error) { throw error })    
   },
@@ -304,8 +304,11 @@ export const actions = {
   async addSprint(sprint) {
     return requests.addSprintRequest(client.project._id, sprint, client.tokenObject.token)
     .then(function(response) {
-      client.project.sprints.push(response.sprint);
-      return response.message;
+      try {
+        client.project.sprints.push(response.sprint);
+      } catch (error) {
+        throw error;
+      }
     })
     .catch(function(error) { throw error })    
   },
@@ -313,8 +316,11 @@ export const actions = {
   async addUserStory(userStory) {
     return requests.addUserStoryRequest(client.project._id, userStory, client.tokenObject.token)
     .then(function(response) {
-      client.project.userStories.push(response.userStory);
-      return response.message;
+      try {
+        client.project.userStories.push(response.userStory);
+      } catch (error) {
+        throw error;
+      }
     })
     .catch(function(error) { throw error })    
   },
@@ -325,7 +331,7 @@ export const actions = {
       try {
         const currUserStory = client.project.userStories.filter((p) => {p._id === task.userStory})[0];
         if (!currUserStory) throw 'Invalid UserStory id';
-        currUserStory.tasks.push(response.task);
+        currUserStory.tasks.push(response.task)
       } catch (error) {
         throw error;
       }
@@ -529,17 +535,6 @@ export const actions = {
     })
     .catch(function(error) { throw error })    
   },
-
-  getMyTasks() {
-    var myTasks = client.project.userStories.filter(userStory =>
-       {userStory.tasks.filter(task =>
-         {task.members.filter(member =>
-            {member._id === client.user._id})
-         }) 
-       })
-
-    return myTasks;
-  }
 }
 
 const requests = {
@@ -642,14 +637,6 @@ const requests = {
 
   // PROJECT -----------------------------------------------
 
-  async getProjectsRequest(token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `get-projects`, {}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
   async inviteUserRequest(projectId, data, token) {
     let headers = { "Authorization": `${token}` };
 
@@ -666,6 +653,14 @@ const requests = {
     .catch(function(error) { throw error })
   },
 
+  async getProjectsRequest(token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `get-projects`, {}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
   async getProjectRequest(projectID, token) {
     let headers = { "Authorization": `${token}` };
 
@@ -674,10 +669,10 @@ const requests = {
     .catch(function(error) { throw error })
   },
 
-  async addProjectRequest(project, token) {
+  async addProjectRequest(projectID, project, token) {
     let headers = { "Authorization": `${token}` };
 
-    return requests.send('POST', 'add-project', {project}, headers)
+    return requests.send('POST', `add-project`, {projectID, project}, headers)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
@@ -692,18 +687,16 @@ const requests = {
 
   async getSprintsRequest(projectID, token) {
     let headers = { "Authorization": `${token}` };
-    let data = { projectID: projectID };
 
-    return requests.send('POST', `get-sprints`, data, headers)
+    return requests.send('POST', `get-sprints`, {projectID}, headers)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
 
   async getUserStoriesRequest(projectID, token) {
     let headers = { "Authorization": `${token}` };
-    let data = { projectID: projectID };
 
-    return requests.send('POST', `get-userstories`, data, headers)
+    return requests.send('POST', `get-userstories`, {projectID}, headers)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
