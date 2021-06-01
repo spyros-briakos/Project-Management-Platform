@@ -49,8 +49,6 @@ export function cli(args) {
 	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 		if(err) return console.log('Writing data failed:', err);
 	  });
-
-		console.log(message);
 	} catch(error) {
 	  if (error.response && error.response.data.message)
 		console.log(`Η ανάκτηση των projects σου απέτυχε: ${error.response.data.message}`);
@@ -213,8 +211,8 @@ export function cli(args) {
   .option('-d, --descr <value>', 'Project\'s description')
   .option('-po, --productOwner <value>', 'Project\'s productOwner')
   .option('-sm, --scrumMaster <value>', 'Project\'s scrumMaster')
-  .option('--status <value>', 'Project\'s status')
-  .option('--plan <value>', 'Project\'s business plan')
+  .option('--status <value>', 'Project\'s status (inProgress | done)')
+  .option('--plan <value>', 'Project\'s business plan (standard | premium)')
   .action(async (command) => {
     try {
 			// Get client object
@@ -242,14 +240,13 @@ export function cli(args) {
 			});
 	
 			console.log(message);
-		} catch(err) {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
+		} catch(error) {
+		  if(error.response && error.response.data.message)
+			console.log(`Η επεξεργασία του project ${command.project} απέτυχε: ', ${error.response.data.message}`);
+		  else if(error.code === 'ENOENT')
+			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+		  else
+			console.log(`Η επεξεργασία του project ${command.project} απέτυχε: ', ${error.message}`);
 		}
   });
 
@@ -355,9 +352,6 @@ export function cli(args) {
 	
 			// Get specified project & set client.project
 			await restAPI.actions.getProject(command.project);
-
-			// Get user's projects
-			await restAPI.actions.getSprints();
 	
 			// Print projects
 			console.log(util.inspect(client.project.sprints, { depth: null, colors: true }));
@@ -367,11 +361,11 @@ export function cli(args) {
 			});
 		} catch(error) {
 			if (error.response && error.response.data.message)
-			console.log(`Η ανάκτηση των projects σου απέτυχε: ${error.response.data.message}`);
+			console.log(`Η ανάκτηση των user stories του project ${command.project} απέτυχε: ${error.response.data.message}`);
 			else if(error.code === 'ENOENT')
 			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 			else
-			console.log(`Η ανάκτηση των projects σου απέτυχε: ${error.message}`);
+			console.log(`Η ανάκτηση των user stories του project ${command.project} απέτυχε: ${error.message}`);
 		}
   });
 	
@@ -390,9 +384,6 @@ export function cli(args) {
 			// Get specified project & set client.project
 			await restAPI.actions.getProject(command.project);
 
-			// Get user's projects
-			await restAPI.actions.getUserStories();
-	
 			// Print projects
 			console.log(util.inspect(client.project.userStories, { depth: null, colors: true }));
 	
@@ -401,11 +392,11 @@ export function cli(args) {
 			});
 		} catch(error) {
 			if (error.response && error.response.data.message)
-			console.log(`Η ανάκτηση των projects σου απέτυχε: ${error.response.data.message}`);
+			console.log(`Η ανάκτηση των user stories του project ${command.project} απέτυχε: ${error.response.data.message}`);
 			else if(error.code === 'ENOENT')
 			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 			else
-			console.log(`Η ανάκτηση των projects σου απέτυχε: ${error.message}`);
+			console.log(`Η ανάκτηση των user stories του project ${command.project} απέτυχε: ${error.message}`);
 		}
   });
 
@@ -446,7 +437,7 @@ export function cli(args) {
 	  // Get client data
 	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
 	  // Set client
-  	restAPI.actions.setClient(clientData);
+  	  restAPI.actions.setClient(clientData);
 
 	  // Get specified project & set client.project
 	  await restAPI.actions.getProject(command.project);
@@ -626,14 +617,13 @@ export function cli(args) {
 			});
 	
 			console.log(message);
-		} catch(err) {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
+		} catch(error) {
+			if(error.response && error.response.data.message)
+				console.log(`Η επεξεργασία του sprint ${command.sprint} απέτυχε: ', ${error.response.data.message}`);
+		  	else if(error.code === 'ENOENT')
+				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			  else
+				console.log(`Η επεξεργασία του sprint ${command.sprint} απέτυχε: ', ${error.message}`);
 		}
 	});
 
@@ -670,14 +660,13 @@ export function cli(args) {
 			});
 	
 			console.log(message);
-		} catch(err) {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
+		} catch(error) {
+			if(error.response && error.response.data.message)
+				console.log(`Η επεξεργασία του user story ${command.userStory} απέτυχε: ', ${error.response.data.message}`);
+			  else if(error.code === 'ENOENT')
+				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+		  	else
+				console.log(`Η επεξεργασία του user story ${command.userStory} απέτυχε: ', ${error.message}`);
 		}
 	});
 
@@ -715,14 +704,13 @@ export function cli(args) {
 			});
 	
 			console.log(message);
-		} catch(err) {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
+		} catch(error) {
+			if(error.response && error.response.data.message)
+				console.log(`Η επεξεργασία του task ${command.task} απέτυχε: ', ${error.response.data.message}`);
+		  	else if(error.code === 'ENOENT')
+				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			  else
+				console.log(`Η επεξεργασία του task ${command.task} απέτυχε: ', ${error.message}`);
 		}
 	});
 
@@ -750,14 +738,13 @@ export function cli(args) {
 			});
 	
 			console.log(message);
-		} catch(err) {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
+		} catch(error) {
+			if(error.response && error.response.data.message)
+				console.log(`Η διαγραφή του sprint ${command.sprint} απέτυχε: ', ${error.response.data.message}`);
+			  else if(error.code === 'ENOENT')
+				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			else
+				console.log(`Η διαγραφή του sprint ${command.sprint} απέτυχε: ', ${error.message}`);
 		}
 	});
 
@@ -923,11 +910,11 @@ export function cli(args) {
 			console.log(message);
 		} catch (error) {
 			if(error.response && error.response.data.message)
-			console.log('Η δημιουργία νέου project απέτυχε: ', error.response.data.message);
+			console.log(`Η αποχώρησή σου από το project ${command.project} απέτυχε: ${error.response.data.message}`);
 			else if(error.code === 'ENOENT')
 			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 			else
-			console.log('Η δημιουργία νέου project απέτυχε: ', error.message);
+			console.log(`Η αποχώρησή σου από το project ${command.project} απέτυχε: ${error.message}`);
 		}
 	});
 
@@ -962,28 +949,124 @@ export function cli(args) {
 	  console.log(message);
 	} catch (error) {
 	  if(error.response && error.response.data.message)
-		console.log(`Η προσθήκη σου στα μέλη του task ${command.task} απέτυχε: ${error.response.data.message}`);
+		console.log(`Η σύνδεση των tasks απέτυχε: ${error.response.data.message}`);
 	  else if(error.code === 'ENOENT')
 		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 	  else
-		console.log(`Η προσθήκη σου στα μέλη του task ${command.task} απέτυχε: ${error.message}`);
+		console.log(`Η σύνδεση των tasks απέτυχε: ${error.message}`);
 	}
   });
 
-	program
-	.command('assign-sprint')
-	.action((command) => {
-	});
+  program
+  .command('assign-sprint')
+  .requiredOption('-p, --project <value>', 'Project\'s name')
+  .requiredOption('-u, --userStory <value>', 'UserStory\'s name (of the Task)')
+  .requiredOption('-t, --task <value>', 'Task\'s name')
+  .requiredOption('-s, --sprint <value>', 'Sprint\'s name')
+  .action(async (command) => {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+  
+	  // Get specified project & set client.project
+	  await restAPI.actions.getProject(command.project);
 
-	program
-	.command('disconnect-tasks')
-	.action((command) => {
-	});
+	  // Get specified task
+	  const task = restAPI.actions.getTaskObj(command.userStory, command.task);
+	  // Get specified sprint
+	  const sprint = restAPI.actions.getSprintObj(command.sprint);
 
-	program
-	.command('unassign-sprint')
-	.action((command) => {
-	});
+	  // Assign task to sprint
+	  let message = await restAPI.actions.connectSprint(task, sprint);
+	
+	  console.log(message);
+	} catch (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η ανάθεση του task ${command.task} στο sprint ${command.sprint} απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+		console.log(`Η ανάθεση του task ${command.task} στο sprint ${command.sprint} απέτυχε: ${error.message}`);
+	}
+  });
+
+  program
+  .command('disconnect-tasks')
+  .requiredOption('-p, --project <value>', 'Project\'s name')
+  .requiredOption('-t1, --task1 <value>', 'Task\'s 1 name')
+  .requiredOption('-u1, --userStory1 <value>', 'UserStory\'s 1 name')
+  .requiredOption('-t2, --task2 <value>', 'Task\'s 2 name')
+  .requiredOption('-u2, --userStory2 <value>', 'UserStory\'s 2 name')
+  .requiredOption('-c, --connection <value>', 'Tasks\' connection (before | after)')
+  .action(async (command) => {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+  
+	  // Get specified project & set client.project
+	  await restAPI.actions.getProject(command.project);
+
+	  // Get task 1
+	  const task1 = restAPI.actions.getTaskObj(command.userStory1, command.task1);
+	  // Get task 2
+	  const task2 = restAPI.actions.getTaskObj(command.userStory2, command.task2);
+
+	  // Disconnect tasks
+	  let message = await restAPI.actions.disconnectTasks(task1, task2, command.connection);
+	
+	  console.log(message);
+	} catch (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η αποσύνδεση των tasks απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+		console.log(`Η αποσύνδεση των tasks απέτυχε: ${error.message}`);
+	}
+  });
+
+  program
+  .command('unassign-sprint')
+  .requiredOption('-p, --project <value>', 'Project\'s name')
+  .requiredOption('-u, --userStory <value>', 'UserStory\'s name (of the Task)')
+  .requiredOption('-t, --task <value>', 'Task\'s name')
+  .action(async (command) => {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+  
+	  // Get specified project & set client.project
+	  await restAPI.actions.getProject(command.project);
+
+	  // Get specified task
+	  const task = restAPI.actions.getTaskObj(command.userStory, command.task);
+
+	  // Unassign task from sprint
+	  let message = await restAPI.actions.disconnectSprint(task);
+	
+	  console.log(message);
+	} catch (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η αποδέσμευση του task ${command.task} από το sprint του απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+		console.log(`Η αποδέσμευση του task ${command.task} από το sprint του απέτυχε: ${error.message}`);
+	}
+  });
+
 
 	// !AUTH COMMANDS
 	

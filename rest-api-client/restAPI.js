@@ -86,6 +86,10 @@ export const actions = {
     return client.project.userStories.filter(userStory => userStory.name === userStoryName)[0];
   },
 
+  getSprintObj(sprintName) {
+    return client.project.sprints.filter(sprint => sprint.name === sprintName)[0];
+  },
+
   getTaskObj(userStoryName, taskName) {
     for(let userStory of client.project.userStories) {
       if(userStory.name === userStoryName) {
@@ -281,7 +285,7 @@ export const actions = {
     return requests.editProjectRequest(client.project._id, project, client.tokenObject.token)
     .then(function(response) {
       client.project = response.project;
-      const currProject = client.user.projects.filter((p) => { return p._id === project._id })[0];
+      const currProject = client.user.projects.filter((p) => { return p._id === client.project._id })[0];
       Object.keys(response.project).forEach(key=>{ if (key in currProject) currProject[key]=response.project[key] });
       return response.message;
     })
@@ -296,10 +300,8 @@ export const actions = {
     .catch(function(error) { throw error })    
   },
 
-  async getUserStories(projectName) {
-    let projectId = actions.getProjectId(projectName);
-  
-    return requests.getUserStoriesRequest(projectId, client.tokenObject.token)
+  async getUserStories() {  
+    return requests.getUserStoriesRequest(client.project._id, client.tokenObject.token)
     .then(function(response) {
       client.project.userStories = response.userStories;
     })
@@ -404,12 +406,9 @@ export const actions = {
     }
     return requests.disconnectTasksRequest(client.project._id, connection, client.tokenObject.token)
     .then(function(response) {
-      try {
-        Object.keys(response.task1).forEach(key=>{ task1[key]=response.task1[key] });
-        Object.keys(response.task2).forEach(key=>{ task2[key]=response.task2[key] });
-      } catch (error) {
-        throw error;
-      }
+      Object.keys(response.task1).forEach(key=>{ task1[key]=response.task1[key] });
+      Object.keys(response.task2).forEach(key=>{ task2[key]=response.task2[key] });
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
@@ -421,14 +420,11 @@ export const actions = {
     }
     return requests.connectSprintRequest(client.project._id, connection, client.tokenObject.token)
     .then(function(response) {
-      try {
-        const currUserStory = client.project.userStories.filter((p) => {return p._id === task.userStory})[0];
-        if (!currUserStory) throw 'Invalid UserStory id';
-        Object.keys(response.userStory).forEach(key=>{ currUserStory[key]=response.userStory[key] });
-        Object.keys(response.sprint).forEach(key=>{ sprint[key]=response.sprint[key] });
-      } catch (error) {
-        throw error;
-      }
+      const currUserStory = client.project.userStories.filter((p) => {return p._id === task.userStory})[0];
+      if (!currUserStory) throw { message: 'Invalid UserStory id' };
+      Object.keys(response.userStory).forEach(key=>{ currUserStory[key]=response.userStory[key] });
+      Object.keys(response.sprint).forEach(key=>{ sprint[key]=response.sprint[key] });
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
@@ -441,11 +437,12 @@ export const actions = {
     .then(function(response) {
       try {
         const currSprint = client.project.sprints.filter((p) => {return p._id === task.sprint})[0];
-        if (!currSprint) throw 'Invalid Sprint id';
+        if (!currSprint) throw { message: 'Invalid Sprint id' };
         const currUserStory = client.project.userStories.filter((p) => {return p._id === task.userStory})[0];
-        if (!currUserStory) throw 'Invalid UserStory id';
+        if (!currUserStory) throw { message: 'Invalid UserStory id' };
         Object.keys(response.userStory).forEach(key=>{ currUserStory[key]=response.userStory[key] });
         Object.keys(response.sprint).forEach(key=>{ currSprint[key]=response.sprint[key] });
+        return response.message;
       } catch (error) {
         throw error;
       }
@@ -457,6 +454,7 @@ export const actions = {
     return requests.deleteSprintRequest(client.project._id, sprint._id, client.tokenObject.token)
     .then(function(response) {
       client.project = response.project;
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
@@ -470,7 +468,7 @@ export const actions = {
   },
 
   async deleteTask(sprint) {
-    return requests.deleteSprintRequest(client.project._id, sprint._id, client.tokenObject.token)
+    return requests.deleteTaskRequest(client.project._id, sprint._id, client.tokenObject.token)
     .then(function(response) {
       client.project = response.project;
     })
@@ -497,7 +495,7 @@ export const actions = {
 
   getMyTasks() {
     var myTasks = client.project.userStories.filter(userStory =>
-       {userStory.tasks.filter(task =>
+       { return userStory.tasks.filter(task =>
          { return task.members.filter(member =>
             { return member._id === client.user._id })
          }) 
