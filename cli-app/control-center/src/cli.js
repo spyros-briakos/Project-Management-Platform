@@ -63,7 +63,7 @@ export function cli(args) {
 
 	program
   .command('create-project')
-  .requiredOption('-p, --project <value>', 'Project\'s name')
+  .requiredOption('-n, --name <value>', 'Project\'s name')
   .option('-d, --description <value>', 'Project\'s description')
   .option('--plan <value>', 'Project\'s plan')
   .action((command) => {
@@ -100,34 +100,34 @@ export function cli(args) {
 		})
   });
 
-	// program
-  // .command('choose-project')
-  // .requiredOption('-p, --project <value>', 'User\'s project name')
-  // .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-  // .action((command) => {
-	// 	let token = ''
-	// 	try {
-	// 		const data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
-	// 		token = data.token
-	// 	} catch (err) {
-	// 			return console.log('Reading token failed:', err);
-	// 	}
-  //   axios.get(`${apiUrl}/projects/`, {
-	// 		project: command.project
-	// 	}, { headers: { "Authorization": token } })
-	// 	.then((response) => {
-	// 		console.log(response.data);
-	// 	})
-	// 	.catch((err) => {
-	// 		if (err.code === 'ECONNREFUSED') {
-	// 			console.log('Unable to connect to server.')
-	// 		} else if (err.response && err.response.status === 500){
-	// 			console.log('Login required!')
-	// 		} else {
-	// 			console.log('Internal Error')
-	// 		}
-	// 	})
-  // });
+	program
+  .command('choose-project')
+  .requiredOption('-p, --project <value>', 'User\'s project name')
+  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
+  .action((command) => {
+		let token = ''
+		try {
+			const data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
+			token = data.token
+		} catch (err) {
+				return console.log('Reading token failed:', err);
+		}
+    axios.get(`${apiUrl}/projects/`, {
+			project: command.project
+		}, { headers: { "Authorization": token } })
+		.then((response) => {
+			console.log(response.data);
+		})
+		.catch((err) => {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
+			}
+		})
+  });
 
 	program
   .command('delete-project')
@@ -445,26 +445,7 @@ export function cli(args) {
 			}
 		})
   });
-
-  program
-  .command('tasks')
-  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
-  .action((command) => {
-		axios.get(`${apiUrl}/tasks/`, {
-			headers: { "Authorization": `Bearer ${command.token}` }
-		})
-		.then(function(response) {
-			console.log(response.data);
-		})
-		.catch(() => {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			}
-		})
-  });
-
+	
   program
 	.command('user-stories')
   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
@@ -483,18 +464,102 @@ export function cli(args) {
 			}
 		})
   });
+	
+	program
+	.command('my-tasks')
+	.action((command) => {
+	});
 
+	program
+	.command('add-sprint')
+	.action((command) => {
+	});
+
+	program
+	.command('add-userStory')
+	.action((command) => {
+	});
+
+	program
+	.command('add-task')
+	.action((command) => {
+	});
+
+	program
+	.command('edit-sprint')
+	.action((command) => {
+	});
+
+	program
+	.command('edit-userStory')
+	.action((command) => {
+	});
+
+	program
+	.command('edit-task')
+	.action((command) => {
+	});
+
+	program
+	.command('delete-sprint')
+	.action((command) => {
+	});
+
+	program
+	.command('delete-userStory')
+	.action((command) => {
+	});
+
+	program
+	.command('delete-task')
+	.action((command) => {
+	});
+
+	program
+	.command('join-task')
+	.action((command) => {
+	});
+
+	program
+	.command('leave-task')
+	.action((command) => {
+	});
+
+	program
+	.command('leave-project')
+	.action((command) => {
+	});
+
+	program
+	.command('connect-tasks')
+	.action((command) => {
+	});
+
+	program
+	.command('assign-sprint')
+	.action((command) => {
+	});
+
+	program
+	.command('disconnect-tasks')
+	.action((command) => {
+	});
+
+	program
+	.command('unassign-sprint')
+	.action((command) => {
+	});
+
+	// !AUTH COMMANDS
+	
   program
   .command('health-check')
-  .option('--format <value>', 'Give format', 'json')
   .action(function (command) {
-	axios.get(`${apiUrl}/health-check?format=${command.format}`, { httpsAgent: agent })
-	.then(function (response) {
-	  // handle success
-	  console.log(response.data);
-	})
+		axios.get(`${apiUrl}/db/health-check`, { httpsAgent: agent })
+		.then(function (response) {
+			console.log(response.data);
+		})
 	.catch(function (error) {
-	  // handle error
 	  console.log('{ status: \'error\' }');
 	})
   });
@@ -504,31 +569,31 @@ export function cli(args) {
   .requiredOption('-u, --username <value>', 'User\'s username')
   .requiredOption('-p, --password <value>', 'User\'s password')
   .action(async function (command) {
-	// Check if the user can log in
-	const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
-	if(check.result === false){
-	  return console.log(check.message);
-	}
+		// Check if the user can log in
+		const check = utils.checkLogInfo(command.username, '/tmp/user.json', '/tmp/token.json');
+		if(check.result === false){
+			return console.log(check.message);
+		}
 
-	try {
-	  const client = restAPI.client;
-	  let message = await restAPI.actions.login(command.username, command.password);
- 
-	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
-		if(err) return console.log('Writing user failed:', err);
-	  });
-	  fs.writeFile('/tmp/token.json', JSON.stringify(client.tokenObject), function(err) {
-		if(err) return console.log('Writing token failed:', err);
-	  });
+		try {
+			const client = restAPI.client;
+			let message = await restAPI.actions.login(command.username, command.password);
+	
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+			if(err) return console.log('Writing user failed:', err);
+			});
+			fs.writeFile('/tmp/token.json', JSON.stringify(client.tokenObject), function(err) {
+			if(err) return console.log('Writing token failed:', err);
+			});
 
-	  console.log(message);
-	} catch(error) {
-	  if (error.response && error.response.data.message) {
-		console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
-	  } else {
-		console.log('Η σύνδεση απέτυχε: ', error.message);
-	  }
-	}
+			console.log(message);
+		} catch(error) {
+			if (error.response && error.response.data.message) {
+			console.log('Η σύνδεση απέτυχε: ', error.response.data.message);
+			} else {
+			console.log('Η σύνδεση απέτυχε: ', error.message);
+			}
+		}
   });
 
   program
@@ -540,31 +605,31 @@ export function cli(args) {
   .requiredOption('-e, --email <value>', 'User\'s email')
   .option('--plan <value>', 'User\'s plan (standard | premium-monthly | premium-year)')
   .action(async function(command) {
-	try {
-	  let data = {
-		username: command.username,
-		password: command.password,
-		firstName: command.firstName,
-		lastName: command.lastName,
-		email: command.email,
-		plan_in_use: command.plan
-	  };
+		try {
+			let data = {
+			username: command.username,
+			password: command.password,
+			firstName: command.firstName,
+			lastName: command.lastName,
+			email: command.email,
+			plan_in_use: command.plan
+			};
 
-	  const client = restAPI.client;
-	  let message = await restAPI.actions.signup(data);
+			const client = restAPI.client;
+			let message = await restAPI.actions.signup(data);
 
-	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
-	    if(err) return console.log('Writing user failed:', err);
-	  });
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+				if(err) return console.log('Writing user failed:', err);
+			});
 
-	  console.log(message);
-	  console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
-	} catch(error) {
-	  if (error.response && error.response.data.message)
-		console.log('Η εγγραφή απέτυχε: ', error.response.data.message);
-	  else
-		console.log('Η εγγραφή απέτυχε: ', error.message);
-	}
+			console.log(message);
+			console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
+		} catch(error) {
+			if (error.response && error.response.data.message)
+			console.log('Η εγγραφή απέτυχε: ', error.response.data.message);
+			else
+			console.log('Η εγγραφή απέτυχε: ', error.message);
+		}
 	// axios.post(`${apiUrl}/users/signup?format=${command.format}/`, {
 	//   username: command.username,
 	//   password: command.password,
@@ -637,32 +702,32 @@ export function cli(args) {
   program
   .command('get-invitations')
   .action(async function() {
-	try {
-	  // Get client object
-	  const client = restAPI.client;
-	  // Get client data
-	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
-	  // Set client
-	  restAPI.actions.setClient(clientData);
+		try {
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
 
-	  let invitations = await restAPI.actions.getInvitations();
+			let invitations = await restAPI.actions.getInvitations();
 
-	  // Update user's info
-	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
-	    if(err) return console.log('Writing user failed:', err);
-	  });
+			// Update user's info
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+				if(err) return console.log('Writing user failed:', err);
+			});
 
-	  // Print invitations
-	//   console.log(util.inspect(invitations, { depth: null, colors: true }));
-	  console.log(invitations);
-	} catch (error) {
-	  if(error.response && error.response.data.message)
-		console.log('Η ανάκτηση δεδομένων απέτυχε.',error.response.data.message);
-	  else if(error.code === 'ENOENT')
-		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-		console.log('Η ανάκτηση δεδομένων απέτυχε.',error.message);
-	}
+			// Print invitations
+		//   console.log(util.inspect(invitations, { depth: null, colors: true }));
+			console.log(invitations);
+		} catch (error) {
+			if(error.response && error.response.data.message)
+			console.log('Η ανάκτηση δεδομένων απέτυχε.',error.response.data.message);
+			else if(error.code === 'ENOENT')
+			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			else
+			console.log('Η ανάκτηση δεδομένων απέτυχε.',error.message);
+		}
   })
 
   program
@@ -672,46 +737,46 @@ export function cli(args) {
   .option('-ln, --lastName <value>', 'User\'s lastName')
   .option('-e, --email <value>', 'User\'s email')
   .action(async function(command) {
-	try {
-	  let data = {
-		username: command.username,
-		firstName: command.firstName,
-		lastName: command.lastName,
-		email: command.email
-	  };
-  
-	  // Get client object
-	  const client = restAPI.client;
-	  // Get client data
-	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
-	  // Set client
-	  restAPI.actions.setClient(clientData);
+		try {
+			let data = {
+			username: command.username,
+			firstName: command.firstName,
+			lastName: command.lastName,
+			email: command.email
+			};
+		
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
 
-	  // Update user
-	  let response = await restAPI.actions.updateUser(data);
-  
-	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
-		if(err) return console.log('Writing user failed:', err);
-	  });
-  
-	  console.log(response.message);
+			// Update user
+			let response = await restAPI.actions.updateUser(data);
+		
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+			if(err) return console.log('Writing user failed:', err);
+			});
+		
+			console.log(response.message);
 
-      // If a new email was given by the user
-	  if(response.email){
-		// Log out the user until the new email is verified
-		fs.unlink('/tmp/token.json', function(err) {
-		  if(err) return console.log('Removing token failed:', err);
-		});
-		console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
-	  }
-	} catch(error) {
-	  if (error.response && error.response.data.message)
-		console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.response.data.message}`);
-	  else if(error.code === 'ENOENT')
-		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-		console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.message}`);
-	}
+				// If a new email was given by the user
+			if(response.email){
+			// Log out the user until the new email is verified
+			fs.unlink('/tmp/token.json', function(err) {
+				if(err) return console.log('Removing token failed:', err);
+			});
+			console.log('Αφού επιβεβαιώσεις το email σου, συνδέσου για να συνεχίσεις στην εφαρμογή.')
+			}
+		} catch(error) {
+			if (error.response && error.response.data.message)
+			console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.response.data.message}`);
+			else if(error.code === 'ENOENT')
+			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			else
+			console.log(`Η ενημέρωση του λογαριασμού απέτυχε: ${error.message}`);
+		}
   })
 
   program
@@ -720,32 +785,32 @@ export function cli(args) {
   .requiredOption('-np, --newPassword <value>','User\'s new password')
   .requiredOption('-cp, --confirmPassword <value>','User\'s password confrimation')
   .action(async function(command) {
-	try {
-	  let data = {
-		old: command.oldPassword,
-		new: command.newPassword,
-		confirm: command.confirmPassword
-	  };
-	
-	  // Get client object
-	  const client = restAPI.client;
-	  // Get client data
-	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
-	  // Set client
-	  restAPI.actions.setClient(clientData);
-  
-	  // Reset user's password
-	  let message = await restAPI.actions.resetPassword(data);
-	
-	  console.log(message);
-	} catch(error) {
-	  if (error.response && error.response.data.message)
-		console.log(`Η ενημέρωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
-	  else if(error.code === 'ENOENT')
-		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-		console.log(`Η ενημέρωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
-	}
+		try {
+			let data = {
+			old: command.oldPassword,
+			new: command.newPassword,
+			confirm: command.confirmPassword
+			};
+		
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
+		
+			// Reset user's password
+			let message = await restAPI.actions.resetPassword(data);
+		
+			console.log(message);
+		} catch(error) {
+			if (error.response && error.response.data.message)
+			console.log(`Η ενημέρωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
+			else if(error.code === 'ENOENT')
+			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			else
+			console.log(`Η ενημέρωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
+		}
   })
 
   // NOT GOOD WITH CLI-APP
@@ -754,119 +819,119 @@ export function cli(args) {
   .command('forgot-password')
   .requiredOption('-e, --email <value>','User\'s email')
   .action(async function(command) {
-	try {
-	  if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
-	  	return console.log('Είσαι ήδη συνδεδεμένος/-η.\nΑν ξέχασες τον κωδικό σου και θες να ορίσεις καινούριο, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
-	  }
+		try {
+			if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
+				return console.log('Είσαι ήδη συνδεδεμένος/-η.\nΑν ξέχασες τον κωδικό σου και θες να ορίσεις καινούριο, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
+			}
 
-	  // Ask to receive email to create new password
-	  let message = await restAPI.actions.forgotPassword(command.email);
-	  console.log(message);
-	  console.log('Αφού δημιουργήσεις τον νέο κωδικό σου, συνδέσου για να συνεχίσεις στην εφαρμογή.');
-	} catch (error) {
-	  if(error.response && error.response.data.message)
-	    console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
-	  else
-	    console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
-	}
+			// Ask to receive email to create new password
+			let message = await restAPI.actions.forgotPassword(command.email);
+			console.log(message);
+			console.log('Αφού δημιουργήσεις τον νέο κωδικό σου, συνδέσου για να συνεχίσεις στην εφαρμογή.');
+		} catch (error) {
+			if(error.response && error.response.data.message)
+				console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.response.data.message}`);
+			else
+				console.log(`Η αποστολή email για την ανανέωση του κωδικού πρόσβασης απέτυχε: ${error.message}`);
+		}
   })
 
   program
   .command('get-premium')
   .requiredOption('-t, --type <value>', 'Premium plan type (month or year)')
   .action(async function(command) {
-	try {
-	  if(command.type !== 'month' && command.type !== 'year') {
-		return console.log('Σφάλμα: Eπίλεξε είτε \'month\' για μηνιαίο είτε \'year\' για ετήσιο πλάνο στο SruManiac.')
-	  }
+		try {
+			if(command.type !== 'month' && command.type !== 'year') {
+			return console.log('Σφάλμα: Eπίλεξε είτε \'month\' για μηνιαίο είτε \'year\' για ετήσιο πλάνο στο SruManiac.')
+			}
 
-	  // Get client object
-	  const client = restAPI.client;
-	  // Get client data
-	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
-	  // Set client
-	  restAPI.actions.setClient(clientData);
-	
-	  // Update user's plan to premium
-	  let message = await restAPI.actions.getPremium(command.type);
-	
-	  // Update user's info
-	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
-		if(err) return console.log('Writing user failed:', err);
-	  });
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
+		
+			// Update user's plan to premium
+			let message = await restAPI.actions.getPremium(command.type);
+		
+			// Update user's info
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+			if(err) return console.log('Writing user failed:', err);
+			});
 
-	  console.log(message);
-	} catch(error) {
-	  if (error.response && error.response.data.message)
-		console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.response.data.message}`);
-	  else if(error.code === 'ENOENT')
-		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-		console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.message}`);
-	}
+			console.log(message);
+		} catch(error) {
+			if (error.response && error.response.data.message)
+			console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.response.data.message}`);
+			else if(error.code === 'ENOENT')
+			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			else
+			console.log(`Η αναβάθμιση του λογαριασμού σου σε προνομιούχο απέτυχε: ${error.message}`);
+		}
   })
 
   program
   .command('delete-user')
   .action(async function() {
-	try {
-	  // Get client data
-	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
-	  // Set client
-	  restAPI.actions.setClient(clientData);
-  
-	  // Delete user
-	  let message = await restAPI.actions.deleteUser();
-  
-	  fs.unlink('/tmp/user.json', function(err) {
-		if(err) return console.log('Removing user failed:', err);
-	  });
-	  fs.unlink('/tmp/token.json', function(err) {
-		if(err) return console.log('Removing token failed:', err);
-	  });
-  
-	  console.log(message);
-	} catch (error) {
-	  if(error.response && error.response.data.message)
-		console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.response.data.message}`);
-	  else if(error.code === 'ENOENT')
-		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-	  else
-		console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.message}`);
-	}
+		try {
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
+		
+			// Delete user
+			let message = await restAPI.actions.deleteUser();
+		
+			fs.unlink('/tmp/user.json', function(err) {
+			if(err) return console.log('Removing user failed:', err);
+			});
+			fs.unlink('/tmp/token.json', function(err) {
+			if(err) return console.log('Removing token failed:', err);
+			});
+		
+			console.log(message);
+		} catch (error) {
+			if(error.response && error.response.data.message)
+			console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.response.data.message}`);
+			else if(error.code === 'ENOENT')
+			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			else
+			console.log(`Η διαγραφή του λογαριασμού απέτυχε: ${error.message}`);
+		}
   })
 
   // NOT GOOD WITH CLI-APP
   program
   .command('signup-google')
   .action(async function() {
-	try {
-	  if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
-		return console.log('Είσαι ήδη συνδεδεμένος/-η.\nΓια να δημιουργήσεις άλλο λογαριασμό, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
-	  }
+		try {
+			if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
+			return console.log('Είσαι ήδη συνδεδεμένος/-η.\nΓια να δημιουργήσεις άλλο λογαριασμό, παρακαλούμε να έχεις αποσυνδεθεί πρώτα.');
+			}
 
-	  let url = await restAPI.actions.signupGoogle();
-	  console.log(url);
-	} catch (error) {
-	  console.log(error);
-	}
+			let url = await restAPI.actions.signupGoogle();
+			console.log(url);
+		} catch (error) {
+			console.log(error);
+		}
   })
 
 // NOT GOOD WITH CLI-APP
   program
   .command('login-google')
   .action(async function() {
-	try {
-	  // Check if the user can log in
-	  if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
-		return console.log('Είσαι ήδη συνδεδεμένος/-η.');
-	  }
-  
-	  let url = await restAPI.actions.loginGoogle();
-	  console.log(url);
-	} catch (error) {
-	  console.log(error);
-	}
+		try {
+			// Check if the user can log in
+			if(fs.existsSync('/tmp/user.json') && fs.existsSync('/tmp/token.json')) {
+			return console.log('Είσαι ήδη συνδεδεμένος/-η.');
+			}
+		
+			let url = await restAPI.actions.loginGoogle();
+			console.log(url);
+		} catch (error) {
+			console.log(error);
+		}
   })
 
 // program
