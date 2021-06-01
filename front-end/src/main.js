@@ -25,8 +25,8 @@ import Gantt from "highcharts/modules/gantt";
 import "./assets/app.scss"; 
 import "./plugins";
 import store from "./store";
-// import { client, actions } from './modules/store'
-import { client, actions } from '../../rest-api-client/restAPI'
+import { client, actions } from './modules/store'
+// import { client, actions } from '../../rest-api-client/restAPI'
 
 Vue.use(VeeValidate);
 
