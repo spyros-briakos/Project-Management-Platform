@@ -13,5 +13,11 @@
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
     "https": "^1.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "eslint": "^7.27.0",
+    "eslint-plugin-vue": "^7.10.0"
   }
 }

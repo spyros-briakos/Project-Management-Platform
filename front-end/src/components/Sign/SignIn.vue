@@ -38,7 +38,7 @@
         <button
           type="submit"
           class="btn btn-dark btn-lg btn-block"
-          v-on:click="login()"
+          @click="login()"
         >
           Σύνδεση<router-link :to="{ name: 'Home' }"></router-link>
         </button>
@@ -90,6 +90,7 @@ export default {
   methods: {
     login() {
       console.log("USER HAS SIGNED IN!");
+      this.$actions.test();
       //     if(this.email != "" && this.password != "") {
       //         if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
       //             this.$emit("authenticated", true);

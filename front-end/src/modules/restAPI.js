@@ -35,26 +35,29 @@ function initClient() {
   }
 }
 
-// function initProject() {
-//   return {
-//     name: null,
-//     description: null,
-//     productOwner: null,
-//     scrumMaster: null,
-//     sprints: [],
-//     userStories: [],
-//     members: [],
-//     status: null,
-//     plan_in_use: null,
-//     startingDate: null,
-//     endingDate: null
-//   }
-// }
+function initProject() {
+  return {
+    name: null,
+    description: null,
+    productOwner: null,
+    scrumMaster: null,
+    sprints: [],
+    userStories: [],
+    members: [],
+    status: null,
+    plan_in_use: null,
+    startingDate: null,
+    endingDate: null
+  }
+}
 
 // Initialize client object
 export var client = initClient();
 
 export const actions = {
+  test() {
+    console.log('testtest')
+  },
   // Set client object
   setClient(data) {
     if(data.user)
@@ -64,7 +67,8 @@ export const actions = {
       client.tokenObject = data.token;
 
     if(data.project)
-      client.project = data.project;
+    console.log(error);
+    client.project = data.project;
   },
 
   // USER -----------------------------------------------
