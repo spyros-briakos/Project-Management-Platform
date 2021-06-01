@@ -39,7 +39,7 @@
             <div class="prof_display">
                 <prof-projects v-bind:seen="invites.seen_invites" v-on:update-seen="updateSeen($event)" :coWorkers="coWorkers" :invites="invites.inv_list" :user="name" v-if="selected_id == 1"/>
                 <profCoWorkers :coWorkers="coWorkers" v-if="selected_id == 2" />
-                <profSettings v-if="selected_id == 3" />
+                <profSettings :Info="perInfo" v-if="selected_id == 3" />
                 <!-- <Prices v-if="selected_id == 4" /> -->
                 <profUpgrade v-if="selected_id == 4" />
                 <profLogout v-if="selected_id == 5" />
@@ -79,7 +79,8 @@
                 inv_list: this.getInvites(),
                 seen_invites: '',
             },
-            coWorkers: this.getCoWorkers()
+            coWorkers: this.getCoWorkers(),
+            perInfo: this.personalInfo(),
         }
     },
     components:{
@@ -151,6 +152,13 @@
                 console.log(this.previewImage);
             };
             alert(image);
+        },
+        personalInfo(){
+            return[
+                {tag: 'name', val: 'Vasilis Goulas'},
+                {tag: 'email', val: 'vasGoul@mplampla.com'},
+                {tag: 'password', val: '123456789'},
+            ]
         }
     },
     computed:{

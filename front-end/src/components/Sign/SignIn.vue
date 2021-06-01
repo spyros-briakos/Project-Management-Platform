@@ -37,7 +37,7 @@
 
         <button
           type="submit"
-          class="btn btn-dark btn-lg btn-block"
+          class="btn btn-dark btn-lg btn-block"          
         >
           Σύνδεση<router-link :to="{ name: 'Home' }"></router-link>
         </button>
