@@ -41,15 +41,15 @@ export function cli(args) {
 	  restAPI.actions.setClient(clientData);
 
 	  // Get user's projects
-	  let projects = await restAPI.actions.getProjects();
+	  await restAPI.actions.getProjects();
 
 	  // Print projects
-	  for (let project of projects) {
-		console.log(util.inspect(project, { depth: null, colors: true }));
-	  }
+	//   for (let project of projects) {
+	  console.log(util.inspect(client.user.projects, { depth: null, colors: true }));
+	//   }
 
 	  // Update user's info
-	  client.user.projects = projects;
+	  client.user.projects = client.user.projects;
 
 	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 		if(err) return console.log('Writing data failed:', err);
@@ -107,16 +107,16 @@ export function cli(args) {
 		} catch (err) {
 				return console.log('Reading token failed:', err);
 		}
-    axios.post(`${apiUrl}/projects/add-project`, {
-			name: command.project,
+    	axios.post(`${apiUrl}/add-project`, {
+			name: command.name,
 			description: command.description,
 			plan_in_use: command.plan
 		}, { headers: { "Authorization": token } })
 		.then((response) => {
-			console.log(response.data);
+			console.log(response.data.message);
 
 			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
-			data.projects.push(response.data)
+			data.projects.push(response.data.project)
 			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
 				if(err) return console.log('Writing data failed:', err);
 			});
@@ -497,10 +497,34 @@ export function cli(args) {
 		})
   });
 	
-	program
-	.command('my-tasks')
-	.action((command) => {
-	});
+  program
+  .command('my-tasks')
+  .requiredOption('-p, --project <value>', 'Project name')
+  .action(async (command) => {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+  	  restAPI.actions.setClient(clientData);
+
+	  // Get specified project & set client.project
+	  await restAPI.actions.getProject(command.project);
+
+	  // Get my tasks
+	  const tasks = restAPI.actions.getMyTasks();
+
+	  console.log(util.inspect(tasks, { depth: null, colors: true }));
+	} catch (error) {
+	  if(error.response && error.response.data.message)
+		console.log('Η ανάκτηση δεδομένων απέτυχε.',error.response.data.message);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+		console.log('Η ανάκτηση δεδομένων απέτυχε.',error.message);
+	}
+  });
 
 	program
 	.command('add-sprint')

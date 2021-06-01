@@ -16,6 +16,7 @@ const agent = new https.Agent({
 function initClient() {
   return {
     user: {
+      _id: null,
       username: null,
       firstName: null,
       lastName: null,
@@ -37,6 +38,7 @@ function initClient() {
 
 function initProject() {
   return {
+    _id: null,
     name: null,
     description: null,
     productOwner: null,
@@ -66,6 +68,19 @@ export const actions = {
     if(data.project)
     console.log(error);
     client.project = data.project;
+  },
+
+  // Get a project's id
+  getProjectId(projectName) {
+    // If the user has chosen a project
+    if(client.project && client.project.name == projectName) {
+      return client.project._id;
+    }
+
+    // Find project
+    let project = client.user.projects.filter(p => p.name == projectName)[0];
+
+    return project._id;
   },
 
   // USER -----------------------------------------------
@@ -204,9 +219,9 @@ export const actions = {
   async getProjects() {
     return requests.getProjectsRequest(client.tokenObject.token)
     .then(function(response) {
-      return response.projects;
+      client.user.projects = response.projects;
     })
-    .catch(function(error) { throw error })
+    .catch(function(error) { throw error })    
   },
 
   // Invite user(s) to a project
@@ -229,26 +244,13 @@ export const actions = {
     .catch(function(error) { throw error })    
   },
 
-  async getProjects() {
-    return requests.getProjectsRequest(client.tokenObject.token)
-    .then(function(response) {
-      try {
-        client.user.projects = response.projects;
-      } catch (error) {
-        throw error;
-      }
-    })
-    .catch(function(error) { throw error })    
-  },
+  // Get a specific project
+  async getProject(projectName) {
+    let projectId = actions.getProjectId(projectName);
 
-  async getProject(projectID) {
-    return requests.getProjectRequest(projectID, client.tokenObject.token)
+    return requests.getProjectRequest(projectId, client.tokenObject.token)
     .then(function(response) {
-      try {
-        client.project = response.project;
-      } catch (error) {
-        throw error;
-      }
+      client.project = response.project;
     })
     .catch(function(error) { throw error })    
   },
@@ -292,14 +294,12 @@ export const actions = {
     .catch(function(error) { throw error })    
   },
 
-  async getUserStories() {
-    return requests.getUserStoriesRequest(client.project._id, client.tokenObject.token)
+  async getUserStories(projectName) {
+    let projectId = actions.getProjectId(projectName);
+  
+    return requests.getUserStoriesRequest(projectId, client.tokenObject.token)
     .then(function(response) {
-      try {
-        client.project.userStories = response.userStories;
-      } catch (error) {
-        throw error;
-      }
+      client.project.userStories = response.userStories;
     })
     .catch(function(error) { throw error })    
   },
@@ -643,7 +643,7 @@ const requests = {
   async getProjectsRequest(token) {
     let headers = { "Authorization": `${token}` };
 
-    return requests.send('POST', 'projects/get-projects', {}, headers)
+    return requests.send('POST', `get-projects`, {}, headers)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
@@ -660,14 +660,6 @@ const requests = {
     let headers = { "Authorization": `${token}` };
 
     return requests.send('GET', `users/answer-invitation/${invitationCode}?answer=${answer}`, {}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async getProjectsRequest(token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `get-projects`, {}, headers)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
@@ -698,16 +690,18 @@ const requests = {
 
   async getSprintsRequest(projectID, token) {
     let headers = { "Authorization": `${token}` };
+    let data = { projectID: projectID };
 
-    return requests.send('POST', `get-sprints`, {projectID}, headers)
+    return requests.send('POST', `get-sprints`, data, headers)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
 
   async getUserStoriesRequest(projectID, token) {
     let headers = { "Authorization": `${token}` };
+    let data = { projectID: projectID };
 
-    return requests.send('POST', `get-userstories`, {projectID}, headers)
+    return requests.send('POST', `get-userstories`, data, headers)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
