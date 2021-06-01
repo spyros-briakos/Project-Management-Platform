@@ -209,6 +209,316 @@ export const actions = {
     })
     .catch(function(error) { throw error })    
   },
+
+  async getProjects() {
+    return requests.getProjectsRequest(client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.user.projects = response.projects;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async getProject(projectID) {
+    return requests.getProjectRequest(projectID, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project = response.project;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async addProject(project) {
+    return requests.addProjectRequest(project, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.user.projects.push(response.project);
+        client.project = response.project;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async editProject(project) {
+    return requests.editProjectRequest(client.project._id, project, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project = response.project;
+        const currProject = client.user.projects.filter((p) => {p._id === project._id})[0];
+        Object.keys(response.project).forEach(key=>{ if (key in currProject) currProject[key]=response.project[key] });
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async getSprints() {
+    return requests.getSprintsRequest(client.project._id, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project.sprints = response.sprints;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async getUserStories() {
+    return requests.getUserStoriesRequest(client.project._id, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project.userStories = response.userStories;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async addSprint(sprint) {
+    return requests.addSprintRequest(client.project._id, sprint, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project.sprints.push(response.sprint);
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async addUserStory(userStory) {
+    return requests.addUserStoryRequest(client.project._id, userStory, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project.userStories.push(response.userStory);
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async addTask(task) {
+    return requests.addTaskRequest(client.project._id, task, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        const currUserStory = client.project.userStories.filter((p) => {p._id === task.userStory})[0];
+        if (!currUserStory) throw 'Invalid UserStory id';
+        currUserStory.tasks.push(response.task)
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async editSprint(sprint) {
+    return requests.editSprintRequest(client.project._id, sprint, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        Object.keys(response.sprint).forEach(key=>{ sprint[key]=response.sprint[key] });
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async editUserStory(userStory) {
+    return requests.editUserStoryRequest(client.project._id, userStory, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        Object.keys(response.userStory).forEach(key=>{ userStory[key]=response.userStory[key] });
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async editTask(task) {
+    return requests.editTaskRequest(client.project._id, task, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        Object.keys(response.task).forEach(key=>{ task[key]=response.task[key] });
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async joinTask(task) {
+    return requests.joinTaskRequest(client.project._id, task._id, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        if (!task.members.includes(client.user._id)) task.members.push(client.user._id)
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async leaveTask(task) {
+    return requests.leaveTaskRequest(client.project._id, task._id, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        task.members = task.members.filter((mID) => {mID !== client.user._id})
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async connectTasks(task1, task2, conn) {
+    const connection = {
+      'task1ID': task1._id,
+      'task2ID': task2._id,
+      'conn': conn,
+    }
+    return requests.connectTasksRequest(client.project._id, connection, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        Object.keys(response.task1).forEach(key=>{ task1[key]=response.task1[key] });
+        Object.keys(response.task2).forEach(key=>{ task2[key]=response.task2[key] });
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async disconnectTasks(task1, task2, conn) {
+    const connection = {
+      'task1ID': task1._id,
+      'task2ID': task2._id,
+      'conn': conn,
+    }
+    return requests.disconnectTasksRequest(client.project._id, connection, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        Object.keys(response.task1).forEach(key=>{ task1[key]=response.task1[key] });
+        Object.keys(response.task2).forEach(key=>{ task2[key]=response.task2[key] });
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async connectSprint(task, sprint) {
+    const connection = {
+      'taskID': task._id,
+      'sprintID': sprint._id,
+    }
+    return requests.connectSprintRequest(client.project._id, connection, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        const currUserStory = client.project.userStories.filter((p) => {p._id === task.userStory})[0];
+        if (!currUserStory) throw 'Invalid UserStory id';
+        Object.keys(response.userStory).forEach(key=>{ currUserStory[key]=response.userStory[key] });
+        Object.keys(response.sprint).forEach(key=>{ sprint[key]=response.sprint[key] });
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async disconnectSprint(task) {
+    const connection = {
+      'taskID': task._id
+    }
+    return requests.disconnectSprintRequest(client.project._id, connection, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        const currSprint = client.project.sprints.filter((p) => {p._id === task.sprint})[0];
+        if (!currSprint) throw 'Invalid Sprint id';
+        const currUserStory = client.project.userStories.filter((p) => {p._id === task.userStory})[0];
+        if (!currUserStory) throw 'Invalid UserStory id';
+        Object.keys(response.userStory).forEach(key=>{ currUserStory[key]=response.userStory[key] });
+        Object.keys(response.sprint).forEach(key=>{ currSprint[key]=response.sprint[key] });
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async deleteSprint(sprint) {
+    return requests.deleteSprintRequest(client.project._id, sprint._id, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project = response.project;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async deleteUserStory(userStory) {
+    return requests.deleteUserStoryRequest(client.project._id, userStory._id, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project = response.project;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async deleteTask(sprint) {
+    return requests.deleteSprintRequest(client.project._id, sprint._id, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.project = response.project;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async deleteProject() {
+    return requests.deleteProjectRequest(client.project._id, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.user.projects = client.user.projects.filter((p) => {p._id !== client.project._id});
+        client.project = null;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
+
+  async leaveProject() {
+    return requests.leaveProjectRequest(client.project._id, client.tokenObject.token)
+    .then(function(response) {
+      try {
+        client.user.projects = client.user.projects.filter((p) => {p._id !== client.project._id});
+        client.project = null;
+      } catch (error) {
+        throw error;
+      }
+    })
+    .catch(function(error) { throw error })    
+  },
 }
 
 const requests = {
@@ -319,6 +629,201 @@ const requests = {
     .catch(function(error) { throw error })
   },
 
+  async getProjectsRequest(token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `get-projects`, {}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async getProjectRequest(projectID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `get-details`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async addProjectRequest(projectID, project, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `add-project`, {projectID, project}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async editProjectRequest(projectID, project, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `edit-project`, {projectID, project}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async getSprintsRequest(projectID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `get-sprints`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async getUserStoriesRequest(projectID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `get-userstories`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async addSprintRequest(projectID, sprint, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `add-sprint`, {projectID, sprint}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async addUserStoryRequest(projectID, userStory, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `add-userstory`, {projectID, userStory}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async addTaskRequest(projectID, task, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `add-task`, {projectID, task}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async editSprintRequest(projectID, sprint, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `edit-sprint`, {projectID, sprint}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async editUserStoryRequest(projectID, userStory, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `edit-userstory`, {projectID, userStory}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async editTaskRequest(projectID, task, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `edit-task`, {projectID, task}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async joinTaskRequest(projectID, taskID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `join-task`, {projectID, taskID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async leaveTaskRequest(projectID, taskID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `leave-task`, {projectID, taskID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async connectTasksRequest(projectID, connection, token) {
+    let headers = { "Authorization": `${token}` };
+    if (!connection.task1ID || !connection.task2ID || !connection.conn) throw 'Invalid connection'
+
+    return requests.send('POST', `connect-task-task`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async disconnectTasksRequest(projectID, connection, token) {
+    let headers = { "Authorization": `${token}` };
+    if (!connection.task1ID || !connection.task2ID || !connection.conn) throw 'Invalid connection'
+
+    return requests.send('POST', `disconnect-task-task`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async connectSprintRequest(projectID, connection, token) {
+    let headers = { "Authorization": `${token}` };
+    if (!connection.taskID || !connection.sprintID) throw 'Invalid connection'
+
+    return requests.send('POST', `connect-task-sprint`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async disconnectSprintRequest(projectID, connection, token) {
+    let headers = { "Authorization": `${token}` };
+    if (!connection.taskID) throw 'Invalid connection'
+
+    return requests.send('POST', `disconnect-task-sprint`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async deleteSprintRequest(projectID, sprintID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `delete-sprint`, {projectID, sprintID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async deleteSprintRequest(projectID, sprintID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `delete-sprint`, {projectID, sprintID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async deleteUserStoryRequest(projectID, userStoryID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `delete-userstory`, {projectID, userStoryID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async deleteTaskRequest(projectID, taskID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `delete-task`, {projectID, taskID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async deleteProjectRequest(projectID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `delete-project`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async leaveProjectRequest(projectID, token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', `leave-project`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
 
   // --------------------------------------------------------------
 
