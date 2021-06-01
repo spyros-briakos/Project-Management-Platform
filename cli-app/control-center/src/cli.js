@@ -103,7 +103,7 @@ export function cli(args) {
 	program
   .command('choose-project')
   .requiredOption('-p, --project <value>', 'User\'s project name')
-  .action((command) => {
+  .action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -142,7 +142,7 @@ export function cli(args) {
 	program
   .command('delete-project')
   .requiredOption('-p, --project <value>', 'User\'s project name')
-  .action((command) => {
+  .action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -173,7 +173,7 @@ export function cli(args) {
 	program
   .command('finish-project')
   .requiredOption('-p, --project <value>', 'User\'s project name')
-  .action((command) => {
+  .action(async (command) => {
     try {
 			// Get client object
 			const client = restAPI.client;
@@ -215,7 +215,7 @@ export function cli(args) {
   .option('-sm, --scrumMaster <value>', 'Project\'s scrumMaster')
   .option('--status <value>', 'Project\'s status')
   .option('--plan <value>', 'Project\'s business plan')
-  .action((command) => {
+  .action(async (command) => {
     try {
 			// Get client object
 			const client = restAPI.client;
@@ -344,7 +344,7 @@ export function cli(args) {
 	program
   .command('sprints')
   .requiredOption('-p, --project <value>', 'Project name')
-  .action((command) => {
+  .action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -378,7 +378,7 @@ export function cli(args) {
   program
 	.command('userStories')
   .requiredOption('-p, --project <value>', 'Project name')
-	.action((command) => {
+	.action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -601,7 +601,7 @@ export function cli(args) {
   .option('-d, --descr <value>', 'Sprint\'s description')
   .option('--status <value>', 'Sprint\'s status (toDo | inProgress | done)')
   .option('--duration <value>', 'Sprint\'s estimated duration')
-	.action((command) => {
+	.action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -645,7 +645,7 @@ export function cli(args) {
   .option('-d, --descr <value>', 'UserStory\'s description')
   .option('--status <value>', 'UserStory\'s status (toDo | inProgress | done)')
   .option('--duration <value>', 'UserStory\'s estimated duration')
-	.action((command) => {
+	.action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -690,7 +690,7 @@ export function cli(args) {
   .option('-d, --descr <value>', 'Task\'s description')
   .option('--status <value>', 'Task\'s status (toDo | inProgress | done)')
   .option('--duration <value>', 'Task\'s estimated duration')
-	.action((command) => {
+	.action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -730,7 +730,7 @@ export function cli(args) {
 	.command('delete-sprint')
 	.requiredOption('-p, --project <value>', 'Project\'s name')
   .requiredOption('-s, --sprint <value>', 'Sprint\'s name')
-	.action((command) => {
+	.action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -765,7 +765,7 @@ export function cli(args) {
 	.command('delete-userStory')
 	.requiredOption('-p, --project <value>', 'Project\'s name')
   .requiredOption('-u, --userStory <value>', 'UserStory\'s name')
-	.action((command) => {
+	.action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -801,7 +801,7 @@ export function cli(args) {
 	.requiredOption('-p, --project <value>', 'Project\'s name')
   .requiredOption('-u, --userStory <value>', 'UserStory\'s name')
   .requiredOption('-t, --task <value>', 'Task\'s name')
-	.action((command) => {
+	.action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -903,7 +903,7 @@ export function cli(args) {
 	program
 	.command('leave-project')
 	.requiredOption('-p, --project <value>', 'Project\'s name')
-	.action((command) => {
+	.action(async (command) => {
 		try {
 			// Get client object
 			const client = restAPI.client;
@@ -931,11 +931,44 @@ export function cli(args) {
 		}
 	});
 
-	program
-	.command('connect-tasks')
-	.action((command) => {
+  program
+  .command('connect-tasks')
+  .requiredOption('-p, --project <value>', 'Project\'s name')
+  .requiredOption('-t1, --task1 <value>', 'Task\'s 1 name')
+  .requiredOption('-u1, --userStory1 <value>', 'UserStory\'s 1 name')
+  .requiredOption('-t2, --task2 <value>', 'Task\'s 2 name')
+  .requiredOption('-u2, --userStory2 <value>', 'UserStory\'s 2 name')
+  .requiredOption('-c, --connection <value>', 'Tasks\' connection (before | after)')
+  .action(async (command) => {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+  
+	  // Get specified project & set client.project
+	  await restAPI.actions.getProject(command.project);
 
-	});
+	  // Get task 1
+	  const task1 = restAPI.actions.getTaskObj(command.userStory1, command.task1);
+	  // Get task 2
+	  const task2 = restAPI.actions.getTaskObj(command.userStory2, command.task2);
+
+	  // Connect tasks
+	  let message = await restAPI.actions.connectTasks(task1, task2, command.connection);
+	
+	  console.log(message);
+	} catch (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η προσθήκη σου στα μέλη του task ${command.task} απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+		console.log(`Η προσθήκη σου στα μέλη του task ${command.task} απέτυχε: ${error.message}`);
+	}
+  });
 
 	program
 	.command('assign-sprint')

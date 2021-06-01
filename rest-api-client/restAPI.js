@@ -411,6 +411,7 @@ export const actions = {
       try {
         Object.keys(response.task1).forEach(key=>{ task1[key]=response.task1[key] });
         Object.keys(response.task2).forEach(key=>{ task2[key]=response.task2[key] });
+        return response.message;
       } catch (error) {
         throw error;
       }
