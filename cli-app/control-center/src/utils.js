@@ -1,5 +1,5 @@
 fs = require('fs');
-// require('datejs');
+require('datejs');
 
 function getToken(path) {
   try {

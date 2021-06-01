@@ -47,7 +47,7 @@ export function cli(args) {
 	  console.log(util.inspect(client.user.projects, { depth: null, colors: true }));
 
 	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
-			if(err) return console.log('Writing data failed:', err);
+		if(err) return console.log('Writing data failed:', err);
 	  });
 
 		console.log(message);
@@ -550,7 +550,8 @@ export function cli(args) {
   program
   .command('add-task')
   .requiredOption('-p, --project <value>', 'Project\'s name')
-  .requiredOption('-n, --taskName <value>', 'Task\'s name')
+  .requiredOption('-u, --userStoryName <value>', 'UserStory\'s name')
+  .requiredOption('-t, --taskName <value>', 'Task\'s name')
   .option('-d, --descr <value>', 'Task\'s description')
   .option('--status <value>', 'Task\'s status (toDo | inProgress | done)')
   .option('--duration <value>', 'Task\'s estimated duration')
@@ -560,18 +561,23 @@ export function cli(args) {
 	  const client = restAPI.client;
 	  // Get client data
 	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+
 	  // Set client
 	  restAPI.actions.setClient(clientData);
+
+	  // Get specified project & set client.project
+	  await restAPI.actions.getProject(command.project);
+
+	  // Get specified user story
+	  const userStoryID = restAPI.actions.getUserStoryObj(command.userStoryName)._id;
 	
 	  let task = {
 		name: command.taskName,
 		description: command.descr,
 		status: command.status,
-		estimated_duration: command.duration
+		estimated_duration: command.duration,
+		userStory: userStoryID
 	  }
-  
-	  // Get specified project & set client.project
-	  await restAPI.actions.getProject(command.project);
   
 	  // Create Task
 	  let message = await restAPI.actions.addTask(task);
@@ -826,47 +832,73 @@ export function cli(args) {
 		}
 	});
 
-//   program
-//   .command('join-task')
-//   .requiredOption('-p, --project <value>', 'Project\'s name')
-//   .requiredOption('-n, --taskName <value>', 'Task\'s name')
-//   .action(async (command) => {
-// 	try {
-// 	  // Get client object
-// 	  const client = restAPI.client;
-// 	  // Get client data
-// 	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
-// 	  // Set client
-// 	  restAPI.actions.setClient(clientData);
-	
-// 	  let data = {
-// 		name: command.taskName,
-// 		description: command.descr,
-// 		status: command.status,
-// 		estimated_duration: command.duration
-// 	  }
+  program
+  .command('join-task')
+  .requiredOption('-p, --project <value>', 'Project\'s name')
+  .requiredOption('-u, --userStory <value>', 'UserStory\'s name')
+  .requiredOption('-t, --task <value>', 'Task\'s name')
+  .action(async (command) => {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
   
-// 	  // Get specified project & set client.project
-// 	  await restAPI.actions.getProject(command.project);
-  
-// 	  // Create Task
-// 	  let message = await restAPI.actions.addTask(task);
-	
-// 	  console.log(message);
-// 	} catch (error) {
-// 	  if(error.response && error.response.data.message)
-// 		console.log(`Η δημιουργία νέου task απέτυχε: ${error.response.data.message}`);
-// 	  else if(error.code === 'ENOENT')
-// 		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
-// 	  else
-// 		console.log(`Η δημιουργία νέου task απέτυχε: ${error.message}`);
-// 	}
-//   });
+	  // Get specified project & set client.project
+	  await restAPI.actions.getProject(command.project);
 
-	program
-	.command('leave-task')
-	.action((command) => {
-	});
+	  // Get specified task
+	  const task = restAPI.actions.getTaskObj(command.userStory, command.task);
+
+	  // Join task
+	  let message = await restAPI.actions.joinTask(task);
+	
+	  console.log(message);
+	} catch (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η προσθήκη σου στα μέλη του task ${command.task} απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+		console.log(`Η προσθήκη σου στα μέλη του task ${command.task} απέτυχε: ${error.message}`);
+	}
+  });
+
+  program
+  .command('leave-task')
+  .requiredOption('-p, --project <value>', 'Project\'s name')
+  .requiredOption('-u, --userStory <value>', 'UserStory\'s name')
+  .requiredOption('-t, --task <value>', 'Task\'s name')
+  .action(async (command) => {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+  
+	  // Get specified project & set client.project
+	  await restAPI.actions.getProject(command.project);
+
+	  // Get specified task
+	  const task = restAPI.actions.getTaskObj(command.userStory, command.task);
+
+	  // Leave task
+	  let message = await restAPI.actions.leaveTask(task);
+	
+	  console.log(message);
+	} catch (error) {
+	  if(error.response && error.response.data.message)
+		console.log(`Η αφαίρεσή σου από τα μέλη του task ${command.task} απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+		console.log(`Η αφαίρεσή σου από τα μέλη του task ${command.task} απέτυχε: ${error.message}`);
+	}
+  });
 
 	program
 	.command('leave-project')

@@ -40,7 +40,6 @@
                 <prof-projects v-bind:seen="invites.seen_invites" v-on:update-seen="updateSeen($event)" :coWorkers="coWorkers" :invites="invites.inv_list" :user="name" v-if="selected_id == 1"/>
                 <profCoWorkers :coWorkers="coWorkers" v-if="selected_id == 2" />
                 <profSettings :Info="perInfo" v-if="selected_id == 3" />
-                <!-- <Prices v-if="selected_id == 4" /> -->
                 <profUpgrade v-if="selected_id == 4" />
                 <profLogout v-if="selected_id == 5" />
             </div>
@@ -53,7 +52,6 @@
     
     import profSettings from "./prof_settings.vue";
     import profProjects from "./prof_projects.vue";
-    // import Prices from "../pricing/Prices.vue";
     import profUpgrade from "./prof_upgrade.vue"
     import profCoWorkers from "./prof_coworkers.vue";
     import profLogout from "./prof_logout.vue";
@@ -62,11 +60,10 @@
     export default {
     name: "ProfOpts",
     data() {
-        // this.seturl("profSettings");
         return{
             img: '',
             def_img: 'prof_default.svg',
-            selected_id: 3,
+            selected_id: this.correct_selected(),
             name: "Vasilis Goulas",
             opts:[
                 {id: 1, title: "Τα Projects μου", path:"myProjects", svg: "project_default.svg"},
@@ -92,6 +89,23 @@
         profLogout,
     },
     methods:{
+        correct_selected(){
+            console.log(this.$route);
+            let cur = this.$route.path;
+            console.log(cur);
+            if(cur == "/profile" || cur == "/profile/settings")
+                return 3;
+            else if(cur == "/profile/myProjects")
+                return 1;
+            else if(cur == "/profile/co_workers")
+                return 2;
+            else if(cur == "/profile/upgrade")
+                return 4;
+            else if(cur == "/profile/profLogout")
+                return 5;
+            else
+                return 3;
+        },
         mpou(opt){
             alert('url(' + this.route + opt + ')');
         },

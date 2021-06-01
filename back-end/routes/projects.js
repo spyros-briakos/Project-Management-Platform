@@ -608,9 +608,12 @@ router.post("/join-task", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
-    if (!task.members.includes(user._id)) {
-      task.members.push(user._id)
+    // If the user is already a member of the task
+    if (task.members.includes(user._id)) {
+      res.status(400).json({ message: `Είσαι ήδη μέλος του Task ${task.name}.` });
     }
+
+    task.members.push(user._id)
     const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true });
 
     const context = await serializer.taskSerializer(updatedTask);
