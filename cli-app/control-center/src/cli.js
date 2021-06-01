@@ -31,34 +31,66 @@ export function cli(args) {
 
   program
   .command('projects')
-  .action((command) => {
-		let token = ''
-		try {
-			const data = fs.readFileSync('/tmp/token.json', 'utf8')
-			token = JSON.parse(data).token
-		} catch (err) {
-				return console.log('Reading token failed:', err);
-		}
-    axios.get(`${apiUrl}/projects/`, { headers: { "Authorization": token } })
-		.then((response) => {
-			console.log(response.data);
+  .action(async () => {
+	try {
+	  // Get client object
+	  const client = restAPI.client;
+	  // Get client data
+	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
 
-			let data = fs.readFileSync('/tmp/user.json', 'utf8')
-			data = JSON.parse(data)
-			data.projects = response.data
-			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
-				if(err) return console.log('Writing data failed:', err);
-			});
-		})
-		.catch((err) => {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
-		})
+	  // Get user's projects
+	  let projects = await restAPI.actions.getProjects();
+
+	  // Print projects
+	  for (let project of projects) {
+		console.log(util.inspect(project, { depth: null, colors: true }));
+	  }
+
+	  // Update user's info
+	  client.user.projects = projects;
+
+	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+		if(err) return console.log('Writing data failed:', err);
+	  });
+
+	} catch(error) {
+	  if (error.response && error.response.data.message)
+		console.log(`Η ανάκτηση των projects σου απέτυχε: ${error.response.data.message}`);
+	  else if(error.code === 'ENOENT')
+		console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+	  else
+		console.log(`Η ανάκτηση των projects σου απέτυχε: ${error.message}`);
+	}
+
+	// let token = ''
+	// try {
+	// 	const data = fs.readFileSync('/tmp/token.json', 'utf8')
+	// 	token = JSON.parse(data).token
+	// } catch (err) {
+	// 		return console.log('Reading token failed:', err);
+	// }
+    // axios.get(`${apiUrl}/projects/`, { headers: { "Authorization": token } })
+	// 	.then((response) => {
+	// 		console.log(response.data);
+
+	// 		let data = fs.readFileSync('/tmp/user.json', 'utf8')
+	// 		data = JSON.parse(data)
+	// 		data.projects = response.data
+	// 		fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
+	// 			if(err) return console.log('Writing data failed:', err);
+	// 		});
+	// 	})
+	// 	.catch((err) => {
+	// 		if (err.code === 'ECONNREFUSED') {
+	// 			console.log('Unable to connect to server.')
+	// 		} else if (err.response && err.response.status === 500){
+	// 			console.log('Login required!')
+	// 		} else {
+	// 			console.log('Internal Error')
+	// 		}
+	// 	})
   });
 
 	program
@@ -75,7 +107,7 @@ export function cli(args) {
 		} catch (err) {
 				return console.log('Reading token failed:', err);
 		}
-    axios.post(`${apiUrl}/projects/`, {
+    axios.post(`${apiUrl}/projects/add-project`, {
 			name: command.project,
 			description: command.description,
 			plan_in_use: command.plan
@@ -150,7 +182,7 @@ export function cli(args) {
 		} catch (err) {
 				return console.log('Reading projects failed:', err);
 		}
-    axios.delete(`${apiUrl}/projects/${project._id}`, { headers: { "Authorization": token } })
+    axios.delete(`${apiUrl}/delete-project`, { headers: { "Authorization": token } })
 		.then((response) => {
 			console.log(response);
 
@@ -687,8 +719,15 @@ export function cli(args) {
   .command('get-user')
   .action(async function() {
 	try {
+	  // Get client object
+	  const client = restAPI.client;
 	  // Get client data
 	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+	  // Set client
+	  restAPI.actions.setClient(clientData);
+
+	  await restAPI.actions.getUser();
+
 	  // Print user's data
 	  console.log(util.inspect(clientData.user, { depth: null, colors: true }));
 	} catch (error) {

@@ -16,19 +16,24 @@ const { InvalidToken } = require("../models/User");
 const { Invitation } = require("../models/User");
 // Import Project model
 const Project = require('../models/Project');
+// Import Sprint model
+const Sprint = require('../models/Sprint');
+// Import User Story model
+const UserStory = require('../models/UserStory');
+// Import Task model
+const Task = require('../models/Task');
 
+// Get specific user
+router.get('/user', async (req, res) => {
+  try {
+    // Get serialized user
+    const context = await serializer.userSerializer(req.user._id);
 
-// // Get specific user
-// router.get('/user', async (req, res) => {
-//   try {
-//     // Get serialized user
-//     const context = await serializer.userSerializer(req.user._id);
-
-//     res.json(context);
-//   } catch (error) {
-//     res.status(400).json({ message: error });
-//   }
-// })
+    res.json(context);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
 
 // Get user's invitations
 router.get('/invitations', async(req, res) => {
@@ -220,16 +225,44 @@ router.delete('/delete-user', async (req, res) => {
 
     // For the user's each project
     for(var project of user.projects) {
-      // Remove user from current project
-      project.members = project.members.filter((member) => { return !member._id.equals(user._id) });
+      // If current user is the product owner of the project, the whole project will be deleted
+      if(user._id.equals(project.productOwner._id)) {
+        // Remove project from all members' projects lists (except the product owner)
+        for (let memberObj of project.members) {
+          if (!memberObj._id.equals(user._id)) {
+            const member = await User.findById(memberObj._id);
+            member.projects = member.projects.filter((pID) => { return !pID.equals(project._id) });
 
-      // Keep only the ids of the rest of the members
-      const members = [];
-      for(var member of project.members)
-        members.push(member._id);
+            // Update member's info
+            await User.findByIdAndUpdate(member._id, { projects: member.projects }, { runValidators: true });
+          }
+        }
 
-      // Update project
-      await Project.findByIdAndUpdate(project._id, { members: members }, { runValidators: true });
+        // Delete project
+        for (let i in project.sprints) {
+          await Sprint.deleteOne({ _id: project.sprints[i] });
+        }
+        for (let i in project.userStories) {
+          const userStory = await UserStory.findById(project.userStories[i]);
+          for (let j in project.tasks) {
+            await Task.deleteOne({ _id: userStory.tasks[j] });
+          }
+          await UserStory.deleteOne({ _id: userStory._id });
+        }
+        // Remove project from db
+        const removedProject = await Project.deleteOne({ _id: project._id });
+      } else {
+        // Remove user from current project
+        project.members = project.members.filter((member) => { return !member._id.equals(user._id) });
+
+        // Keep only the ids of the rest of the members
+        const members = [];
+        for(var member of project.members)
+          members.push(member._id);
+
+        // Update project
+        await Project.findByIdAndUpdate(project._id, { members: members }, { runValidators: true });
+      }
     }
 
     // For the user's each invitation

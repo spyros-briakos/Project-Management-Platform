@@ -402,7 +402,7 @@ router.post("/edit-task", async (req, res) => {
 
 // DELETE PROJECT/ USERSTORY/ SPRINT/ TASK
 
-router.post('/delete-project', async (req, res) => {
+router.delete('/delete-project', async (req, res) => {
   try {
     const user = req.user;
     // Find project in the db
@@ -413,30 +413,33 @@ router.post('/delete-project', async (req, res) => {
     }
 
     // Check if is the product owner is the user that sends the request
-    if (!user._id.equals(project.productOwner)){
+    if (!user._id.equals(project.productOwner._id)){
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
-    // Remove project from user's projects list
-    user.projects = user.projects.filter((pID) => { return !pID.equals(project._id) });
+    // Remove project from all members' projects lists
+    for (let memberObj of project.members) {
+      const member = await User.findById(memberObj._id);
+      member.projects = member.projects.filter((pID) => { return !pID.equals(project._id) });
 
-    // Update user's info
-    await User.findByIdAndUpdate(user._id, user, { runValidators: true });
+      // Update member's info
+      await User.findByIdAndUpdate(member._id, { projects: member.projects }, { runValidators: true });
+    }
 
     for (let i in project.sprints) {
-      await Project.deleteOne({ _id: project.sprints[i] });
+      await Sprint.deleteOne({ _id: project.sprints[i] });
     }
     for (let i in project.userStories) {
       const userStory = await UserStory.findById(project.userStories[i]);
       for (let j in project.tasks) {
         await Task.deleteOne({ _id: userStory.tasks[j] });
       }
-      await Task.deleteOne({ _id: userStory._id });
+      await UserStory.deleteOne({ _id: userStory._id });
     }
     // Remove project from its table
     const removedProject = await Project.deleteOne({ _id: project._id });
 
-    res.json({ status: 'OK', message: 'Το UserStory διαγράγθηκε με επιτυχία.' });
+    res.json({ status: 'OK', message: 'Το Project διαγράφθηκε με επιτυχία.' });
   } catch (err) {
     return res.status(400).json({ message: err });
   }
@@ -479,7 +482,7 @@ router.post("/delete-userstory", async (req, res) => {
     await UserStory.deleteOne({ _id: userStory._id });
 
     const context = await serializer.projectDetailsSerializer(project);
-    res.json({status: 'OK', message: 'Το UserStory διαγράγθηκε με επιτυχία.', project: context});
+    res.json({status: 'OK', message: 'Το UserStory διαγράφθηκε με επιτυχία.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -524,7 +527,7 @@ router.post("/delete-sprint", async (req, res) => {
     await Task.deleteOne({ _id: sprint._id });
 
     const context = await serializer.projectDetailsSerializer(project);
-    res.json({status: 'OK', message: 'Το Sprint διαγράγθηκε με επιτυχία.', project: context});
+    res.json({status: 'OK', message: 'Το Sprint διαγράφθηκε με επιτυχία.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }
@@ -580,7 +583,7 @@ router.post("/delete-task", async (req, res) => {
     await Task.deleteOne({ _id: task._id });
 
     const context = await serializer.projectDetailsSerializer(project);
-    res.json({status: 'OK', message: 'Το Task διαγράγθηκε με επιτυχία.', project: context});
+    res.json({status: 'OK', message: 'Το Task διαγράφθηκε με επιτυχία.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });
   }

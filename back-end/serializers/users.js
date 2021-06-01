@@ -3,7 +3,11 @@ const { projectDescriptionSerializer } = require("./projects");
 
 async function usernameSerializer(query) {
   try {
-    query = await User.findById(query)
+    // If an id was passed and not a User object
+    if(!(query instanceof User)){
+      query = await User.findById(query)
+    }
+
     const context = {
       _id: query._id,
       username: query.username
@@ -56,10 +60,14 @@ async function userSerializer(query) {
 
 async function invitationSerializer(query) {
   try {
+    // If an id was passed and not an Invitation object
+    if(!(query instanceof Invitation)){
     query = await Invitation.findById(query)
       .populate('receiver')
       .populate('sender')
       .populate('project');
+    }
+
     const context = {
       receiver: query.receiver.username,
       sender: query.sender.username,
