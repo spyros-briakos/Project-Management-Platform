@@ -82,6 +82,18 @@ export const actions = {
     return project._id;
   },
 
+  getUserStoryObj(userStoryName) {
+    return client.project.userStories.filter(userStory => userStory.name === userStoryName)[0];
+  },
+
+  getTaskObj(userStoryName, taskName) {
+    for(let userStory of client.project.userStories) {
+      if(userStory.name === userStoryName) {
+        return userStory.tasks.filter(task => task.name === taskName)[0];
+      }
+    }
+  },
+
 
   // USER -----------------------------------------------
 
@@ -323,9 +335,10 @@ export const actions = {
     return requests.addTaskRequest(client.project._id, task, client.tokenObject.token)
     .then(function(response) {
       try {
-        const currUserStory = client.project.userStories.filter((p) => {p._id === task.userStory})[0];
-        if (!currUserStory) throw 'Invalid UserStory id';
+        const currUserStory = client.project.userStories.filter(p => p._id === task.userStory)[0];
+        if (!currUserStory) throw { message: 'Invalid UserStory id' };
         currUserStory.tasks.push(response.task);
+        return response.message;
       } catch (error) {
         throw error;
       }
@@ -372,11 +385,8 @@ export const actions = {
   async joinTask(task) {
     return requests.joinTaskRequest(client.project._id, task._id, client.tokenObject.token)
     .then(function(response) {
-      try {
-        if (!task.members.includes(client.user._id)) task.members.push(client.user._id)
-      } catch (error) {
-        throw error;
-      }
+      task.members.push(client.user._id);
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
@@ -384,11 +394,8 @@ export const actions = {
   async leaveTask(task) {
     return requests.leaveTaskRequest(client.project._id, task._id, client.tokenObject.token)
     .then(function(response) {
-      try {
-        task.members = task.members.filter((mID) => {mID !== client.user._id})
-      } catch (error) {
-        throw error;
-      }
+      task.members = task.members.filter((mID) => {mID !== client.user._id});
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
