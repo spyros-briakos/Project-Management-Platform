@@ -13,7 +13,7 @@ const agent = new https.Agent({
 // console.log(apiUrl);
 
 // Create empty client object
-export function initClient() {
+function initClient() {
   return {
     user: {
       username: null,
@@ -35,7 +35,7 @@ export function initClient() {
   }
 }
 
-export function initProject() {
+function initProject() {
   return {
     name: null,
     description: null,
@@ -101,6 +101,16 @@ export const actions = {
       return response.message;
     })
     .catch(function(error) { throw error })    
+  },
+
+  // Get specific user
+  async getUser() {
+    return requests.getUserRequest(client.tokenObject.token)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+    })
+    .catch(function(error) { throw error })  
   },
 
   // Update user
@@ -190,6 +200,15 @@ export const actions = {
 
   // PROJECT -----------------------------------------------
 
+  // Get user's projects
+  async getProjects() {
+    return requests.getProjectsRequest(client.tokenObject.token)
+    .then(function(response) {
+      return response.projects;
+    })
+    .catch(function(error) { throw error })
+  },
+
   // Invite user(s) to a project
   async inviteUser(projectId, data) {
     return requests.inviteUserRequest(projectId, data, client.tokenObject.token)
@@ -236,6 +255,14 @@ const requests = {
 
   async signupRequest(data) {
     return requests.send('POST', 'users/signup', data)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
+
+  async getUserRequest(token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('GET', 'secure-routes/user', {}, headers)
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },
@@ -302,6 +329,14 @@ const requests = {
   },
 
   // PROJECT -----------------------------------------------
+
+  async getProjectsRequest(token) {
+    let headers = { "Authorization": `${token}` };
+
+    return requests.send('POST', 'projects/get-projects', {}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  },
 
   async inviteUserRequest(projectId, data, token) {
     let headers = { "Authorization": `${token}` };
