@@ -102,7 +102,7 @@
                     >
                 </v-autocomplete>
 
-            <v-btn class="create_btn">
+            <v-btn type="submit" class="create_btn">
                 Δημιουργία
             </v-btn>
 

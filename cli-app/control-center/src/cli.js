@@ -41,18 +41,16 @@ export function cli(args) {
 	  restAPI.actions.setClient(clientData);
 
 	  // Get user's projects
-	  await restAPI.actions.getProjects();
+	  const message = await restAPI.actions.getProjects();
 
 	  // Print projects
 	  console.log(util.inspect(client.user.projects, { depth: null, colors: true }));
-
-	  // Update user's info
-	  client.user.projects = client.user.projects;
 
 	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 		if(err) return console.log('Writing data failed:', err);
 	  });
 
+		console.log(message);
 	} catch(error) {
 	  if (error.response && error.response.data.message)
 		console.log(`Η ανάκτηση των projects σου απέτυχε: ${error.response.data.message}`);
@@ -78,17 +76,17 @@ export function cli(args) {
 	  // Set client
 	  restAPI.actions.setClient(clientData);
 
-	  let project = {
-		name: command.project,
-		description: command.descr,
-		plan: command.plan,
-		status: command.status
+	  const project = {
+			name: command.project,
+			description: command.descr,
+			plan: command.plan,
+			status: command.status
  	  }
 
-	  let message = await restAPI.actions.addProject(project);
+		const message = await restAPI.actions.addProject(project);
 
 	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
-		if(err) return console.log('Writing data failed:', err);
+			if(err) return console.log('Writing data failed:', err);
 	  });
 
 	  console.log(message);
@@ -105,22 +103,32 @@ export function cli(args) {
 	program
   .command('choose-project')
   .requiredOption('-p, --project <value>', 'User\'s project name')
-  .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
   .action((command) => {
-		let token = ''
 		try {
-			const data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
-			token = data.token
-		} catch (err) {
-				return console.log('Reading token failed:', err);
-		}
-    axios.get(`${apiUrl}/projects/`, {
-			project: command.project
-		}, { headers: { "Authorization": token } })
-		.then((response) => {
-			console.log(response.data);
-		})
-		.catch((err) => {
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
+	
+			let project = {
+				name: command.project,
+				description: command.descr,
+				plan: command.plan,
+				status: command.status
+			}
+			// Get specified project & set client.project
+			await restAPI.actions.getProject(command.project);
+
+			let message = await restAPI.actions.editProject(project);
+	
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+			if(err) return console.log('Writing data failed:', err);
+			});
+	
+			console.log(message);
+		} catch(err) {
 			if (err.code === 'ECONNREFUSED') {
 				console.log('Unable to connect to server.')
 			} else if (err.response && err.response.status === 500){
@@ -128,82 +136,66 @@ export function cli(args) {
 			} else {
 				console.log('Internal Error')
 			}
-		})
+		}
   });
 
 	program
   .command('delete-project')
   .requiredOption('-p, --project <value>', 'User\'s project name')
   .action((command) => {
-		let data
-		let token = ''
-		let project = {}
 		try {
-			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
-			token = data.token
-		} catch (err) {
-				return console.log('Reading token failed:', err);
-		}
-		try {
-			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
-			let projects = data.projects.filter(p => p.name == command.project)
-			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
-			project = projects[0]
-		} catch (err) {
-				return console.log('Reading projects failed:', err);
-		}
-    axios.delete(`${apiUrl}/delete-project`, { headers: { "Authorization": token } })
-		.then((response) => {
-			console.log(response);
-
-			data.projects = data.projects.filter(p => p.name != command.project)
-			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
-				if(err) return console.log('Writing data failed:', err);
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
+			// Get specified project & set client.project
+			await restAPI.actions.getProject(command.project);
+	
+			let message = await restAPI.actions.deleteProject();
+	
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+			if(err) return console.log('Writing data failed:', err);
 			});
-		})
-		.catch((err) => {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
-		})
+	
+			console.log(message);
+		} catch (error) {
+			if(error.response && error.response.data.message)
+			console.log('Η δημιουργία νέου project απέτυχε: ', error.response.data.message);
+			else if(error.code === 'ENOENT')
+			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			else
+			console.log('Η δημιουργία νέου project απέτυχε: ', error.message);
+		}
   });
 
 	program
   .command('finish-project')
   .requiredOption('-p, --project <value>', 'User\'s project name')
   .action((command) => {
-    let data
-		let token = ''
-		let project = {}
-		try {
-			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
-			token = data.token
-		} catch (err) {
-				return console.log('Reading token failed:', err);
-		}
-		try {
-			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
-			let projects = data.projects.filter(p => p.name == command.project)
-			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
-			project = projects[0]
-		} catch (err) {
-				return console.log('Reading projects failed:', err);
-		}
-    axios.patch(`${apiUrl}/projects/${project._id}`, {status: 'done'}, { headers: { "Authorization": token } })
-		.then((response) => {
-			console.log(response);
+    try {
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
+	
+			let project = {
+				status: 'done'
+			}
+			// Get specified project & set client.project
+			await restAPI.actions.getProject(command.project);
 
-			let project = data.projects.filter(p => p.name == command.project)[0]
-			project.status = 'done'
-			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
-				if(err) return console.log('Writing data failed:', err);
+			let message = await restAPI.actions.editProject(project);
+	
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+			if(err) return console.log('Writing data failed:', err);
 			});
-		})
-		.catch((err) => {
+	
+			console.log(message);
+		} catch(err) {
 			if (err.code === 'ECONNREFUSED') {
 				console.log('Unable to connect to server.')
 			} else if (err.response && err.response.status === 500){
@@ -211,62 +203,52 @@ export function cli(args) {
 			} else {
 				console.log('Internal Error')
 			}
-		})
+		}
   });
 
 	program
   .command('edit-project')
   .requiredOption('-p, --project <value>', 'Project\'s name')
-  .option('-n, --name <value>', 'Project\'s name')
-  .option('-d, --description <value>', 'Project\'s description')
+  .option('-n, --new_name <value>', 'Project\'s name')
+  .option('-d, --descr <value>', 'Project\'s description')
   .option('-po, --productOwner <value>', 'Project\'s productOwner')
   .option('-sm, --scrumMaster <value>', 'Project\'s scrumMaster')
   .option('--plan <value>', 'Project\'s business plan')
   .action((command) => {
-    let data
-		let token = ''
-		let project = {}
-		try {
-			data = JSON.parse(fs.readFileSync('/tmp/token.json', 'utf8'))
-			token = data.token
-		} catch (err) {
-				return console.log('Reading token failed:', err);
-		}
-		try {
-			data = JSON.parse(fs.readFileSync('/tmp/user.json', 'utf8'))
-			let projects = data.projects.filter(p => p.name == command.project)
-			if (projects.length == 0) return console.log('There is no project with the specific name \''+command.project+'\'')
-			project = projects[0]
-		} catch (err) {
-				return console.log('Reading projects failed:', err);
-		}
-    axios.patch(`${apiUrl}/projects/${project._id}`, {
-			name: command.name ? command.name : project.name,
-			description: command.description ? command.description : project.description,
-			productOwner: command.productOwner ? command.productOwner : project.productOwner,
-			scrumMaster: command.scrumMaster ? command.scrumMaster : project.scrumMaster,
-			plan_in_use: command.plan ? command.plan : project.plan,
-		}, { headers: { "Authorization": token } })
-		.then((response) => {
-			console.log(response);
+    try {
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
+	
+			let project = {
+				name: command.new_name,
+				description: command.descr,
+				plan: command.plan,
+				productOwner: command.productOwner,
+				scrumMaster: command.scrumMaster
+			}
+			// Get specified project & set client.project
+			await restAPI.actions.getProject(command.project);
 
-			project.name = command.name
-			project.description = command.description
-			project.productOwner = command.productOwner
-			project.scrumMaster = command.scrumMaster
-			fs.writeFile('/tmp/user.json', JSON.stringify(data), function(err) {
-				if(err) return console.log('Writing data failed:', err);
+			let message = await restAPI.actions.editProject(project);
+	
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+			if(err) return console.log('Writing data failed:', err);
 			});
-		})
-		.catch((err) => {
+	
+			console.log(message);
+		} catch(err) {
 			if (err.code === 'ECONNREFUSED') {
 				console.log('Unable to connect to server.')
 			} else if (err.response && err.response.status === 500){
 				console.log('Login required!')
-			} else if (err.response && err.response.message) {
-				console.log(err.response.message)
+			} else {
+				console.log('Internal Error')
 			}
-		})
+		}
   });
 
   program
@@ -449,7 +431,7 @@ export function cli(args) {
   });
 	
   program
-	.command('user-stories')
+	.command('userStories')
   .requiredOption('--token <value>', 'User\'s authentication token (without the \'Bearer\' prefix)')
 	.action((command) => {
 		axios.get(`${apiUrl}/user_stories/`, {
@@ -655,12 +637,88 @@ export function cli(args) {
 
 	program
 	.command('edit-sprint')
+	.requiredOption('-p, --project <value>', 'Project\'s name')
+  .requiredOption('-n, --sprintName <value>', 'Sprint\'s name')
+  .option('-d, --descr <value>', 'Task\'s description')
+  .option('--status <value>', 'Task\'s status (toDo | inProgress | done)')
+  .option('--duration <value>', 'Task\'s estimated duration')
 	.action((command) => {
+		try {
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
+	
+			let sprint = {
+				name: command.sprintName,
+				description: command.descr,
+				duration: command.duration,
+				status: command.status
+			}
+			// Get specified project & set client.project
+			await restAPI.actions.getProject(command.project);
+
+			let message = await restAPI.actions.editSprint(sprint);
+	
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+			if(err) return console.log('Writing data failed:', err);
+			});
+	
+			console.log(message);
+		} catch(err) {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
+			}
+		}
 	});
 
 	program
 	.command('edit-userStory')
+	.requiredOption('-p, --project <value>', 'Project\'s name')
+  .requiredOption('-n, --userStoryName <value>', 'UserStory\'s name')
+  .option('-d, --descr <value>', 'Task\'s description')
+  .option('--status <value>', 'Task\'s status (toDo | inProgress | done)')
+  .option('--duration <value>', 'Task\'s estimated duration')
 	.action((command) => {
+		try {
+			// Get client object
+			const client = restAPI.client;
+			// Get client data
+			const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
+			// Set client
+			restAPI.actions.setClient(clientData);
+	
+			let sprint = {
+				name: command.sprintName,
+				description: command.descr,
+				duration: command.duration,
+				status: command.status
+			}
+			// Get specified project & set client.project
+			await restAPI.actions.getProject(command.project);
+
+			let message = await restAPI.actions.editSprint(sprint);
+	
+			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
+			if(err) return console.log('Writing data failed:', err);
+			});
+	
+			console.log(message);
+		} catch(err) {
+			if (err.code === 'ECONNREFUSED') {
+				console.log('Unable to connect to server.')
+			} else if (err.response && err.response.status === 500){
+				console.log('Login required!')
+			} else {
+				console.log('Internal Error')
+			}
+		}
 	});
 
 	program

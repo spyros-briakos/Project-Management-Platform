@@ -37,12 +37,7 @@
 
         <button
           type="submit"
-          class="btn btn-dark btn-lg btn-block"
-<<<<<<< HEAD
-          @click="login()"
-=======
-          
->>>>>>> 40ff3d50401bd4a953276d17dc29b3a911f4664d
+          class="btn btn-dark btn-lg btn-block"          
         >
           Σύνδεση<router-link :to="{ name: 'Home' }"></router-link>
         </button>
