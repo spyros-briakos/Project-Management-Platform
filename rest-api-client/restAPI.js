@@ -110,7 +110,7 @@ export const actions = {
       actions.setClient(response);
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   // Log out user
@@ -121,7 +121,7 @@ export const actions = {
       client = initClient();
       return response.message;
     })
-    .catch(function(error) { throw error })
+    .catch(function(error) { client = initClient(); throw error })
   },
 
   // Sign up user
@@ -132,7 +132,7 @@ export const actions = {
       actions.setClient(response);
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   // Get specific user
@@ -142,7 +142,7 @@ export const actions = {
       // Set client object
       actions.setClient(response);
     })
-    .catch(function(error) { throw error })  
+    .catch(function(error) { client = initClient(); throw error })  
   },
 
   // Update user
@@ -156,7 +156,7 @@ export const actions = {
         email: response.email
       }
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   // Reset user's password
@@ -167,7 +167,7 @@ export const actions = {
       actions.setClient(response);
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   // Send email to the user to create new password
@@ -176,7 +176,7 @@ export const actions = {
     .then(function(response) {
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   // Update user's plan to premium
@@ -187,7 +187,7 @@ export const actions = {
       actions.setClient(response);
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   // Delete user
@@ -198,7 +198,7 @@ export const actions = {
       client = initClient();
       return response.message;
     })
-    .catch(function(error) { throw error })
+    .catch(function(error) { client = initClient(); throw error })
   },
 
   // Get user's invitations to projects
@@ -209,7 +209,7 @@ export const actions = {
       actions.setClient(response);
       return response.invitations;
     })
-    .catch(function(error) { throw error }) 
+    .catch(function(error) { client = initClient(); throw error }) 
   },
 
   // Sign up with google
@@ -218,7 +218,7 @@ export const actions = {
     .then(function(response) {
       return response.url;
     })
-    .catch(function(error) { throw error })
+    .catch(function(error) { client = initClient(); throw error })
   },
 
   // Login with google
@@ -227,7 +227,7 @@ export const actions = {
     .then(function(response) {
       return response.url;
     })
-    .catch(function(error) { throw error })
+    .catch(function(error) { client = initClient(); throw error })
   },
 
   // PROJECT -----------------------------------------------
@@ -238,7 +238,7 @@ export const actions = {
     .then(function(response) {
       client.user.projects = response.projects;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   // Invite user(s) to a project
@@ -247,7 +247,7 @@ export const actions = {
     .then(function(response) {
       return response.message;
     })
-    .catch(function(error) { throw error })
+    .catch(function(error) { client = initClient(); throw error })
   },
 
   // Answer to invitation to a project
@@ -258,7 +258,7 @@ export const actions = {
       actions.setClient(response);
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   // Get a specific project
@@ -269,7 +269,7 @@ export const actions = {
     .then(function(response) {
       client.project = response.project;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async addProject(project) {
@@ -279,7 +279,7 @@ export const actions = {
       client.project = response.project;
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async editProject(project) {
@@ -290,7 +290,7 @@ export const actions = {
       Object.keys(response.project).forEach(key=>{ if (key in currProject) currProject[key]=response.project[key] });
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async getSprints() {
@@ -298,7 +298,7 @@ export const actions = {
     .then(function(response) {
       client.project.sprints = response.sprints;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async getUserStories() {  
@@ -306,7 +306,7 @@ export const actions = {
     .then(function(response) {
       client.project.userStories = response.userStories;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async addSprint(sprint) {
@@ -315,7 +315,7 @@ export const actions = {
       client.project.sprints.push(response.sprint);
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async addUserStory(userStory) {
@@ -324,7 +324,7 @@ export const actions = {
       client.project.userStories.push(response.userStory);
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async addTask(task) {
@@ -335,7 +335,7 @@ export const actions = {
       currUserStory.tasks.push(response.task);
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async editSprint(sprint) {
@@ -344,7 +344,7 @@ export const actions = {
       Object.keys(response.sprint).forEach(key=>{ sprint[key]=response.sprint[key] });
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async editUserStory(userStory) {
@@ -353,7 +353,7 @@ export const actions = {
       Object.keys(response.userStory).forEach(key=>{ userStory[key]=response.userStory[key] });
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async editTask(task) {
@@ -362,7 +362,7 @@ export const actions = {
       Object.keys(response.task).forEach(key=>{ task[key]=response.task[key] });
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async joinTask(task) {
@@ -371,7 +371,7 @@ export const actions = {
       task.members.push(client.user._id);
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async leaveTask(task) {
@@ -380,7 +380,7 @@ export const actions = {
       task.members = task.members.filter((mID) => { return mID !== client.user._id });
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async connectTasks(task1, task2, conn) {
@@ -396,7 +396,7 @@ export const actions = {
       Object.keys(response.task2).forEach(key=>{ task2[key]=response.task2[key] });
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async disconnectTasks(task1, task2, conn) {
@@ -411,7 +411,7 @@ export const actions = {
       Object.keys(response.task2).forEach(key=>{ task2[key]=response.task2[key] });
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async connectSprint(task, sprint) {
@@ -427,7 +427,7 @@ export const actions = {
       Object.keys(response.sprint).forEach(key=>{ sprint[key]=response.sprint[key] });
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async disconnectSprint(task) {
@@ -445,10 +445,10 @@ export const actions = {
         Object.keys(response.sprint).forEach(key=>{ currSprint[key]=response.sprint[key] });
         return response.message;
       } catch (error) {
-        throw error;
+        client = initClient(); throw error;
       }
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async deleteSprint(sprint) {
@@ -457,7 +457,7 @@ export const actions = {
       client.project = response.project;
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async deleteUserStory(userStory) {
@@ -466,7 +466,7 @@ export const actions = {
       client.project = response.project;
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async deleteTask(task) {
@@ -475,7 +475,7 @@ export const actions = {
       client.project = response.project;
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async deleteProject() {
@@ -485,7 +485,7 @@ export const actions = {
       client.project = null;
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   async leaveProject() {
@@ -495,7 +495,7 @@ export const actions = {
       client.project = null;
       return response.message;
     })
-    .catch(function(error) { throw error })    
+    .catch(function(error) { client = initClient(); throw error })    
   },
 
   getMyTasks() {

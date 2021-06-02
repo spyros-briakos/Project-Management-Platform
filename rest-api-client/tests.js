@@ -7,17 +7,7 @@ const sample = {
     lastName: 'User',
     email: 'sample_user@gmail.com',
     status: 'Pending',
-    projects: [{
-        _id: '111111111111111111111',
-        name: 'sample_project',
-        description: 'This is a sample project to test the client',
-        productOwner: { _id: '000000000000000000000', username: 'sample_user' },
-        scrumMaster: { _id: '000000000000000000000', username: 'sample_user' },
-        members: [{ _id: '000000000000000000000', username: 'sample_user' }],
-        status: inProgress,
-        plan_in_use: 'standard',
-        startingDate: '2021-06-02'
-      }],
+    projects: [initProject()],
     invitations: [],
     plan_in_use: 'standard'
   },
