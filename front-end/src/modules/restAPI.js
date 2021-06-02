@@ -56,7 +56,7 @@ export var client = initClient();
 
 export const actions = {
   test() {
-    console.log('testtest')
+    console.log('test')
   },
   // Set client object
   setClient(data) {

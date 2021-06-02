@@ -4,7 +4,7 @@
     <img id="image2" src="../../assets/img/scrum4.png">
 
     <div class="inner-block">
-      <form>
+      <form v-on:submit.prevent="signUp()">
         <h3>Δημιούργησε τον λογαριασμό σου!</h3>
 
         <div class="form-group">
@@ -66,13 +66,53 @@
 
 <script>
 export default {
+  name: "SignUp",
   data() {
     return {
       name: "",
       email: "",
       password: "",
       password2: "",
+      // data: {
+      //   username: this.username,
+      //   password: this.password,
+      //   firstName: this.firstName,
+      //   lastName: this.lastName,
+      //   email: this.email,
+      //   plan_in_use: "standard"
+			// },
+      data: {
+        username: "aaaa1234",
+        password: "12345678",
+        firstName: "aaaaa",
+        lastName: "aaaaa",
+        email: "andreas.giannoutsos.cloud@gmail.com",
+        plan_in_use: "standard"
+			},
     };
+  },
+  
+  methods: {
+    checkPassword2() { 
+      return this.password === this.password2; 
+    },
+    signUp() {
+        console.log("CHECK PASSWORD");
+      if (this.checkPassword2()) {
+        this.$actions.signup(this.data) 
+        .then( response => {
+          console.log(this);
+          console.log("USER "+this.name+" HAS SIGNED IN!");
+          this.$router.push({name:"myProjects"})
+        })
+      .catch( error => { 
+          console.log(error);
+          console.log("ERROR IN SIGNUP");
+        }) 
+      } else {
+        alert("Τα password δεν είναι ίδια");
+      }
+    },
   },
 };
 </script>
