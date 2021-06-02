@@ -403,7 +403,7 @@ router.post("/edit-task", async (req, res) => {
 
 // DELETE PROJECT/ USERSTORY/ SPRINT/ TASK
 
-router.delete('/delete-project', async (req, res) => {
+router.post('/delete-project', async (req, res) => {
   try {
     const user = req.user;
     // Find project in the db
@@ -413,7 +413,7 @@ router.delete('/delete-project', async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
     }
 
-    // Check if is the product owner is the user that sends the request
+    // Check if it is not the product owner that sends the request
     if (!user._id.equals(project.productOwner._id)){
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
@@ -438,7 +438,7 @@ router.delete('/delete-project', async (req, res) => {
       await UserStory.deleteOne({ _id: userStory._id });
     }
     // Remove project from its table
-    const removedProject = await Project.deleteOne({ _id: project._id });
+    await Project.deleteOne({ _id: project._id });
 
     res.json({ status: 'OK', message: 'Το Project διαγράφθηκε με επιτυχία.' });
   } catch (err) {
@@ -662,14 +662,14 @@ router.post("/leave-project", async (req, res) => {
     }
     // Check if user is authorized for that action
     const user = req.user;
-    if (project.productOwner === user._id) { // && !project.members.includes(user._id)) {
+    if (project.productOwner.equals(user._id)) {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
     if (project.members.includes(user._id)) {
       project.members = project.members.filter((mID) => { return !mID.equals(user._id) });
 
-      if (project.scrumMaster === user._id) {
+      if (project.scrumMaster.equals(user._id)) {
         project.scrumMaster = project.productOwner
       }
     }
@@ -688,8 +688,7 @@ router.post("/leave-project", async (req, res) => {
     user.projects = user.projects.filter((pID) => { return !pID.equals(project._id) });
     await User.findByIdAndUpdate(user._id, user, { runValidators: true });
 
-
-    const context = projectDetailSerializer(updatedProject);
+    const context = await serializer.projectDetailsSerializer(updatedProject);
     res.json({status: 'OK', message: 'Ο χρήστης αποχώρησε από το Project.', project: context});
   } catch (error) {
     res.status(400).json({ message: error });

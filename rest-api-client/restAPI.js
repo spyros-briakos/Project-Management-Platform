@@ -463,14 +463,16 @@ export const actions = {
     return requests.deleteUserStoryRequest(client.project._id, userStory._id, client.tokenObject.token)
     .then(function(response) {
       client.project = response.project;
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
 
-  async deleteTask(sprint) {
-    return requests.deleteTaskRequest(client.project._id, sprint._id, client.tokenObject.token)
+  async deleteTask(task) {
+    return requests.deleteTaskRequest(client.project._id, task._id, client.tokenObject.token)
     .then(function(response) {
       client.project = response.project;
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
@@ -480,6 +482,7 @@ export const actions = {
     .then(function(response) {
       client.user.projects = client.user.projects.filter((p) => {return p._id !== client.project._id});
       client.project = null;
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },
@@ -489,6 +492,7 @@ export const actions = {
     .then(function(response) {
       client.user.projects = client.user.projects.filter((p) => {return p._id !== client.project._id});
       client.project = null;
+      return response.message;
     })
     .catch(function(error) { throw error })    
   },

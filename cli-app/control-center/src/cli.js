@@ -160,11 +160,11 @@ export function cli(args) {
 			console.log(message);
 		} catch (error) {
 			if(error.response && error.response.data.message)
-			console.log('Η δημιουργία νέου project απέτυχε: ', error.response.data.message);
+			console.log(`Η διαγραφή project ${command.project} απέτυχε: ${error.response.data.message}`);
 			else if(error.code === 'ENOENT')
 			console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 			else
-			console.log('Η δημιουργία νέου project απέτυχε: ', error.message);
+			console.log(`Η διαγραφή project ${command.project} απέτυχε: ${error.message}`);
 		}
   });
 
@@ -619,11 +619,11 @@ export function cli(args) {
 			console.log(message);
 		} catch(error) {
 			if(error.response && error.response.data.message)
-				console.log(`Η επεξεργασία του sprint ${command.sprint} απέτυχε: ', ${error.response.data.message}`);
+				console.log(`Η επεξεργασία του sprint ${command.sprint} απέτυχε: ${error.response.data.message}`);
 		  	else if(error.code === 'ENOENT')
 				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 			  else
-				console.log(`Η επεξεργασία του sprint ${command.sprint} απέτυχε: ', ${error.message}`);
+				console.log(`Η επεξεργασία του sprint ${command.sprint} απέτυχε: ${error.message}`);
 		}
 	});
 
@@ -662,11 +662,11 @@ export function cli(args) {
 			console.log(message);
 		} catch(error) {
 			if(error.response && error.response.data.message)
-				console.log(`Η επεξεργασία του user story ${command.userStory} απέτυχε: ', ${error.response.data.message}`);
+				console.log(`Η επεξεργασία του user story ${command.userStory} απέτυχε: ${error.response.data.message}`);
 			  else if(error.code === 'ENOENT')
 				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 		  	else
-				console.log(`Η επεξεργασία του user story ${command.userStory} απέτυχε: ', ${error.message}`);
+				console.log(`Η επεξεργασία του user story ${command.userStory} απέτυχε: ${error.message}`);
 		}
 	});
 
@@ -706,11 +706,11 @@ export function cli(args) {
 			console.log(message);
 		} catch(error) {
 			if(error.response && error.response.data.message)
-				console.log(`Η επεξεργασία του task ${command.task} απέτυχε: ', ${error.response.data.message}`);
+				console.log(`Η επεξεργασία του task ${command.task} απέτυχε: ${error.response.data.message}`);
 		  	else if(error.code === 'ENOENT')
 				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 			  else
-				console.log(`Η επεξεργασία του task ${command.task} απέτυχε: ', ${error.message}`);
+				console.log(`Η επεξεργασία του task ${command.task} απέτυχε: ${error.message}`);
 		}
 	});
 
@@ -740,11 +740,11 @@ export function cli(args) {
 			console.log(message);
 		} catch(error) {
 			if(error.response && error.response.data.message)
-				console.log(`Η διαγραφή του sprint ${command.sprint} απέτυχε: ', ${error.response.data.message}`);
-			  else if(error.code === 'ENOENT')
+				console.log(`Η διαγραφή του sprint ${command.sprint} απέτυχε: ${error.response.data.message}`);
+			else if(error.code === 'ENOENT')
 				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
 			else
-				console.log(`Η διαγραφή του sprint ${command.sprint} απέτυχε: ', ${error.message}`);
+				console.log(`Η διαγραφή του sprint ${command.sprint} απέτυχε: ${error.message}`);
 		}
 	});
 
@@ -772,14 +772,13 @@ export function cli(args) {
 			});
 	
 			console.log(message);
-		} catch(err) {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
+		} catch(error) {
+			if(error.response && error.response.data.message)
+				console.log(`Η διαγραφή του user story ${command.userStory} απέτυχε: ${error.response.data.message}`);
+			else if(error.code === 'ENOENT')
+				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			else
+				console.log(`Η διαγραφή του user story ${command.userStory} απέτυχε: ${error.message}`);
 		}
 	});
 
@@ -799,23 +798,24 @@ export function cli(args) {
 
 			// Get specified project & set client.project
 			await restAPI.actions.getProject(command.project);
+			// Get specified task
 			const task = restAPI.actions.getTaskObj(command.userStory, command.task);
 
-			const message = await restAPI.actions.deleteTask({userStory, task});
+			// Delete task
+			const message = await restAPI.actions.deleteTask(task);
 	
 			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 			if(err) return console.log('Writing data failed:', err);
 			});
 	
 			console.log(message);
-		} catch(err) {
-			if (err.code === 'ECONNREFUSED') {
-				console.log('Unable to connect to server.')
-			} else if (err.response && err.response.status === 500){
-				console.log('Login required!')
-			} else {
-				console.log('Internal Error')
-			}
+		} catch(error) {
+			if(error.response && error.response.data.message)
+				console.log(`Η διαγραφή του task ${command.task} απέτυχε: ${error.response.data.message}`);
+			else if(error.code === 'ENOENT')
+				console.log('Ο ελεγχος ταυτότητας απέτυχε: Παρακαλούμε να έχεις συνδεθεί πρώτα.');
+			else
+				console.log(`Η διαγραφή του task ${command.task} απέτυχε: ${error.message}`);
 		}
 	});
 
