@@ -94,7 +94,7 @@ router.post('/login', async (req, res, next) => {
       // If there was an error
       if (err || !user) {
         res.statusCode = 500
-        return res.json({ message: info.message });
+        return res.status(400).json({ message: info.message });
       }
 
       // Create user's authentication token
@@ -109,7 +109,7 @@ router.post('/login', async (req, res, next) => {
         token: tokenObject
       });
     } catch (error) {
-      return next(error);
+      return next({ message: error });
     }
   })(req, res, next);
 });
@@ -375,60 +375,6 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
   }
 })
 
-// router.post('/rm-inv', async(req, res) => {
-//   try {
-//     await Invitation.deleteOne({ _id: req.body.id });
-//     res.json({ message: 'done' });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).json({ message: error });
-//   }
-// })
-
-// router.delete('/delete-user/:userId', async (req, res) => {
-//   try {
-//     // // Delete user from db
-//     // const removedUser = await User.deleteOne({ _id: req.params.userId });
-
-//     // // Mark user's auth token as invalid
-//     // const token = new InvalidToken({ value: utils.extractToken(req) });
-//     // await token.save();
-//     // // Log out user
-//     // req.logout();
-    
-//     const user = await User.updateOne({ _id: req.params.userId }, { $set: { invitations: [] } }, { new: true });
-//     // console.log(user);
-
-//     res.json({
-//       // result: removedUser,
-//       message: 'Deleted user successfully'
-//     });
-//   } catch (error) {
-//     res.status(400).json({ message: error });
-//   }
-// })
-
-// router.delete('/delete-project/:projectId', async (req, res) => {
-//   try {
-//     // Delete project from db
-//     const removedproject = await Project.deleteOne({ _id: req.params.projectId });
-    
-//     res.json({
-//       result: removedproject,
-//     });
-//   } catch (error) {
-//     res.status(400).json({ message: error });
-//   }
-// })
-
-// router.get("/inv", async (req, res) => {
-//   try {
-//     const invs = await Invitation.find({});
-//     res.json(invs);
-//   } catch (error) {
-//     res.status(400).json({ message: error });
-//   }
-// })
 
 // Export router
 module.exports = router;

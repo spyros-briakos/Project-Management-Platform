@@ -36,24 +36,25 @@ function initClient() {
   }
 }
 
-function initProject() {
-  return {
-    _id: null,
-    name: null,
-    description: null,
-    productOwner: null,
-    scrumMaster: null,
-    sprints: [],
-    userStories: [],
-    members: [],
-    status: null,
-    plan_in_use: null,
-    startingDate: null,
-    endingDate: null
-  }
-}
+// function initProject() {
+//   return {
+//     _id: null,
+//     name: null,
+//     description: null,
+//     productOwner: null,
+//     scrumMaster: null,
+//     sprints: [],
+//     userStories: [],
+//     members: [],
+//     status: null,
+//     plan_in_use: null,
+//     startingDate: null,
+//     endingDate: null
+//   }
+// }
 
 // Initialize client object
+
 export var client = initClient();
 
 export const actions = {
@@ -251,7 +252,7 @@ export const actions = {
 
   // Answer to invitation to a project
   async answerInvitation(answer, invitationCode) {
-    return requests.answerInvitationRequest(answer, invitationCode, client.tokenObject.token)
+    return requests.answerInvitationRequest(answer, invitationCode)
     .then(function(response) {
       // Set client object
       actions.setClient(response);
@@ -625,10 +626,8 @@ const requests = {
     .catch(function(error) { throw error })
   },
 
-  async answerInvitationRequest(answer, invitationCode, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('GET', `users/answer-invitation/${invitationCode}?answer=${answer}`, {}, headers)
+  async answerInvitationRequest(answer, invitationCode) {
+    return requests.send('GET', `users/answer-invitation/${invitationCode}?answer=${answer}`, {})
     .then(function(response) { return response })
     .catch(function(error) { throw error })
   },

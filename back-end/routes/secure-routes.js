@@ -272,7 +272,7 @@ router.delete('/delete-user', async (req, res) => {
     }
 
     // Delete user from db
-    const removedUser = await User.deleteOne({ _id: req.user._id });
+    await User.deleteOne({ _id: req.user._id });
 
     // Mark user's auth token as invalid
     const token = new InvalidToken({ value: utils.extractToken(req) });
