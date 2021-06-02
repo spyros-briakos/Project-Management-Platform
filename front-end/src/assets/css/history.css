@@ -2,6 +2,7 @@
     display:flex;
     height:91.5vh;
     justify-content: center;
+    padding: 5vh 0 5vh 0;
     /* background-color: rgba(230, 230, 230, 0.815); */
 }
 
@@ -11,7 +12,6 @@
     flex-wrap: wrap;
     min-height: 40vh;
     max-height: 80vh;
-    margin-top: 5vh;
     width:80%;
     margin-left: 10vh;
     align-content: flex-start;
