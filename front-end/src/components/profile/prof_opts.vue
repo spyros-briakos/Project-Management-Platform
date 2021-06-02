@@ -90,9 +90,7 @@
     },
     methods:{
         correct_selected(){
-            console.log(this.$route);
             let cur = this.$route.path;
-            console.log(cur);
             if(cur == "/profile" || cur == "/profile/settings")
                 return 3;
             else if(cur == "/profile/myProjects")

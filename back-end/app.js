@@ -11,6 +11,7 @@ const logger = require('./middlewares/logger');   // Print logger on requests
 const session = require("express-session");
 const passport = require("passport");             // For user authentication
 const localStradegy = require("passport-local");  // For user authentication
+var cors = require('cors')
 
 require("dotenv/config");                         // Protect sensitive information
 require('./auth/auth');                           // For user authentication
@@ -21,16 +22,16 @@ const authenticate = require("./middlewares/authenticate");
 const app = express();
 
 // MIDDLEWARES
-// app.use(cors());
+app.use(cors());
 app.use(express.urlencoded({limit: '50mb', extended: true}));  // Instead of bodyParser
 app.use(express.json({limit: '50mb', extended: true}));
 app.use(logger);
-app.use(function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "https://localhost:3000");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
-	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
-	next();
-});
+// app.use(function(req, res, next) {
+// 	res.header("Access-Control-Allow-Origin", "https://localhost:8080");
+// 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+// 	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
+// 	next();
+// });
 
 app.use(session({
   // ?secret: process.env.SESSION_SECRET,

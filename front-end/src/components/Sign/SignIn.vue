@@ -88,8 +88,15 @@ export default {
   },
   methods: {
     login() {
-      console.log("USER HAS SIGNED IN!");
-      this.$actions.test();
+      this.$actions.login(this.username, this.password) 
+      .then( response => {
+        console.log("USER "+this.username+" HAS SIGNED IN!");
+        this.$router.push({name:"myProjects"})
+      })
+    .catch( error => { 
+        console.log("ERROR IN LOGIN");
+        alert("Λάθος κωδικός ή όνομα χρήστη")
+      }) 
       //     if(this.email != "" && this.password != "") {
       //         if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
       //             this.$emit("authenticated", true);

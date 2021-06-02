@@ -9,8 +9,8 @@
             {{mssg}}
         </div>
 
-        <v-form class="wrap_form">
-            <v-text-field class="mycont" v-for="input in input_fields" :key="input.name"
+        <v-form id="prj_form" class="wrap_form">
+            <v-text-field :id="input.key" class="mycont" v-for="input in input_fields" @change="isValid()" :key="input.name"
                 :label="input.name"
                 :placeholder="input.placeholder"
                 :hint="input.hint"
@@ -22,7 +22,7 @@
                 {{input.name}}
             </v-text-field>
 
-            <v-radio-group class="type_wrap" v-for="choose in choose_fields" :key="choose.name"
+            <v-radio-group :id="choose.key" class="type_wrap" v-for="choose in choose_fields" @change="isValid()" :key="choose.name"
                 :label="choose.name"
                 mandatory
                 >
@@ -46,7 +46,7 @@
                     >
                         
                     <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
+                        <v-text-field @change="isValid()" id="prDates"
                             class="small"
                             v-model="datesRange"
                             label="Διάρκεια Project"
@@ -86,14 +86,15 @@
                     </v-date-picker>
                 </v-menu>
 
-                <v-autocomplete
+                <v-autocomplete @change="isValid()" id="getFriends"
                     class="friends_picker"
+                    :v-model="form_data.autocomplete"
                     multiple
                     chips
                     :label="get_friends.label"
                     :items="get_friends.people"
                     item-text="name"
-                    itme-value="id"
+                    item-value="id"
                     :placeholder="get_friends.placeholder"
                     :hint="get_friends.hint"
                     :search-input.sync="get_friends.search"
@@ -102,7 +103,7 @@
                     >
                 </v-autocomplete>
 
-            <v-btn type="submit" class="create_btn">
+            <v-btn type="submit" class="create_btn" :disabled="invalid">
                 Δημιουργία
             </v-btn>
 
@@ -117,6 +118,8 @@ export default({
     
     data(){
         return{
+            form_data:{autocomplete: null,},
+            invalid: true,
             dates: ['2021-01-01','2022-02-02'],
             menu:false,
             main_rules:[
@@ -184,11 +187,22 @@ export default({
         },
         coWorkers: Array,
     },
-    methos:{
+    methods:{
         find(val){
             alert(val);
             this.get_friends.people.push(val);
             return val;
+        },
+        isValid(){
+            if(document.getElementById('prj_form') == undefined)
+                return;
+            var form = document.getElementById('prj_form').elements;
+            for(let i of this.input_fields){
+                if(form[i.key].value.length == 0){
+                    return;
+                }
+            }
+            this.invalid=false;
         }
     },
     computed:{
