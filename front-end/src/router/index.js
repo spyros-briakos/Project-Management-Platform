@@ -6,6 +6,7 @@ import Projects from "../components/Project/Projects.vue";
 import Roadmap from "../components/Project/Roadmap.vue";
 import Comments from "../components/Project/Comments.vue";
 import History from "../components/Project/History.vue";
+import Settings from "../components/Project/Settings.vue";
 import Kanban from "../components/Project/Kanban.vue";
 import TaskBoard from "../components/Project/Scrumboard/TaskBoard.vue";
 import Chart from "../components/Project/Chart.vue";
@@ -79,6 +80,11 @@ const routes = [
         path: "history",
         name: "History",
         component: History,
+      },
+      {
+        path: "settings",
+        name: "Settings",
+        component: Settings,
       },
     ],
   },

@@ -10,7 +10,7 @@
   
     <LoadingIndicator></LoadingIndicator>
 
-    <myFooter v-if="!['SignIn','SignUp','profile','profSettings','coWorkers','myProjects','Upgrade','ForgotPassword','Projects','Roadmap','Chart', 'Comments','History','Task-board', 'Kanban'].includes($route.name)"></myFooter>
+    <myFooter v-if="!['SignIn','SignUp','profile','profSettings','coWorkers','myProjects','Upgrade','ForgotPassword','Projects','Roadmap','Chart', 'Comments','Settings','History','Task-board', 'Kanban'].includes($route.name)"></myFooter>
   
   </v-app>
 

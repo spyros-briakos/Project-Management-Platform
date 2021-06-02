@@ -66,6 +66,11 @@ export default {
           title: "Ιστορικό",
           icon: "fa fa-history",
         },
+        {
+          href: "/projects/settings",
+          title: "Ρυθμίσεις",
+          icon: "fa fa-cogs",
+        },
       ],
       collapsed: true,
       selectedTheme: "white-theme",
