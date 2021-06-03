@@ -1,5 +1,34 @@
 <template>
   <div class="vertical-center">
+    <v-alert
+      prominent
+      type="info"
+      :value="goodSignUpAllert"
+    >
+      <v-row align="center">
+        <v-col class="grow">
+          Η δημιουργία του λογαριασμού σας ολοκληρώθηκε με επιτυχία. 
+          Παρακαλώ επιβεβαιώστε το email σας και μεταβείτε στην σελίδα σύνδεσης για να συνδεθείτε.
+        </v-col>
+        <v-col class="shrink">
+          <v-btn
+          color="accent"
+          depressed
+          elevation="2"
+          @click="goToSignIn">
+            Σύνδεση
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-alert>
+
+    <v-alert
+      type="error"
+      :value="badSignUpAllert"
+    >
+      {{ this.badSignUpAllertMessage }}
+    </v-alert>
+
     <img id="image1" src="../../assets/img/scrum1.png">
     <img id="image2" src="../../assets/img/scrum4.png">
 
@@ -8,11 +37,31 @@
         <h3>Δημιούργησε τον λογαριασμό σου!</h3>
 
         <div class="form-group">
-          <label>Πληκτρολόγησε το όνομα σου</label>
+          <label>Πληκτρολόγησε το username σου</label>
           <input
             type="text"
             required
-            v-model="name"
+            v-model="userName"
+            class="form-control form-control-lg"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Πληκτρολόγησε το όνομά σου</label>
+          <input
+            type="text"
+            required
+            v-model="firstName"
+            class="form-control form-control-lg"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Πληκτρολόγησε το επίθετό σου</label>
+          <input
+            type="text"
+            required
+            v-model="lastName"
             class="form-control form-control-lg"
           />
         </div>
@@ -69,48 +118,55 @@ export default {
   name: "SignUp",
   data() {
     return {
-      name: "",
+      goodSignUpAllert: false,
+      badSignUpAllert: false,
+      badSignUpAllertMessage : "Σφάλμα κατά την εγγραφή",
+      userName: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       password2: "",
-      // data: {
-      //   username: this.username,
-      //   password: this.password,
-      //   firstName: this.firstName,
-      //   lastName: this.lastName,
-      //   email: this.email,
-      //   plan_in_use: "standard"
-			// },
-      data: {
-        username: "aaaa1234",
-        password: "12345678",
-        firstName: "aaaaa",
-        lastName: "aaaaa",
-        email: "andreas.giannoutsos.cloud@gmail.com",
-        plan_in_use: "standard"
-			},
     };
   },
   
   methods: {
+    goToSignIn(){
+      this.$router.push({name:"SignIn"})
+    },
+    myFilter() {
+      this.goodSignUpAllert = !this.goodSignUpAllert;
+    },
     checkPassword2() { 
       return this.password === this.password2; 
     },
+    getData() {
+      return {
+        username: this.userName,
+        password: this.password,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        plan_in_use: "standard"
+      }
+    },
     signUp() {
-        console.log("CHECK PASSWORD");
       if (this.checkPassword2()) {
-        this.$actions.signup(this.data) 
+        this.$actions.signup(this.getData()) 
         .then( response => {
-          console.log(this);
-          console.log("USER "+this.name+" HAS SIGNED IN!");
-          this.$router.push({name:"myProjects"})
+          console.log("USER HAS SIGNED IN!");
+          this.badSignUpAllert = false
+          this.goodSignUpAllert = true
         })
       .catch( error => { 
           console.log(error);
           console.log("ERROR IN SIGNUP");
+          this.goodSignUpAllert = false
+          this.badSignUpAllert = true
+          this.badSignUpAllertMessage = error.message
         }) 
       } else {
-        alert("Τα password δεν είναι ίδια");
+        alert("Τα password δεν είναι όμοια");
       }
     },
   },
