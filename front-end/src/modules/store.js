@@ -5,7 +5,8 @@ export const _client = Vue.observable(client);
 // export const _actions = actions;
 
 export const _actions = {
-  ...actions
+  ...actions,
+  
 }
 
 export default {_client, _actions}

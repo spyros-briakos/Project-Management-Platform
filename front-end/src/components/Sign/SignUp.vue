@@ -160,10 +160,11 @@ export default {
         })
       .catch( error => { 
           console.log(error);
+          console.log(this.getData());
           console.log("ERROR IN SIGNUP");
           this.goodSignUpAllert = false
           this.badSignUpAllert = true
-          this.badSignUpAllertMessage = error.message
+          this.badSignUpAllertMessage = error.response.data.message
         }) 
       } else {
         alert("Τα password δεν είναι όμοια");
