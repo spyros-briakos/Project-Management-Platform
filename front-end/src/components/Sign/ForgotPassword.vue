@@ -29,7 +29,7 @@
       type="error"
       :value="badAllert"
     >
-      {{ this.badSignUpAllertMessage }}
+      {{ this.badAllertMessage }}
     </v-alert>
 
     
@@ -61,12 +61,15 @@ export default {
   data() {
     return {
       email: "",
-      badSignUpAllertMessage: "",
+      badAllertMessage: "",
       goodAllert: false,
       badAllert: false,
     };
   },
   methods: {
+    goToSignIn(){
+      this.$router.push({name:"SignIn"})
+    },
     resetPassword() {
       console.log("RESET PASSWOD")
       this.$actions.forgotPassword(this.email)
@@ -80,6 +83,7 @@ export default {
           console.log("ERROR IN EMAIL RESET");
           this.goodAllert = false
           this.badAllert = true
+          this.badAllertMessage = error;
         });
 
     }

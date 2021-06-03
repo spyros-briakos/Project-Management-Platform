@@ -3,6 +3,13 @@
     <img id="image1" src="../../assets/img/scrum1.png">
     <img id="image2" src="../../assets/img/scrum4.png">
 
+    <v-alert
+      type="error"
+      :value="badAllert"
+    >
+      {{ this.badAllertMessage }}
+    </v-alert>
+
     <div class="inner-block">
       <form v-on:submit.prevent="login()">
         <h3>Συνδέσου με τον λογαριασμό σου!</h3>
@@ -83,7 +90,9 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      badAllertMessage: "",
+      badAllert: false,
     };
   },
   methods: {
@@ -99,7 +108,9 @@ export default {
       })
       .catch( error => { 
         console.log("ERROR IN LOGIN");
-        alert(error)
+        this.badAllert = true;
+        this.badAllertMessage = error
+        
       }) 
       //     if(this.email != "" && this.password != "") {
       //         if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {

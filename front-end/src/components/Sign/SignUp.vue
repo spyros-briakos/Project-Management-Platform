@@ -37,7 +37,7 @@
         <h3>Δημιούργησε τον λογαριασμό σου!</h3>
 
         <div class="form-group">
-          <label>Πληκτρολόγησε το username σου</label>
+          <label>Πληκτρολόγησε το Username σου</label>
           <input
             type="text"
             required
