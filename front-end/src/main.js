@@ -6,7 +6,7 @@ import "@babel/polyfill";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/assets/css/main.css";
 import VeeValidate from 'vee-validate';
-// import "./quasar";
+// import "quasar";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
@@ -22,11 +22,25 @@ import Highcharts from "highcharts";
 import HighchartsVue from "highcharts-vue";
 import Gantt from "highcharts/modules/gantt";
 
+
+// import { Quasar,Notify,Dialog } from 'quasar'
+// Vue.use(Quasar, {
+//   plugins: {
+//     Notify,
+//     Dialog
+//   },
+//   config: {
+//     notify: { position: 'center'  }
+//   }
+// })
+
 import "./assets/app.scss"; 
 import "./plugins";
-import store from "./store";
-import { client, actions } from './modules/restAPI'
-// import { client, actions } from '../../rest-api-client/restAPI'
+import store from "./modules/store";
+// import { client, actions } from './modules/restAPI'
+// import restAPI from '@the-ver-best-scrum-team/rest-api-client/restAPI'
+Vue.prototype.$client = store._client
+Vue.prototype.$actions = store._actions
 
 Vue.use(VeeValidate);
 
@@ -39,11 +53,9 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false;
 
-Vue.prototype.$client = client
-Vue.prototype.$actions = actions
+Vue.use(store)
 
 new Vue({
-  store,
   router,
   vuetify,
   render: (h) => h(App),

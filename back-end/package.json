@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "start": "export NODE_TLS_REJECT_UNAUTHORIZED='0' | node app.js",
+    "dev": "export NODE_TLS_REJECT_UNAUTHORIZED='0' | nodemon app.js",
     "test": "mocha"
   },
   "keywords": [],

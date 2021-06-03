@@ -3,6 +3,13 @@
     <img id="image1" src="../../assets/img/scrum1.png">
     <img id="image2" src="../../assets/img/scrum4.png">
 
+    <v-alert
+      type="error"
+      :value="badAllert"
+    >
+      {{ this.badAllertMessage }}
+    </v-alert>
+
     <div class="inner-block">
       <form v-on:submit.prevent="login()">
         <h3>Συνδέσου με τον λογαριασμό σου!</h3>
@@ -83,19 +90,27 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      badAllertMessage: "",
+      badAllert: false,
     };
   },
   methods: {
     login() {
+      console.log(this.$actions);
+      console.log(this.$client.user);
+      console.log(this.username)
+      console.log(this.password)
       this.$actions.login(this.username, this.password) 
       .then( response => {
         console.log("USER "+this.username+" HAS SIGNED IN!");
         this.$router.push({name:"myProjects"})
       })
-    .catch( error => { 
+      .catch( error => { 
         console.log("ERROR IN LOGIN");
-        alert("Λάθος κωδικός ή όνομα χρήστη")
+        this.badAllert = true;
+        this.badAllertMessage = error
+        
       }) 
       //     if(this.email != "" && this.password != "") {
       //         if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {

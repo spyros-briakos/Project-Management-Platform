@@ -5,7 +5,7 @@ const axios = require('axios');
 const requests = require('./requests');
 
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
-const apiUrl = `http://127.0.0.1:3000/api-control`;
+const apiUrl = 'https://127.0.0.1:3000/api-control';
 const agent = new https.Agent({
   rejectUnauthorized: false,
 });
@@ -492,22 +492,22 @@ export const actions = {
 }
 
 export const send = async (method, url, data, headers) => {
-    switch(method) {
-      case('POST'):
-        return axios.post(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
-        .then(function(response) { return response.data })
-        .catch(function(error) { throw error })
-      case('GET'):
-        return axios.get(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
-        .then(function(response) { return response.data })
-        .catch(function(error) { throw error })
-      case('PATCH'):
-        return axios.patch(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
-        .then(function(response) { return response.data })
-        .catch(function(error) { throw error })
-      case('DELETE'):
-        return axios.delete(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
-        .then(function(response) { return response.data })
-        .catch(function(error) { throw error })
-    }
+  switch(method) {
+    case('POST'):
+      return axios.post(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
+      .then(function(response) { return response.data })
+      .catch(function(error) { throw error })
+    case('GET'):
+      return axios.get(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
+      .then(function(response) { return response.data })
+      .catch(function(error) { throw error })
+    case('PATCH'):
+      return axios.patch(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
+      .then(function(response) { return response.data })
+      .catch(function(error) { throw error })
+    case('DELETE'):
+      return axios.delete(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
+      .then(function(response) { return response.data })
+      .catch(function(error) { throw error })
   }
+}
