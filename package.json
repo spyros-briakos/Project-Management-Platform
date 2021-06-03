@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "datejs": "*",
-    "mdbvue": "^5.4.1",
-    "util": "^0.12.3"
-  }
-}

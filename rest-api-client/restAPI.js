@@ -1,11 +1,9 @@
-// import { getToken } from '../cli-app/control-center/src/utils';
-
 const https = require('https');
 const axios = require('axios');
 // require('dotenv').config();
 
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
-const apiUrl = `http://127.0.0.1:3000/api-control`;
+const apiUrl = 'https://127.0.0.1:3000/api-control';
 const agent = new https.Agent({
   rejectUnauthorized: false,
 });
@@ -839,5 +837,4 @@ const requests = {
     }
 
   }
-
 }

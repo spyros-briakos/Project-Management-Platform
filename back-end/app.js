@@ -2,7 +2,7 @@
 
 // IMPORT PACKAGES
 const fs = require("fs");
-const http = require("http");
+const https = require("https");
 const express = require("express");               // Basic Package for API structure
 const mongoose = require("mongoose");             // MongoDB
 mongoose.set('useFindAndModify', false);
@@ -27,7 +27,7 @@ app.use(express.urlencoded({limit: '50mb', extended: true}));  // Instead of bod
 app.use(express.json({limit: '50mb', extended: true}));
 app.use(logger);
 // app.use(function(req, res, next) {
-// 	res.header("Access-Control-Allow-Origin", "https://localhost:8080");
+// 	res.header("Access-Control-Allow-Origin", "*");
 // 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
 // 	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
 // 	next();
@@ -39,6 +39,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+
+// http.get('*', function(req, res) {  
+//   res.redirect('https://' + req.headers.host + req.url);
+// })
 
 // Use the passport package
 app.use(passport.initialize());
@@ -91,11 +95,11 @@ mongoose.connect(
 // module.exports = app;
 
 const options = {
-	key: fs.readFileSync("./scrum-team.pem").toString(),
-	cert: fs.readFileSync("./certificate.pem").toString()
+	key: fs.readFileSync("./server.key").toString(),
+	cert: fs.readFileSync("./server.cert").toString()
 };
 
-const server = http.createServer(options, app).listen(PORT, function(){
+const server = https.createServer(options, app).listen(PORT, function(){
   console.log(`Server listening at http://${process.env.HOSTNAME}:${PORT}/`);
 });
 module.exports = server;

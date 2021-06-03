@@ -11,8 +11,8 @@ const apiUrl = 'http://127.0.0.1:3000/api-control';
 const agent = new https.Agent({
   rejectUnauthorized: false,
 });
-
 const restAPI = require('../../../rest-api-client/restAPI');
+// const restAPI = require('@the-ver-best-scrum-team/rest-api-client/restAPI');
 
 export function cli(args) {
 

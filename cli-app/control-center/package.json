@@ -1,7 +1,7 @@
 {
   "name": "@telo/control-center",
   "version": "1.0.0",
-  "description": "A Control Center CLI",
+  "description": "Scrum-maniac CLI",
   "main": "src/index.js",
   "bin": {
     "@telo/control-center": "bin/control-center",
@@ -17,9 +17,10 @@
     "cli",
     "control-center"
   ],
-  "author": "Koumarela and Pelekoudas",
+  "author": "Dionysis",
   "license": "MIT",
   "dependencies": {
+    "@the-ver-best-scrum-team/rest-api-client": "file:../../rest-api-client",
     "axios": "^0.21.1",
     "commander": "^5.1.0",
     "esm": "^3.2.25",
