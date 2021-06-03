@@ -263,22 +263,15 @@ export function cli(args) {
 	  // Set client
 	  restAPI.actions.setClient(clientData);
 
-	  // Get current user and the requested project
-	  let user = client.user;
-	  let projects = user.projects.filter(p => p.name == command.project);
-
-	  // If no such project was found
-	  if (projects.length == 0)
-	    return console.log('Δεν βρέθηκε κάποιο project με το όνομα \''+command.project+'\'');
-
-	  let project = projects[0];
+	  // Get specified project & set client.project
+	  await restAPI.actions.getProject(command.project);
 
 	  // Invite the requested user(s)
 	  let data = {
 		users: [command.username].concat(command.args),
-		project: command.project
+		project: client.project.name
 	  };
-	  let message = await restAPI.actions.inviteUser(project._id, data);
+	  let message = await restAPI.actions.inviteUser(client.project._id, data);
 
 	  console.log(message);
 	} catch (error) {
@@ -307,17 +300,14 @@ export function cli(args) {
 	  const clientData = utils.fileToClient('/tmp/user.json', '/tmp/token.json');
 	  // Set client
 	  restAPI.actions.setClient(clientData);
-  
-	  // Get current user
-	  let user = client.user;
-	  // Get user's invitations to the requested project
-	  let invitations = user.invitations.filter(invitation => invitation.project == command.project);
 
-	  // If no such invitation was found
-	  if (invitations.length == 0)
+	  // Get user's invitations
+	  let invitations = await restAPI.actions.getInvitations();
+	  // Get user's invitation to the requested project
+	  let invitation = invitations.filter(inv => inv.project == command.project)[0];
+
+	  if (!invitation)
 	    return console.log('Δεν βρέθηκε κάποια πρόσκληση στο project με το όνομα \''+command.project+'\'');
-  
-	  let invitation = invitations[0];
   
 	  // Answer to the invitation
 	  let message = await restAPI.actions.answerInvitation(command.answer, invitation.invitationCode);
@@ -1133,7 +1123,7 @@ export function cli(args) {
   .requiredOption('-fn, --firstName <value>', 'User\'s first name')
   .requiredOption('-ln, --lastName <value>', 'User\'s last name')
   .requiredOption('-e, --email <value>', 'User\'s email')
-  .option('--plan <value>', 'User\'s plan (standard | premium-monthly | premium-year)')
+  .option('--plan <value>', 'User\'s plan (standard | premium-month | premium-year)')
   .action(async function(command) {
 		try {
 			let data = {

@@ -22,10 +22,10 @@ passport.use('signup', new localStrategy(
         const today = new Date();
 
         // If the user wants to be premium for a month
-        if(req.body.plan_in_use === 'premium-monthly') {
+        if(req.body.plan_in_use === 'premium-month') {
           req.body.premium_ending_date = today.add(1).month();
         // If the user wants to be premium for a year
-        } else if(req.body.plan_in_use === 'premium-yearly') {
+        } else if(req.body.plan_in_use === 'premium-year') {
           req.body.premium_ending_date = today.add(12).month();
         }
 

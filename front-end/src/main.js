@@ -6,7 +6,7 @@ import "@babel/polyfill";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/assets/css/main.css";
 import VeeValidate from 'vee-validate';
-// import "./quasar";
+// import "quasar";
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
@@ -21,6 +21,18 @@ import { faChartBar } from '@fortawesome/free-regular-svg-icons'
 import Highcharts from "highcharts";
 import HighchartsVue from "highcharts-vue";
 import Gantt from "highcharts/modules/gantt";
+
+
+// import { Quasar,Notify,Dialog } from 'quasar'
+// Vue.use(Quasar, {
+//   plugins: {
+//     Notify,
+//     Dialog
+//   },
+//   config: {
+//     notify: { position: 'center'  }
+//   }
+// })
 
 import "./assets/app.scss"; 
 import "./plugins";
