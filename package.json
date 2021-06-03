@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "axios": "^0.21.1",
     "datejs": "*",
-    "mdbvue": "^5.4.1",
+    "https": "^1.0.0",
+    "mdbvue": "^6.7.2",
     "util": "^0.12.3"
   }
 }

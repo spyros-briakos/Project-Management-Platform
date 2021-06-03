@@ -17,8 +17,8 @@
     "cli",
     "control-center"
   ],
-  "author": "Koumarela and Pelekoudas",
-  "license": "MIT",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
     "commander": "^5.1.0",
