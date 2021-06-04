@@ -32,7 +32,7 @@
     name: "profCoWorkers",
     data(){
         return{
-            welcome_mssg: "Οι Συνεργάτες σου:",
+            welcome_mssg: "Οι Συνεργάτες μου:",
         }
     },
     props:{
