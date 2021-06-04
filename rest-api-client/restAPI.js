@@ -42,13 +42,16 @@ export const actions = {
   // Set client object
   setClient(data) {
     if(data.user)
-      client.user = data.user;
+      // client.user = data.user;
+      client.user = JSON.parse(JSON.stringify(data.user));
 
     if(data.token)
-      client.tokenObject = data.token;
+      // client.tokenObject = data.token;
+      client.tokenObject = JSON.parse(JSON.stringify(data.token));
 
     if(data.project)
-      client.project = data.project;
+      // client.project = data.project;
+      client.project = JSON.parse(JSON.stringify(data.project));
   },
 
   // Get a project's id

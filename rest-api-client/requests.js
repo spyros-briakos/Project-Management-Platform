@@ -177,208 +177,359 @@ export const loginGoogleRequest = async () => {
   }
 }
 
-//   // PROJECT -----------------------------------------------
 
-//   async getProjectsRequest(token) {
-//     let headers = { "Authorization": `${token}` };
+// PROJECT -----------------------------------------------
 
-//     return restAPI.send('POST', `get-projects`, {}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const addProjectRequest = async (project, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async inviteUserRequest(projectId, data, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', 'add-project', {project}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', 'add-project', {project}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `secure-routes/project-invite/${projectId}`, data, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const getProjectsRequest = async (token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async answerInvitationRequest(answer, invitationCode) {
-//     return restAPI.send('GET', `users/answer-invitation/${invitationCode}?answer=${answer}`, {})
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+  if(TESTING) {
+    return tests.test('POST', `get-projects`, {}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `get-projects`, {}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//   async getProjectRequest(projectID, token) {
-//     let headers = { "Authorization": `${token}` };
+export const inviteUserRequest = async (projectId, data, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//     return restAPI.send('POST', `get-details`, {projectID}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+  if(TESTING) {
+    return tests.test('POST', `secure-routes/project-invite/${projectId}`, data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `secure-routes/project-invite/${projectId}`, data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//   async addProjectRequest(project, token) {
-//     let headers = { "Authorization": `${token}` };
+export const answerInvitationRequest = async (answer, invitationCode) => {
+  if(TESTING) {
+    return tests.test('GET', `users/answer-invitation/${invitationCode}?answer=${answer}`, {})
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('GET', `users/answer-invitation/${invitationCode}?answer=${answer}`, {})
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', 'add-project', {project}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const getProjectRequest = async (projectID, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async editProjectRequest(projectID, project, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `get-details`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `get-details`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `edit-project`, {projectID, project}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const editProjectRequest = async (projectID, project, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async getSprintsRequest(projectID, token) {
-//     let headers = { "Authorization": `${token}` };
-//     let data = { projectID: projectID };
+  if(TESTING) {
+    return tests.test('POST', `edit-project`, {projectID, project}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `edit-project`, {projectID, project}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `get-sprints`, data, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const getSprintsRequest = async (projectID, token) => {
+  let headers = { "Authorization": `${token}` };
+  let data = { projectID: projectID };
 
-//   async getUserStoriesRequest(projectID, token) {
-//     let headers = { "Authorization": `${token}` };
-//     let data = { projectID: projectID };
+  if(TESTING) {
+    return tests.test('POST', `get-sprints`, data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `get-sprints`, data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `get-userstories`, data, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const getUserStoriesRequest = async (projectID, token) => {
+  let headers = { "Authorization": `${token}` };
+  let data = { projectID: projectID };
 
-//   async addSprintRequest(projectID, sprint, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `get-userstories`, data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `get-userstories`, data, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `add-sprint`, {projectID, sprint}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const addSprintRequest = async (projectID, sprint, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async addUserStoryRequest(projectID, userStory, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `add-sprint`, {projectID, sprint}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `add-sprint`, {projectID, sprint}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `add-userstory`, {projectID, userStory}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const addUserStoryRequest = async (projectID, userStory, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async addTaskRequest(projectID, task, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `add-userstory`, {projectID, userStory}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `add-userstory`, {projectID, userStory}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `add-task`, {projectID, task}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const addTaskRequest = async (projectID, task, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async editSprintRequest(projectID, sprint, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `add-task`, {projectID, task}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `add-task`, {projectID, task}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `edit-sprint`, {projectID, sprint}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const editSprintRequest = async (projectID, sprint, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async editUserStoryRequest(projectID, userStory, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `edit-sprint`, {projectID, sprint}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `edit-sprint`, {projectID, sprint}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `edit-userstory`, {projectID, userStory}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const editUserStoryRequest = async (projectID, userStory, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async editTaskRequest(projectID, task, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `edit-userstory`, {projectID, userStory}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `edit-userstory`, {projectID, userStory}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `edit-task`, {projectID, task}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const editTaskRequest = async (projectID, task, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async joinTaskRequest(projectID, taskID, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `edit-task`, {projectID, task}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `edit-task`, {projectID, task}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `join-task`, {projectID, taskID}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const joinTaskRequest = async (projectID, taskID, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async leaveTaskRequest(projectID, taskID, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `join-task`, {projectID, taskID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `join-task`, {projectID, taskID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `leave-task`, {projectID, taskID}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const leaveTaskRequest = async (projectID, taskID, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async connectTasksRequest(projectID, connection, token) {
-//     let headers = { "Authorization": `${token}` };
-//     if (!connection.task1ID || !connection.task2ID || !connection.conn) throw 'Invalid connection'
+  if(TESTING) {
+    return tests.test('POST', `leave-task`, {projectID, taskID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `leave-task`, {projectID, taskID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `connect-task-task`, {projectID, ...connection}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const connectTasksRequest = async (projectID, connection, token) => {
+  let headers = { "Authorization": `${token}` };
+  if (!connection.task1ID || !connection.task2ID || !connection.conn) throw 'Invalid connection'
 
-//   async disconnectTasksRequest(projectID, connection, token) {
-//     let headers = { "Authorization": `${token}` };
-//     if (!connection.task1ID || !connection.task2ID || !connection.conn) throw 'Invalid connection'
+  if(TESTING) {
+    return tests.test('POST', `connect-task-task`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `connect-task-task`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `disconnect-task-task`, {projectID, ...connection}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const disconnectTasksRequest = async (projectID, connection, token) => {
+  let headers = { "Authorization": `${token}` };
+  if (!connection.task1ID || !connection.task2ID || !connection.conn) throw 'Invalid connection'
 
-//   async connectSprintRequest(projectID, connection, token) {
-//     let headers = { "Authorization": `${token}` };
-//     if (!connection.taskID || !connection.sprintID) throw 'Invalid connection'
+  if(TESTING) {
+    return tests.test('POST', `disconnect-task-task`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `disconnect-task-task`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `connect-task-sprint`, {projectID, ...connection}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const connectSprintRequest = async (projectID, connection, token) => {
+  let headers = { "Authorization": `${token}` };
+  if (!connection.taskID || !connection.sprintID) throw 'Invalid connection'
 
-//   async disconnectSprintRequest(projectID, connection, token) {
-//     let headers = { "Authorization": `${token}` };
-//     if (!connection.taskID) throw 'Invalid connection'
+  if(TESTING) {
+    return tests.test('POST', `connect-task-sprint`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `connect-task-sprint`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `disconnect-task-sprint`, {projectID, ...connection}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const disconnectSprintRequest = async (projectID, connection, token) => {
+  let headers = { "Authorization": `${token}` };
+  if (!connection.taskID) throw 'Invalid connection'
 
-//   async deleteSprintRequest(projectID, sprintID, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `disconnect-task-sprint`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `disconnect-task-sprint`, {projectID, ...connection}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `delete-sprint`, {projectID, sprintID}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const deleteSprintRequest = async (projectID, sprintID, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async deleteUserStoryRequest(projectID, userStoryID, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `delete-sprint`, {projectID, sprintID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `delete-sprint`, {projectID, sprintID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `delete-userstory`, {projectID, userStoryID}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const deleteUserStoryRequest = async (projectID, userStoryID, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async deleteTaskRequest(projectID, taskID, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `delete-userstory`, {projectID, userStoryID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `delete-userstory`, {projectID, userStoryID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `delete-task`, {projectID, taskID}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const deleteTaskRequest = async (projectID, taskID, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async deleteProjectRequest(projectID, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `delete-task`, {projectID, taskID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `delete-task`, {projectID, taskID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `delete-project`, {projectID}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   },
+export const deleteProjectRequest = async (projectID, token) => {
+  let headers = { "Authorization": `${token}` };
 
-//   async leaveProjectRequest(projectID, token) {
-//     let headers = { "Authorization": `${token}` };
+  if(TESTING) {
+    return tests.test('POST', `delete-project`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `delete-project`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
 
-//     return restAPI.send('POST', `leave-project`, {projectID}, headers)
-//     .then(function(response) { return response })
-//     .catch(function(error) { throw error })
-//   }
+export const leaveProjectRequest = async (projectID, token) => {
+  let headers = { "Authorization": `${token}` };
+
+  if(TESTING) {
+    return tests.test('POST', `leave-project`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('POST', `leave-project`, {projectID}, headers)
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}

@@ -16,9 +16,5 @@ export function runTests(args) {
     }
   });
 
-
-
-
-  
   program.parse(process.argv);
 }

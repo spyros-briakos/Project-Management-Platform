@@ -17,13 +17,8 @@
     "cli",
     "control-center"
   ],
-<<<<<<< HEAD
-  "author": "",
-  "license": "ISC",
-=======
   "author": "Dionysis",
   "license": "MIT",
->>>>>>> 4e76f12aeee37dde6f0413dd7ab6595a323708c7
   "dependencies": {
     "@the-ver-best-scrum-team/rest-api-client": "file:../../rest-api-client",
     "axios": "^0.21.1",
