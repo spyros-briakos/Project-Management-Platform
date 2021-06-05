@@ -1,4 +1,4 @@
-import { client } from "@the-ver-best-scrum-team/rest-api-client";
+// import { client } from "@the-ver-best-scrum-team/rest-api-client";
 
 export default {
 	isLoading: state => state.isLoading,
@@ -8,11 +8,12 @@ export default {
 	archivedBoards: state => state.boards.filter(b => b.archived),
 	archivedLists: state => (state.activeBoard ? state.activeBoard.lists.filter(l => l.archived) : []),
 	unarchivedLists: state => (state.activeBoard ? state.activeBoard.lists.filter(l => !l.archived) : []),
-	token: state => (state.token),
-	firstName: state => (state.client.user.firstName),
-	lastName: state => (state.client.user.lastName),
-	userName: state => (state.client.user.username),
-	email: state => (state.client.user.email),
-	image: state => (state.client.user.image),
-	plan_in_use: state => (state.client.user.plan_in_use),
+	token: state => (state.token ? state.token : null),
+	client: state => (state.client ? state.client : null),
+	firstName: state => (state.client ? state.client.user.firstName : null),
+	lastName: state => (state.client ? state.client.user.lastName : null),
+	userName: state => (state.client ? state.client.user.userName : null),
+	email: state => (state.client ? state.client.user.email : null),
+	image: state => (state.client ? state.client.user.image : null),
+	plan_in_use: state => (state.client ? state.client.user.plan_in_use : null),
 }

@@ -24,6 +24,10 @@ export default {
 		localStorage.removeItem("token");
 	},
 
+	DELETE_CLIENT(state, payload) {
+		localStorage.removeItem("client");
+	},
+
 	// Set Initial Data
 	SET_INITIAL_DATA(state, payload) {
 		state.boards = payload

@@ -13,9 +13,7 @@ var log = function(msg){
 	if (1)
 		console.log(msg);
 }
-// mapGetters({
-// 	getClient: "getClient",
-// })
+
 
 export default {
 
@@ -54,6 +52,7 @@ export default {
 		.then( response => {
 			log(response);
 			commit("DELETE_TOKEN")
+			commit("DELETE_CLIENT")
 		})
 		.catch( error => { 
 			log(error);
