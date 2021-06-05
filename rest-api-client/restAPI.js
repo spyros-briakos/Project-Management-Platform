@@ -3,6 +3,8 @@ const http = require('http');
 const axios = require('axios');
 // require('dotenv').config();
 
+const requests = require('./requests');
+
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
 const apiUrl = 'http://127.0.0.1:3000/api-control';
 const agent = new http.Agent({
@@ -35,38 +37,22 @@ function initClient() {
   }
 }
 
-// function initProject() {
-//   return {
-//     _id: null,
-//     name: null,
-//     description: null,
-//     productOwner: null,
-//     scrumMaster: null,
-//     sprints: [],
-//     userStories: [],
-//     members: [],
-//     status: null,
-//     plan_in_use: null,
-//     startingDate: null,
-//     endingDate: null
-//   }
-// }
-
-// Initialize client object
-
 export var client = initClient();
 
 export const actions = {
   // Set client object
   setClient(data) {
     if(data.user)
-      client.user = data.user;
+      // client.user = data.user;
+      client.user = JSON.parse(JSON.stringify(data.user));
 
     if(data.token)
-      client.tokenObject = data.token;
+      // client.tokenObject = data.token;
+      client.tokenObject = JSON.parse(JSON.stringify(data.token));
 
     if(data.project)
-      client.project = data.project;
+      // client.project = data.project;
+      client.project = JSON.parse(JSON.stringify(data.project));
   },
 
   // Get a project's id
@@ -152,7 +138,7 @@ export const actions = {
       // Set client object
       actions.setClient(response);
     })
-    .catch(function(error) { client = initClient(); throw error })  
+    .catch(function(error) { client = initClient(); console.log(error); throw error })  
   },
 
   // Get specific user
@@ -530,332 +516,23 @@ export const actions = {
   }
 }
 
-const requests = {
-
-  // USER -----------------------------------------------
-
-  async loginRequest(username, password) {
-    let data = {
-      username: username,
-      password: password
-    }
-
-    return requests.send('POST', 'users/login', data)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async logoutRequest(token) {
-    let headers = { "Authorization": `${token}` };
-  
-    return requests.send('GET', 'secure-routes/logout', {}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async signupRequest(data) {
-    return requests.send('POST', 'users/signup', data)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async getUserRequest(token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('GET', 'secure-routes/user', {}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async updateUserRequest(data, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('PATCH', 'secure-routes/edit-user', data, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async resetPasswordRequest(data, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('PATCH', 'secure-routes/reset-password', data, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async forgotPasswordRequest(email) {
-    let data = { email: email };
-
-    return requests.send('PATCH', 'users/forgot-password', data)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async getPremiumRequest(plan, token) {
-    let data = { plan_in_use: plan };
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('PATCH', 'secure-routes/upgrade-plan', data, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-  
-  async deleteUserRequest(token) {
-    let headers = { "Authorization": `${token}` };
-  
-    return requests.send('DELETE', 'secure-routes/delete-user', {}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async getInvitationsRequest(token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('GET', 'secure-routes/invitations', {}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async signupGoogleRequest() {
-    return requests.send('GET', 'users/signup-google', {})
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async loginGoogleRequest() {
-    return requests.send('GET', 'users/login-google', {})
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  // PROJECT -----------------------------------------------
-
-  async getProjectsRequest(token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `get-projects`, {}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async inviteUserRequest(projectId, data, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `secure-routes/project-invite/${projectId}`, data, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async answerInvitationRequest(answer, invitationCode) {
-    return requests.send('GET', `users/answer-invitation/${invitationCode}?answer=${answer}`, {})
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async getProjectRequest(projectID, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `get-details`, {projectID}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async addProjectRequest(project, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', 'add-project', {project}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async editProjectRequest(projectID, project, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `edit-project`, {projectID, project}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async getSprintsRequest(projectID, token) {
-    let headers = { "Authorization": `${token}` };
-    let data = { projectID: projectID };
-
-    return requests.send('POST', `get-sprints`, data, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async getUserStoriesRequest(projectID, token) {
-    let headers = { "Authorization": `${token}` };
-    let data = { projectID: projectID };
-
-    return requests.send('POST', `get-userstories`, data, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async addSprintRequest(projectID, sprint, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `add-sprint`, {projectID, sprint}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async addUserStoryRequest(projectID, userStory, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `add-userstory`, {projectID, userStory}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async addTaskRequest(projectID, task, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `add-task`, {projectID, task}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async editSprintRequest(projectID, sprint, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `edit-sprint`, {projectID, sprint}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async editUserStoryRequest(projectID, userStory, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `edit-userstory`, {projectID, userStory}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async editTaskRequest(projectID, task, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `edit-task`, {projectID, task}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async joinTaskRequest(projectID, taskID, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `join-task`, {projectID, taskID}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async leaveTaskRequest(projectID, taskID, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `leave-task`, {projectID, taskID}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async connectTasksRequest(projectID, connection, token) {
-    let headers = { "Authorization": `${token}` };
-    if (!connection.task1ID || !connection.task2ID || !connection.conn) throw 'Invalid connection'
-
-    return requests.send('POST', `connect-task-task`, {projectID, ...connection}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async disconnectTasksRequest(projectID, connection, token) {
-    let headers = { "Authorization": `${token}` };
-    if (!connection.task1ID || !connection.task2ID || !connection.conn) throw 'Invalid connection'
-
-    return requests.send('POST', `disconnect-task-task`, {projectID, ...connection}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async connectSprintRequest(projectID, connection, token) {
-    let headers = { "Authorization": `${token}` };
-    if (!connection.taskID || !connection.sprintID) throw 'Invalid connection'
-
-    return requests.send('POST', `connect-task-sprint`, {projectID, ...connection}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async disconnectSprintRequest(projectID, connection, token) {
-    let headers = { "Authorization": `${token}` };
-    if (!connection.taskID) throw 'Invalid connection'
-
-    return requests.send('POST', `disconnect-task-sprint`, {projectID, ...connection}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async deleteSprintRequest(projectID, sprintID, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `delete-sprint`, {projectID, sprintID}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async deleteUserStoryRequest(projectID, userStoryID, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `delete-userstory`, {projectID, userStoryID}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async deleteTaskRequest(projectID, taskID, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `delete-task`, {projectID, taskID}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async deleteProjectRequest(projectID, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `delete-project`, {projectID}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  async leaveProjectRequest(projectID, token) {
-    let headers = { "Authorization": `${token}` };
-
-    return requests.send('POST', `leave-project`, {projectID}, headers)
-    .then(function(response) { return response })
-    .catch(function(error) { throw error })
-  },
-
-  // --------------------------------------------------------------
-
-  // Send request
-  async send(method, url, data, headers) {
-    switch(method) {
-      case('POST'):
-        return axios.post(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
-        .then(function(response) { return response.data })
-        .catch(function(error) { throw error })
-      case('GET'):
-        return axios.get(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
-        .then(function(response) { return response.data })
-        .catch(function(error) { throw error })
-      case('PATCH'):
-        return axios.patch(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
-        .then(function(response) { return response.data })
-        .catch(function(error) { throw error })
-      case('DELETE'):
-        return axios.delete(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
-        .then(function(response) { return response.data })
-        .catch(function(error) { throw error })
-    }
-
+export const send = async (method, url, data, headers) => {
+  switch(method) {
+    case('POST'):
+      return axios.post(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
+      .then(function(response) { return response.data })
+      .catch(function(error) { throw error })
+    case('GET'):
+      return axios.get(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
+      .then(function(response) { return response.data })
+      .catch(function(error) { throw error })
+    case('PATCH'):
+      return axios.patch(`${apiUrl}/${url}`, data, { headers: headers }, { httpsAgent: agent })
+      .then(function(response) { return response.data })
+      .catch(function(error) { throw error })
+    case('DELETE'):
+      return axios.delete(`${apiUrl}/${url}`, { headers: headers }, { httpsAgent: agent })
+      .then(function(response) { return response.data })
+      .catch(function(error) { throw error })
   }
 }

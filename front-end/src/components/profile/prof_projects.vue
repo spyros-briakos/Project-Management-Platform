@@ -101,7 +101,7 @@
     name: "profProjects",
     data(){
         return{
-            welcome_mssg: "Όλα σου τα Projects:",
+            welcome_mssg: "Όλα μου τα Projects:",
             btn_mssg: "Δημιουργία Project",
             create_prj: 0,
             invites_mouse_over: '',
