@@ -4,7 +4,6 @@ import Home from "../components/Home.vue";
 import Prices from "../components/pricing/Prices.vue";
 import Projects from "../components/Project/Projects.vue";
 import Roadmap from "../components/Project/Roadmap.vue";
-import Comments from "../components/Project/Comments.vue";
 import History from "../components/Project/History.vue";
 import Settings from "../components/Project/Settings.vue";
 import Kanban from "../components/Project/Kanban.vue";
@@ -70,11 +69,6 @@ const routes = [
         path: "chart",
         name: "Chart",
         component: Chart,
-      },
-      {
-        path: "comments",
-        name: "Comments",
-        component: Comments,
       },
       {
         path: "history",
