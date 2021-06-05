@@ -1,8 +1,6 @@
 const requests = require('../../requests');
 const restAPI = require('../../restAPI');
 
-const util = require('util');
-
 const sample = {
   user: {
     _id: '000000000000000000000',
@@ -22,7 +20,6 @@ const sample = {
 export const runTests = async () => {
 
   // Requests will be made for testing
-  // requests.TESTING = true;
   requests.setTesting(true);
   
   // Sign up sample user
@@ -446,7 +443,6 @@ export const test = async (method, url, data, headers) => {
     // Check method
     if(method !== 'POST') {
       throw { message: 'Προέκυψε σφάλμα.' };
-    console.log(method);
     }
     // Check passed data
     if(!data || !data.username || !data.password || !data.email || !data.firstName || !data.lastName

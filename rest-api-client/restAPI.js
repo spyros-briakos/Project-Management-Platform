@@ -109,16 +109,16 @@ export const actions = {
     .catch(function(error) { client = initClient(); throw error })
   },
 
-    // Log out user
-    async logout(token) {
-      return requests.logoutRequest(token)
-      .then(function(response) {
-        // Empty client object
-        client = initClient();
-        return response.message;
-      })
-      .catch(function(error) { client = initClient(); throw error })
-    },
+    // // Log out user
+    // async logout(token) {
+    //   return requests.logoutRequest(token)
+    //   .then(function(response) {
+    //     // Empty client object
+    //     client = initClient();
+    //     return response.message;
+    //   })
+    //   .catch(function(error) { client = initClient(); throw error })
+    // },
 
   // Sign up user
   async signup(data) {
