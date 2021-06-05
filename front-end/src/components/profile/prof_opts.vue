@@ -18,7 +18,7 @@
                         <!-- </button> -->
                     </div>
                     <div class="name">
-                        {{name}}
+                        {{firstName+" "+lastName}}
                     </div>
                     <div class="prof_opts">
                         <button v-for="opt in this.opts" :key="opt.id"
@@ -55,6 +55,8 @@
     import profUpgrade from "./prof_upgrade.vue"
     import profCoWorkers from "./prof_coworkers.vue";
     import profLogout from "./prof_logout.vue";
+    import { mapActions, mapGetters } from "vuex"
+
 
 
     export default {
@@ -88,7 +90,21 @@
         profCoWorkers,
         profLogout,
     },
+    created() {
+        this.getUser()        
+    },
+    computed:{
+        ...mapGetters({
+		    firstName: "firstName",
+		    lastName: "lastName",
+		    userName: "userName",
+		    email: "email",
+		    image: "image",
+	    }),
+
+    },
     methods:{
+        ...mapActions(["getUser"]),
         correct_selected(){
             let cur = this.$route.path;
             if(cur == "/profile" || cur == "/profile/settings")
@@ -172,10 +188,6 @@
                 {tag: 'password', val: '123456789'},
             ]
         }
-    },
-    computed:{
-        
-        
     },
     watch: {
         $route(to) {

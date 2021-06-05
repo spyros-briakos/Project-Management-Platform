@@ -1,10 +1,11 @@
 const https = require('https');
+const http = require('http');
 const axios = require('axios');
 // require('dotenv').config();
 
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
-const apiUrl = 'https://127.0.0.1:3000/api-control';
-const agent = new https.Agent({
+const apiUrl = 'http://127.0.0.1:3000/api-control';
+const agent = new http.Agent({
   rejectUnauthorized: false,
 });
 
@@ -122,6 +123,17 @@ export const actions = {
     .catch(function(error) { client = initClient(); throw error })
   },
 
+    // Log out user
+    async logout(token) {
+      return requests.logoutRequest(token)
+      .then(function(response) {
+        // Empty client object
+        client = initClient();
+        return response.message;
+      })
+      .catch(function(error) { client = initClient(); throw error })
+    },
+
   // Sign up user
   async signup(data) {
     return requests.signupRequest(data)
@@ -136,6 +148,16 @@ export const actions = {
   // Get specific user
   async getUser() {
     return requests.getUserRequest(client.tokenObject.token)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+    })
+    .catch(function(error) { client = initClient(); throw error })  
+  },
+
+  // Get specific user
+  async getUser(token) {
+    return requests.getUserRequest(token)
     .then(function(response) {
       // Set client object
       actions.setClient(response);
