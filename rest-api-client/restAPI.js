@@ -141,15 +141,15 @@ export const actions = {
     .catch(function(error) { client = initClient(); console.log(error); throw error })  
   },
 
-  // Get specific user
-  async getUser(token) {
-    return requests.getUserRequest(token)
-    .then(function(response) {
-      // Set client object
-      actions.setClient(response);
-    })
-    .catch(function(error) { client = initClient(); throw error })  
-  },
+  // // Get specific user
+  // async getUser(token) {
+  //   return requests.getUserRequest(token)
+  //   .then(function(response) {
+  //     // Set client object
+  //     actions.setClient(response);
+  //   })
+  //   .catch(function(error) { client = initClient(); throw error })  
+  // },
 
   // Update user
   async updateUser(data) {
