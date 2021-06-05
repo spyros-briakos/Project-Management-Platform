@@ -32,6 +32,7 @@ export default {
 		return actions.login(username, password) 
 		.then( response => {
 			log(response);
+      console.log(client);
 			commit("STORE_CLIENT", client)
 			commit("STORE_TOKEN", client.tokenObject.token)
       return response;
@@ -98,6 +99,7 @@ export default {
 		return actions.getUser() 
 		.then( response => {
 			console.log(response);
+      console.log(client)
       return response;
 			// commit("STORE_CLIENT", client)
 		})
