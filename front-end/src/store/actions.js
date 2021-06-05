@@ -91,15 +91,16 @@ export default {
 	async getUser({ commit, getters }) {
 		// Get client object
 		var token = getters.token
-		log(token)
+		console.log(token)
+		console.log(client)
 
-		let message = actions.getUser(token) 
+		let message = actions.getUser() 
 		.then( response => {
-			log(response);
+			console.log(response);
 			// commit("STORE_CLIENT", client)
 		})
 		.catch( error => { 
-			log(error);
+			console.log(error);
 			throw error;
 		})
 

@@ -7,8 +7,8 @@ export default {
   isLoading: true,
   activeBoard: null,
   boards: [],
-  // client: JSON.parse(localStorage.getItem('client')),
-  client: client ? client : null,
-  token: token ? token : null,
-  // client: client,
+  client: JSON.parse(localStorage.getItem('client')),
+  // client: client ? client : null,
+  token: JSON.parse(localStorage.getItem('token')),
+  // token: token ? token : null,
 }
