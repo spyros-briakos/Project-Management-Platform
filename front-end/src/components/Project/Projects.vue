@@ -57,11 +57,6 @@ export default {
           icon: "fa fa-chart-bar",
         },
         {
-          href: "/projects/comments",
-          title: "Αναφορές Μελών",
-          icon: "fa fa-comments",
-        },
-        {
           href: "/projects/history",
           title: "Ιστορικό",
           icon: "fa fa-history",

@@ -173,7 +173,7 @@
         uploadImg(data){
             const image = data.target.files[0];
             const reader = new FileReader();
-            
+
             reader.readAsDataURL(image);
             reader.onload = data =>{
                 this.img = data.target.result;
