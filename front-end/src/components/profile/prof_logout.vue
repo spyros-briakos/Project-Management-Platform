@@ -5,30 +5,47 @@
             <div class="logout_personal_info">
                 <img class="logout_prof_pict" :src="require('../../assets/img/' + def + '')">
                 <div class="logout_personal_info_text_wrapper">
-                    <div class="logout_personal_info_text" :style="{'font-weight': 'bold'}">{{username}}</div>
+                    <div class="logout_personal_info_text" :style="{'font-weight': 'bold'}">{{firstName+" "+lastName}}</div>
                     <div class="logout_personal_info_text">{{email}}</div>
                 </div>
             </div>
             <div class="logout_btn_wrap">
-                    <button class="logout_btn" v-on:click="mpou()">Αποσύνδεση</button>
+                    <button class="logout_btn" v-on:click="logout_()">Αποσύνδεση</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import { mapActions, mapGetters } from "vuex"
     export default {
     name: "profLogout",
     data(){
         return{
             def: 'prof_default.svg',
             username: "Vasilis Goulas",
-            email: "VasilisGoulas@dit.uoa.gr",
+            // email: "VasilisGoulas@dit.uoa.gr",
         }
     },
+    computed:{
+        ...mapGetters({
+		    firstName: "firstName",
+		    lastName: "lastName",
+		    userName: "userName",
+		    email: "email",
+		    image: "image",
+	    }),
+    },
     methods:{
-        mpou(){
-            alert("on-click");
+        ...mapActions(["logout"]),
+        logout_(){
+            this.logout() 
+            .then( response => {
+                this.$router.push({name:"SignIn"})
+            })
+            .catch( error => { 
+                alert(error)
+            }) 
         },
     },
 };

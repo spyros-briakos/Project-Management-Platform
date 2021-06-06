@@ -9,6 +9,7 @@
     position: static;
     height: 91.5vh;
     justify-content: space-around;
+    font-size: 110%;
     background-color: rgba(230, 230, 230, 0.815);
     padding: 10px 0 10px 0;
 }
@@ -128,7 +129,7 @@
 .prof_display{
     display: flex;
     padding: 30px 20px 30px 20px;
-    font-size: 17px;
+    font-size: 21px;
     width: calc(100% - calc(1.5 * var(--pict_size)px));
     max-width: 75%;
     padding: 20px 20px 10px 10px;

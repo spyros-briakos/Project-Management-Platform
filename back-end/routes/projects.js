@@ -193,7 +193,7 @@ router.post("/add-task", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
     }
     // Check if user is authorized for that action
-    if (!project.members.includes(user._id)) {
+    if (!project.members.includes(user._id) && !user._id.equals(project.productOwner)) {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 

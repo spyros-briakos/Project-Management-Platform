@@ -36,11 +36,12 @@ import Gantt from "highcharts/modules/gantt";
 
 import "./assets/app.scss"; 
 import "./plugins";
-import store from "./modules/store";
+// import store_ from "./modules/store_";
+import store from "./store";
 // import { client, actions } from './modules/restAPI'
 // import restAPI from '@the-ver-best-scrum-team/rest-api-client/restAPI'
-Vue.prototype.$client = store._client
-Vue.prototype.$actions = store._actions
+// Vue.prototype.$client = store_._client
+// Vue.prototype.$actions = store_._actions
 
 Vue.use(VeeValidate);
 
@@ -53,11 +54,11 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false;
 
-Vue.use(store)
 
 new Vue({
   router,
   vuetify,
+  store,
   render: (h) => h(App),
 }).$mount("#app");
 

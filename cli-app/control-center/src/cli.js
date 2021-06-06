@@ -81,7 +81,7 @@ export function cli(args) {
 			status: command.status
  	  }
 
-		const message = await restAPI.actions.addProject(project);
+	  const message = await restAPI.actions.addProject(project);
 
 	  fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 			if(err) return console.log('Writing data failed:', err);
@@ -1098,7 +1098,6 @@ export function cli(args) {
 		try {
 			const client = restAPI.client;
 			let message = await restAPI.actions.login(command.username, command.password);
-	
 			fs.writeFile('/tmp/user.json', JSON.stringify(client.user), function(err) {
 			if(err) return console.log('Writing user failed:', err);
 			});

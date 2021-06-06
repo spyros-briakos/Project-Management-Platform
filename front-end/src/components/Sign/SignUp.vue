@@ -33,7 +33,7 @@
     <img id="image2" src="../../assets/img/scrum4.png">
 
     <div class="inner-block">
-      <form v-on:submit.prevent="signUp()">
+      <form v-on:submit.prevent="signup_()">
         <h3>Δημιούργησε τον λογαριασμό σου!</h3>
 
         <div class="form-group">
@@ -114,6 +114,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex"
 export default {
   name: "SignUp",
   data() {
@@ -131,6 +132,7 @@ export default {
   },
   
   methods: {
+    ...mapActions(["signup"]),
     goToSignIn(){
       this.$router.push({name:"SignIn"})
     },
@@ -150,18 +152,14 @@ export default {
         plan_in_use: "standard"
       }
     },
-    signUp() {
+    signup_() {
       if (this.checkPassword2()) {
-        this.$actions.signup(this.getData()) 
+        this.signup(this.getData()) 
         .then( response => {
-          console.log("USER HAS SIGNED IN!");
           this.badSignUpAllert = false
           this.goodSignUpAllert = true
         })
-      .catch( error => { 
-          console.log(error);
-          console.log(this.getData());
-          console.log("ERROR IN SIGNUP");
+        .catch( error => { 
           this.goodSignUpAllert = false
           this.badSignUpAllert = true
           this.badSignUpAllertMessage = error.response.data.message

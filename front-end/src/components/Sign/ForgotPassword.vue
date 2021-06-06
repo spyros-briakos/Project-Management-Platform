@@ -10,8 +10,8 @@
     >
       <v-row align="center">
         <v-col class="grow">
-          Ο νέος σας κωδικός έχει αποσταλεί στο email σας. 
-          Παρακαλώ μεταβείτε στην σελίδα σύνδεσης για να συνδεθείτε.
+          Για αλλάξετε τον κωδικό σας παρακαλώ μεταβείτε στο email σας. Έπειτα
+          μεταβείτε στην σελίδα σύνδεσης για να συνδεθείτε.
         </v-col>
         <v-col class="shrink">
           <v-btn
@@ -35,7 +35,7 @@
     
 
     <div class="inner-block">
-      <form v-on:submit.prevent="resetPassword()">
+      <form v-on:submit.prevent="forgotPassword_()">
         <h5>Ανάκτησε τον κωδικό σου!</h5>
 
         <div class="form-group">
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex"
 export default {
   data() {
     return {
@@ -67,23 +68,20 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["forgotPassword"]),
     goToSignIn(){
       this.$router.push({name:"SignIn"})
     },
-    resetPassword() {
-      console.log("RESET PASSWOD")
-      this.$actions.forgotPassword(this.email)
+    forgotPassword_() {
+      this.forgotPassword(this.email)
       .then( response => {
-          console.log("EMAIL RESETED");
           this.badAllert = false
           this.goodAllert = true
         })
       .catch( error => { 
-          console.log(error);
-          console.log("ERROR IN EMAIL RESET");
           this.goodAllert = false
           this.badAllert = true
-          this.badAllertMessage = error;
+          this.badAllertMessage = error.response.data.message;
         });
 
     }
