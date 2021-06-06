@@ -260,7 +260,7 @@ Prepared by
 
 
 #### Σχεδιασμός Πλατφόρμας (το <<πώς>> θα υλοποιηθεί)
-![class diagram](https://github.com/spympr/Project-Management-Platform/blob/main/docs/ClassDiagram.jpeg)
+![class diagram](https://github.com/spympr/Project-Management-Platform/blob/main/docs/ClassDiagram.jpg)
 
 
 
