@@ -1,14 +1,25 @@
 const https = require('https');
 const axios = require('axios');
+const fs = require('fs');
 // require('dotenv').config();
 
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
 const apiUrl = 'https://127.0.0.1:3000/api-control';
+// const agent = new https.Agent({
+//   requestCert: true,
+//   rejectUnauthorized: false,
+//   cert: fs.readFileSync('../../back-end/server.cert'),
+//   key: fs.readFileSync("../../back-end/server.key"),
+//   // passphrase: "YYY"
+// });
 const agent = new https.Agent({
-  rejectUnauthorized: false,
-});
+  rejectUnauthorized: false, // (NOTE: this will disable client verification)
+})
+// ?O THEOS EVALE TO XERI TOY?
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-// console.log(apiUrl);
+axios.defaults.options = agent
+console.log(process.env.NODE_ENV, `RejectUnauthorized is disabled.`)
 
 // Create empty client object
 function initClient() {
