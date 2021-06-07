@@ -1,17 +1,28 @@
 const https = require('https');
 const http = require('http');
 const axios = require('axios');
+const fs = require('fs');
 // require('dotenv').config();
 
 const requests = require('./requests');
 
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
-const apiUrl = 'http://127.0.0.1:3000/api-control';
-const agent = new http.Agent({
-  rejectUnauthorized: false,
-});
+const apiUrl = 'https://127.0.0.1:3000/api-control';
+// const agent = new https.Agent({
+//   requestCert: true,
+//   rejectUnauthorized: false,
+//   cert: fs.readFileSync('../../back-end/server.cert'),
+//   key: fs.readFileSync("../../back-end/server.key"),
+//   // passphrase: "YYY"
+// });
+const agent = new https.Agent({
+  rejectUnauthorized: false, // (NOTE: this will disable client verification)
+})
+// ?O THEOS EVALE TO XERI TOY?
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-// console.log(apiUrl);
+axios.defaults.options = agent
+console.log(process.env.NODE_ENV, `RejectUnauthorized is disabled.`)
 
 // Create empty client object
 function initClient() {
@@ -109,16 +120,16 @@ export const actions = {
     .catch(function(error) { client = initClient(); throw error })
   },
 
-    // Log out user
-    async logout(token) {
-      return requests.logoutRequest(token)
-      .then(function(response) {
-        // Empty client object
-        client = initClient();
-        return response.message;
-      })
-      .catch(function(error) { client = initClient(); throw error })
-    },
+    // // Log out user
+    // async logout(token) {
+    //   return requests.logoutRequest(token)
+    //   .then(function(response) {
+    //     // Empty client object
+    //     client = initClient();
+    //     return response.message;
+    //   })
+    //   .catch(function(error) { client = initClient(); throw error })
+    // },
 
   // Sign up user
   async signup(data) {
@@ -141,15 +152,15 @@ export const actions = {
     .catch(function(error) { client = initClient(); console.log(error); throw error })  
   },
 
-  // Get specific user
-  async getUser(token) {
-    return requests.getUserRequest(token)
-    .then(function(response) {
-      // Set client object
-      actions.setClient(response);
-    })
-    .catch(function(error) { client = initClient(); throw error })  
-  },
+  // // Get specific user
+  // async getUser(token) {
+  //   return requests.getUserRequest(token)
+  //   .then(function(response) {
+  //     // Set client object
+  //     actions.setClient(response);
+  //   })
+  //   .catch(function(error) { client = initClient(); throw error })  
+  // },
 
   // Update user
   async updateUser(data) {

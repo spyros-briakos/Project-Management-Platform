@@ -29,11 +29,13 @@ export default {
 	async login({ commit }, payload) {
 		let username = payload.username 
 		let password = payload.password 
-		let message = actions.login(username, password) 
+		return actions.login(username, password) 
 		.then( response => {
 			log(response);
+      console.log(client);
 			commit("STORE_CLIENT", client)
 			commit("STORE_TOKEN", client.tokenObject.token)
+      return response;
 		})
 		.catch( error => { 
 			log(error);
@@ -91,19 +93,22 @@ export default {
 	async getUser({ commit, getters }) {
 		// Get client object
 		var token = getters.token
-		log(token)
+		console.log(token)
+		console.log(client)
 
-		let message = actions.getUser(token) 
+		return actions.getUser() 
 		.then( response => {
-			log(response);
+			console.log(response);
+      console.log(client)
+      return response;
 			// commit("STORE_CLIENT", client)
 		})
 		.catch( error => { 
-			log(error);
+			console.log(error);
 			throw error;
 		})
 
-		return message
+		// return message
 	},
 
 	async saveTaskBoard({ commit }, payload) {
