@@ -48,7 +48,7 @@ export default {
 		var token = getters.token
 		log(token)
 
-		var message = actions.logout(token) 
+		var message = actions.logout(token)
 		.then( response => {
 			log(response);
 			commit("DELETE_TOKEN")
