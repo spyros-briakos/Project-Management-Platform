@@ -12,16 +12,23 @@ export default {
 	// store client
 	STORE_CLIENT(state, payload) {
 		// state.client = payload
+		// console.log("cleint before store")
+		// console.log(JSON.parse(localStorage.getItem("client")))
 		localStorage.setItem("client", JSON.stringify(payload))
+		// console.log("cleint after store")
+		// console.log(JSON.parse(localStorage.getItem("client")))
+		
 	},
-
+	
 	// store token
 	STORE_TOKEN(state, payload) {
 		localStorage.setItem("token", JSON.stringify(payload))
+		state.tokenn = JSON.stringify(payload)
 	},
 
 	DELETE_TOKEN(state, payload) {
 		localStorage.removeItem("token");
+		state.tokenn = null
 	},
 
 	DELETE_CLIENT(state, payload) {

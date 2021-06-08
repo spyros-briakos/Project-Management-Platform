@@ -31,8 +31,8 @@ export default {
 		let password = payload.password 
 		return actions.login(username, password) 
 		.then( response => {
-			log(response);
-      console.log(client);
+			console.log(response);
+      		console.log(client);
 			commit("STORE_CLIENT", client)
 			commit("STORE_TOKEN", client.tokenObject.token)
       return response;
@@ -41,16 +41,14 @@ export default {
 			log(error);
 			throw error;
 		})
-
-		return message
 	},
 
-	async logout({ commit, getters }, payload) {
+	async logout({ commit }, payload) {
 		// Get client object
-		var token = getters.token
+		var token = JSON.parse(localStorage.getItem('token'))
 		log(token)
 
-		var message = actions.logout(token) 
+		return actions.logout(token) 
 		.then( response => {
 			log(response);
 			commit("DELETE_TOKEN")
@@ -60,12 +58,10 @@ export default {
 			log(error);
 			throw error;
 		})
-
-		return message
 	},
 
 	async signup({ commit }, payload) {
-		var message = actions.signup(payload) 
+		return actions.signup(payload) 
 		.then( response => {
 			log(response)
 			log("USER HAS SIGNED IN!");
@@ -74,11 +70,10 @@ export default {
 			log(error);
 			log("ERROR IN SIGNUP");
 		}) 
-		return message
 	},
 
 	async forgotPassword({ commit }, payload) {
-		var message  = actions.forgotPassword(payload)
+		return actions.forgotPassword(payload)
 		.then( response => {
 			log(response)
 			log("EMAIL RESETED");
@@ -87,28 +82,37 @@ export default {
 			log(error);
 			log("ERROR IN EMAIL RESET");
 			});
-		return message
 	},
 
 	async getUser({ commit, getters }) {
+
 		// Get client object
-		var token = getters.token
+		var token = JSON.parse(localStorage.getItem('token'))
 		console.log(token)
 		console.log(client)
 
-		return actions.getUser() 
+		console.log("stateeeeee")
+		console.log(getters.client)
+		console.log(getters.token)
+		console.log(getters.tokenn)
+		console.log("teolso stateeeeee")
+
+		console.log("bazo client")
+		// client = getters.client
+		console.log(client)
+
+		// actions.setClient(getters.client)
+		return actions.getUser(token) 
 		.then( response => {
 			console.log(response);
-      console.log(client)
-      return response;
-			// commit("STORE_CLIENT", client)
+      		console.log(client)
+			commit("STORE_CLIENT", client)
 		})
 		.catch( error => { 
 			console.log(error);
 			throw error;
 		})
 
-		// return message
 	},
 
 	async saveTaskBoard({ commit }, payload) {
