@@ -142,7 +142,7 @@
                         this.addWrong(['pass_new']);
                     if(!val_new_pass.length)
                         this.addWrong(['pass_new_val']);
-                        
+
                     alert("Συμπληρώστε όλα τα πεδία !!");
                     return false;
                 }
