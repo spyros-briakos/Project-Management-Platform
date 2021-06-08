@@ -55,9 +55,7 @@
     import profUpgrade from "./prof_upgrade.vue"
     import profCoWorkers from "./prof_coworkers.vue";
     import profLogout from "./prof_logout.vue";
-    import { mapActions, mapGetters } from "vuex"
-
-
+    import { mapActions, mapGetters } from "vuex";
 
     export default {
     name: "ProfOpts",
