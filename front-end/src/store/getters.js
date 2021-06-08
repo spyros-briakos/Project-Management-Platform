@@ -19,6 +19,8 @@ export default {
 	// plan_in_use: state => (JSON.parse(localStorage.getItem('client')) ? JSON.parse(localStorage.getItem('client')).user.plan_in_use : null),
 	isLogedIn: state => state.isLogedIn, 
 	token: state => state.token,
+	userName: state => state.userName,
+	name: state => state.firstName+" "+state.lastName,
 	firstName: state => state.firstName,
 	lastName: state => state.lastName,
 	email: state => state.email,

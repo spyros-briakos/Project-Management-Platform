@@ -18,7 +18,7 @@
                         <!-- </button> -->
                     </div>
                     <div class="name">
-                        {{firstName+" "+lastName}}
+                        {{Name}}
                     </div>
                     <div class="prof_opts">
                         <button v-for="opt in this.opts" :key="opt.id"
@@ -95,7 +95,9 @@
     },
     computed:{
         ...mapGetters({
+		    isLogedIn: "isLogedIn",
 		    firstName: "firstName",
+		    Name: "name",
 		    lastName: "lastName",
 		    userName: "userName",
 		    email: "email",

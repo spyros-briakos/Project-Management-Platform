@@ -12,6 +12,7 @@ export default {
 	// client: client_ ? client_ : "xexe",
 	// token: JSON.parse(localStorage.getItem('token')),
 	token: null,
+	userName: null,
 	firstName: null,
 	lastName: null,
 	email: null,

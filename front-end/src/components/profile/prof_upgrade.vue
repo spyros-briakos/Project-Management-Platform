@@ -1,5 +1,22 @@
 <template>
     <div class="profUpgr_wrap">
+        <v-alert
+        prominent
+        type="info"
+        :value="goodAllert"
+        dismissible
+        >
+        {{ this.goodAllertMessage }}
+        </v-alert>
+
+        <v-alert
+        type="error"
+        :value="badAllert"
+        dismissible
+        >
+        {{ this.badAllertMessage }}
+        </v-alert>
+        
         <div class="mytitle">
             {{wlc_mssg}}
         </div>    
@@ -26,7 +43,7 @@
                 {{val.price}} &#8364;
             </button>
 
-            <button class="buy_btn">
+            <button class="buy_btn" @click="getPremium_()">
                 {{'Αγορά'}}
             </button>
 
@@ -35,6 +52,8 @@
 </template>
 
 <script>
+    import { mapActions } from "vuex"
+
     export default {
     name: "profUpgrade",
     data(){
@@ -58,11 +77,26 @@
                 "Διαχείρηση Ομάδας",
             ],
             buttn: { mssg: "Αγορά", link: "#" },
+            goodAllert: false,
+            goodAllertMessage: "",
+            badAllert: false,
+            badAllertMessage: "",
         }
     },
     methods:{
-        mpou(){
-            alert("on-click");
+        ...mapActions(["getPremium"]),
+        getPremium_(){
+            this.getPremium( this.active_plan ? "year" : "month" ) 
+            .then( response => {
+                this.goodAllert = true
+                this.badAllert = false
+                this.goodAllertMessage = response
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = false
+                this.badAllertMessage = "Σφάλμα κατά την αναβάθμιση. Ο λαγαριασμός είναι ήδη premium."
+            }) 
         },
     },
 };

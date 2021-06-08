@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 export default {
     data() {
         return {
@@ -94,6 +94,11 @@ export default {
             badAllertMessage: "",
             badAllert: false,
         };
+    },
+    computed: {
+        ...mapGetters({
+		    isLogedIn: "isLogedIn",
+	    }),
     },
     methods: {
         ...mapActions(["login"]),

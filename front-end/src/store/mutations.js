@@ -11,6 +11,7 @@ export default {
 
 	// store client
 	STORE_CLIENT(state, payload) {
+		Vue.set(state, "userName", payload.username)
 		Vue.set(state, "firstName", payload.firstName)
 		Vue.set(state, "lastName", payload.lastName)
 		Vue.set(state, "email", payload.email)
@@ -28,6 +29,7 @@ export default {
 	},
 
 	DELETE_CLIENT(state, payload) {
+		Vue.set(state, "userName", null)
 		Vue.set(state, "firstName", null)
 		Vue.set(state, "lastName", null)
 		Vue.set(state, "email", null)
