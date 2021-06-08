@@ -8,7 +8,7 @@ import actions from "./actions"
 import VuexPersistence from 'vuex-persist';
 
 const vuexLocal = new VuexPersistence({
-  key: "tokenn",
+  key: "ls",
   storage: window.localStorage,
 });
 

@@ -37,6 +37,7 @@
 <script>
     import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
     import { library } from '@fortawesome/fontawesome-svg-core';
+    import { mapActions, mapGetters } from "vuex"
     library.add(faTrashAlt);
 
     export default {
@@ -74,16 +75,32 @@
                         {id: 1, title: "Προσοχή !", val: "Η Διαγραφή του λογαρισμού σας δεν είναι προσωρινή! Συνεχίστε μόνο αν είστε σιγούροι πως θέλετε να σταματήσετε να χρησιμοποιείτε το Scru Maniac!", hide:false, holder: "Πληκτρολόγησε τον κωδικό σου", button: true},
                     ]
                 }
-            ]
+            ],
+            
         }
+    },
+    computed:{
+        ...mapGetters({
+		    firstName: "firstName",
+		    lastName: "lastName",
+		    userName: "userName",
+		    email: "email",
+		    image: "image",
+	    }),
     },
     props:{
         Info: Array,
         // expects: [ {tag: '', val: ''}, {tag: '', val: ''}, .... ]
     },
     methods:{
+        ...mapActions(["updateUser"]),
         setAttr(target){
-            for(let i of this.Info){
+            var computedPerInfo = [
+                {tag: 'name', val: this.firstName+" "+this.lastName},
+                {tag: 'email', val: this.email},
+                {tag: 'password', val: '123456789'},
+            ]
+            for(let i of computedPerInfo){
                 if(i.tag == target){
                     // alert(i.val);
                     return i.val;

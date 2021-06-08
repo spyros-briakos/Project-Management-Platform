@@ -11,38 +11,42 @@ export default {
 
 	// store client
 	STORE_CLIENT(state, payload) {
-		// state.client = payload
-		// console.log("cleint before store")
-		// console.log(JSON.parse(localStorage.getItem("client")))
-		localStorage.setItem("client", JSON.stringify(payload))
-		// console.log("cleint after store")
-		// console.log(JSON.parse(localStorage.getItem("client")))
-		
+		Vue.set(state, "firstName", payload.firstName)
+		Vue.set(state, "lastName", payload.lastName)
+		Vue.set(state, "email", payload.email)
+		Vue.set(state, "image", payload.image)
+		Vue.set(state, "plan_in_use", payload.plan_in_use)
 	},
 	
 	// store token
 	STORE_TOKEN(state, payload) {
-		localStorage.setItem("token", JSON.stringify(payload))
-		state.tokenn = JSON.stringify(payload)
+		Vue.set(state, "token", payload)
 	},
 
 	DELETE_TOKEN(state, payload) {
-		localStorage.removeItem("token");
-		state.tokenn = null
+		Vue.set(state, "token", null)
 	},
 
 	DELETE_CLIENT(state, payload) {
-		localStorage.removeItem("client");
+		Vue.set(state, "firstName", null)
+		Vue.set(state, "lastName", null)
+		Vue.set(state, "email", null)
+		Vue.set(state, "image", null)
+		Vue.set(state, "plan_in_use", null)
+	},
+
+	SET_LOGEDIN_STATE(state, payload) {
+		Vue.set(state, "isLogedIn", payload)
 	},
 
 	// Set Initial Data
 	SET_INITIAL_DATA(state, payload) {
-		state.boards = payload
+		Vue.set(state, "boards", payload)
 	},
 
 	// Set Loading State
 	SET_LOADING_STATE(state, payload) {
-		state.isLoading = payload
+		Vue.set(state, "isLoading", payload)
 	},
 
 	// Save Task Board

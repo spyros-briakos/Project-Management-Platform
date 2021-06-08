@@ -101,7 +101,6 @@
 		    email: "email",
 		    image: "image",
 	    }),
-
     },
     methods:{
         ...mapActions(["getUser"]),

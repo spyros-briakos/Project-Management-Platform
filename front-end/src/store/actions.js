@@ -18,11 +18,11 @@ var log = function(msg){
 export default {
 
 	async fetchData({ commit }) {
-		commit("SET_LOADING_STATE", true) 
-		return axios.get(INITIAL_DATA_URL).then(res => {
-		commit("SET_INITIAL_DATA", res.data)
-		commit("SET_LOADING_STATE", false)
-		})
+		// commit("SET_LOADING_STATE", true) 
+		// return axios.get(INITIAL_DATA_URL).then(res => {
+		// commit("SET_INITIAL_DATA", res.data)
+		// commit("SET_LOADING_STATE", false)
+		// })
 	},
 
 
@@ -33,9 +33,9 @@ export default {
 		.then( response => {
 			console.log(response);
       		console.log(client);
-			commit("STORE_CLIENT", client)
+			commit("STORE_CLIENT", client.user)
 			commit("STORE_TOKEN", client.tokenObject.token)
-      return response;
+			commit("SET_LOGEDIN_STATE", true)
 		})
 		.catch( error => { 
 			log(error);
@@ -43,9 +43,9 @@ export default {
 		})
 	},
 
-	async logout({ commit }, payload) {
+	async logout({ commit, getters }, payload) {
 		// Get client object
-		var token = JSON.parse(localStorage.getItem('token'))
+		var token = getters.token
 		log(token)
 
 		return actions.logout(token) 
@@ -53,6 +53,7 @@ export default {
 			log(response);
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("SET_LOGEDIN_STATE", false)
 		})
 		.catch( error => { 
 			log(error);
@@ -87,14 +88,13 @@ export default {
 	async getUser({ commit, getters }) {
 
 		// Get client object
-		var token = JSON.parse(localStorage.getItem('token'))
+		var token = getters.token
 		console.log(token)
 		console.log(client)
 
 		console.log("stateeeeee")
 		console.log(getters.client)
 		console.log(getters.token)
-		console.log(getters.tokenn)
 		console.log("teolso stateeeeee")
 
 		console.log("bazo client")
@@ -106,7 +106,24 @@ export default {
 		.then( response => {
 			console.log(response);
       		console.log(client)
-			commit("STORE_CLIENT", client)
+			commit("STORE_CLIENT", client.user)
+		})
+		.catch( error => { 
+			console.log(error);
+			throw error;
+		})
+
+	},
+
+	async updateUser({ commit, getters }, data) {
+
+		// Get token
+		var token = getters.token
+		return actions.getUser(data, token) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_CLIENT", client.user)
 		})
 		.catch( error => { 
 			console.log(error);
