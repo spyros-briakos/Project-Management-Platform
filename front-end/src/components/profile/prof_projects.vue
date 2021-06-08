@@ -14,7 +14,7 @@
                 :style="{'opacity': create_prj==1 ? '0.6' : ''}"/>
             {{welcome_mssg}}
         </div>
-        <button class="create_btn" v-on:click="create_prj=1">{{btn_mssg}}</button>
+        <button class="create_btn" v-on:click="create_prj=1,selected_prj=-1">{{btn_mssg}}</button>
 
         <ul class="projects_ul">
 
