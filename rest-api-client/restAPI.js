@@ -7,7 +7,7 @@ const fs = require('fs');
 const requests = require('./requests');
 
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
-const apiUrl = 'http://127.0.0.1:3000/api-control';
+const apiUrl = 'https://127.0.0.1:3000/api-control';
 // const agent = new https.Agent({
 //   requestCert: true,
 //   rejectUnauthorized: false,
@@ -15,7 +15,7 @@ const apiUrl = 'http://127.0.0.1:3000/api-control';
 //   key: fs.readFileSync("../../back-end/server.key"),
 //   // passphrase: "YYY"
 // });
-const agent = new http.Agent({
+const agent = new https.Agent({
   rejectUnauthorized: false, // (NOTE: this will disable client verification)
 })
 // ?O THEOS EVALE TO XERI TOY?
@@ -176,20 +176,6 @@ export const actions = {
     .catch(function(error) { client = initClient(); throw error })    
   },
 
-  // // Update user
-  // async updateUser(data, token) {
-  //   return requests.updateUserRequest(data, token)
-  //   .then(function(response) {
-  //     // Set client object
-  //     actions.setClient(response);
-  //     return {
-  //       message: response.message,
-  //       email: response.email
-  //     }
-  //   })
-  //   .catch(function(error) { client = initClient(); throw error })    
-  // },
-
   // Reset user's password
   async resetPassword(data) {
     return requests.resetPasswordRequest(data, client.tokenObject.token)
@@ -200,17 +186,6 @@ export const actions = {
     })
     .catch(function(error) { client = initClient(); throw error })    
   },
-
-  // // Reset user's password
-  // async resetPassword(data, token) {
-  //   return requests.resetPasswordRequest(data, token)
-  //   .then(function(response) {
-  //     // Set client object
-  //     actions.setClient(response);
-  //     return response.message;
-  //   })
-  //   .catch(function(error) { client = initClient(); throw error })    
-  // },
 
   // Send email to the user to create new password
   async forgotPassword(email) {
@@ -232,17 +207,6 @@ export const actions = {
     .catch(function(error) { client = initClient(); throw error })    
   },
 
-  // // Update user's plan to premium
-  // async getPremium(plan, token) {
-  //   return requests.getPremiumRequest(plan, token)
-  //   .then(function(response) {
-  //     // Set client object
-  //     actions.setClient(response);
-  //     return response.message;
-  //   })
-  //   .catch(function(error) { client = initClient(); throw error })    
-  // },
-
   // Delete user
   async deleteUser() {
     return requests.deleteUserRequest(client.tokenObject.token)
@@ -253,16 +217,6 @@ export const actions = {
     })
     .catch(function(error) { client = initClient(); throw error })
   },
-
-  // async deleteUser(token) {
-  //   return requests.deleteUserRequest(token)
-  //   .then(function(response) {
-  //     // Empty client object
-  //     client = initClient();
-  //     return response.message;
-  //   })
-  //   .catch(function(error) { client = initClient(); throw error })
-  // },
 
   // Get user's invitations to projects
   async getInvitations() {
