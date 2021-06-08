@@ -19,7 +19,9 @@
         <ul class="projects_ul">
 
             <li v-for="invite in invites" :key="invite.title" :class="{ 'selectedProject' : selected_prj == invite.title}"
-                :style="{'opacity': 1}">
+                :style="{'opacity': 1}"
+                @mouseover="mouse_on(invite.title)"
+                @mouseleave="invites_mouse_over=''">
 
                 <div :class="{'projectTitle': true, 'selectedProject' : selected_prj == invite.title}">
                     <font-awesome-icon class="icon" :icon="!invite.icon ? invite.icon=icon_roulete() : invite.icon"
