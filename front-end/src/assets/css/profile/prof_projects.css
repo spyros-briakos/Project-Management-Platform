@@ -13,7 +13,7 @@
     width: 100%;
     background-color: whitesmoke;
     padding: 20px 5px 5px 10px;
-    font-size: 25px;
+    font-size: 26px;
     color: #79b38c;
     border-radius: 20px;
     border-bottom-right-radius: 0;
@@ -62,11 +62,12 @@
     flex-flow: row;
     flex-wrap: wrap;
     width: 100%;
-    height: 90%;
+    height: 80%;
     justify-content: flex-start;
     align-content: flex-start;
     overflow-y: scroll;
     padding-top: 20px;
+    margin-bottom: 20px;
 }
 
 .projects_ul button{
@@ -85,15 +86,15 @@
     position: static;
     flex-wrap: wrap;
     padding: 0 0 0 0;
-    width: 35%;
+    width: 38%;
     margin-left: 5%;
     font-size: 80%;
     align-content: center;
     border-bottom: 1px solid black;
     color: black;
     cursor: pointer;
-    margin-bottom: 40px;
-    height: 5vh;
+    margin-bottom: 3vh;
+    height: 7vh;
     /* border: 2px solid red; */
 }
 
@@ -192,11 +193,9 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    /* padding-left: 3px; */
-    /* border: 2px solid red; */
     font-size: 80%;
-    min-width: 40%;
-    max-width: 50%;
+    min-width: 50%;
+    width:60%;
 }
 
 .projects_ul li .partners_box .vert_div{

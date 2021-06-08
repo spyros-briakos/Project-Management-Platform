@@ -1,6 +1,5 @@
 <template>
-    <div class="wrap_projects">
-        
+    <div class="wrap_projects">   
         <div v-if="create_prj==1" class="overlay"></div>
         <div class="create_prj" v-if="create_prj==1">
             <createProject :coWorkers="coWorkers" :user="user" />
@@ -118,9 +117,7 @@
                 </div>
             </li>            
         </ul>
-    <router-view></router-view>
     </div>
-
 </template>
 
 <script>
