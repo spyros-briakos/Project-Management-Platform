@@ -39,6 +39,7 @@ export default {
 			commit("STORE_TOKEN", client.tokenObject.token)
 			commit("SET_LOGEDIN_STATE", true)
 			commit("SET_LOADING_STATE", false)
+			return response
 		})
 		.catch( error => { 
 			log(error);
@@ -60,6 +61,7 @@ export default {
 			commit("DELETE_CLIENT")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
+			return response
 		})
 		.catch( error => { 
 			log(error);
@@ -75,6 +77,7 @@ export default {
 			log(response)
 			log("USER HAS SIGNED IN!");
 			commit("SET_LOADING_STATE", false)
+			return response
 		})
 		.catch( error => { 
 			log(error);
@@ -91,6 +94,7 @@ export default {
 			log(response)
 			log("EMAIL RESETED");
 			commit("SET_LOADING_STATE", false)
+			return response
 		})
 		.catch( error => { 
 			log(error);
@@ -112,6 +116,7 @@ export default {
       		console.log(client)
 			commit("STORE_CLIENT", client.user)
 			commit("SET_LOADING_STATE", false)
+			return response
 		})
 		.catch( error => { 
 			console.log(error);
@@ -121,7 +126,7 @@ export default {
 
 	},
 
-	async updateUser({ commit, getters }, data) {
+	async updateUserName({ commit, getters }, data) {
 
 		// Get token
 		var token = getters.token
@@ -134,6 +139,32 @@ export default {
       		console.log(client)
 			commit("STORE_CLIENT", client.user)
 			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async updateUserEmail({ commit, getters }, data) {
+
+		// Get token
+		var token = getters.token
+		console.log(data)
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.updateUser(data) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("DELETE_TOKEN")
+			commit("DELETE_CLIENT")
+			commit("SET_LOGEDIN_STATE", false)
+			commit("SET_LOADING_STATE", false)
+			return response
 		})
 		.catch( error => { 
 			console.log(error);
@@ -155,6 +186,7 @@ export default {
       		console.log(client)
 			commit("STORE_CLIENT", client.user)
 			commit("SET_LOADING_STATE", false)
+			return response
 		})
 		.catch( error => { 
 			console.log(error);
@@ -178,6 +210,7 @@ export default {
 			commit("DELETE_CLIENT")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
+			return response
 		})
 		.catch( error => { 
 			console.log(error);
@@ -199,6 +232,51 @@ export default {
       		console.log(client)
 			commit("STORE_CLIENT", client.user)
 			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async addProject({ commit, getters }, data) {
+
+		// Get token
+		var token = getters.token
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.addProject(data) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_PROJECT", client.project)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async getProjects({ commit, getters }, data) {
+
+		// Get token
+		var token = getters.token
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.getProjects(data) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_PROJECTS", client.user.projects)
+			commit("SET_LOADING_STATE", false)
+			return response
 		})
 		.catch( error => { 
 			console.log(error);

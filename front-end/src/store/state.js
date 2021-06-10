@@ -18,4 +18,7 @@ export default {
 	email: null,
 	image: null,
 	plan_in_use: null,
+
+	project: null,
+	projects: [],
 }

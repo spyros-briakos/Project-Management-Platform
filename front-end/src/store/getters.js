@@ -18,6 +18,9 @@ export default {
 	email: state => state.email,
 	image: state => state.image,
 	plan_in_use: state => state.plan_in_use,
+	isPremium: state => (state.plan_in_use === "standard") ? false : true ,
+
+	projects: state => (state.projects === undefined || state.projects.length == 0 ? null : state.projects)
 
 }
 
