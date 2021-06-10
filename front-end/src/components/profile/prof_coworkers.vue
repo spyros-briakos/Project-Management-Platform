@@ -7,14 +7,14 @@
         </div>
 
         <ul class="coworkers_ul">
-            <li v-for="person in coWorkers" :key="person.id"
+            <li v-for="person in coWorkers" :key="person._id"
                 v-on:click="mpou()"
                 :style="{
                     'background-color' : color_roulete(),
                 }">
 
                 <font-awesome-icon class="icon" :icon="['far', 'user']"/>
-                {{person.name}}
+                {{person.username}}
 
             </li>
         </ul>

@@ -1,5 +1,44 @@
 <template>
     <div class="prof_set_wrap">
+        <v-alert
+        prominent
+        type="success"
+        :value="goodAllert"
+        dismissible
+        >
+        {{ this.goodAllertMessage }}
+        </v-alert>
+
+        <v-alert
+        type="error"
+        :value="badAllert"
+        dismissible
+        >
+        {{ this.badAllertMessage }}
+        </v-alert>
+
+        <v-alert
+      prominent
+      type="info"
+      :value="emailChangeAllert"
+    >
+      <v-row align="center">
+            <v-col class="grow">
+                Η αλλαγή του email σας ολοκληρώθηκε με επιτυχία. 
+                Παρακαλώ επιβεβαιώστε το email σας και μεταβείτε στην σελίδα σύνδεσης για να συνδεθείτε.
+            </v-col>
+            <v-col class="shrink">
+                <v-btn
+                color="accent"
+                depressed
+                elevation="2"
+                @click="goToSignIn">
+                    Σύνδεση
+                </v-btn>
+            </v-col>
+        </v-row>
+        </v-alert>
+
         <ul class="settings_list" v-for="elem in this.menu" :key="elem.id"
             :class="{'warnul':elem.id==3}">
             
@@ -48,6 +87,8 @@
             goodAllertMessage: "",
             badAllert: false,
             badAllertMessage: "",
+            emailChangeAllert: false,
+            emailChangeAllertMessage: "",
             text: "",
             form_input: null,
         }
@@ -99,7 +140,10 @@
         // expects: [ {tag: '', val: ''}, {tag: '', val: ''}, .... ]
     },
     methods:{
-        ...mapActions(["updateUser", "resetPassword", "deleteUser"]),
+        ...mapActions(["updateUserName", "updateUserEmail", "resetPassword", "deleteUser"]),
+        goToSignIn(){
+            this.$router.push({name:"SignIn"})
+        },
         setAttr(target){
             var computedPerInfo = [
                 {tag: 'name', val: this.userName},
@@ -160,43 +204,53 @@
             return 1;
         },
         mySub(form, elem){
-            console.log(form)
-            console.log(elem)
-            console.log(document.forms[form])
+            var elements = document.getElementById(form).elements;
             
             // if(!this.myVal(form, elem)){
             //     return false;
             // }
             if(form === "perInfo"){
-                console.log(this.$refs.perInfo.value)
-                console.log(elem.items[0].val)
-                console.log(elem.items[1].val)
+                var userName_, email_;
+                for(let element of elements){
+                    if(element.name == "name")
+                        userName_ = element.value
+                    else if(element.name == "email")
+                        email_ = element.value
+                }
 
                 let data = {
-                    username: elem.items[0].val,
+                    username: userName_,
                     firstName: this.firstName,
                     lastName: this.lastName,
-                    email: elem.items[1].val,
+                    email: email_,
 			    };
-                
-                this.updateUser_(data)
+                // check if update username or email
+                // if email then account needs to logout
+                if (email_ !== this.email)
+                    this.updateUserEmail_(data)
+                else
+                    this.updateUserName_(data)
 
             } else if (form === "pass"){
-                console.log(elem.items[0].val)
-                console.log(elem.items[1].val)
-                console.log(elem.items[2].val)
+                var old_, new_, confirm_;
+                for(let element of elements){
+                    if(element.name == "original_pass")
+                        old_ = element.value;
+                    if(element.name == "pass_new")
+                        new_ = element.value;
+                    else if(element.name == "pass_new_val")
+                        confirm_ = element.value;
+                }
 
                 let data = {
-                    old: elem.items[0].val,
-                    new: elem.items[1].val,
-                    confirm: elem.items[2].val,
+                    old: old_,
+                    new: new_,
+                    confirm: confirm_,
 			    };
 
                 this.resetPassword_(data)
 
             } else if (form === "deleteAcc"){
-                console.log(elem.items[0].val)
-
                 this.deleteUser_()
             }
             // return false
@@ -212,16 +266,33 @@
                 document.getElementById(i).classList.remove('wrong_field');
             }
         },
-        updateUser_(data){
-            this.updateUser( data ) 
+        updateUserName_(data){
+            this.updateUserName( data ) 
             .then( response => {
                 this.goodAllert = true
                 this.badAllert = false
+                this.emailChangeAllert = false
+                this.goodAllertMessage = response.message
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = false
+                this.emailChangeAllert = false
+                this.badAllertMessage = error.response.data.message
+            }) 
+        },
+        updateUserEmail_(data){
+            this.updateUserEmail( data ) 
+            .then( response => {
+                this.goodAllert = false
+                this.badAllert = false
+                this.emailChangeAllert = true
                 this.goodAllertMessage = response
             })
             .catch( error => { 
                 this.badAllert = true
                 this.goodAllert = false
+                this.emailChangeAllert = false
                 this.badAllertMessage = error.response.data.message
             }) 
         },
@@ -230,25 +301,23 @@
             .then( response => {
                 this.goodAllert = true
                 this.badAllert = false
+                this.emailChangeAllert = false
                 this.goodAllertMessage = response
             })
             .catch( error => { 
                 this.badAllert = true
                 this.goodAllert = false
+                this.emailChangeAllert = false
                 this.badAllertMessage = error.response.data.message
             }) 
         },
         deleteUser_(){
             this.deleteUser() 
             .then( response => {
-                this.goodAllert = true
-                this.badAllert = false
                 this.goodAllertMessage = response
                 this.$router.push({name:"SignIn"})
             })
             .catch( error => { 
-                this.badAllert = true
-                this.goodAllert = false
                 this.badAllertMessage = error.response.data.message
             }) 
         },

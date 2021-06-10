@@ -1,20 +1,20 @@
 <template>
     <div class="profUpgr_wrap">
         <v-alert
-        prominent
-        type="info"
-        :value="goodAllert"
-        dismissible
-        >
-        {{ this.goodAllertMessage }}
+            prominent
+            type="success"
+            :value="goodAllert"
+            dismissible
+            >
+            {{ this.goodAllertMessage }}
         </v-alert>
 
         <v-alert
-        type="error"
-        :value="badAllert"
-        dismissible
-        >
-        {{ this.badAllertMessage }}
+            type="error"
+            :value="badAllert"
+            dismissible
+            >
+            {{ this.badAllertMessage }}
         </v-alert>
         
         <div class="mytitle">
@@ -95,7 +95,7 @@
             .catch( error => { 
                 this.badAllert = true
                 this.goodAllert = false
-                this.badAllertMessage = "Σφάλμα κατά την αναβάθμιση. Ο λαγαριασμός είναι ήδη premium."
+                this.badAllertMessage = error.response.data.message
             }) 
         },
     },

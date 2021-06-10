@@ -63,7 +63,7 @@
                 </div>
             </li>
 
-            <li v-for="project in projects" :key="project.id" :class="{ 'selectedProject' : selected_prj == project.id}">
+            <li v-for="project in projects" :key="project._id" :class="{ 'selectedProject' : selected_prj == project._id}">
                 
                 <div :class="{'projectTitle': true}">
                     <font-awesome-icon class="icon" :icon="!project.icon ? project.icon=icon_roulete() : project.icon"
@@ -71,17 +71,17 @@
                             'color' : !project.color ? project.color=color_roulete() : project.color,
                         }"
                     />
-                    {{project.title}}
+                    {{project.name}}
                 </div>
 
                 <font-awesome-icon
-                    :class="{'icon_arrow': true, 'rotate': selected_prj == project.id}"
+                    :class="{'icon_arrow': true, 'rotate': selected_prj == project._id}"
                     :icon="['fas', 'chevron-right']"
-                    @click="selected_prj==project.id ? selected_prj=-1 : selected_prj=project.id;"
+                    @click="selected_prj==project._id ? selected_prj=-1 : selected_prj=project._id;"
                     >
                 </font-awesome-icon>
                 
-                <div :class="{'partners_box': true, 'show_box': selected_prj==project.id}">
+                <div :class="{'partners_box': true, 'show_box': selected_prj==project._id}">
                     
                     <div class="prof_progress">
                         Κατάσταση:&#9;
@@ -89,16 +89,16 @@
                                 :rotate="-45"
                                 :size="50"
                                 :width="4"
-                                :value="project.progress"
+                                :value="project.status"
                                 color="teal"
                         >
-                            {{project.progress }}
+                            {{project.status }}
                         </v-progress-circular>
                     </div>
                     <div class="vert_div"></div>
                     
                     <div class="wrap_partners">
-                        <div class="partner" v-for="partner in project.partners" :key="partner">
+                        <div class="partner" v-for="partner in project.members" :key="partner">
                             <font-awesome-icon class="icon" :icon="['far', 'user']"
                                 :style="{
                                     'background-color' : color_roulete(),
@@ -106,7 +106,7 @@
                             </font-awesome-icon>
 
                             <div class="fullname">
-                                {{partner}}
+                                {{partner.username}}
                             </div>
 
                             <div class="mytxt">
@@ -124,6 +124,7 @@
 
     import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
     import { library } from '@fortawesome/fontawesome-svg-core';
+    import { mapActions, mapGetters } from "vuex"
     library.add(faChevronRight);
 
     import createProject from "../create.vue"
@@ -137,73 +138,14 @@
             create_prj: 0,
             selected_prj: -1,
             invites_mouse_over: '',
-            projects:[
-                {
-                    id: 1,
-                    title: "Deploy PPO, A2C model",
-                    progress: '80%',
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 2,
-                    title: "CNN's Implementation",
-                    progress: '80%',
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 3,
-                    title: "Mini JS Compiler",
-                    progress: '80%',
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 4,
-                    title: "LSH HyperCube Algorithms",
-                    progress: '80%',
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 5,
-                    title: "Variational Autoencoders",
-                    progress: '80%',
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 6,
-                    title: "Redesign Eudoxus Website",
-                    progress: '80%',
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 7,
-                    title: "Best DI Team Implementation",
-                    progress: '80%',
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                }
-            ],
+            
         }
     },
+    created() {
+        this.getProjects()        
+    },
     methods:{
+        ...mapActions(["getProjects"]),
         mpou(){
             alert("on-click");
         },
@@ -228,7 +170,99 @@
         }
     },
     computed:{
+        ...mapGetters({
+		    projectsDatabase: "projects",
+	    }),
 
+        // print old projects for front debugging without database
+        projects: function() { return (this.projectsDatabase === null ? this.projectsTest : this.projectsDatabase ) },
+
+        projectsTest: function() { return [
+                {
+                    _id: 1,
+                    name: "Deploy PPO, A2C model",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 2,
+                    name: "CNN's Implementation",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 3,
+                    name: "Mini JS Compiler",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 4,
+                    name: "LSH HyperCube Algorithms",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 5,
+                    name: "Variational Autoencoders",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 6,
+                    name: "Redesign Eudoxus Website",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 7,
+                    name: "Best DI Team Implementation",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                }
+            ]
+        },
     },
     components:{
         createProject,

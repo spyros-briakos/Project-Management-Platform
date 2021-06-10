@@ -143,15 +143,15 @@
         },
         getCoWorkers(){
             return [
-                {id: 1, name: "Christina Evaggelou"},
-                {id: 2, name: "Giwrgos Raptis"},
-                {id: 3, name: "Melina Papadioti"},
-                {id: 4, name: "Antonis Mourat"},
-                {id: 5, name: "Vasilis Mpimis"},
-                {id: 6, name: "Eleni Masoura"},
-                {id: 7, name: "Rafail Musaj"},
-                {id: 8, name: "Chris Baziotis"},
-                {id: 9, name: "Panos Perdikos"},
+                {_id: 1, username: "Christina Evaggelou"},
+                {_id: 2, username: "Giwrgos Raptis"},
+                {_id: 3, username: "Melina Papadioti"},
+                {_id: 4, username: "Antonis Mourat"},
+                {_id: 5, username: "Vasilis Mpimis"},
+                {_id: 6, username: "Eleni Masoura"},
+                {_id: 7, username: "Rafail Musaj"},
+                {_id: 8, username: "Chris Baziotis"},
+                {_id: 9, username: "Panos Perdikos"},
             ]
         },
         updateSeen(title){
