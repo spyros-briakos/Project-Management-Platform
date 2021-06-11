@@ -9,7 +9,7 @@ export default {
 	archivedLists: state => (state.activeBoard ? state.activeBoard.lists.filter(l => l.archived) : []),
 	unarchivedLists: state => (state.activeBoard ? state.activeBoard.lists.filter(l => !l.archived) : []),
 	
-	isLogedIn: state => state.isLogedIn, 
+	isLogedIn: state => state.isLogedIn,
 	token: state => state.token,
 	userName: state => state.userName,
 	name: state => state.firstName+" "+state.lastName,

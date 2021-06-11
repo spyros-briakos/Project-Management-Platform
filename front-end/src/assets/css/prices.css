@@ -26,7 +26,7 @@
     display: flex;
     flex-direction: column;
     align-content: flex-start;
-    min-width: 20%;
+    width: 30%;
     font-weight: bold;
     background-color: rgba(181, 231, 212, 0.918);
     border-radius: 20px;
@@ -40,8 +40,8 @@
 }
 
 .price{
-    margin-top: 17px;
-    margin-bottom: 7px;
+    /* margin-top: 17px; */
+    /* margin-bottom: 7px; */
     font-size: 180%;
     color: black;
     padding-top: 0;
@@ -95,17 +95,21 @@
     color: black;
     font-size: 120%;
     align-items: center;
-    width: 100%;
+    max-width: 100%;
+    margin: auto 0 auto 0;
+    /* border: 2px solid red; */
+    padding: 0 7px 0 7px;
 }
 
 .my-custom-toggle{
     display: flex;
     background-color: rgba(187, 187, 187, 0.787);
     min-width: 30%;
-    justify-content: space-evenly;
+    /* justify-content: space-evenly; */
     display: flex;
     align-self: center;
     border-radius: 20px;
+    margin: 3px 0 auto 0;
 }
 
 
@@ -143,7 +147,7 @@
 
 .ftr-wrapper{
     display:flex;
-    height: 100%;
+    /* height: 100%; */
     flex-direction: column;
     justify-content: flex-start;
     /* border: 2px solid red; */

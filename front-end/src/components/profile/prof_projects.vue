@@ -98,7 +98,7 @@
                     <div class="vert_div"></div>
                     
                     <div class="wrap_partners">
-                        <div class="partner" v-for="partner in project.members" :key="partner">
+                        <div class="partner" v-for="partner in project.members" :key="project.name+'_'+partner._id">
                             <font-awesome-icon class="icon" :icon="['far', 'user']"
                                 :style="{
                                     'background-color' : color_roulete(),
@@ -183,11 +183,11 @@
                     name: "Deploy PPO, A2C model",
                     status: '80%',
                     members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
                 },
 
                 {
@@ -195,11 +195,11 @@
                     name: "CNN's Implementation",
                     status: '80%',
                     members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
                 },
 
                 {
@@ -207,11 +207,11 @@
                     name: "Mini JS Compiler",
                     status: '80%',
                     members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
                 },
 
                 {
@@ -219,11 +219,11 @@
                     name: "LSH HyperCube Algorithms",
                     status: '80%',
                     members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
                 },
 
                 {
@@ -231,11 +231,11 @@
                     name: "Variational Autoencoders",
                     status: '80%',
                     members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
                 },
 
                 {
@@ -243,11 +243,11 @@
                     name: "Redesign Eudoxus Website",
                     status: '80%',
                     members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
                 },
 
                 {
@@ -255,11 +255,11 @@
                     name: "Best DI Team Implementation",
                     status: '80%',
                     members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0be", username: "Aleksandra"},],
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
                 }
             ]
         },
