@@ -4,7 +4,6 @@
             prominent
             type="success"
             :value="goodAllert"
-            dismissible
             >
             {{ this.goodAllertMessage }}
         </v-alert>
@@ -165,7 +164,7 @@ export default({
         coWorkers: Array,
     },
     methods:{
-        ...mapActions(["addProject"]),
+        ...mapActions(["addProject", "getProject", "inviteUsers", "getProjects"]),
         find(val){
             alert(val);
             this.get_friends.people.push(val);
@@ -215,10 +214,53 @@ export default({
 
             }
 
+
+            this.createProjectAndInvite(project, ["admin2", "admin3"])
+            .then( response => {console.log("PROEJCTE CREATEEEEEEEEE")
+                this.getProjects()})
+            
+
+            
+        },
+        async createProjectAndInvite(project, inviteUsernameList) {
             // create project
-            this.addProject_(project)
+            return this.addProject(project)
+                // load project
+                .then( response => {
+                    this.goodAllertMessage += response + " "
+                    this.getProject(project.name)
+                    // invites
+                    .then( response => {this.inviteUsers(inviteUsernameList)
+                        .then( response => {
+                            console.log(11111111111)
+                            console.log(response)
+                            
+                            this.goodAllert = true
+                            this.badAllert = false
+                            this.goodAllertMessage += response
+                        })
+                        .catch( error => { 
+                            console.log(22222222222)
+                            this.badAllert = true
+                            this.goodAllert = false
+                            this.badAllertMessage = error.response.data.message
+                        })
+                    })
+                    .catch( error => { 
+                        console.log(3333333333)
 
-
+                        this.badAllert = true
+                        this.goodAllert = false
+                        this.badAllertMessage = error.response.data.message
+                    })
+                })
+                .catch( error => { 
+                    console.log(44444444444)
+                
+                    this.badAllert = true
+                    this.goodAllert = false
+                    this.badAllertMessage = error.response.data.message
+                })
         },
         addProject_(project) {
             this.addProject(project)
