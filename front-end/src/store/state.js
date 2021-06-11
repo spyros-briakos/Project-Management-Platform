@@ -21,4 +21,6 @@ export default {
 
 	project: null,
 	projects: [],
+
+	invites: [],
 }
