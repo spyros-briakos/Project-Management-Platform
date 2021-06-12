@@ -41,6 +41,7 @@
       - vuex >= 3.4.0
     - Άλλα dependencies που χρησιμοποιούνται:
       - bootstrap >= 4.6.0
+      - quasar >= 1.15.10
       - @fortawesome/vue-fontawesome >= 2.0.2
 
 
