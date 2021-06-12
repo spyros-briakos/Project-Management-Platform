@@ -61,6 +61,7 @@ export default {
 			commit("DELETE_CLIENT")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
+			commit("DELETE_COWORKERS")
 			commit("DELETE_INVITES")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
@@ -167,6 +168,7 @@ export default {
 			commit("DELETE_CLIENT")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
+			commit("DELETE_COWORKERS")
 			commit("DELETE_INVITES")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
@@ -216,6 +218,7 @@ export default {
 			commit("DELETE_CLIENT")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
+			commit("DELETE_COWORKERS")
 			commit("DELETE_INVITES")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
@@ -307,6 +310,7 @@ export default {
 			console.log(response);
       		console.log(client)
 			commit("STORE_PROJECTS", client.user.projects)
+			commit("STORE_COWORKERS")
 			commit("SET_LOADING_STATE", false)
 			// return response
 		})
@@ -327,7 +331,7 @@ export default {
 		return actions.getInvitations() 
 		.then( response => {
 			console.log(response);
-      		console.log("ka8aros cliebt", client)
+      		console.log(client)
 			commit("STORE_INVITES", client.user.invitations)
 			commit("SET_LOADING_STATE", false)
 			return response
@@ -354,15 +358,12 @@ export default {
 		client.tokenObject.token = token
 		return actions.inviteUser(getters.projectId, data) 
 		.then( response => {
-			console.log("Invites sent")
 			console.log(response);
       		console.log(client)
-			// commit("STORE_PROJECTS", client.user.projects)
 			commit("SET_LOADING_STATE", false)
 			return response
 		})
 		.catch( error => { 
-			console.log("Invites NOOOOT sent")
 			console.log(error);
 			commit("SET_LOADING_STATE", false)
 			throw error;

@@ -66,9 +66,22 @@ export default {
 	STORE_PROJECTS(state, payload) {
 		Vue.set(state, "projects", [...payload])
 	},
+
+	STORE_COWORKERS(state, payload) {
+		var maxCoWorkers = 20
+		var coWorkersSet = new Set(state.coWorkers.map(o => JSON.stringify(o)));
+		state.projects.forEach(project => {
+			project.members.forEach(member => {
+				// exclude yourself
+				if ( String(member.username) !== String(state.userName))
+					coWorkersSet.add(JSON.stringify({_id: member._id, username: member.username}))
+			});
+		});
+		Vue.set(state, "coWorkers", [...Array.from(coWorkersSet).slice(0, maxCoWorkers).map(o => JSON.parse(o))])	
+	},
 	
 	STORE_INVITES(state, payload) {
-		console.log("INVITESSSSSSSSSSSS IS HERE STORED")
+		console.log("INVITES ARE HERE STORED")
 		// add seen
 		payload.forEach(function (element) {
 			element.seen = 0;
@@ -116,6 +129,10 @@ export default {
 
 	DELETE_PROJECTS(state, payload) {
 		Vue.set(state, "projects", [])
+	},
+
+	DELETE_COWORKERS(state, payload) {
+		Vue.set(state, "coWorkers", [])
 	},
 
 	DELETE_INVITES(state, payload) {
