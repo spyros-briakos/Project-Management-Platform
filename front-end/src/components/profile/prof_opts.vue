@@ -76,7 +76,7 @@
                 inv_list: this.getInvites(),
                 seen_invites: '',
             },
-            coWorkers: this.getCoWorkers(),
+            // coWorkers: this.getCoWorkers(),
             perInfo: this.personalInfo(),
         }
     },
@@ -100,6 +100,8 @@
 		    userName: "userName",
 		    email: "email",
 		    image: "image",
+            coWorkers: "coWorkers",
+            invitesSeen: "invitesSeen",
 	    }),
     },
     methods:{
@@ -162,12 +164,13 @@
             }
         },
         existNewInvs(){
-            for(let inv of this.invites.inv_list){
-                if(inv.seen == 0){
-                    return true;
-                }
-            }
-            return false;
+            // for(let inv of this.invites.inv_list){
+            //     if(inv.seen == 0){
+            //         return true;
+            //     }
+            // }
+            // return false;
+            return this.invitesSeen
         },
         uploadImg(data){
             const image = data.target.files[0];

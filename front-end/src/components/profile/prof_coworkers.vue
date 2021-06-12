@@ -25,7 +25,10 @@
 <script>
     import { faThumbtack } from '@fortawesome/free-solid-svg-icons'
     import { library } from '@fortawesome/fontawesome-svg-core';
+    import { mapGetters } from "vuex"
+
     library.add(faThumbtack);
+
     
     export default {
     name: "profCoWorkers",
@@ -35,7 +38,7 @@
         }
     },
     props:{
-        coWorkers: Array,
+        // coWorkers: Array,
     },
     methods:{
         mpou(){
@@ -45,7 +48,12 @@
             let c_arr=["red", "orange", "lightblue", "plum", "green", "purple"];
             return c_arr[Math.floor(Math.random() * c_arr.length)];
         }
-    }
+    },
+    computed:{
+        ...mapGetters({
+		    coWorkers: "coWorkers",
+	    }),  
+    },
 };
 </script>
 
