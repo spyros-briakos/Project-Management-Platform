@@ -1,5 +1,20 @@
 <template>
     <div class="createWiz_wrap">
+        <v-alert
+            prominent
+            type="success"
+            :value="goodAllert"
+            >
+            {{ this.goodAllertMessage }}
+        </v-alert>
+
+        <v-alert
+            type="error"
+            :value="badAllert"
+            dismissible
+            >
+            {{ this.badAllertMessage }}
+        </v-alert>
 
         <div class="wizTitle">
             Δημιουργία{{' '+ name}}
@@ -28,6 +43,7 @@
                 >
 
                 <v-radio v-for="opt in choose.opts" :key="opt.val"
+                    :id="opt.key"
                     :label="opt.disabled ? opt.val + ' || ' + opt.mssg : opt.val"
                     :value="opt.id"
                     :disabled="opt.disabled">
@@ -93,8 +109,8 @@
                     chips
                     :label="get_friends.label"
                     :items="get_friends.people"
-                    item-text="name"
-                    item-value="id"
+                    item-text="username"
+                    item-value="_id"
                     :placeholder="get_friends.placeholder"
                     :hint="get_friends.hint"
                     :search-input.sync="get_friends.search"
@@ -103,7 +119,7 @@
                     >
                 </v-autocomplete>
 
-            <v-btn type="submit" class="create_btn" :disabled="invalid">
+            <v-btn class="create_btn" :disabled="invalid" @click="createProject_()">
                 Δημιουργία
             </v-btn>
 
@@ -113,6 +129,8 @@
 
 
 <script>
+import { mapActions, mapGetters } from "vuex"
+
 export default({
     name: "createProject",
     
@@ -122,6 +140,7 @@ export default({
             invalid: true,
             dates: ['2021-01-01','2022-02-02'],
             menu:false,
+            premiumProject: 0,
             main_rules:[
                 v => !!v || 'Αναγκαίο Πεδίο'
             ],
@@ -130,64 +149,22 @@ export default({
             ],
             name:'Project',
             mssg:'Συμπλήρωσε τα πεδία',
-            input_fields:[
-                {
-                    name:'Τίτλος Project',
-                    key:'name',
-                    placeholder:'myProject',
-                    hint:'Έτσι θα βλέπουν όλοι το Project σου!',
-                    rules:[
-                        v => !!v || 'Αναγκαίο Πεδίο'
-                    ],
-                },
-                {
-                    name:'Περιγραφή',
-                    key:'description',
-                    placeholder:'Το καλύτερο Project!',
-                    hint:'Δώσε μια σύντομη περιγραφή για τους στόχους σου!'
-                },
-                {
-                    name:'Scru-Master',
-                    key:'scruMaster',
-                    value:this.user,
-                    readonly:true,
-                },
-                {
-                    name:'Product Owner',
-                    key:'productOwner',
-                    value:this.user,
-                    readonly: true,
-                },
-            ],
-            choose_fields:[
-                {
-                    name:'Τύπος Project',
-                    opts:[
-                        {id:0, val:'Απλό', hint: 'test'},
-                        {id:1, val:'Προνομιούχο', hint: 'test2', mssg:"Χρειάζεσαι Προνομιούχο Λογαριασμό για αυτήν την επιλογή", disabled:this.isPremium ? false : true}
-                    ],
-                    key:'prj_type',
-                },
-            ],
-            get_friends:{
-                people: this.coWorkers,
-                search: null,
-                label: 'Διάλεξε τους Συνεργάτες σου',
-                placeholder: 'best Teammates',
-                hint: 'Διάλεξε μερικούς απο τους παλιούς συνεργάτες σου ή προσκάλεσε νέους!'
-            }
-
+            goodAllert: false,
+            goodAllertMessage: "",
+            badAllert: false,
+            badAllertMessage: "",
         }
     },
     props:{
         user:String,
-        isPremium:{
-            type:Boolean,
-            default:false,
-        },
-        coWorkers: Array,
+        // isPremium:{
+        //     type:Boolean,
+        //     default:false,
+        // },
+        // coWorkers: Array,
     },
     methods:{
+        ...mapActions(["addProject", "getProject", "inviteUsers", "getProjects"]),
         find(val){
             alert(val);
             this.get_friends.people.push(val);
@@ -203,19 +180,157 @@ export default({
                 }
             }
             this.invalid=false;
-        }
+        },
+        createProject_(){
+            var project = {
+                name: null,
+                description: null,
+                plan: null,
+                status: "inProgress"
+            }
+            var elements = document.getElementById("prj_form").elements;
+            for(let element of elements){
+                if (element.id === "name"){
+                    // console.log(element.value)
+                    project.name = element.value 
+                } else if (element.id === "description"){
+                    // console.log(element.value)
+                    project.description = element.value
+                } else if (element.id === "standardSelector"){
+                    // console.log(element.checked)
+                    project.plan = element.checked ? "standard" : "premium"
+                } else if (element.id === "premiumSelector"){
+                    // console.log(element.checked)
+                    project.plan = element.checked ? "premium" : "standard"
+                } else if (element.id === "prDates"){
+                    // console.log(element.value)
+                } else if (element.id === "getFriends"){
+                    // console.log(element.value)
+                    // console.log(element.id)
+                }
+
+            }
+
+
+            this.createProjectAndInvite(project, ["admin2", "admin3"])
+            .then( response => {console.log("PROEJECT CREATED"); this.getProjects();})
+            
+
+            
+        },
+        async createProjectAndInvite(project, inviteUsernameList) {
+            // create project
+            return this.addProject(project)
+                // load project
+                .then( response => {
+                    this.goodAllertMessage += response + " "
+                    this.getProject(project.name)
+                    // invites
+                    .then( response => {this.inviteUsers(inviteUsernameList)
+                        .then( response => {                            
+                            this.goodAllert = true
+                            this.badAllert = false
+                            this.goodAllertMessage += response
+                        })
+                        .catch( error => { 
+                            this.badAllert = true
+                            this.goodAllert = true
+                            this.badAllertMessage = error.response.data.message
+                        })
+                    })
+                    .catch( error => { 
+                        this.badAllert = true
+                        this.goodAllert = false
+                        this.badAllertMessage = error.response.data.message
+                    })
+                })
+                .catch( error => { 
+                    this.badAllert = true
+                    this.goodAllert = false
+                    this.badAllertMessage = error.response.data.message
+                })
+        },
+        addProject_(project) {
+            this.addProject(project)
+            .then( response => {
+                this.goodAllert = true
+                this.badAllert = false
+                this.goodAllertMessage = response
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = false
+                this.badAllertMessage = error.response.data.message
+            })
+        },
     },
     computed:{
+        ...mapGetters({
+		    isLogedIn: "isLogedIn",
+		    Name: "name",
+		    userName: "userName",
+		    firstName: "firstName",
+		    lastName: "lastName",
+            isPremium: "isPremium",
+            coWorkers: "coWorkers",
+
+	    }),
         getNames(){
-            let names = [];
+            let usernames = [];
             for(let person in this.coWorkers)
-                names.push(person.name);
-            return names;
+                usernames.push(person.username);
+            return usernames;
         },
         datesRange(){
             return this.dates.join(' ~ ');
-        }
-        
+        },
+
+        input_fields(){ return [
+            {
+                name:'Τίτλος Project',
+                key:'name',
+                placeholder:'myProject',
+                hint:'Έτσι θα βλέπουν όλοι το Project σου!',
+                rules:[
+                    v => !!v || 'Αναγκαίο Πεδίο'
+                ],
+            },
+            {
+                name:'Περιγραφή',
+                key:'description',
+                placeholder:'Το καλύτερο Project!',
+                hint:'Δώσε μια σύντομη περιγραφή για τους στόχους σου!'
+            },
+            {
+                name:'Scru-Master',
+                key:'scruMaster',
+                value:this.userName,
+                readonly:true,
+            },
+            {
+                name:'Product Owner',
+                key:'productOwner',
+                value:this.userName,
+                readonly: true,
+            },
+        ]},
+        choose_fields() { return [
+            {
+                name:'Τύπος Project',
+                opts:[
+                    {id:0, key: "standardSelector", val:'Απλό', hint: 'test'},
+                    {id:1, key: "premiumSelector", val:'Προνομιούχο', hint: 'test2', mssg:"Χρειάζεσαι Προνομιούχο Λογαριασμό για αυτήν την επιλογή", disabled:!this.isPremium}
+                ],
+                key:'prj_type',
+            },
+        ]},
+        get_friends() { return {
+                people: this.coWorkers,
+                search: null,
+                label: 'Διάλεξε τους Συνεργάτες σου',
+                placeholder: 'best Teammates',
+                hint: 'Διάλεξε μερικούς απο τους παλιούς συνεργάτες σου ή προσκάλεσε νέους!',
+            }},
     },
     watch:{
         search (val) {

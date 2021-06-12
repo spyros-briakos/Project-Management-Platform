@@ -7,14 +7,14 @@
         </div>
 
         <ul class="coworkers_ul">
-            <li v-for="person in coWorkers" :key="person.id"
+            <li v-for="person in coWorkers" :key="person._id"
                 v-on:click="mpou()"
                 :style="{
                     'background-color' : color_roulete(),
                 }">
 
                 <font-awesome-icon class="icon" :icon="['far', 'user']"/>
-                {{person.name}}
+                {{person.username}}
 
             </li>
         </ul>
@@ -25,7 +25,10 @@
 <script>
     import { faThumbtack } from '@fortawesome/free-solid-svg-icons'
     import { library } from '@fortawesome/fontawesome-svg-core';
+    import { mapGetters } from "vuex"
+
     library.add(faThumbtack);
+
     
     export default {
     name: "profCoWorkers",
@@ -35,7 +38,7 @@
         }
     },
     props:{
-        coWorkers: Array,
+        // coWorkers: Array,
     },
     methods:{
         mpou(){
@@ -45,7 +48,12 @@
             let c_arr=["red", "orange", "lightblue", "plum", "green", "purple"];
             return c_arr[Math.floor(Math.random() * c_arr.length)];
         }
-    }
+    },
+    computed:{
+        ...mapGetters({
+		    coWorkers: "coWorkers",
+	    }),  
+    },
 };
 </script>
 
