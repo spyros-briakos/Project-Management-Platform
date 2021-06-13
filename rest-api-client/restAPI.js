@@ -526,12 +526,21 @@ export const actions = {
   },
 
   getMyTasks() {
-    var myTasks = client.project.userStories.filter(userStory =>
-       { return userStory.tasks.filter(task =>
-         { return task.members.filter(member =>
-            { return member._id === client.user._id })
-         }) 
-       })
+    var myTasks = [];
+
+    // If client is not the product owner of the project
+    if(client.user._id !== client.project.productOwner._id) {
+      myTasks = client.project.userStories.filter(userStory =>
+        { return userStory.tasks.filter(task =>
+           { return task.members.filter(member =>
+              { return member._id === client.user._id })
+           }) 
+        })
+    } else {
+      // If it is the product owner, return all the tasks in the project
+      myTasks = client.project.userStories.filter(userStory =>
+        { return userStory.tasks })
+    }
 
     return myTasks;
   }
