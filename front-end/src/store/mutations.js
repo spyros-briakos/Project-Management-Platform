@@ -33,10 +33,7 @@ export default {
 	// __proto__: Object
 	// store project
 	STORE_PROJECT(state, payload) {
-		console.log("PROJECT IS HERE STORED")
-		console.log(payload)
-		console.log(payload._id)
-
+		console.log("PROJECT IS HERE STORED", payload)
 		var project = {_id:null, name:null, description:null, plan_in_use:null, status:null, 
 						productOwner:{_id:null, username:null}, scrumMaster:{_id:null, username:null}, 
 						members:[], }						
@@ -68,7 +65,7 @@ export default {
 	},
 
 	STORE_COWORKERS(state, payload) {
-		var maxCoWorkers = 20
+		const maxCoWorkers = state.constants.maxCoWorkers
 		var coWorkersSet = new Set(state.coWorkers.map(o => JSON.stringify(o)));
 		state.projects.forEach(project => {
 			project.members.forEach(member => {

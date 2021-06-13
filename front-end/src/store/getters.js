@@ -126,9 +126,19 @@ export default {
 	image: state => state.image,
 	plan_in_use: state => state.plan_in_use,
 	isPremium: state => (state.plan_in_use === "standard") ? false : true ,
+	checkPremiumAtProjectCreation: state => (this.isPremium ? true : state.projects.length < state.constants.maxNonPremiumProjects),
 
-	projectName: state => state.project.name,
-	projectId: state => state.project._id,
+
+	project: state => state.project ? state.project : null,
+	projectId: state => state.project._id ? state.project._id : null,
+	projectName: state => state.project.name ? state.project.name : null,
+	projectDescription: state => state.project.description ? state.project.description : null,
+	projectPlan: state => state.project.plan_in_use ? state.project.plan_in_use : null,
+	projectStatus: state => state.project.status ? state.project.status : null,
+	projectProductOwner: state => state.project ? state.project.productOwner : null,
+	projectScrumMaster: state => state.project ? state.project.scrumMaster : null,
+	projectMembers: state => state.project ? state.project.members : null ,
+
 
 	projects: state => (state.projects === undefined || state.projects.length == 0 ? testing ? projectsTest : [] : state.projects),
 	invites: state => (state.invites === undefined || state.invites.length == 0 ? testing ? invitesTest : [] : state.invites),

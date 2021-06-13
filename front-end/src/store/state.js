@@ -11,6 +11,7 @@ export default {
 	// client: JSON.parse(localStorage.getItem('client')),
 	// client: client_ ? client_ : "xexe",
 	// token: JSON.parse(localStorage.getItem('token')),
+	constants: {maxCoWorkers:20, maxNonPremiumProjects:3},
 	token: null,
 	userName: null,
 	firstName: null,
