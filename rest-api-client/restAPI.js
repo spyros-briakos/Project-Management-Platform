@@ -289,6 +289,16 @@ export const actions = {
     .catch(function(error) { client = initClient(); throw error })    
   },
 
+    // Get a specific project
+    async getProjectById(projectId) {
+  
+      return requests.getProjectRequest(projectId, client.tokenObject.token)
+      .then(function(response) {
+        client.project = response.project;
+      })
+      .catch(function(error) { client = initClient(); throw error })    
+    },
+
   async addProject(project) {
     return requests.addProjectRequest(project, client.tokenObject.token)
     .then(function(response) {
