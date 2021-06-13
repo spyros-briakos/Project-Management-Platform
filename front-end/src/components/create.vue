@@ -273,6 +273,7 @@ export default({
 		    lastName: "lastName",
             isPremium: "isPremium",
             coWorkers: "coWorkers",
+            checkPremiumAtProjectCreation: "checkPremiumAtProjectCreation",
 
 	    }),
         getNames(){
