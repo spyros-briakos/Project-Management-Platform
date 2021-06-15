@@ -152,6 +152,15 @@ export const actions = {
     .catch(function(error) { client = initClient(); console.log(error); throw error })  
   },
 
+  // Get all users
+  async getUsers() {
+    return requests.getUsersRequest()
+    .then(function(response) {
+      return response;
+    })
+    .catch(function(error) { console.log(error); throw error })
+  },
+
   // // Get specific user
   // async getUser(token) {
   //   return requests.getUserRequest(token)
@@ -519,7 +528,7 @@ export const actions = {
     var myTasks = [];
 
     // If client is not the product owner of the project
-    if(client.user._id !== client.project.productOwner._id) {
+    if(client.user._id.equals(client.project.productOwner._id)) {
       myTasks = client.project.userStories.filter(userStory =>
         { return userStory.tasks.filter(task =>
            { return task.members.filter(member =>
