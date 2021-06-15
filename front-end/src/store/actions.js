@@ -51,7 +51,7 @@ export default {
 	async logout({ commit, getters }, payload) {
 		// Get client object
 		var token = getters.token
-		log(token)
+		// log(token)
 		commit("SET_LOADING_STATE", true) 
 		client.tokenObject.token = token
 		return actions.logout() 
@@ -284,12 +284,17 @@ export default {
 		client.tokenObject.token = token
 		return actions.getProjects() 
 		.then( response => {
-			console.log(response);
-      		console.log(client)
-			actions.getProject(data)
-			commit("STORE_PROJECT", client.project)
-			commit("SET_LOADING_STATE", false)
-			// return response
+			actions.getProject(data).then( response => {
+				console.log(response);
+				console.log(client)
+				commit("STORE_PROJECT", client.project)
+				commit("SET_LOADING_STATE", false)
+			})
+			.catch( error => {
+				console.log(error);
+				commit("SET_LOADING_STATE", false)
+				throw error;
+			})
 		})
 		.catch( error => { 
 			console.log(error);
@@ -392,6 +397,70 @@ export default {
 		})
 	},
 
+	async editProject({ commit, getters }, projectData) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = { _id: projectLs._id }
+		client.user.projects = projectsLs
+
+		commit("SET_LOADING_STATE", true) 
+		return actions.editProject(projectData) 
+		.then( response => {
+			actions.getProjectById(getters.projectId)
+			.then( response => {
+				console.log(response);
+				console.log(client)
+				commit("STORE_PROJECT", client.project)
+				commit("SET_LOADING_STATE", false)
+				return response
+			})
+			.catch( error => {
+				console.log(error);
+				console.log(client)
+				commit("SET_LOADING_STATE", false)
+				throw error;
+			})
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async deleteProject({ commit, getters }, projectName) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = { _id: projectLs._id }
+		client.user.projects = projectsLs
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.deleteProject() 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("DELETE_PROJECT")
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+
 
 	async saveTaskBoard({ commit }, payload) {
 		commit("SAVE_TASKBOARD", payload)
@@ -405,24 +474,23 @@ export default {
 	async setActiveTaskBoard({ commit }, payload) {
 		commit("SET_ACTIVE_TASKBOARD", payload)
 	},
-
+	async restoreTaskList({ commit }, payload) {
+		commit("RESTORE_TASKLIST", payload)
+	},
+	
+	// usefull methods
 	async saveTaskList({ commit }, payload) {
 		commit("SAVE_TASKLIST", payload)
 	},
 	async archiveTaskList({ commit }, payload) {
 		commit("ARCHIVE_TASKLIST", payload)
 	},
-	async restoreTaskList({ commit }, payload) {
-		commit("RESTORE_TASKLIST", payload)
-	},
-
-	async reorderTaskLists({ commit }, payload) {
+	async reorderTaskLists({ commit }, payload) { // maybe usefull for the backlog
 		commit("REORDER_TASKLISTS", payload)
 	},
 	async reorderTaskListItems({ commit }, payload) {
 		commit("REORDER_TASKLIST_ITEMS", payload)
 	},
-
 	async saveTaskListItem({ commit }, payload) {
 		commit("SAVE_TASKLIST_ITEM", payload)
 	},
