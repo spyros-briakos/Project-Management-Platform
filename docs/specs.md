@@ -14,8 +14,8 @@
 
 - Κλάσεις/Μοντέλα της εφαρμογής:
   - Παρουσιάζονται αναλυτικά από το Class Diagram (στο docs/ClassDiagram.jpg)
-  - Ο ορισμός τους γίνεται στο back end μέρος, στον φάκελο ![models](https://github.com/spympr/Project-Management-Platform/blob/main/back-end/models)
-  - Για μια πιο abstract υλοποίηση, χρησιμοποιούνται κατάλληλοι serializers για οποιαδήποτε λειτουγρία αφορά τα μοντέλα (ορισμός στον φάκελο ![serializers](https://github.com/spympr/Project-Management-Platform/blob/main/back-end/serializers))
+  - Ο ορισμός τους γίνεται στο back end μέρος, στον φάκελο [models](https://github.com/spympr/Project-Management-Platform/blob/main/back-end/models)
+  - Για μια πιο abstract υλοποίηση, χρησιμοποιούνται κατάλληλοι serializers για οποιαδήποτε λειτουγρία αφορά τα μοντέλα (ορισμός στον φάκελο [serializers](https://github.com/spympr/Project-Management-Platform/blob/main/back-end/serializers))
 
 - **Https** requests μέσω:
   - Express web app framework >= 4.17.1
@@ -42,8 +42,8 @@
   - Για την λήψη προσκλήσεων σε projects
   - Μέσω του nodemailer >= 6.5.0
 
-- Συγκέντρωση των κοινών **client requests**, που γίνονται τόσο από το front end όσο και από το cli app, στο library που βρίσκεται στον φάκελο ![rest-api-client](https://github.com/spympr/Project-Management-Platform/blob/main/rest-api-client)
-  - Στο αρχείο ![restAPI](https://github.com/spympr/Project-Management-Platform/blob/main/rest-api-client/restAPI.js) βρίσκεται ο ορισμός του client object που ενημερώνεται συνεχώς από τα responses του server στα client requests που γίνονται (από το front end ή το cli app) και διατηρεί έναν σκελετό από τις πληροφορίες που πρέπει να διατηρούνται για τον χρήστη στο client-side
+- Συγκέντρωση των κοινών **client requests**, που γίνονται τόσο από το front end όσο και από το cli app, στο library που βρίσκεται στον φάκελο [rest-api-client](https://github.com/spympr/Project-Management-Platform/blob/main/rest-api-client)
+  - Στο αρχείο [restAPI](https://github.com/spympr/Project-Management-Platform/blob/main/rest-api-client/restAPI.js) βρίσκεται ο ορισμός του client object που ενημερώνεται συνεχώς από τα responses του server στα client requests που γίνονται (από το front end ή το cli app) και διατηρεί έναν σκελετό από τις πληροφορίες που πρέπει να διατηρούνται για τον χρήστη στο client-side
   - Με στόχο την καλύτερη μελλοντική συντήρηση και επέκταση του project, απομονώσαμε τις συναρτήσεις που υλοποιούν την επικοινωνία με το backend (μέσω του axios) από τις συναρτήσεις που χρησιμοποιεί ο χρήστης, δημιουργώντας ένα επιπλέον επίπεδο. Έτσι το σύστημα είναι πιο abstract.
   - Για το cli app:
     - Για την προσωρινή αποθήκευση των στοιχείων του client σε ένα local αρχείο χρησιμοποιείται το file system module του nodeJS (fs), ώστε να διατηρούνται τα στοιχεία του χρήστη όσο είναι συνδεδεμένος
@@ -60,4 +60,4 @@
       - quasar >= 1.15.10
       - @fortawesome/vue-fontawesome >= 2.0.2
 
-- Για οδηγίες εγκατάστασης και εκτέλεσης των επιμερούς τμημάτων του Project ανατρέξτε στο κεντρικό ![README.md](https://github.com/spympr/Project-Management-Platform/blob/main/README.md).
+- Για οδηγίες εγκατάστασης και εκτέλεσης των επιμερούς τμημάτων του Project ανατρέξτε στο κεντρικό [README.md](https://github.com/spympr/Project-Management-Platform/blob/main/README.md).
