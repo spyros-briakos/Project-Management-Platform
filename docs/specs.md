@@ -15,7 +15,7 @@
 - Κλάσεις/Μοντέλα της εφαρμογής:
   - Παρουσιάζονται αναλυτικά από το Class Diagram (στο docs/ClassDiagram.jpg)
   - Ο ορισμός τους γίνεται στο back end μέρος, στον φάκελο ![models](https://github.com/spympr/Project-Management-Platform/blob/main/back-end/models)
-  - Για μια πιο abstruct υλοποίηση, χρησιμοποιούνται κατάλληλοι serializers για οποιαδήποτε λειτουγρία αφορά τα μοντέλα (ορισμός στον φάκελο ![serializers](https://github.com/spympr/Project-Management-Platform/blob/main/back-end/serializers))
+  - Για μια πιο abstract υλοποίηση, χρησιμοποιούνται κατάλληλοι serializers για οποιαδήποτε λειτουγρία αφορά τα μοντέλα (ορισμός στον φάκελο ![serializers](https://github.com/spympr/Project-Management-Platform/blob/main/back-end/serializers))
 
 - **Https** requests μέσω:
   - Express web app framework >= 4.17.1
