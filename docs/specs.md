@@ -44,6 +44,7 @@
 
 - Συγκέντρωση των κοινών **client requests**, που γίνονται τόσο από το front end όσο και από το cli app, στο library που βρίσκεται στον φάκελο ![rest-api-client](https://github.com/spympr/Project-Management-Platform/blob/main/rest-api-client)
   - Στο αρχείο ![restAPI](https://github.com/spympr/Project-Management-Platform/blob/main/rest-api-client/restAPI.js) βρίσκεται ο ορισμός του client object που ενημερώνεται συνεχώς από τα responses του server στα client requests που γίνονται (από το front end ή το cli app) και διατηρεί έναν σκελετό από τις πληροφορίες που πρέπει να διατηρούνται για τον χρήστη στο client-side
+  - Με στόχο την καλύτερη μελλοντική συντήρηση και επέκταση του project, απομονώσαμε τις συναρτήσεις που υλοποιούν την επικοινωνία με το backend (μέσω του axios) από τις συναρτήσεις που χρησιμοποιεί ο χρήστης, δημιουργώντας ένα επιπλέον επίπεδο. Έτσι το σύστημα είναι πιο abstract.
   - Για το cli app:
     - Για την προσωρινή αποθήκευση των στοιχείων του client σε ένα local αρχείο χρησιμοποιείται το file system module του nodeJS (fs), ώστε να διατηρούνται τα στοιχεία του χρήστη όσο είναι συνδεδεμένος
     - Η διεπαφή του χρήστη με την εφαρμογή πραγματοποιείται μέσω του πακέτου εντολών commander >= 5.1.0
@@ -59,3 +60,4 @@
       - quasar >= 1.15.10
       - @fortawesome/vue-fontawesome >= 2.0.2
 
+- Για οδηγίες εγκατάστασης και εκτέλεσης των επιμερούς τμημάτων του Project ανατρέξτε στο κεντρικό ![README.md](https://github.com/spympr/Project-Management-Platform/blob/main/README.md).
