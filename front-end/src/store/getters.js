@@ -138,6 +138,10 @@ export default {
 	projectProductOwner: state => state.project ? state.project.productOwner : null,
 	projectScrumMaster: state => state.project ? state.project.scrumMaster : null,
 	projectMembers: state => state.project ? state.project.members : null ,
+	// projectSprints: state => state.project ? state.project.sprints : null ,
+	// projectUserStories: state => state.project ? state.projectuserStories : null ,
+	projectSprints: state => (state.sprints === undefined || state.sprints.length == 0 ? [] : state.sprints),
+	projectUserStories: state => (state.userStories === undefined || state.userStories.length == 0 ? [] : state.userStories),
 
 
 	projects: state => (state.projects === undefined || state.projects.length == 0 ? testing ? projectsTest : [] : state.projects),

@@ -36,7 +36,7 @@ export default {
 		console.log("PROJECT IS HERE STORED", payload)
 		var project = {_id:null, name:null, description:null, plan_in_use:null, status:null, 
 						productOwner:{_id:null, username:null}, scrumMaster:{_id:null, username:null}, 
-						members:[], }						
+						members:[], sprints:[], userStories:[] }						
 		state.project = project
 
 		// project info
@@ -55,13 +55,22 @@ export default {
 
 		// members, userStories, sprints
 		Vue.set(state.project, "members", [...payload.members])
-		Vue.set(state.project, "userStories", [...payload.userStories])
-		Vue.set(state.project, "sprints", [...payload.sprints])
+		// Vue.set(state.project, "userStories", [...payload.userStories])
+		// Vue.set(state.project, "sprints", [...payload.sprints])
 
 	},
 
 	STORE_PROJECTS(state, payload) {
 		Vue.set(state, "projects", [...payload])
+	},
+
+	STORE_SPRINTS(state, payload) {
+		console.log("SPRIIIIIIINTS", payload)
+		Vue.set(state, "sprints", [...payload])
+	},
+
+	STORE_USER_STORIES(state, payload) {
+		Vue.set(state, "userStories", [...payload])
 	},
 
 	STORE_COWORKERS(state, payload) {
@@ -120,8 +129,16 @@ export default {
 	DELETE_PROJECT(state, payload) {
 		var project = {_id:null, name:null, description:null, plan_in_use:null, status:null, 
 			productOwner:{_id:null, username:null}, scrumMaster:{_id:null, username:null}, 
-			members:[], }	
+			members:[], sprints:[], userStories:[]}	
 		Vue.set(state, "project", project)
+	},
+
+	DELETE_SPRINTS(state, payload) {
+		Vue.set(state, "sprints", [])
+	},
+
+	DELETE_USER_STORIES(state, payload) {
+		Vue.set(state, "userStories", [])
 	},
 
 	DELETE_PROJECTS(state, payload) {
@@ -141,8 +158,28 @@ export default {
 	},
 
 	// Set Initial Data
-	SET_INITIAL_DATA(state, payload) {
-		Vue.set(state, "boards", payload)
+	STORE_EMULATED_BOARD_DATA(state, payload) {
+		var myEmulatedBoard = payload
+		var sprints = state.sprints
+		console.log("EDOOOOOO", sprints)
+
+		// SCRUM BOARD
+		myEmulatedBoard[0].name = state.project.name
+		if (sprints) {
+			sprints.forEach(sprint => {
+				myEmulatedBoard[0].lists.push( {id: new Date().getUTCMilliseconds(),
+											name: sprint.name,
+											headerColor: "#607d8b",
+											archived: false,
+											items: [],})
+			});
+		}
+
+
+		// KANBAN BOARD
+		myEmulatedBoard[1].name = state.project.name
+
+		Vue.set(state, "boards", myEmulatedBoard)
 	},
 
 	// Set Loading State
@@ -235,6 +272,12 @@ export default {
 	// Reorder TaskBoad Lists
 	REORDER_TASKLISTS(state, payload) {
 		const board = state.boards.find(b => b.id == payload.boardId)
+		// find the backlog and keep it in 1st position
+		const backLogIndex = payload.lists.findIndex(b => b.name === "Product Backlog")
+		// swap posistion
+		var temp = payload.lists[0]
+		payload.lists[0] = payload.lists[backLogIndex]
+		payload.lists[backLogIndex] = temp
 		Vue.set(board, "lists", payload.lists)
 	},
 

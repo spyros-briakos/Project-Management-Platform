@@ -21,6 +21,8 @@ export default {
 	plan_in_use: null,
 
 	project: null,
+	sprints: [],
+	userStories: [],
 	projects: [],
 
 	invites: [],

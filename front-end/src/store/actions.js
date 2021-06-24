@@ -2,6 +2,7 @@ import { answerInvitationRequest, getPremiumRequest } from '@the-ver-best-scrum-
 import {client, actions} from '@the-ver-best-scrum-team/rest-api-client/restAPI'
 var cloneDeep = require('lodash.clonedeep');
 
+import { emulatedBoard } from './emulatedBoard';
 
 const INITIAL_DATA_URL = "https://raw.githubusercontent.com/spympr/estimate-pi/master/temp.json"
 
@@ -18,13 +19,46 @@ var log = function(msg){
 
 export default {
 
-	async fetchData({ commit }) {
-		commit("SET_LOADING_STATE", true) 
-		return axios.get(INITIAL_DATA_URL).then(res => {
-		commit("SET_INITIAL_DATA", res.data)
-		commit("SET_LOADING_STATE", false)
-		})
-	},
+	// async getEmulatedData({ commit, getters }) {
+	// 	commit("SET_LOADING_STATE", true) 
+	// 	// return axios.get(INITIAL_DATA_URL).then(res => {
+	// 	// commit("SET_INITIAL_DATA", res.data)
+	// 	// })
+	// 	var myEmulatedBoard = cloneDeep(emulatedBoard) 
+	// 	var token = getters.token
+	// 	var projectLs = getters.project
+	// 	var projectsLs = getters.projects
+	// 	client.tokenObject.token = token
+	// 	client.project = { _id: projectLs._id }
+	// 	client.user.projects = projectsLs
+		
+	// 	console.log("GETT SPRITSSSS", client);
+	// 	// add sprints
+	// 	return actions.getSprints()
+	// 	.then(response => {
+	// 		console.log(response);
+    //   		console.log(client);
+	// 		commit("STORE_SPRINTS", client.project.sprints)
+	// 		var sprints = getters.projectSprints
+	// 		console.log("EDOOOOOO", sprints)
+	// 		// if (sprints) {
+	// 		// 	sprints.forEach(sprint => {
+	// 		// 		myEmulatedBoard[0].lists.push( {id: new Date().getUTCMilliseconds(),
+	// 		// 									name: sprint.name,
+	// 		// 									headerColor: "#607d8b",
+	// 		// 									archived: false,
+	// 		// 									items: [],})
+	// 		// 	});
+	// 		// }
+	// 		// commit("SET_INITIAL_DATA", myEmulatedBoard)
+	// 		commit("SET_LOADING_STATE", false)
+	// 	})
+	// 	.catch( error => { 
+	// 		log(error);
+	// 		commit("SET_LOADING_STATE", false)
+	// 		throw error;
+	// 	})
+	// },
 
 
 	async login({ commit }, payload) {
@@ -62,6 +96,8 @@ export default {
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
 			commit("DELETE_COWORKERS")
+			commit("DELETE_SPRINTS")
+			commit("DELETE_USER_STORIES")
 			commit("DELETE_INVITES")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
@@ -168,6 +204,8 @@ export default {
 			commit("DELETE_CLIENT")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
+			commit("DELETE_SPRINTS")
+			commit("DELETE_USER_STORIES")
 			commit("DELETE_COWORKERS")
 			commit("DELETE_INVITES")
 			commit("SET_LOGEDIN_STATE", false)
@@ -219,6 +257,8 @@ export default {
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
 			commit("DELETE_COWORKERS")
+			commit("DELETE_SPRINTS")
+			commit("DELETE_USER_STORIES")
 			commit("DELETE_INVITES")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
@@ -288,6 +328,9 @@ export default {
 				console.log(response);
 				console.log(client)
 				commit("STORE_PROJECT", client.project)
+				commit("STORE_SPRINTS", client.project.sprints)
+				commit("STORE_EMULATED_BOARD_DATA", cloneDeep(emulatedBoard) )
+				commit("SET_ACTIVE_TASKBOARD", getters.allBoards[0]) //set active scrum boeard
 				commit("SET_LOADING_STATE", false)
 			})
 			.catch( error => {
@@ -356,9 +399,15 @@ export default {
 			users: usernames,
 			project: getters.projectName
 		};
-
+		/////////////////////// neeeddss fiiiix like the others with local storage
 		// Get token
 		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = { _id: projectLs._id }
+		client.user.projects = projectsLs
+
 		commit("SET_LOADING_STATE", true) 
 		client.tokenObject.token = token
 		return actions.inviteUser(getters.projectId, data) 
@@ -449,6 +498,147 @@ export default {
 			console.log(response);
       		console.log(client)
 			commit("DELETE_PROJECT")
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async addSprint({ commit, getters }, sprintData) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		// client.project = { _id: projectLs._id }
+		client.project = projectLs
+
+		client.user.projects = projectsLs
+		console.log(client)
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.addSprint(sprintData) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			// commit("STORE_PROJECT", client.project)
+			commit("STORE_SPRINTS", client.project.sprints)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async getSprints({ commit, getters }) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		// client.project = { _id: projectLs._id }
+		client.project = projectLs
+		client.user.projects = projectsLs
+		console.log(client)
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.getSprints() 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_SPRINTS", client.project.sprints)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async addUserStory({ commit, getters }, userStoryData) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = { _id: projectLs._id }
+		client.user.projects = projectsLs
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.addUserStory(userStoryData) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_PROJECT", client.project)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async getUserStories({ commit, getters }) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = { _id: projectLs._id }
+		client.user.projects = projectsLs
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.getUserStories() 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_USER_STORIES", client.project.userStories)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async addTask({ commit, getters }, taskData) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = { _id: projectLs._id }
+		client.user.projects = projectsLs
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.addTask(taskData) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_PROJECT", client.project)
 			commit("SET_LOADING_STATE", false)
 			return response
 		})

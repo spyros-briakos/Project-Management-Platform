@@ -48,7 +48,7 @@ export default {
       return this.activeBoard ? this.activeBoard.name : ""
     },
     heading() {
-      return this.listForm.id ? "Update list name" : "Create new list"
+      return this.listForm.id ? "Here needs a new form for updating Sprints" : "Here needs a new form for Sprints"
     }
   },
   mounted() {
@@ -56,7 +56,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      saveTaskList: "saveTaskList"
+      saveTaskList: "saveTaskList",
+      addSprint: "addSprint",
     }),
     handlePopupToggled(isOpen) {
       if (!isOpen) {
@@ -71,6 +72,18 @@ export default {
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {
+
+      // just add the form elemnts in this object
+      let sprint = {
+                // like this
+                name: this.listForm.name,
+                description: "testaroume edoo",
+                status: "toDo",
+                estimated_duration: "10"
+            }
+      // and call this method @click
+      this.addSprint(sprint)
+
       this.$validator.validateAll().then(async result => {
         if (result) {
           await this.saveTaskList({
@@ -84,4 +97,30 @@ export default {
     },
   }
 }
+            // let sprint = {
+            //     name: "Sprint testy",
+            //     description: "testaroume edoo",
+            //     status: "toDo",
+            //     estimated_duration: "10"
+            // }
+
+            // let userStory = {
+            //     name: "Test Story",
+            //     description: "testaroume pali edoo",
+            //     label: "issue",
+            //     status: "toDo",
+            //     estimated_duration: "10"
+            // }
+
+            // // let task = {
+            // //     name: "proto taskoo",
+            // //     description: "malakizomaste edo",
+            // //     status: "toDo",
+            // //     estimated_duration: "3",
+            // //     userStory: "Test Story"
+            // // }
+            
+            // this.addSprint(sprint)
+            // this.addUserStory(userStory)
+            // // .then(this.addTask(task))
 </script>

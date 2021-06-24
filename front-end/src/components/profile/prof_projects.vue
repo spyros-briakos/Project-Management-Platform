@@ -146,7 +146,7 @@
         this.getInvites()
     },
     methods:{
-        ...mapActions(["getProjects", "getProject", "getInvites", "answerInvitation"]),
+        ...mapActions(["getProjects", "getProject", "getInvites", "answerInvitation", "getEmulatedData"]),
         mpou(){
             alert("on-click");
         },
@@ -175,7 +175,7 @@
         },
         goToProject(projectName) {
             this.getProject(projectName)
-            .then( this.$router.push({name:"Projects"}) )
+            .then( response => {this.$router.push({name:"Projects"});}) 
         }
     },
     computed:{
