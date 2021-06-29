@@ -13,22 +13,26 @@ export const emulatedBoard = [{
 			"items": [{
 					"id": "6fb2c8e6-5980-9403-f847-51407ab4597a",
 					"title": "an den blepeis",
-					"text": "We are gonna do this and that...etc1"
+					"text": "We are gonna do this and that...etc1",
+					"status": "userStory",
 				},
 				{
 					"id": "c7f25d4b-6a72-d0d5-7d03-fc0b8794fb94",
 					"title": "tipota de3ia --->",
-					"text": ""
+					"text": "",
+					"status": "userStory",
 				},
 				{
 					"id": "78ab7725-ddee-ba6a-c039-b581ea10e20e",
 					"title": "tote prepei na",
-					"text": "We are gonna do this and that...etc3"
+					"text": "We are gonna do this and that...etc3",
+					"status": "userStory",
 				},
 				{
 					"id": "49ad2dd1-5c3e-42e7-c2f0-5c9b193fb676",
 					"title": "anoi3eis to back end",
-					"text": ""
+					"text": "",
+					"status": "userStory",
 				}
 			]
 		},
@@ -86,22 +90,26 @@ export const emulatedBoard = [{
 			"items": [{
 					"id": "d437a857-ea63-74a6-23c1-7bd4e80e420d",
 					"title": "Build the feature #1",
-					"text": "We are gonna do this and that...etc1"
+					"text": "We are gonna do this and that...etc1",
+					"status": "task",
 				},
 				{
 					"id": "f2bbdeaf-cee8-2677-c6da-9a9acbf7777b",
 					"title": "Test the feature #1",
-					"text": "We are gonna do this and that...etc2"
+					"text": "We are gonna do this and that...etc2",
+					"status": "task",
 				},
 				{
 					"id": "9dd22d09-9536-bee4-cadb-986dd0cf71d5",
 					"title": "Commit feature #1 to the repository",
-					"text": "We are gonna do this and that...etc3"
+					"text": "We are gonna do this and that...etc3",
+					"status": "task",
 				},
 				{
 					"id": "eecc7160-8575-19a1-bdaa-ea24e1ee3a34",
 					"title": "Deploy the feature #1",
-					"text": "We are gonna do this and that...etc4"
+					"text": "We are gonna do this and that...etc4",
+					"status": "task",
 				}
 			]
 		},
@@ -113,17 +121,20 @@ export const emulatedBoard = [{
 			"items": [{
 					"id": "b0f701c4-ad7f-2a99-7c59-a37dda5a966f",
 					"title": "Build the demo app",
-					"text": ""
+					"text": "",
+					"status": "task",
 				},
 				{
 					"id": "c2acf5a3-a008-6157-9f37-48b0aa9f8ee0",
 					"title": "Put in some sample data in app",
-					"text": ""
+					"text": "",
+					"status": "task",
 				},
 				{
 					"id": "ffad019d-0b23-d853-1c61-c86997a1b37b",
 					"title": "Test the app before launching",
-					"text": ""
+					"text": "",
+					"status": "task",
 				}
 			]
 		},

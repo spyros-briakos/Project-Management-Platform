@@ -1,7 +1,7 @@
 <template>
   <DetailsPopup ref="newListPopup" v-show="this.activeBoard" @popup-toggled="handlePopupToggled">
     <template v-slot:handle>
-      <span class="nav-item btn btn-sm btn-app mr-2">+ New List</span>
+      <span class="nav-item btn btn-sm btn-app mr-2">+ New Sprint</span>
     </template>
     <template v-slot:content>
       <form>

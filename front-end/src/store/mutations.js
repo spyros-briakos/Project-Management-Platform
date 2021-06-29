@@ -137,6 +137,11 @@ export default {
 		Vue.set(state, "sprints", [])
 	},
 
+	DELETE_SPRINT(state, payload) {
+		var sprintIndex = state.sprints.findIndex(spr => spr._id === payload)
+		Vue.delete(state.sprints, sprintIndex)
+	},
+
 	DELETE_USER_STORIES(state, payload) {
 		Vue.set(state, "userStories", [])
 	},
@@ -167,7 +172,7 @@ export default {
 		myEmulatedBoard[0].name = state.project.name
 		if (sprints) {
 			sprints.forEach(sprint => {
-				myEmulatedBoard[0].lists.push( {id: new Date().getUTCMilliseconds(),
+				myEmulatedBoard[0].lists.push( {id: sprint._id,
 											name: sprint.name,
 											headerColor: "#607d8b",
 											archived: false,

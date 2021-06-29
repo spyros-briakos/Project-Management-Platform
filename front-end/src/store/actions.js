@@ -330,7 +330,7 @@ export default {
 				commit("STORE_PROJECT", client.project)
 				commit("STORE_SPRINTS", client.project.sprints)
 				commit("STORE_EMULATED_BOARD_DATA", cloneDeep(emulatedBoard) )
-				commit("SET_ACTIVE_TASKBOARD", getters.allBoards[0]) //set active scrum boeard
+				commit("SET_ACTIVE_TASKBOARD", { board: getters.allBoards[0]}) //set active scrum boeard
 				commit("SET_LOADING_STATE", false)
 			})
 			.catch( error => {
@@ -482,6 +482,33 @@ export default {
 
 	},
 
+	async leaveProject({ commit, getters }, projectName) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = { _id: projectLs._id }
+		client.user.projects = projectsLs
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.leaveProject() 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("DELETE_PROJECT")
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
 	async deleteProject({ commit, getters }, projectName) {
 
 		// Get token
@@ -558,6 +585,35 @@ export default {
 			console.log(response);
       		console.log(client)
 			commit("STORE_SPRINTS", client.project.sprints)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async deleteSprint({ commit, getters }, sprintId) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		// client.project = { _id: projectLs._id }
+		client.project = projectLs
+		client.user.projects = projectsLs
+		console.log(client)
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.deleteSprint({_id:sprintId}) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("DELETE_SPRINT", sprintId)
 			commit("SET_LOADING_STATE", false)
 			return response
 		})

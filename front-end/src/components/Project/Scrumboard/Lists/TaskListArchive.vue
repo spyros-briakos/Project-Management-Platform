@@ -28,7 +28,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      archiveTaskList: "archiveTaskList"
+      archiveTaskList: "archiveTaskList",
+      deleteSprint: "deleteSprint"
     }),
     handleTaskListArchive() {
       this.archiveTaskList({
@@ -36,6 +37,7 @@ export default {
         listId: this.list.id
       })
       this.$refs.popup.close()
+      this.deleteSprint(this.list.id)
     },
     handleTaskListArchiving(data) {
       this.board = data.board
