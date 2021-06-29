@@ -52,7 +52,7 @@
                                         {{co.username}}
                                     </v-chip>
                                 </v-chip-group>
-                                <v-btn style="margin-top:2vh;">
+                                <v-btn style="margin-top:2vh;" @click="_leaveProject">
                                     Θέλω να αποχωρήσω
                                 </v-btn>
                             </v-card>
@@ -181,7 +181,7 @@ import { mapActions, mapGetters } from "vuex"
                 ] },
         },
         methods:{
-            ...mapActions(["editProject", "getProject", "inviteUsers", "getProjects", "deleteProject"]),
+            ...mapActions(["editProject", "getProject", "inviteUsers", "getProjects", "deleteProject", "leaveProject"]),
             mpou(){
                 alert("on-click");
             },
@@ -236,6 +236,21 @@ import { mapActions, mapGetters } from "vuex"
                     this.goodAllert = true
                     this.badAllert = false
                     this.goodAllertMessage = "Το Project τροποποιήθηκε με επιτυχία."
+                })
+                .catch( error => { 
+                    this.badAllert = true
+                    this.goodAllert = false
+                    this.badAllertMessage = error.response.data.message
+                })
+            },
+
+            _leaveProject() {
+                this.leaveProject()
+                .then( response => {
+                    this.goodAllert = true
+                    this.badAllert = false
+                    this.goodAllertMessage = "Αποχωρίσατε με επιτυχία."
+                    this.$router.push({name:"myProjects"}) 
                 })
                 .catch( error => { 
                     this.badAllert = true
