@@ -17,7 +17,7 @@
         />
         <small class="text-danger" style="display:block">{{ errors.first("listName") }}</small>
         <button class="btn btn-sm btn-app mt-2" @click.prevent="handleTaskListSave">
-          Save List
+          Save Sprint
         </button>
       </form>
     </template>
@@ -48,7 +48,7 @@ export default {
       return this.activeBoard ? this.activeBoard.name : ""
     },
     heading() {
-      return this.listForm.id ? "Here needs a new form for updating Sprints" : "Here needs a new form for Sprints"
+      return this.listForm.id ? "Here needs a new form for editing Sprints" : "Here needs a new form for Sprints"
     }
   },
   mounted() {
@@ -58,6 +58,7 @@ export default {
     ...mapActions({
       saveTaskList: "saveTaskList",
       addSprint: "addSprint",
+      editSprint: "editSprint",
     }),
     handlePopupToggled(isOpen) {
       if (!isOpen) {
@@ -69,6 +70,16 @@ export default {
     handleTaskListEditing(list) {
       this.listForm.id = list.id
       this.listForm.name = list.name
+      console.log("EDIIIITTTT")
+      let sprint = {
+        // like this
+                name: "xexe",
+                description: "testaroume edoo",
+                status: "toDo",
+                estimated_duration: "10",
+                _id: list.id,
+            }
+      this.editSprint(sprint)
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {

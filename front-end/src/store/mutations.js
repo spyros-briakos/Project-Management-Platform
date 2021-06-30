@@ -69,6 +69,49 @@ export default {
 		Vue.set(state, "sprints", [...payload])
 	},
 
+	STORE_SPRINT(state, payload) {
+		console.log("SPRIIINT", payload)
+		// store as a taskList
+		const board = state.boards.find(b => b.id == "SCRUM_BOARD")
+		const list = board.lists.find(l => l.id == payload._id)
+		const listIdx = board.lists.findIndex(l => l.id == payload._id)
+
+		// For existing item
+		if (listIdx > -1) {
+			list.name = payload.name
+			Vue.set(board.lists, listIdx, list)
+		}
+		// // For new item
+		else {
+			const list = {
+				id: payload._id,
+				name: payload.name,
+				headerColor: "#607d8b",
+				archived: false,
+				items: []
+			}
+			board.lists.push(list)
+		}
+
+		// store as a Sprint
+		// for exissting Sprint
+		const sprint = state.sprints.find(s => s._id === payload._is)
+		const sprintIdx = state.sprints.findIndex(s => s._id === payload._is)
+
+		if (sprintIdx > -1) {
+			sprint.name = payload.name
+			sprint.description = payload.description
+			sprint.status = payload.status
+			sprint.estimated_duration = payload.estimated_duration
+			Vue.set(state.sprints, sprintIdx, sprint)
+		}
+		// For new Sprint
+		else {
+			state.sprints.push(payload)
+		}
+	
+	},
+
 	STORE_USER_STORIES(state, payload) {
 		Vue.set(state, "userStories", [...payload])
 	},
@@ -246,7 +289,7 @@ export default {
 		// // For new item
 		else {
 		const list = {
-			id: guid(),
+			id: payload.listId,
 			name: payload.name,
 			headerColor: "#607d8b",
 			archived: false,
@@ -262,7 +305,8 @@ export default {
 		const list = board.lists.find(l => l.id == payload.listId)
 		const listIdx = board.lists.findIndex(l => l.id == payload.listId)
 		list.archived = true
-		Vue.set(board.lists, listIdx, list)
+		// Vue.set(board.lists, listIdx, list)
+		Vue.delete(board.lists, listIdx)
 	},
 
 	// Restore Task List

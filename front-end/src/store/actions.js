@@ -16,6 +16,19 @@ var log = function(msg){
 		console.log(msg);
 }
 
+var setToken = function(){
+	var token = getters.token
+	client.tokenObject.token = token
+}
+
+var setTokenProject = function(){
+	var token = getters.token
+	var projectLs = getters.project
+	var projectsLs = getters.projects
+	client.tokenObject.token = token
+	client.project = { _id: projectLs._id }
+	client.user.projects = projectsLs
+}
 
 export default {
 
@@ -399,7 +412,6 @@ export default {
 			users: usernames,
 			project: getters.projectName
 		};
-		/////////////////////// neeeddss fiiiix like the others with local storage
 		// Get token
 		var token = getters.token
 		var projectLs = getters.project
@@ -409,7 +421,6 @@ export default {
 		client.user.projects = projectsLs
 
 		commit("SET_LOADING_STATE", true) 
-		client.tokenObject.token = token
 		return actions.inviteUser(getters.projectId, data) 
 		.then( response => {
 			console.log(response);
@@ -543,11 +554,8 @@ export default {
 		var projectLs = getters.project
 		var projectsLs = getters.projects
 		client.tokenObject.token = token
-		// client.project = { _id: projectLs._id }
 		client.project = projectLs
-
 		client.user.projects = projectsLs
-		console.log(client)
 		
 		commit("SET_LOADING_STATE", true) 
 		return actions.addSprint(sprintData) 
@@ -555,7 +563,43 @@ export default {
 			console.log(response);
       		console.log(client)
 			// commit("STORE_PROJECT", client.project)
-			commit("STORE_SPRINTS", client.project.sprints)
+			commit("STORE_SPRINT", client.project.sprints[0])
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async editSprint({ commit, getters }, sprintData) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = projectLs
+		client.user.projects = projectsLs
+
+		// get sprint
+		var sprint = getters.projectSprints.find(s => s._id === sprintData._id)
+		// edit sprint
+		sprint.name = sprintData.name;
+		sprint.description = sprintData.description;
+		sprint.duration = sprintData.estimated_duration;
+		sprint.status = sprintData.status;
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.editSprint(sprint) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			// commit("STORE_PROJECT", client.project)
+			commit("STORE_SPRINT", sprintData)
 			commit("SET_LOADING_STATE", false)
 			return response
 		})
@@ -574,10 +618,8 @@ export default {
 		var projectLs = getters.project
 		var projectsLs = getters.projects
 		client.tokenObject.token = token
-		// client.project = { _id: projectLs._id }
 		client.project = projectLs
 		client.user.projects = projectsLs
-		console.log(client)
 		
 		commit("SET_LOADING_STATE", true) 
 		return actions.getSprints() 
@@ -603,10 +645,8 @@ export default {
 		var projectLs = getters.project
 		var projectsLs = getters.projects
 		client.tokenObject.token = token
-		// client.project = { _id: projectLs._id }
 		client.project = projectLs
 		client.user.projects = projectsLs
-		console.log(client)
 		
 		commit("SET_LOADING_STATE", true) 
 		return actions.deleteSprint({_id:sprintId}) 
@@ -632,7 +672,7 @@ export default {
 		var projectLs = getters.project
 		var projectsLs = getters.projects
 		client.tokenObject.token = token
-		client.project = { _id: projectLs._id }
+		client.project = projectLs
 		client.user.projects = projectsLs
 		
 		commit("SET_LOADING_STATE", true) 
@@ -659,7 +699,7 @@ export default {
 		var projectLs = getters.project
 		var projectsLs = getters.projects
 		client.tokenObject.token = token
-		client.project = { _id: projectLs._id }
+		client.project = projectLs
 		client.user.projects = projectsLs
 		
 		commit("SET_LOADING_STATE", true) 
@@ -686,7 +726,7 @@ export default {
 		var projectLs = getters.project
 		var projectsLs = getters.projects
 		client.tokenObject.token = token
-		client.project = { _id: projectLs._id }
+		client.project = projectLs
 		client.user.projects = projectsLs
 		
 		commit("SET_LOADING_STATE", true) 
@@ -726,7 +766,7 @@ export default {
 	
 	// usefull methods
 	async saveTaskList({ commit }, payload) {
-		commit("SAVE_TASKLIST", payload)
+		// commit("SAVE_TASKLIST", payload)
 	},
 	async archiveTaskList({ commit }, payload) {
 		commit("ARCHIVE_TASKLIST", payload)
