@@ -6,6 +6,7 @@
 - [ ] Full text search at project invites during the creation of the project
 - [ ] Full text search at project invites in project settings
 - [ ] Remove project memembers from coworkers at project invites in project settings
+- [ ] Product owner premium project rights...
 - [ ] Scrum board...
 - [X] Scrum board create test Sprints and store in state
 - [ ] Scrum board create test User stories and store in state
