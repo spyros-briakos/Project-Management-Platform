@@ -327,7 +327,7 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
         // Delete user's invitation
         const invitations = user.invitations;
         // Get invitation's position in the list of user's invitations
-        const index = invitations.findIndex((invitationId) => { return invitationId === invitation._id });
+        const index = invitations.findIndex((invitationId) => { return invitationId.equals(invitation._id) });
         // At position index, remove 1 item
         invitations.splice(index, 1);
         // Update user
@@ -349,7 +349,7 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
         // Delete user's invitation
         const invitations = user.invitations;
         // Get invitation's position in the list of user's invitations
-        const index = invitations.findIndex((invitationId) => { return invitationId === invitation._id });
+        const index = invitations.findIndex((invitationId) => { return invitationId.equals(invitation._id) });
         // At position index, remove 1 item
         invitations.splice(index, 1);
         // Update user

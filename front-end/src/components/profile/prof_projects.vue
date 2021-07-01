@@ -1,6 +1,5 @@
 <template>
-    <div class="wrap_projects">
-        
+    <div class="wrap_projects">   
         <div v-if="create_prj==1" class="overlay"></div>
         <div class="create_prj" v-if="create_prj==1">
             <createProject :coWorkers="coWorkers" :user="user" />
@@ -14,86 +13,119 @@
                 :style="{'opacity': create_prj==1 ? '0.6' : ''}"/>
             {{welcome_mssg}}
         </div>
-        <button class="create_btn" v-on:click="create_prj=1">{{btn_mssg}}</button>
+        <button class="create_btn" v-on:click="create_prj=1,selected_prj=-1">{{btn_mssg}}</button>
 
         <ul class="projects_ul">
-                    
-            <li v-for="invite in invites" :key="invite.title"
+
+            <li v-for="invite in invites" :key="invite.invitationCode" :class="{ 'selectedProject' : selected_prj == invite.invitationCode}"
                 :style="{'opacity': 1}"
-                @mouseover="mouse_on(invite.title)"
+                @mouseover="mouse_on(invite.invitationCode)"
                 @mouseleave="invites_mouse_over=''">
-                
-                
-            <font-awesome-icon class="icon" :icon="!invite.icon ? invite.icon=icon_roulete() : invite.icon"
-                    :style="{
-                        'color' : !invite.color ? invite.color=color_roulete() : invite.color,
-                    }"
-            />
-                <div v-if="!invite.seen" class="notify"></div>
-                <!-- <div class="icon" :style="{
-                    'background-color' :  !invite.color ? invite.color=color_roulete() : invite.color,
-                }"> -->
-                <!-- </div> -->
-                <div class="projectTitle">
-                    {{invites_mouse_over == invite.title ? 'Από: ' + invite.from + ' ' + invite.date : 'Πρόσκληση: ' + invite.title}}
+
+                <div :class="{'projectTitle': true, 'selectedProject' : selected_prj == invite.invitationCode}">
+                    <font-awesome-icon class="icon" :icon="!invite.icon ? invite.icon=icon_roulete() : invite.icon"
+                        :style="{
+                            'color' : !invite.color ? invite.color=color_roulete() : invite.color,
+                        }"
+                    />
+                    {{'Πρόσκληση: ' + invite.project}}
                 </div>
-                <div class="partners_box"
+
+                <div v-if="!invite.seen" class="notify"></div> 
+                <font-awesome-icon
+                    :class="{'icon_arrow': true, 'rotate': selected_prj == invite.invitationCode}"
+                    :icon="['fas', 'chevron-right']"
+                    @click="selected_prj==invite.invitationCode ? selected_prj=-1 : selected_prj=invite.invitationCode;"
+                    >
+                </font-awesome-icon>
+
+                <div :class="{'partners_box': true, 'show_box': selected_prj==invite.invitationCode}"
                     :style="{
                         'flex-flow': 'row',
                         'align-items': 'center',
                     }">
-                    <button v-on:click="accept_inv(invite.title)">
-                        <!-- Αποδοχή -->
-                        <font-awesome-icon class="accept" :icon="['far', 'check-circle']"/> 
-                    </button>
-                    <button v-on:click="reject_inv(invite.title)">
-                        <!-- Απόριψη -->
-                        <font-awesome-icon class="ignore" :icon="['far', 'times-circle']"/>
-                    </button>
-                </div>
-            </li>
+                    <div class="prof_progress">
+                        {{'Από: ' + invite.sender + ' ' + invite.date }}
+                    </div>
 
-            <li v-for="project in projects" :key="project.id"
-                v-on:click="mpou()">
+                    <div class="vert_div"></div>
 
-            <font-awesome-icon class="icon" :icon="!project.icon ? project.icon=icon_roulete() : project.icon"
-                :style="{
-                        'color' : !project.color ? project.color=color_roulete() : project.color,
-                    }"
-            />
-                <!-- <div class="icon" :style="{
-                    'background-color' : !project.color ? project.color=color_roulete() : project.color,
-                }"></div> -->
-                <div class="projectTitle">
-                    {{project.title}}
-                </div>
-                <div class="partners_box">
-                    <div class="partner" v-for="partner in project.partners" :key="partner">
-                        <font-awesome-icon class="icon" :icon="['far', 'user']"
-                            :style="{
-                                'background-color' : color_roulete(),
-                            }">
-                        </font-awesome-icon>
-
-                        <div class="fullname">
-                            {{partner}}
-                        </div>
-
-                        <div class="mytxt">
-                            {{partner[0]}}
-                        </div>
+                    <div class="wrap_partners">
+                        <button v-on:click="accept_inv(invite.invitationCode)"> 
+                            Αποδοχή
+                            <font-awesome-icon class="accept" :icon="['far', 'check-circle']"/> 
+                        </button>
+                        <button v-on:click="reject_inv(invite.invitationCode)">
+                            Απόρριψη
+                            <font-awesome-icon class="ignore" :icon="['far', 'times-circle']"/>
+                        </button>
                     </div>
                 </div>
             </li>
 
-            
-        </ul>
-    <router-view></router-view>
-    </div>
+            <li v-for="project in projects" :key="project._id" :class="{ 'selectedProject' : selected_prj == project._id}">
+                
+                <div :class="{'projectTitle': true}" @click="goToProject(project.name)">
+                    <font-awesome-icon class="icon" :icon="!project.icon ? project.icon=icon_roulete() : project.icon"
+                    :style="{
+                            'color' : !project.color ? project.color=color_roulete() : project.color,
+                        }"
+                    />
+                    {{project.name}}
+                </div>
 
+                <font-awesome-icon
+                    :class="{'icon_arrow': true, 'rotate': selected_prj == project._id}"
+                    :icon="['fas', 'chevron-right']"
+                    @click="selected_prj==project._id ? selected_prj=-1 : selected_prj=project._id;"
+                    >
+                </font-awesome-icon>
+                
+                <div :class="{'partners_box': true, 'show_box': selected_prj==project._id}">
+                    
+                    <div class="prof_progress">
+                        Κατάσταση:&#9;
+                        <v-progress-circular style="margin-left:5px"
+                                :rotate="-45"
+                                :size="50"
+                                :width="4"
+                                :value="project.status"
+                                color="teal"
+                        >
+                            {{project.status }}
+                        </v-progress-circular>
+                    </div>
+                    <div class="vert_div"></div>
+                    
+                    <div class="wrap_partners">
+                        <div class="partner" v-for="partner in project.members" :key="partner._id">
+                            <font-awesome-icon class="icon" :icon="['far', 'user']"
+                                :style="{
+                                    'background-color' : color_roulete(),
+                                }">
+                            </font-awesome-icon>
+
+                            <div class="fullname">
+                                {{partner.username}}
+                            </div>
+
+                            <div class="mytxt">
+                                {{partner.username[0]}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>            
+        </ul>
+    </div>
 </template>
 
 <script>
+
+    import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+    import { library } from '@fortawesome/fontawesome-svg-core';
+    import { mapActions, mapGetters } from "vuex"
+    library.add(faChevronRight);
 
     import createProject from "../create.vue"
 
@@ -104,67 +136,17 @@
             welcome_mssg: "Όλα μου τα Projects:",
             btn_mssg: "Δημιουργία Project",
             create_prj: 0,
+            selected_prj: -1,
             invites_mouse_over: '',
-            projects:[
-                {
-                    id: 1,
-                    title: "Deploy PPO, A2C model",
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 2,
-                    title: "CNN's Implementation",
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 3,
-                    title: "Mini JS Compiler",
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 4,
-                    title: "LSH HyperCube Algorithms",
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 5,
-                    title: "Variational Autoencoders",
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 6,
-                    title: "Redesign Eudoxus Website",
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                },
-
-                {
-                    id: 7,
-                    title: "Best DI Team Implementation",
-                    partners: [
-                        'Mike','Spyros','Dion','Andreas','Mery','Aleksandra',
-                    ],
-                }
-            ],
+            
         }
     },
+    created() {
+        this.getProjects()        
+        this.getInvites()
+    },
     methods:{
+        ...mapActions(["getProjects", "getProject", "getInvites", "answerInvitation", "getEmulatedData"]),
         mpou(){
             alert("on-click");
         },
@@ -177,19 +159,33 @@
             return i_arr[Math.floor(Math.random() * i_arr.length)];
         }
         ,
-        accept_inv(name){
-            alert("Accepted: " + name);
+        accept_inv(invitationCode){
+            this.answerInvitation({answer: "accept", invitationCode: invitationCode})
+            .then( response => {console.log("ACCEPT INVITE"); this.getProjects()})
+            
         },
-        reject_inv(name){
-            alert("Rejected: " + name);
+        reject_inv(invitationCode){
+            this.answerInvitation({answer: "reject", invitationCode: invitationCode})
+            .then( response => {console.log("REJECT INVITE"); this.getProjects()})
         },
-        mouse_on(title){
-            this.invites_mouse_over=title;
-            this.$emit('update-seen', title);
+        mouse_on(invitationCode){
+            this.invites_mouse_over=invitationCode;
+            // this.$emit('update-seen', title);
+            this.$store.commit("UPDATE_SEEN_INVITE", invitationCode)
+        },
+        goToProject(projectName) {
+            this.getProject(projectName)
+            .then( response => {this.$router.push({name:"Projects"});}) 
         }
     },
     computed:{
+        ...mapGetters({
+		    projects: "projects",
+            invites: "invites",
+	    }),
 
+
+        
     },
     components:{
         createProject,
@@ -197,7 +193,7 @@
     props:{
         user:String,
         coWorkers:Array,
-        invites:Array,
+        // invites:Array,
     }
 };
 </script>

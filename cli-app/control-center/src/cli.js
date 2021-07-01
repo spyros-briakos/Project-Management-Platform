@@ -17,19 +17,6 @@ const restAPI = require('../../../rest-api-client/restAPI');
 export function cli(args) {
 
   program
-  .command('users')
-  .action(() => {
-    axios.get(`${apiUrl}/users/`)
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch(() => {
-      // console.log(error);
-			console.log('An error occurred');
-    })
-  });
-
-  program
   .command('projects')
   .action(async () => {
 	try {

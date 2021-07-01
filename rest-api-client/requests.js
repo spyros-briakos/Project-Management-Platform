@@ -67,6 +67,18 @@ export const getUserRequest = async (token) => {
   }
 }
 
+export const getUsersRequest = async () => {
+  if(TESTING) {
+    return tests.test('GET', 'users', {}, {})
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  } else {
+    return restAPI.send('GET', 'users', {}, {})
+    .then(function(response) { return response })
+    .catch(function(error) { throw error })
+  }
+}
+
 export const updateUserRequest = async (data, token) => {
   let headers = { "Authorization": `${token}` };
 

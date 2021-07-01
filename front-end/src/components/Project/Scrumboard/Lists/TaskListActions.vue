@@ -11,6 +11,8 @@
     </template>
   </DetailsDropdown>
 </template>
+
+
 <script>
 import DetailsDropdown from "../Details/DetailsDropdown.vue"
 import { Bus } from "@/utils/bus"
