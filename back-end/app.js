@@ -2,7 +2,7 @@
 
 // IMPORT PACKAGES
 const fs = require("fs");
-const https = require("https");
+const http = require("https");
 const http = require("http");
 const express = require("express");               // Basic Package for API structure
 const mongoose = require("mongoose");             // MongoDB
@@ -79,6 +79,7 @@ const PORT = process.env.PORT || 5000
 // SERVER CONNECTS TO DATABASE
 mongoose.connect(
   process.env.DB_URL, 
+  // 'mongodb://mongo:27017/docker-node-mongo',
   { 
   	useNewUrlParser: true, 
   	useUnifiedTopology: true,
@@ -100,7 +101,7 @@ const options = {
 	cert: fs.readFileSync("./server.cert").toString()
 };
 
-const server = https.createServer(options, app).listen(PORT, function(){
+const server = http.createServer(options, app).listen(PORT, function(){
   console.log(`Server listening at https://${process.env.HOSTNAME}:${PORT}/`);
 });
 module.exports = server;
