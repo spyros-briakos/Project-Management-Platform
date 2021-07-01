@@ -2,7 +2,7 @@
 
 // IMPORT PACKAGES
 const fs = require("fs");
-const http = require("https");
+const https = require("https");
 const http = require("http");
 const express = require("express");               // Basic Package for API structure
 const mongoose = require("mongoose");             // MongoDB
@@ -101,7 +101,7 @@ const options = {
 	cert: fs.readFileSync("./server.cert").toString()
 };
 
-const server = http.createServer(options, app).listen(PORT, function(){
+const server = https.createServer(options, app).listen(PORT, function(){
   console.log(`Server listening at https://${process.env.HOSTNAME}:${PORT}/`);
 });
 module.exports = server;
