@@ -538,17 +538,19 @@ export const actions = {
     var myTasks = [];
 
     // If client is not the product owner of the project
-    if(client.user._id.equals(client.project.productOwner._id)) {
-      myTasks = client.project.userStories.filter(userStory =>
-        { return userStory.tasks.filter(task =>
-           { return task.members.filter(member =>
-              { return member._id === client.user._id })
-           }) 
-        })
+    if(client.user._id === client.project.productOwner._id) {
+      for (let us of client.project.userStories) {
+        for (let task of us.tasks) {
+          if (task.member._id === client.user._id) {
+            myTasks.push(task)
+          }
+        }
+      }
     } else {
       // If it is the product owner, return all the tasks in the project
-      myTasks = client.project.userStories.filter(userStory =>
-        { return userStory.tasks })
+      for (let us of client.project.userStories) {
+        myTasks.push(...us.tasks)
+      }
     }
 
     return myTasks;

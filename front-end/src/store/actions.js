@@ -413,6 +413,8 @@ export default {
 		var token = getters.token
 		commit("SET_LOADING_STATE", true) 
 		client.tokenObject.token = token
+		client.user._id = getters._id
+
 		return actions.getProjects() 
 		.then( response => {
 			actions.getProject(data).then( response => {
@@ -421,7 +423,8 @@ export default {
 				commit("STORE_PROJECT", client.project)
 				commit("STORE_SPRINTS", client.project.sprints)
 				commit("STORE_USER_STORIES", client.project.userStories)
-				commit("STORE_EMULATED_BOARD_DATA", cloneDeep(emulatedBoard) )
+				commit("STORE_EMULATED_BOARD_DATA", cloneDeep(emulatedBoard))
+				commit("STORE_EMULATED_KANBAN_BOARD", actions.getMyTasks())
 				commit("SET_ACTIVE_TASKBOARD", { board: getters.allBoards[0]}) //set active scrum boeard
 				commit("SET_LOADING_STATE", false)
 			})
@@ -436,6 +439,25 @@ export default {
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
+
+	},
+
+	getMyTasks({ commit, getters }) {
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = projectLs
+		client.user.projects = projectsLs
+
+		client.project.userStories = getters.projectUserStories
+		client.user._id = getters._id
+
+		commit("SET_LOADING_STATE", true) 
+		commit("STORE_EMULATED_KANBAN_BOARD", actions.getMyTasks() )
+		console.log("MY TASKS ",actions.getMyTasks())
+		commit("SET_LOADING_STATE", false)
 
 	},
 
@@ -499,7 +521,6 @@ export default {
 		client.project = { _id: projectLs._id }
 		client.user.projects = projectsLs
 
-		console.log("BEFORE INVIRE", data)
 		commit("SET_LOADING_STATE", true) 
 		return actions.inviteUser(getters.projectId, data) 
 		.then( response => {

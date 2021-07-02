@@ -11,6 +11,7 @@ export default {
 
 	// store client
 	STORE_CLIENT(state, payload) {
+		Vue.set(state, "_id", payload._id)
 		Vue.set(state, "userName", payload.username)
 		Vue.set(state, "firstName", payload.firstName)
 		Vue.set(state, "lastName", payload.lastName)
@@ -241,6 +242,7 @@ export default {
 	},
 
 	DELETE_CLIENT(state, payload) {
+		Vue.set(state, "_id", null)
 		Vue.set(state, "userName", null)
 		Vue.set(state, "firstName", null)
 		Vue.set(state, "lastName", null)
@@ -367,10 +369,38 @@ export default {
 			});
 		}
 
+		Vue.set(state, "boards", myEmulatedBoard)
+	},
 
+	STORE_EMULATED_KANBAN_BOARD(state, payload) {
+		// add my tasks to kanban board
+		var myEmulatedBoard = state.boards
+		var myTasks = payload
 
-		// KANBAN BOARD
 		myEmulatedBoard[1].name = state.project.name
+
+		myTasks.forEach(task => {
+
+			var itemTask = {
+				id: task._id,
+				title: task.name,
+				text: task.description,
+				state: "taskInKanban"}
+				
+			if (task.status === "toDo") {				
+				// if not already inside
+				if (!myEmulatedBoard[1].lists[0].items.find(item => item.id === itemTask.id))
+					myEmulatedBoard[1].lists.find(list => list.id === "To do Id").items.push(itemTask)
+			} else if (task.status === "inProgress") {
+				// if not already inside
+				if (!myEmulatedBoard[1].lists[1].items.find(item => item.id === itemTask.id))
+					myEmulatedBoard[1].lists.find(list => list.id === "Doing Id").items.push(itemTask)
+			} else if (task.status === "done") {
+				// if not already inside
+				if (!myEmulatedBoard[1].lists[2].items.find(item => item.id === itemTask.id))
+					myEmulatedBoard[1].lists.find(list => list.id === "Done Id").items.push(itemTask)
+			}
+		})
 
 		Vue.set(state, "boards", myEmulatedBoard)
 	},

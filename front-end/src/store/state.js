@@ -13,6 +13,7 @@ export default {
 	// token: JSON.parse(localStorage.getItem('token')),
 	constants: {maxCoWorkers:20, maxNonPremiumProjects:3},
 	token: null,
+	_id: null,
 	userName: null,
 	firstName: null,
 	lastName: null,

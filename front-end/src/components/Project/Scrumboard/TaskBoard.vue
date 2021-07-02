@@ -59,6 +59,7 @@ export default {
     ...mapActions({
       reorderTaskLists: "reorderTaskLists",
       setActiveTaskBoard: "setActiveTaskBoard",
+      getMyTasks: "getMyTasks",
     })
   },
   created() {
@@ -68,6 +69,11 @@ export default {
       })
     }
     // this.getEmulatedData()
+    // if kanban then load my tasks
+    if (this.param === "KANBAN_BOARD") {
+      this.getMyTasks()
+      console.log("CREATEDDDD KANBAAAN")
+    }
     console.log("CREATEDDDD ", this.$route.name)
   },
   watch:{
@@ -76,6 +82,10 @@ export default {
         this.setActiveTaskBoard({
           board: this.getBoard
         })
+        if (this.param === "KANBAN_BOARD") {
+          this.getMyTasks()
+          console.log("CREATEDDDD KANBAAAN")
+        }
       }
     }
   }, 
