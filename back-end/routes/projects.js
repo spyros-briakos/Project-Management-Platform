@@ -353,6 +353,7 @@ router.post("/edit-task", async (req, res) => {
   try {
     const user = req.user;
     const project = await Project.findById(req.body.projectID);
+    const task = await Task.findById(req.body.task._id);
     // If no such project found
     if(!project) {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
@@ -362,7 +363,6 @@ router.post("/edit-task", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
-    const task = await Task.findById(req.body.task._id);
     // If no such task found
     if(!task || !project.userStories.includes(task.userStory)) {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το task.' });
@@ -527,6 +527,7 @@ router.post("/delete-task", async (req, res) => {
   try {
     const user = req.user;
     const project = await Project.findById(req.body.projectID);
+    const task = await Task.findById(req.body.taskID);
     // If no such project found
     if(!project) {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
@@ -536,7 +537,6 @@ router.post("/delete-task", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
-    const task = await Task.findById(req.body.taskID);
     // If no such task found
     if(!task || !project.userStories.includes(task.userStory)) {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το task.' });
