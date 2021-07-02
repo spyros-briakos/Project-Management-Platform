@@ -656,7 +656,6 @@ export default {
 	},
 
 	async editSprint({ commit, getters }, sprintData) {
-
 		// Get token
 		var token = getters.token
 		var projectLs = getters.project
@@ -665,16 +664,16 @@ export default {
 		client.project = projectLs
 		client.user.projects = projectsLs
 
-		// get sprint
-		var sprint = getters.projectSprints.find(s => s._id === sprintData._id)
-		// edit sprint
-		sprint.name = sprintData.name;
-		sprint.description = sprintData.description;
-		sprint.duration = sprintData.estimated_duration;
-		sprint.status = sprintData.status;
+		// // get sprint
+		// var sprint = getters.projectSprints.find(s => s._id === sprintData._id)
+		// // edit sprint
+		// sprint.name = sprintData.name;
+		// sprint.description = sprintData.description;
+		// sprint.duration = sprintData.estimated_duration;
+		// sprint.status = sprintData.status;
 		
 		commit("SET_LOADING_STATE", true) 
-		return actions.editSprint(sprint) 
+		return actions.editSprint(JSON.parse(JSON.stringify(sprintData))) 
 		.then( response => {
 			console.log(response);
       		console.log(client)
@@ -782,17 +781,17 @@ export default {
 		client.project = projectLs
 		client.user.projects = projectsLs
 
-		// get user story
-		var userStory = getters.projectUserStories.find(s => s._id === userStoryData._id)
-		// edit user story
-		userStory.name = userStoryData.name;
-		userStory.description = userStoryData.description;
-		userStory.duration = userStoryData.estimated_duration;
-		userStory.status = userStoryData.status;
-		userStory.label = userStoryData.label;
+		// // get user story
+		// var userStory = getters.projectUserStories.find(s => s._id === userStoryData._id)
+		// // edit user story
+		// userStory.name = userStoryData.name;
+		// userStory.description = userStoryData.description;
+		// userStory.duration = userStoryData.estimated_duration;
+		// userStory.status = userStoryData.status;
+		// userStory.label = userStoryData.label;
 		
 		commit("SET_LOADING_STATE", true) 
-		return actions.editUserStory(userStory) 
+		return actions.editUserStory(JSON.parse(JSON.stringify(userStoryData))) 
 		.then( response => {
 			console.log(response);
       		console.log(client)
@@ -908,20 +907,18 @@ export default {
 		// add User Story
 		client.project.userStories = getters.projectUserStories
 
-		// get task
-		var taskList = getters.projectUserStories.find(us => us._id === taskData.userStory).tasks
-		var task = taskList.find(tsk => tsk._id === taskData._id)
+		// // get task
+		// var taskList = getters.projectUserStories.find(us => us._id === taskData.userStory).tasks
+		// var task = taskList.find(tsk => tsk._id === taskData._id)
 
-		// edit task
-		task.name = taskData.name
-        task.description = taskData.description
-        task.status = taskData.status
-        task.estimated_duration = taskData.estimated_duration
+		// // edit task
+		// task.name = taskData.name
+        // task.description = taskData.description
+        // task.status = taskData.status
+        // task.estimated_duration = taskData.estimated_duration
 
-		console.log(taskData)
-		console.log(task)
 		commit("SET_LOADING_STATE", true) 
-		return actions.editTask(task) 
+		return actions.editTask(JSON.parse(JSON.stringify(taskData))) 
 		.then( response => {
 			console.log(response);
 			console.log(client)

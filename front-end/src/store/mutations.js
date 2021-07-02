@@ -70,7 +70,6 @@ export default {
 	},
 
 	STORE_SPRINT(state, payload) {
-		console.log("SPRIIINT", payload)
 		// store as a taskList
 		const board = state.boards.find(b => b.id == "SCRUM_BOARD")
 		const list = board.lists.find(l => l.id == payload._id)
