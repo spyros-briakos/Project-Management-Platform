@@ -6,23 +6,67 @@
 .scrolling-wrapper {
   overflow-x: scroll;
   overflow-y: hidden;
+  // white-space: nowrap;
+
   -webkit-overflow-scrolling: touch;
 ////////////////////////////////////////////
   position:fixed;
   // display: flex;
   top: 160px;
   left: 80px;
-  width: 95%;
+  width: 94%;
   z-index: 0;
   // margin: auto;
 }
 
+div.scroll {
+//   display: block;
+//   overflow-y: auto;
+//   overflow-x: hidden;
+//   // overflow-x: auto;
+//   // overflow-y: hidden;
+//   white-space: nowrap;
+  // -webkit-overflow-scrolling: touch;
+
+  position: fixed;
+  border:1px solid black; 
+  width:1650px;
+  height:700px;
+  // left: 100px;
+  // bottom: 100px;
+  overflow-y:hidden;
+  overflow-x: scroll;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+// div.scroll tbody {
+//   display: table;
+//   width: 100%;
+// }
+
 ///////////////////////
-// .row.flex-nowrap.mt-1 {
+.row.flex-nowrap.mt-1 {
 //   position: fixed;
 //   display: flex;
 //   z-index: 0;
-// }
+  // display: block;
+  // overflow-x: auto;
+  // white-space: nowrap;
+
+  position: fixed;
+  border:1px solid black; 
+  width: 1640px;
+  // left: 10px;
+  height:690px;
+  overflow-y:hidden;
+  overflow-x: scroll;
+  white-space: nowrap;
+  // padding-left: 10px;
+  // z-index: 0;
+
+  width: 96%;
+}
 
 .scrolling-wrapper::-webkit-scrollbar {
   display: none;
@@ -54,7 +98,7 @@
   top: 63px;
   left: 70px;
   width: 95%;
-  z-index: 1;
+  z-index: 2;
   // zoom: 1;
   // transform: scale(2);
   // transform-origin: 0 0;
@@ -127,7 +171,7 @@
 }
 
 .cards-list {
-  min-height: 300px;
+  min-height: 600px;
   height: 100vh;
   overflow: scroll;
   box-shadow: 1px 1px 1px 0px rgba(158, 158, 158, 0.25);
