@@ -1,11 +1,10 @@
 <template>
   <div class="scrolling-wrapper">   
-    <Header v-if="['Task-board'].includes($route.name)"></Header>
-    <!-- <div class="scroll"> -->
-      <draggable v-model="lists" class="row flex-nowrap mt-1" v-bind="getDragOptions">
-        <TaskList v-for="(listItem, index) in lists" :key="index" :board="getBoard" :list="listItem"></TaskList>
-      </draggable>
-    <!-- </div> -->
+    <!-- <Header v-if="['Task-board'].includes($route.name)"></Header> -->
+    <Header></Header>
+    <draggable v-model="lists" class="row flex-nowrap mt-1" v-bind="getDragOptions">
+      <TaskList v-for="(listItem, index) in lists" :key="index" :board="getBoard" :list="listItem"></TaskList>
+    </draggable>
   </div>
 </template>
 
@@ -59,7 +58,7 @@ export default {
   methods: {
     ...mapActions({
       reorderTaskLists: "reorderTaskLists",
-      setActiveTaskBoard: "setActiveTaskBoard"
+      setActiveTaskBoard: "setActiveTaskBoard",
     })
   },
   created() {
@@ -68,6 +67,17 @@ export default {
         board: this.getBoard
       })
     }
-  }
+    // this.getEmulatedData()
+    console.log("CREATEDDDD ", this.$route.name)
+  },
+  watch:{
+    $route(to, from){
+      if (this.getBoard) {
+        this.setActiveTaskBoard({
+          board: this.getBoard
+        })
+      }
+    }
+  }, 
 }
 </script>

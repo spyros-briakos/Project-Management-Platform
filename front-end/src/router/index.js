@@ -45,12 +45,13 @@ const routes = [
   },
   {
     path: "/projects",
-    redirect:"/projects/boards/d033c156-5972-4767-ceb0-8a91a5c282db",
+    redirect:"/projects/boards/SCRUM_BOARD",
     name: "Projects",
     component: Projects,
     children: [
       {
         path: "boards/:id",
+        // redirect:"/projects/boards/SCRUM_BOARD",
         name: "Task-board",
         component: TaskBoard
       },
@@ -61,7 +62,7 @@ const routes = [
       },
       {
         path: "kanban",
-        redirect:"/projects/boards/0319aa8a-e1f4-6e8a-9717-c6f93e7d68b2",
+        redirect:"/projects/boards/KANBAN_BOARD",
         name: "Kanban",
         component: Kanban,
       },

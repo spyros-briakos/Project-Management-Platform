@@ -29,9 +29,6 @@ export default {
       myFooter,
       LoadingIndicator
   },  
-  beforeCreate() {
-    this.$store.dispatch("fetchData")
-  },
   computed: {
     ...mapGetters({
       isLoading: "isLoading"

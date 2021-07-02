@@ -183,7 +183,7 @@
 
     <div class="card-body" v-if="!isNewItem">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
-        <span style = "font-weight: bold; font-size:15px;" v-if="!isNewItem"> {{ this.selected }} </span> 
+        <span style = "font-weight: bold; font-size:15px;" v-if="!isNewItem"> {{ displayItemState }} </span> 
         <br v-if="!isNewItem">
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
@@ -212,7 +212,15 @@ export default {
     },
     displayTitle() {
       return this.isNewItem ? "" : this.item.title
-    }
+    },
+    displayItemState() {
+      // var status = this.item.status
+      // if (status === "userStory")
+      //   return "User Story"
+      // else if (status === "taskUnderUserStory" || status === "taskUnderUserSprint" || status === "kanbanTask")
+      //   return "Task"
+      return this.item.state === "userStory" ? "User Story" : "Task"
+    },
   },
   data() {
     return {
