@@ -4,13 +4,14 @@
 - [ ] Secure routes (remove logon button after login etc.)
 - [ ] At profile password change needs password form 
 - [ ] Full text search at project invites during the creation of the project
+- [X] Fix asynchronous invites at project creation
 - [ ] Full text search at project invites in project settings
 - [ ] Remove project memembers from coworkers at project invites in project settings
 - [ ] Product owner premium project rights...
 - [ ] Scrum board...
 - [X] Scrum board create test Sprints and store in state
-- [ ] Scrum board create test User stories and store in state
-- [ ] Scrum board create test Tasks and store in state
+- [X] Scrum board create test User stories and store in state
+- [X] Scrum board create test Tasks and store in state
 - [ ] Scrum board horizontal scroll (Quasar has that module)
 - [ ] Scrum board create Sprint form
 - [ ] Scrum board edit Sprint form integration
