@@ -33,6 +33,7 @@ cd Project-Management-Platform
 ```bash
 npm install
 npm start
+curl --request GET --url http://127.0.0.1:3081/db/initialize-db 
 ```
 
 ### Frontend Installation
