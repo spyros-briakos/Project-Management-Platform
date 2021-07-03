@@ -38,7 +38,7 @@
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
         <span class="edit_2" v-else> 
-          <i class="fas fa-plus-circle" @click="startEditing"></i> 
+          <i class="fas fa-plus-circle"  @click="startEditing"></i> 
         </span> 
       </template>
 
@@ -173,7 +173,7 @@
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
         <span class="edit_2" v-else> 
-          <i class="fas fa-plus-circle" @click="startEditing"></i> 
+          <i class="fas fa-plus-circle"  @click="startEditing"></i> 
         </span> 
       </template>
 
@@ -658,4 +658,5 @@ export default {
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css">
+
 </style>
