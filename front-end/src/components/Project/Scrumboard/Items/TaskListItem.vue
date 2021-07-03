@@ -504,7 +504,7 @@ export default {
             item: updatedItem
           })
           this.$emit("item-edited")
-          this.$validator.reset()
+          this.$validator.reset() 
         }
         this.$refs.newItemPopup.close()
       })
