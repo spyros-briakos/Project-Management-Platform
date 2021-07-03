@@ -8,7 +8,7 @@
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
         <span class="edit_2" v-else> 
-          <i class="fas fa-plus-circle" @click="startEditing"></i> 
+          <i class="fas fa-plus-circle"  @click="startEditing"></i> 
         </span> 
       </template>
 
@@ -116,7 +116,7 @@
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
         <span class="edit_2" v-else> 
-          <i class="fas fa-plus-circle" @click="startEditing"></i> 
+          <i class="fas fa-plus-circle"  @click="startEditing"></i> 
         </span> 
       </template>
 
@@ -188,17 +188,25 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div>
-    <v-btn
-      elevation="1"
-      fab
-      x-small
-      block
-      v-if="item.state==='userStory'"
-      @click="collapseTasks_()"
-    > 
-      <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
-      <i class="fas fa-chevron-down" v-else></i>
-    </v-btn>
+    <div align="center" >
+      <v-btn 
+        elevation="1"
+        fab
+        v-if="item.state==='userStory'"
+        @click="collapseTasks_()"
+        width="0px"
+        height="0px"
+        style="padding-bottom:10px"
+      > 
+        <!-- <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
+        <i class="fas fa-chevron-down" v-else></i> -->
+        <v-icon  style="font-size:18px; color:#292F2B" v-if="collapsedTasks">fas fa-chevron-circle-down</v-icon>
+        <v-icon style="font-size:18px; color:#292F2B" v-else>fas fa-chevron-circle-down</v-icon>
+        <!-- <v-icon class="fas fa-chevron-circle-down" style="color:white" v-else></v-icon> -->
+        <!-- <i class="fas fa-chevron-circle-down" style="font-size:15px; right:100px; top:345px; cursor: pointer;" v-if="collapsedTasks"></i>
+        <i class="fas fa-chevron-circle-down" style="font-size:15px; right:100px; top:345px; cursor: pointer;" v-else></i> -->
+      </v-btn>
+    </div>
   
   </div>
 </template>
@@ -320,4 +328,5 @@ export default {
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css">
+
 </style>
