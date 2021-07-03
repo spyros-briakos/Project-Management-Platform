@@ -3,7 +3,7 @@
     <summary>
       <slot name="handle">...</slot>
     </summary>
-    <div class="dropdown-content">
+    <div class="dropdown-content" style="position:absolute; top:30px; left:-20px; height:70px; width:95px;">
       <slot name="content">
         <label class="content-item">Item 1</label>
         <label class="content-item">Item 2</label>

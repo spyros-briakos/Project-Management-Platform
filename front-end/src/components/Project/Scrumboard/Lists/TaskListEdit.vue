@@ -70,20 +70,12 @@ export default {
     handleTaskListEditing(list) {
       this.listForm.id = list.id
       this.listForm.name = list.name
-      console.log("EDIIIITTTT")
-      let sprint = {
-        // like this
-                name: "xexe",
-                description: "testaroume edoo",
-                status: "toDo",
-                estimated_duration: "10",
-                _id: list.id,
-            }
-      this.editSprint(sprint)
+      // here needs an edit form
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {
 
+      // here needs a create form
       // just add the form elemnts in this object
       let sprint = {
                 // like this

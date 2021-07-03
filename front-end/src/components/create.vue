@@ -164,7 +164,7 @@ export default({
         // coWorkers: Array,
     },
     methods:{
-        ...mapActions(["addProject", "getProject", "inviteUsers", "getProjects", "addSprint", "addTask", "addUserStory"]),
+        ...mapActions(["addProject", "getProject", "inviteUsers", "getProjects", "addSprint", "addTask", "addUserStory", "createProjectAndInvite"]),
         find(val){
             alert(val);
             this.get_friends.people.push(val);
@@ -212,73 +212,54 @@ export default({
             }
 
 
-            this.createProjectAndInvite(project, ["admin2", "admin3"])
-            .then( response => {console.log("PROEJECT CREATED"); this.getProjects();})
-
-            
+            this.createProjectAndInvite( {project:project, inviteUsernameList:["admin2", "admin3"]})
+            .then( response => {                            
+                this.goodAllert = true
+                this.badAllert = false
+                this.goodAllertMessage = response
+                this.getProjects()
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = true
+                this.badAllertMessage = error.response.data.message
+            })
 
             
         },
-        async createProjectAndInvite(project, inviteUsernameList) {
-            // create project
-            return this.addProject(project)
-                // load project
-                .then( response => {
-                    this.goodAllertMessage += response + " "
-                    this.getProject(project.name)
-                    // invites
-                    .then( response => {this.inviteUsers(inviteUsernameList)
-                    // TESTING SCRUM BOARDS
-            // let sprint = {
-            //     name: "Sprint testy",
-            //     description: "testaroume edoo",
-            //     status: "toDo",
-            //     estimated_duration: "10"
-            // }
-
-            // let userStory = {
-            //     name: "Test Story",
-            //     description: "testaroume pali edoo",
-            //     label: "issue",
-            //     status: "toDo",
-            //     estimated_duration: "10"
-            // }
-
-            // // let task = {
-            // //     name: "proto taskoo",
-            // //     description: "malakizomaste edo",
-            // //     status: "toDo",
-            // //     estimated_duration: "3",
-            // //     userStory: "Test Story"
-            // // }
-            
-            // this.addSprint(sprint)
-            // this.addUserStory(userStory)
-            // // .then(this.addTask(task))
-            
-                        .then( response => {                            
-                            this.goodAllert = true
-                            this.badAllert = false
-                            this.goodAllertMessage += response
-                        })
-                        .catch( error => { 
-                            this.badAllert = true
-                            this.goodAllert = true
-                            this.badAllertMessage = error.response.data.message
-                        })
-                    })
-                    .catch( error => { 
-                        this.badAllert = true
-                        this.goodAllert = false
-                        this.badAllertMessage = error.response.data.message
-                    })
-                })
-                .catch( error => { 
-                    this.badAllert = true
-                    this.goodAllert = false
-                    this.badAllertMessage = error.response.data.message
-                })
-        },
+        // async createProjectAndInvite(project, inviteUsernameList) {
+        //     // create project
+        //     return this.addProject(project)
+        //         // load project
+        //         .then( response => {
+        //             this.goodAllertMessage += response + " "
+        //             this.getProject(project.name)
+        //             // invites
+        //             .then( response => {
+        //                 this.inviteUsers(inviteUsernameList)
+        //                 .then( response => {                            
+        //                     this.goodAllert = true
+        //                     this.badAllert = false
+        //                     this.goodAllertMessage += response
+        //                 })
+        //                 .catch( error => { 
+        //                     this.badAllert = true
+        //                     this.goodAllert = true
+        //                     this.badAllertMessage = error.response.data.message
+        //                 })
+        //             })
+        //             .catch( error => { 
+        //                 this.badAllert = true
+        //                 this.goodAllert = false
+        //                 this.badAllertMessage = error.response.data.message
+        //             })
+        //         })
+        //         .catch( error => { 
+        //             this.badAllert = true
+        //             this.goodAllert = false
+        //             this.badAllertMessage = error.response.data.message
+        //         })
+        // },
         addProject_(project) {
             this.addProject(project)
             .then( response => {

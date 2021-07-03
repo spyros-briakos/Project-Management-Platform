@@ -1,5 +1,5 @@
 <template>
-  <div class="card tasklist-item">   
+  <div class="card tasklist-item" v-if="item.state!=='hiddenTaskUnderUserStory'">   
 
     <BacklogPopup ref="newItemPopup" v-if="list.name!='Product Backlog'" @popuptoggled1="handlePopupToggled1">
       <template v-slot:handle1>
@@ -188,6 +188,17 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div>
+    <v-btn
+      elevation="1"
+      fab
+      x-small
+      block
+      v-if="item.state==='userStory'"
+      @click="collapseTasks_()"
+    > 
+      <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
+      <i class="fas fa-chevron-down" v-else></i>
+    </v-btn>
   
   </div>
 </template>
@@ -231,14 +242,22 @@ export default {
         title: ""
       },
       selected: 'Task',
-      options: ['User Story', 'Epic','Issue','Task']
+      options: ['User Story', 'Epic','Issue','Task'],
+      collapsedTasks: false,
     }
   },
   methods: {
     ...mapActions({
       saveTaskListItem: "saveTaskListItem",
-      deleteTaskListItem: "deleteTaskListItem"
+      deleteTaskListItem: "deleteTaskListItem",
+      changeTasksState: "changeTasksState",
     }),
+
+    collapseTasks_() {
+      this.collapsedTasks = !this.collapsedTasks
+      this.changeTasksState(this.item.id)
+    },
+
     startEditing() {
       this.form.id = this.item.id
       this.form.title = this.item.title

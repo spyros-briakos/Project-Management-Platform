@@ -150,5 +150,28 @@ export default {
 
 	coWorkers: state => (state.coWorkers === undefined || state.coWorkers.length == 0 ? testing ? coWorkersTest : [] : state.coWorkers ),
 
+	getSprintIdbyName: (state) => (sprintName) => {
+        return state.sprints.find(s => s.name === sprintName)._id
+	},
+
+	getSprintbyName: (state) => (sprintName) => {
+        return JSON.parse(JSON.stringify(state.sprints.find(s => s.name === sprintName)))
+	},
+
+	getUserStoryIdbyName: (state) => (userStoryName) => {
+        return state.userStories.find(us => us.name === userStoryName)._id
+	},
+
+	getUserStorybyName: (state) => (userStoryName) => {
+        return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName)))
+	},
+
+	getTaskIdbyNames: (state) => (taskName, userStoryName) => {
+        return state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)._id
+	},
+
+	getTaskbyNames: (state) => (taskName, userStoryName) => {
+        return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))
+	},
 }
 

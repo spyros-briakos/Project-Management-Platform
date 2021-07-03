@@ -83,63 +83,65 @@ export const emulatedBoard = [{
 	"description": "This is a project Kanban?",
 	"archived": false,
 	"lists": [{
-			"id": "16078327-fb2d-03f5-b3fd-51e7d8c2c667",
+			"id": "To do Id",
 			"name": "To do",
 			"headerColor": "#607d8b",
 			"archived": false,
-			"items": [{
-					"id": "d437a857-ea63-74a6-23c1-7bd4e80e420d",
-					"title": "Build the feature #1",
-					"text": "We are gonna do this and that...etc1",
-					"state": "task",
-				},
-				{
-					"id": "f2bbdeaf-cee8-2677-c6da-9a9acbf7777b",
-					"title": "Test the feature #1",
-					"text": "We are gonna do this and that...etc2",
-					"state": "task",
-				},
-				{
-					"id": "9dd22d09-9536-bee4-cadb-986dd0cf71d5",
-					"title": "Commit feature #1 to the repository",
-					"text": "We are gonna do this and that...etc3",
-					"state": "task",
-				},
-				{
-					"id": "eecc7160-8575-19a1-bdaa-ea24e1ee3a34",
-					"title": "Deploy the feature #1",
-					"text": "We are gonna do this and that...etc4",
-					"state": "task",
-				}
+			"items": [
+				// {
+				// 	"id": "d437a857-ea63-74a6-23c1-7bd4e80e420d",
+				// 	"title": "Build the feature #1",
+				// 	"text": "We are gonna do this and that...etc1",
+				// 	"state": "task",
+				// },
+				// {
+				// 	"id": "f2bbdeaf-cee8-2677-c6da-9a9acbf7777b",
+				// 	"title": "Test the feature #1",
+				// 	"text": "We are gonna do this and that...etc2",
+				// 	"state": "task",
+				// },
+				// {
+				// 	"id": "9dd22d09-9536-bee4-cadb-986dd0cf71d5",
+				// 	"title": "Commit feature #1 to the repository",
+				// 	"text": "We are gonna do this and that...etc3",
+				// 	"state": "task",
+				// },
+				// {
+				// 	"id": "eecc7160-8575-19a1-bdaa-ea24e1ee3a34",
+				// 	"title": "Deploy the feature #1",
+				// 	"text": "We are gonna do this and that...etc4",
+				// 	"state": "task",
+				// }
 			]
 		},
 		{
-			"id": "a1640945-47aa-18c4-898c-11848eadce35",
+			"id": "Doing Id",
 			"name": "Doing",
 			"headerColor": "#607d8b",
 			"archived": false,
-			"items": [{
-					"id": "b0f701c4-ad7f-2a99-7c59-a37dda5a966f",
-					"title": "Build the demo app",
-					"text": "",
-					"state": "task",
-				},
-				{
-					"id": "c2acf5a3-a008-6157-9f37-48b0aa9f8ee0",
-					"title": "Put in some sample data in app",
-					"text": "",
-					"state": "task",
-				},
-				{
-					"id": "ffad019d-0b23-d853-1c61-c86997a1b37b",
-					"title": "Test the app before launching",
-					"text": "",
-					"state": "task",
-				}
+			"items": [
+				// {
+				// 	"id": "b0f701c4-ad7f-2a99-7c59-a37dda5a966f",
+				// 	"title": "Build the demo app",
+				// 	"text": "",
+				// 	"state": "task",
+				// },
+				// {
+				// 	"id": "c2acf5a3-a008-6157-9f37-48b0aa9f8ee0",
+				// 	"title": "Put in some sample data in app",
+				// 	"text": "",
+				// 	"state": "task",
+				// },
+				// {
+				// 	"id": "ffad019d-0b23-d853-1c61-c86997a1b37b",
+				// 	"title": "Test the app before launching",
+				// 	"text": "",
+				// 	"state": "task",
+				// }
 			]
 		},
 		{
-			"id": "fe4f6134-2e17-d63a-5a4c-8220af800129",
+			"id": "Done Id",
 			"name": "Done",
 			"headerColor": "#607d8b",
 			"archived": false,
