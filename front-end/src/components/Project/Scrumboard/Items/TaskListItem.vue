@@ -162,7 +162,8 @@
   <!--  -->
   <!-- Case: Scrum Board -> userStory --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="item.state=='userStory' && board.id=='SCRUM_BOARD'">   
+  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">   
+  <!-- <div class="card tasklist-item" v-else-if="item.state=='userStory' && board.id=='SCRUM_BOARD'">    -->
     
     <!--  For Product Backlog (different popup from others) -->
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
@@ -181,7 +182,7 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
+            <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
         </div>
         
@@ -218,6 +219,7 @@
           <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
           <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
           <!-- <div> -->
+          <!-- <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save"> -->
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save">
             Save
           </button> 
@@ -428,12 +430,12 @@ export default {
       getTaskIdbyNames: "getTaskIdbyNames",
       getUserStorybyName: "getUserStorybyName",
       getTaskbyNames: "getTaskbyNames",
+      getUserStoriesNames: "getUserStoriesNames"
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
     }
   },
-    
   data() {
     return {
       isEditing: false,
@@ -447,7 +449,8 @@ export default {
         storyName: '',
         taskName: '', 
       },
-      selected: 'Task',
+      default_task: 'Task',
+      default_user_story: 'User Story',
       options: ['User Story','Task'],
       collapsedTasks: false,
     }
@@ -480,6 +483,12 @@ export default {
       this.form.text = this.item.text
       this.isEditing = true
       // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
+      
+      ///experiment//
+
+
+      ///////////////
+
       this.$emit("item-editing")
     },
     clearForm() {
@@ -531,8 +540,6 @@ export default {
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
     },
-
-    //antrikos
 
     addSprint_() {
       let sprint = {
@@ -588,8 +595,8 @@ export default {
 
       // get output from form
       let userStoryFormOutput = {
-        name: "xexexe",
-        description: "edo pali testaroume",
+        name: this.form.title,
+        description: this.form.text,
         label: "issue",
         status: "toDo",
         estimated_duration: "10",
