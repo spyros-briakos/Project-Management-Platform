@@ -112,6 +112,7 @@ router.patch('/edit-user', async (req, res) => {
       req.logout();
 
       res.json({
+        status: 'OK', 
         message: 'Ο λογαριασμός σου ενημερώθηκε με επιτυχία.\nΣου στείλαμε email επιβεβαίωσης. Παρακαλούμε δες το Gmail σου!',
         user: context,
         email: 'updated'
@@ -164,7 +165,7 @@ router.patch('/reset-password', async (req, res) => {
     // Save it so that the new password will be hashed
     const saved = await user.save();
 
-    res.json({ message: 'Επιτυχής ενημέρωση του κωδικού πρόσβασης.' });
+    res.json({ status: 'OK', message: 'Επιτυχής ενημέρωση του κωδικού πρόσβασης.' });
 
   } catch (error) {
     res.status(400).json({ message: error });
@@ -209,6 +210,7 @@ router.patch('/upgrade-plan', async (req, res) => {
     const context = await serializer.userSerializer(updatedUser);
 
     res.json({
+      status: 'OK', 
       message: 'Ο λογαριασμός σου αναβαθμίστηκε με επιτυχία σε προνομιούχος!',
       user: context
     });
@@ -280,7 +282,7 @@ router.delete('/delete-user', async (req, res) => {
     // Log out user
     req.logout();
 
-    res.json({ message: 'Επιτυχής διαγραφή λογαριασμού.' });
+    res.json({ status: 'OK', message: 'Επιτυχής διαγραφή λογαριασμού.' });
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: error });
@@ -350,9 +352,9 @@ router.post('/project-invite/:projectId', async(req, res) => {
     }
 
     if(req.body.users.length == 1) {
-      res.json({ message: `Η πρόσκληση του χρήστη ${req.body.users[0]} στο project ${req.body.project} στάλθηκε με επιτυχία!` });
+      res.json({ status: 'OK', message: `Η πρόσκληση του χρήστη ${req.body.users[0]} στο project ${req.body.project} στάλθηκε με επιτυχία!` });
     } else {
-      res.json({ message: `Όλες οι προσκλήσεις μελών στο project ${req.body.project} στάλθηκαν με επιτυχία!` });
+      res.json({ status: 'OK', message: `Όλες οι προσκλήσεις μελών στο project ${req.body.project} στάλθηκαν με επιτυχία!` });
     }
   } catch (error) {
     res.status(400).json({ message: error });

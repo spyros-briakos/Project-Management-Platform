@@ -1,0 +1,70 @@
+{
+    "user": {
+        "username": "admin",
+        "password": "admin1234",
+        "firstName": "Dionysis",
+        "lastName": "Balaskas",
+        "email": "dionysisbalaskas@gmail.com",
+        "plan_in_use": "standard",
+        "status": "Active",
+        "projects": [],
+        "invitations": [],
+        "image": {}
+    },
+    "message": {
+        "login": "Η σύνδεσή σου ολοκληρώθηκε με επιτυχία.",
+        "logout": "Επιτυχής αποσύνδεση.",
+        "signup": "Επιτυχής εγγραφή!\nΣου στείλαμε email επιβεβαίωσης. Παρακαλούμε δες το Gmail σου!",
+        "edit_user": "Ο λογαριασμός σου ενημερώθηκε με επιτυχία.",
+        "delete_user": "Επιτυχής διαγραφή λογαριασμού.",
+        "upgrade_plan": "Ο λογαριασμός σου αναβαθμίστηκε με επιτυχία σε προνομιούχος!",
+        "reset_password": "Επιτυχής ενημέρωση του κωδικού πρόσβασης.",
+        "add_project": "Το Project δημιουργήθηκε με επιτυχία.",
+        "edit_project": "Το Project τροποποιήθηκε με επιτυχία.",
+        "delete_project": "Το Project διαγράφθηκε με επιτυχία.",
+        "add_userStory": "Το UserStory δημιουργήθηκε με επιτυχία.",
+        "edit_userStory": "Το UserStory τροποποιήθηκε με επιτυχία.",
+        "delete_userStory": "Το UserStory διαγράφθηκε με επιτυχία.",
+        "add_sprint": "Το Sprint δημιουργήθηκε με επιτυχία.",
+        "edit_sprint": "Το Sprint τροποποιήθηκε με επιτυχία.",
+        "delete_sprint": "Το Sprint διαγράφθηκε με επιτυχία.",
+        "add_task": "Το Task δημιουργήθηκε με επιτυχία.",
+        "edit_task": "Το Task τροποποιήθηκε με επιτυχία.",
+        "delete_task": "Το Task διαγράφθηκε με επιτυχία.",
+        "join_task": "Ο χρήστης έγινε μέλος του Task.",
+        "leave_task": "Ο χρήστης αποχώρησε από το Task.",
+        "leave_project": "Ο χρήστης αποχώρησε από το Project.",
+        "connect_task_sprint": "Το Task συνδέθηκε στο Sprint.",
+        "disconnect_task_sprint": "Το Task αποδεσμεύτηκε από το Sprint.",
+        "connect_task_task": "Τα Tasks συνδέθηκαν μεταξύ τους.",
+        "disconnect_task_task": "Τα Tasks αποδεσμεύτηκαν."
+    },
+    "project": {
+        "name": "new project",
+        "description": "test project desc",
+        "productOwner": {
+            "username": "admin"
+        },
+        "scrumMaster": {
+            "username": "admin"
+        },
+        "sprints": [],
+        "userStories": [],
+        "status": "inProgress",
+        "plan_in_use": "standard",
+        "members": [
+            {
+                "username": "admin"
+            }
+        ]
+    },
+    "task": {
+
+    },
+    "sprint": {
+        
+    },
+    "userStory": {
+
+    }
+  }

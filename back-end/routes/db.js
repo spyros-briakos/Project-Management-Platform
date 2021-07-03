@@ -7,7 +7,8 @@ const router = express.Router();
 // DIONYSIS
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb://localhost/scrub", {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 const { User } = require("../models/User");
 // DIONYSIS
@@ -125,6 +126,12 @@ router.get('/reset', function(req, res) {
   });
   user.save();
   res.json({ status : 'OK' })
+})
+
+// initialize system
+router.get('/initialize-db', function(req, res) {
+  db.db.dropDatabase()
+  // ALLAXE TA OLA - VALE THN MANA SOY KAI TON PATERA SOY
 })
 
 module.exports = router;
