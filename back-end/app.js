@@ -74,12 +74,13 @@ app.get("/", (req, res) => {
 
 // SERVER CONFIG
 const PORT = process.env.PORT || 5000
+const HOST = process.env.HOST || '127.0.0.1'
 // const DB_URL = process.env.DB_CONNECTION || "mongodb://localhost/scrub";
 
 // SERVER CONNECTS TO DATABASE
 mongoose.connect(
-  process.env.DB_URL, 
-  // 'mongodb://mongo:27017/docker-node-mongo',
+  "mongodb://localhost/scrub",
+  // process.env.DB_URL, 
   { 
   	useNewUrlParser: true, 
   	useUnifiedTopology: true,
@@ -101,6 +102,9 @@ const options = {
 	cert: fs.readFileSync("./server.cert").toString()
 };
 
+// const server = https.createServer(options, app).listen(PORT, function(){
+//   console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
+// });
 const server = http.createServer(options, app).listen(PORT, function(){
   console.log(`Server listening at http://${process.env.HOSTNAME}:${PORT}/`);
 });
