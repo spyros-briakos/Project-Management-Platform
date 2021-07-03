@@ -259,7 +259,8 @@
   <!--  -->
   <!-- Case: Scrum Board -> taskInSprint --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="item.state=='taskInSprint' && board.id=='SCRUM_BOARD'">   
+  <div class="card tasklist-item" v-else>   
+  <!-- <div class="card tasklist-item" v-else-if="item.state=='taskInSprint' && board.id=='SCRUM_BOARD'">    -->
     
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
       <template v-slot:handle1>
@@ -392,7 +393,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex"
+import { mapGetters, mapActions } from "vuex"
 import BacklogPopup from '../Details/BacklogPopup.vue'
 import Multiselect from 'vue-multiselect'
 
@@ -420,17 +421,37 @@ export default {
       //   return "Task"
       return this.item.state === "userStory" ? "User Story" : "Task"
     },
+    //antrikos
+    ...mapGetters({
+      activeBoard: "activeBoard",
+      isLoading: "isLoading",
+      getSprintIdbyName: "getSprintIdbyName",
+      getSprintbyName: "getSprintbyName",
+      getUserStoryIdbyName: "getUserStoryIdbyName",
+      getTaskIdbyNames: "getTaskIdbyNames",
+      getUserStorybyName: "getUserStorybyName",
+      getTaskbyNames: "getTaskbyNames",
+    }),
+    boardName() {
+      return this.activeBoard ? this.activeBoard.name : ""
+    }
   },
+    
   data() {
     return {
       isEditing: false,
       form: {
         id: "",
         text: "",
-        title: ""
+        title: "",
+        // antrikos
+        valid: true,
+        sprintName: '',
+        storyName: '',
+        taskName: '', 
       },
       selected: 'Task',
-      options: ['User Story', 'Epic','Issue','Task'],
+      options: ['User Story','Task'],
       collapsedTasks: false,
     }
   },
@@ -439,6 +460,16 @@ export default {
       saveTaskListItem: "saveTaskListItem",
       deleteTaskListItem: "deleteTaskListItem",
       changeTasksState: "changeTasksState",
+      //antrikos
+      addUserStory: "addUserStory",
+      editUserStory: "editUserStory",
+      deleteUserStory: "deleteUserStory",
+      addTask: "addTask",
+      editTask: "editTask",
+      deleteTask: "deleteTask",
+      addSprint: "addSprint",
+      editSprint: "editSprint",
+      deleteSprint: "deleteSprint",
     }),
 
     collapseTasks_() {
@@ -503,6 +534,121 @@ export default {
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
     },
+
+    //antrikos
+
+    addSprint_() {
+      let sprint = {
+        name: this.sprintName,
+        description: "testaroume edoo",
+        status: "toDo",
+        estimated_duration: "10"
+      }
+      this.addSprint(sprint)
+    },
+
+    editSprint_(){
+      // get the current object for place holding
+      const sprint = this.getSprintbyName(this.sprintName)
+
+      // get output from form
+      let sprintFormOutput = {
+        name: "xeexee",
+        description: "testaroume edoo",
+        status: "toDo",
+        estimated_duration: "10"
+      }
+
+      // edit it
+      sprint.name = sprintFormOutput.name
+      sprint.description = sprintFormOutput.description
+      sprint.status = sprintFormOutput.status
+      sprint.estimated_duration = sprintFormOutput.estimated_duration
+
+      // send request
+      this.editSprint(sprint)
+    },
+
+    deleteSprint_(sprintName){
+      this.deleteSprint(this.getSprintIdbyName(sprintName))
+    },
+
+
+    addUserStory_() {
+      let userStory = {
+        name: this.storyName,
+        description: "edo pali testaroume",
+        label: "issue",
+        status: "toDo",
+        estimated_duration: "10",
+      }
+      this.addUserStory(userStory)
+    },
+
+    editUserStory_(){
+      // get the current object for place holding
+      var userStory = this.getUserStorybyName(this.storyName)
+
+      // get output from form
+      let userStoryFormOutput = {
+        name: "xexexe",
+        description: "edo pali testaroume",
+        label: "issue",
+        status: "toDo",
+        estimated_duration: "10",
+      }
+
+      // edit it
+      userStory.name =  userStoryFormOutput.name,
+      userStory.description =  userStoryFormOutput.description,
+      userStory.label =  userStoryFormOutput.label,
+      userStory.status =  userStoryFormOutput.status,
+      userStory.estimated_duration =  userStoryFormOutput.estimated_duration,
+
+      // send request
+      this.editUserStory(userStory)
+    },
+
+    deleteUserStory_(userStoryName){
+      this.deleteUserStory(this.getUserStoryIdbyName(userStoryName))
+    },
+
+    addTask_() {
+      let task = {
+        name: this.taskName,
+        description: "telika ftasame os edo",
+        status: "toDo",
+        estimated_duration: "10",
+        userStory: this.getUserStoryIdbyName(this.storyName)
+      }
+      this.addTask(task)
+    },
+
+    editTask_() {
+      // get the current object for place holding
+      var task = this.getTaskbyNames(this.taskName, this.storyName)
+
+      // get output from form
+      let taskFormOutput = {
+        name: "xexxe",
+        description: "telika ftasame os edo",
+        status: "toDo",
+        estimated_duration: "10",
+      }
+
+      // edit it
+      task.name = taskFormOutput.name
+      task.description = taskFormOutput.description
+      task.status = taskFormOutput.status
+      task.estimated_duration = taskFormOutput.estimated_duration
+
+      // send request
+      this.editTask(task)
+    },
+
+    deleteTask_(taskName, storyName) {
+      this.deleteTask(this.getTaskIdbyNames(taskName, storyName))
+    }
   }
 }
 </script>
