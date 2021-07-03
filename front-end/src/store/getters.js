@@ -164,7 +164,7 @@ export default {
 	invites: state => (state.invites === undefined || state.invites.length == 0 ? testing ? invitesTest : [] : state.invites),
 	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
 
-	coWorkers: state => (state.coWorkers === undefined || state.coWorkers.length == 0 ? testing ? coWorkersTest : [] : state.coWorkers ),
+	coWorkers: state => ( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : ['mpla'] ) : state.coWorkers ),
 
 	getSprintIdbyName: (state) => (sprintName) => {
         return state.sprints.find(s => s.name === sprintName)._id
