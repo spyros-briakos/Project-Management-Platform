@@ -100,7 +100,7 @@ export default {
       return this.activeBoard ? this.activeBoard.name : ""
     },
     heading() {
-      return this.listForm.id ? "Here needs a new form for editing Sprints" : "Here needs a new form for Sprints"
+      return this.listForm.id ? "Edit Sprint" : "New Sprint"
     }
   },
   mounted() {

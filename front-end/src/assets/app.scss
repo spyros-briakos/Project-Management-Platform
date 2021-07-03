@@ -37,7 +37,7 @@ div.scroll {
   overflow-y:hidden;
   overflow-x: scroll;
   white-space: nowrap;
-  z-index: 1;
+  z-index: 0;
 }
 
 // div.scroll tbody {
@@ -49,12 +49,12 @@ div.scroll {
 .row.flex-nowrap.mt-1 {
 //   position: fixed;
 //   display: flex;
-  z-index: -100;
+  // z-index: 0;
   // display: block;
   // overflow-x: auto;
   // white-space: nowrap;
 
-  position: fixed;
+  position:fixed;
   // border:1px solid black; 
   width: 1640px;
   // left: 10px;
@@ -98,7 +98,7 @@ div.scroll {
   top: 63px;
   left: 70px;
   width: 95%;
-  z-index: -9;
+  z-index: 1;
   // zoom: 1;
   // transform: scale(2);
   // transform-origin: 0 0;
@@ -228,7 +228,7 @@ div.scroll {
 // .col-3.list-column.list-width {
 //   position: relative;
 //   // display: flex;
-//   z-index: 0;
+//   z-index: -1;
 // }
 
 // .nav-item.btn.btn-sm.btn-app.mr-2 {
