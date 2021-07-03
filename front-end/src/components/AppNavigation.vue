@@ -55,7 +55,7 @@
     methods:{
       hide(val){
         let to_hide = ['Projects', 'Profile'];
-        if(to_hide.includes(val))
+        if(to_hide.includes(val) && !this.isLogedIn)
           return true;
         return false;
       }

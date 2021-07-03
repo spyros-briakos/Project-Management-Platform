@@ -142,16 +142,9 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   let allow = ['SignIn', 'SignUp', 'ForgotPassword', 'Home', 'How_It_Works', 'Prices'];
-
   let loged = getters.isLogedIn;
 
-  // if(loged){
-    // loged
-  // }
-
-  if( !allow.includes(to.name) || loged==false ){
-    console.log(to.name);
-    console.log(loged);
+  if( !allow.includes(to.name) && loged==false ){
     next({name: 'SignIn'});
   }
   else next();
