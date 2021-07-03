@@ -163,10 +163,10 @@ export default({
         //     type:Boolean,
         //     default:false,
         // },
-        coWorkers: Array,
+        // coWorkers: Array,
     },
     methods:{
-        ...mapActions(["addProject", "getProject", "inviteUsers", "getProjects"]),
+        ...mapActions(["addProject", "getProject", "inviteUsers", "getProjects", "addSprint", "addTask", "addUserStory", "createProjectAndInvite"]),
         find(val){
             alert(val);
             this.get_friends.people.push(val);
@@ -184,7 +184,6 @@ export default({
             this.invalid=false;
         },
         createProject_(){
-            console.log("naiiiIIAIIIIIIIIIIIIAAAAAAA")
             var project = {
                 name: null,
                 description: null,
@@ -193,77 +192,76 @@ export default({
             }
             var elements = document.getElementById("prj_form").elements;
             for(let element of elements){
-                // console.log(element.id)
-                // console.log(element.value)
                 if (element.id === "name"){
-                    console.log(element.value)
+                    // console.log(element.value)
                     project.name = element.value 
                 } else if (element.id === "description"){
-                    console.log(element.value)
+                    // console.log(element.value)
                     project.description = element.value
                 } else if (element.id === "standardSelector"){
-                    console.log(element.checked)
+                    // console.log(element.checked)
                     project.plan = element.checked ? "standard" : "premium"
                 } else if (element.id === "premiumSelector"){
-                    console.log(element.checked)
+                    // console.log(element.checked)
                     project.plan = element.checked ? "premium" : "standard"
                 } else if (element.id === "prDates"){
-                    console.log(element.value)
+                    // console.log(element.value)
                 } else if (element.id === "getFriends"){
-                    console.log(element.value)
-                    console.log(element.id)
+                    // console.log(element.value)
+                    // console.log(element.id)
                 }
 
             }
 
 
-            this.createProjectAndInvite(project, ["admin2", "admin3"])
-            .then( response => {console.log("PROEJCTE CREATEEEEEEEEE")
-                this.getProjects()})
-            
+            this.createProjectAndInvite( {project:project, inviteUsernameList:["admin2", "admin3"]})
+            .then( response => {                            
+                this.goodAllert = true
+                this.badAllert = false
+                this.goodAllertMessage = response
+                this.getProjects()
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = true
+                this.badAllertMessage = error.response.data.message
+            })
 
             
         },
-        async createProjectAndInvite(project, inviteUsernameList) {
-            // create project
-            return this.addProject(project)
-                // load project
-                .then( response => {
-                    this.goodAllertMessage += response + " "
-                    this.getProject(project.name)
-                    // invites
-                    .then( response => {this.inviteUsers(inviteUsernameList)
-                        .then( response => {
-                            console.log(11111111111)
-                            console.log(response)
-                            
-                            this.goodAllert = true
-                            this.badAllert = false
-                            this.goodAllertMessage += response
-                        })
-                        .catch( error => { 
-                            console.log(22222222222)
-                            this.badAllert = true
-                            this.goodAllert = false
-                            this.badAllertMessage = error.response.data.message
-                        })
-                    })
-                    .catch( error => { 
-                        console.log(3333333333)
-
-                        this.badAllert = true
-                        this.goodAllert = false
-                        this.badAllertMessage = error.response.data.message
-                    })
-                })
-                .catch( error => { 
-                    console.log(44444444444)
-                
-                    this.badAllert = true
-                    this.goodAllert = false
-                    this.badAllertMessage = error.response.data.message
-                })
-        },
+        // async createProjectAndInvite(project, inviteUsernameList) {
+        //     // create project
+        //     return this.addProject(project)
+        //         // load project
+        //         .then( response => {
+        //             this.goodAllertMessage += response + " "
+        //             this.getProject(project.name)
+        //             // invites
+        //             .then( response => {
+        //                 this.inviteUsers(inviteUsernameList)
+        //                 .then( response => {                            
+        //                     this.goodAllert = true
+        //                     this.badAllert = false
+        //                     this.goodAllertMessage += response
+        //                 })
+        //                 .catch( error => { 
+        //                     this.badAllert = true
+        //                     this.goodAllert = true
+        //                     this.badAllertMessage = error.response.data.message
+        //                 })
+        //             })
+        //             .catch( error => { 
+        //                 this.badAllert = true
+        //                 this.goodAllert = false
+        //                 this.badAllertMessage = error.response.data.message
+        //             })
+        //         })
+        //         .catch( error => { 
+        //             this.badAllert = true
+        //             this.goodAllert = false
+        //             this.badAllertMessage = error.response.data.message
+        //         })
+        // },
         addProject_(project) {
             this.addProject(project)
             .then( response => {
@@ -299,7 +297,10 @@ export default({
 		    firstName: "firstName",
 		    lastName: "lastName",
             isPremium: "isPremium",
-            allUsers: "allUsers"
+            allUsers: "allUsers",
+            coWorkers: "coWorkers",
+            checkPremiumAtProjectCreation: "checkPremiumAtProjectCreation",
+
 	    }),
         getNames(){
             let usernames = [];

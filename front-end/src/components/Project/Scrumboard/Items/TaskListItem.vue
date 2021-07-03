@@ -1,5 +1,5 @@
 <template>
-  <div class="card tasklist-item">   
+  <div class="card tasklist-item" v-if="item.state!=='hiddenTaskUnderUserStory'">   
 
     <BacklogPopup ref="newItemPopup" v-if="list.name!='Product Backlog'" @popuptoggled1="handlePopupToggled1">
       <template v-slot:handle1>
@@ -183,11 +183,22 @@
 
     <div class="card-body" v-if="!isNewItem">
       <div :class="[isNewItem ? 'text-center text-dark font-weight-bold disable-select' : 'text-dark disable-select']">
-        <span style = "font-weight: bold; font-size:15px;" v-if="!isNewItem"> {{ this.selected }} </span> 
+        <span style = "font-weight: bold; font-size:15px;" v-if="!isNewItem"> {{ displayItemState }} </span> 
         <br v-if="!isNewItem">
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div>
+    <v-btn
+      elevation="1"
+      fab
+      x-small
+      block
+      v-if="item.state==='userStory'"
+      @click="collapseTasks_()"
+    > 
+      <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
+      <i class="fas fa-chevron-down" v-else></i>
+    </v-btn>
   
   </div>
 </template>
@@ -212,7 +223,15 @@ export default {
     },
     displayTitle() {
       return this.isNewItem ? "" : this.item.title
-    }
+    },
+    displayItemState() {
+      // var status = this.item.status
+      // if (status === "userStory")
+      //   return "User Story"
+      // else if (status === "taskUnderUserStory" || status === "taskUnderUserSprint" || status === "kanbanTask")
+      //   return "Task"
+      return this.item.state === "userStory" ? "User Story" : "Task"
+    },
   },
   data() {
     return {
@@ -223,14 +242,22 @@ export default {
         title: ""
       },
       selected: 'Task',
-      options: ['User Story', 'Epic','Issue','Task']
+      options: ['User Story', 'Epic','Issue','Task'],
+      collapsedTasks: false,
     }
   },
   methods: {
     ...mapActions({
       saveTaskListItem: "saveTaskListItem",
-      deleteTaskListItem: "deleteTaskListItem"
+      deleteTaskListItem: "deleteTaskListItem",
+      changeTasksState: "changeTasksState",
     }),
+
+    collapseTasks_() {
+      this.collapsedTasks = !this.collapsedTasks
+      this.changeTasksState(this.item.id)
+    },
+
     startEditing() {
       this.form.id = this.item.id
       this.form.title = this.item.title

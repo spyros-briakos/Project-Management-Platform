@@ -2,7 +2,7 @@
   <DetailsPopup style="position: absolute;top: 12px;right: 10px;" ref="popup">
     <template v-slot:content v-if="board && list">
       <h4>Θέλετε να διαγράψετε οριστικά το {{ list.name }};</h4>
-      <button class="btn btn-sm btn-danger" @click="handleTaskListArchive(list)">
+      <button class="btn btn-sm btn-danger" @click="deleteSprint_(list)">
         Yes, please
       </button>
     </template>
@@ -28,14 +28,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      archiveTaskList: "archiveTaskList"
+      archiveTaskList: "archiveTaskList",
+      deleteSprint: "deleteSprint"
     }),
-    handleTaskListArchive() {
-      this.archiveTaskList({
-        boardId: this.board.id,
-        listId: this.list.id
-      })
+    deleteSprint_() {
+      // this.archiveTaskList({
+      //   boardId: this.board.id,
+      //   listId: this.list.id
+      // })
       this.$refs.popup.close()
+      this.deleteSprint(this.list.id)
     },
     handleTaskListArchiving(data) {
       this.board = data.board

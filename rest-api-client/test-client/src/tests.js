@@ -47,6 +47,15 @@ export const runTests = async () => {
   })
   .catch(function(error) { throw '\n--- Testing log in: '+'\x1b[31m%s\x1b[0m', error.message +'\n' });
 
+  // Get all users
+  // -------------
+  await restAPI.actions.getUsers()
+  .then(function(response) {
+    if(!response)  throw '\n--- Testing get all users: '+'\x1b[31m%s\x1b[0m','FAILED\n'
+    else console.log('\n--- Testing get all users: '+'\x1b[32m%s\x1b[0m','SUCCESSFUL\n');
+  })
+  .catch(function(error) { throw '\n--- Testing get all users: '+'\x1b[31m%s\x1b[0m', error.message +'\n' });
+
   // User forgot password
   // --------------------
   await restAPI.actions.forgotPassword('sample_user@gmail.com')
@@ -438,6 +447,14 @@ export const test = async (method, url, data, headers) => {
       user: JSON.parse(JSON.stringify(sample.user)),
       token: JSON.parse(JSON.stringify(sample.tokenObject))
     }
+  }
+  else if(url === 'users') {
+    // Check method
+    if(method !== 'GET') {
+      throw { message: 'Προέκυψε σφάλμα.' };
+    }
+
+    return [sample.user];
   }
   else if(url === 'users/signup') {
     // Check method

@@ -8,8 +8,8 @@
         </v-toolbar-title>
       </router-link>
       <template v-for="(item, index) in items">
-        <template v-if="index <= 3">
-          <v-btn :key="index" :to="item.url" plain> {{ item.title }} </v-btn>
+        <template v-if="index <= 3" >
+          <v-btn :key="index" :to="item.url" :style="{'display': hide(item.title) ? 'none' : ''}" plain> {{ item.title }} </v-btn>
         </template>
         <template v-else>
           <v-btn :key="index" :to="item.url" fixed right color="#FF914D">
@@ -23,28 +23,44 @@
 </template>
 
 <script>
-export default {
-  name: "AppNavigation",
-  data() {
-    return {
-      appTitle: "ScruManiac",
-      appurl: "/",
-      drawer: false,
-      outlined: true,
-      plain: true,
-      fixed: true,
-      right: true,
 
-      items: [
-        { title: "Projects", url: "/projects" },
-        { title: "Profile", url: "/profile" },
-        { title: "Πώς δουλεύει", url: "/how_it_works" },
-        { title: "Τιμές", url: "/prices" },
-        { title: "Σύνδεση", url: "/sign/in" },
-      ],
-    };
-  },
-};
+  import {mapGetters} from "vuex";
+
+  export default {
+    name: "AppNavigation",
+    data() {
+      return {
+        appTitle: "ScruManiac",
+        appurl: "/",
+        drawer: false,
+        outlined: true,
+        plain: true,
+        fixed: true,
+        right: true,
+
+        items: [
+          { title: "Projects", url: "/projects" },
+          { title: "Profile", url: "/profile" },
+          { title: "Πώς δουλεύει", url: "/how_it_works" },
+          { title: "Τιμές", url: "/prices" },
+          { title: "Σύνδεση", url: "/sign/in" },
+        ],
+      };
+    },
+    computed:{
+      ...mapGetters({
+        isLogedIn: "isLogedIn",
+      }),
+    },
+    methods:{
+      hide(val){
+        let to_hide = ['Projects', 'Profile'];
+        if(to_hide.includes(val))
+          return true;
+        return false;
+      }
+    }
+  };
 </script>
 
 <style>

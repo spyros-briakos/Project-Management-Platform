@@ -79,6 +79,7 @@ const PORT = process.env.PORT || 5000
 // SERVER CONNECTS TO DATABASE
 mongoose.connect(
   process.env.DB_URL, 
+  // 'mongodb://mongo:27017/docker-node-mongo',
   { 
   	useNewUrlParser: true, 
   	useUnifiedTopology: true,

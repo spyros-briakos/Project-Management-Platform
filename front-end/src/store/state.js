@@ -11,7 +11,9 @@ export default {
 	// client: JSON.parse(localStorage.getItem('client')),
 	// client: client_ ? client_ : "xexe",
 	// token: JSON.parse(localStorage.getItem('token')),
+	constants: {maxCoWorkers:20, maxNonPremiumProjects:3},
 	token: null,
+	_id: null,
 	userName: null,
 	firstName: null,
 	lastName: null,
@@ -20,7 +22,10 @@ export default {
 	plan_in_use: null,
 
 	project: null,
+	sprints: [],
+	userStories: [],
 	projects: [],
 
 	invites: [],
+	coWorkers: [],
 }

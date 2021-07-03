@@ -72,7 +72,7 @@
                 {id: 4, title: "Αναβάθμιση", path:"Upgrade", svg: "upgrade.svg"},
                 {id: 5, title: "Αποσύνδεση", path:"profLogout", svg: "exit.svg"},
             ],
-            coWorkers: this.getCoWorkers(),
+            // coWorkers: this.getCoWorkers(),
             perInfo: this.personalInfo(),
         }
     },
@@ -95,7 +95,9 @@
 		    userName: "userName",
 		    email: "email",
 		    image: "image",
-            invites: "invites"
+            invites: "invites",
+            coWorkers: "coWorkers",
+            invitesSeen: "invitesSeen",
 	    }),
     },
     methods:{
@@ -166,6 +168,7 @@
                 }
             }
             return false;
+            // return this.invitesSeen;
         },
         uploadImg(data){
             const image = data.target.files[0];

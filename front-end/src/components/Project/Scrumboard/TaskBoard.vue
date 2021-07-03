@@ -1,6 +1,7 @@
 <template>
   <div class="scrolling-wrapper">   
-    <Header v-if="['Task-board'].includes($route.name)"></Header>
+    <!-- <Header v-if="['Task-board'].includes($route.name)"></Header> -->
+    <Header></Header>
     <draggable v-model="lists" class="row flex-nowrap mt-1" v-bind="getDragOptions">
       <TaskList v-for="(listItem, index) in lists" :key="index" :board="getBoard" :list="listItem"></TaskList>
     </draggable>
@@ -57,7 +58,8 @@ export default {
   methods: {
     ...mapActions({
       reorderTaskLists: "reorderTaskLists",
-      setActiveTaskBoard: "setActiveTaskBoard"
+      setActiveTaskBoard: "setActiveTaskBoard",
+      getMyTasks: "getMyTasks",
     })
   },
   created() {
@@ -66,6 +68,26 @@ export default {
         board: this.getBoard
       })
     }
-  }
+    // this.getEmulatedData()
+    // if kanban then load my tasks
+    if (this.param === "KANBAN_BOARD") {
+      this.getMyTasks()
+      console.log("CREATEDDDD KANBAAAN")
+    }
+    console.log("CREATEDDDD ", this.$route.name)
+  },
+  watch:{
+    $route(to, from){
+      if (this.getBoard) {
+        this.setActiveTaskBoard({
+          board: this.getBoard
+        })
+        if (this.param === "KANBAN_BOARD") {
+          this.getMyTasks()
+          console.log("CREATEDDDD KANBAAAN")
+        }
+      }
+    }
+  }, 
 }
 </script>

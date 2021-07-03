@@ -107,6 +107,19 @@ var testSearch = [
 ]
 
 var testing = true
+var coWorkersTest = [
+	{_id: 1, username: "Christina Evaggelou"},
+	{_id: 2, username: "Giwrgos Raptis"},
+	{_id: 3, username: "Melina Papadioti"},
+	{_id: 4, username: "Antonis Mourat"},
+	{_id: 5, username: "Vasilis Mpimis"},
+	{_id: 6, username: "Eleni Masoura"},
+	{_id: 7, username: "Rafail Musaj"},
+	{_id: 8, username: "Chris Baziotis"},
+	{_id: 9, username: "Panos Perdikos"},
+]
+
+var testing = false
 
 export default {
 	isLoading: state => state.isLoading,
@@ -127,13 +140,54 @@ export default {
 	image: state => state.image,
 	plan_in_use: state => state.plan_in_use,
 	isPremium: state => (state.plan_in_use === "standard") ? false : true ,
+	checkPremiumAtProjectCreation: state => (this.isPremium ? true : state.projects.length < state.constants.maxNonPremiumProjects),
 
-	projectName: state => state.project.name,
-	projectId: state => state.project._id,
+
+	project: state => state.project ? state.project : null,
+	projectId: state => state.project._id ? state.project._id : null,
+	projectName: state => state.project.name ? state.project.name : null,
+	projectDescription: state => state.project.description ? state.project.description : null,
+	projectPlan: state => state.project.plan_in_use ? state.project.plan_in_use : null,
+	projectStatus: state => state.project.status ? state.project.status : null,
+	projectProductOwner: state => state.project ? state.project.productOwner : null,
+	projectScrumMaster: state => state.project ? state.project.scrumMaster : null,
+	projectMembers: state => state.project ? state.project.members : null ,
+	// projectSprints: state => state.project ? state.project.sprints : null ,
+	// projectUserStories: state => state.project ? state.projectuserStories : null ,
+	projectSprints: state => (state.sprints === undefined || state.sprints.length == 0 ? [] : state.sprints),
+	projectUserStories: state => (state.userStories === undefined || state.userStories.length == 0 ? [] : state.userStories),
+
 
 	projects: state => (state.projects === undefined || state.projects.length == 0 ? testing ? projectsTest : [] : state.projects),
 	invites: state => (state.invites === undefined || state.invites.length == 0 ? testing ? invitesTest : [] : state.invites),
+	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
 
-	allUsers: state => (state.allUsers == undefined || state.allUsers.length == 0 ? testing ? testSearch : [] : state.allUsers)
+	coWorkers: state => (state.coWorkers === undefined || state.coWorkers.length == 0 ? testing ? coWorkersTest : [] : state.coWorkers ),
+
+	getSprintIdbyName: (state) => (sprintName) => {
+        return state.sprints.find(s => s.name === sprintName)._id
+	},
+
+	getSprintbyName: (state) => (sprintName) => {
+        return JSON.parse(JSON.stringify(state.sprints.find(s => s.name === sprintName)))
+	},
+
+	getUserStoryIdbyName: (state) => (userStoryName) => {
+        return state.userStories.find(us => us.name === userStoryName)._id
+	},
+
+	getUserStorybyName: (state) => (userStoryName) => {
+        return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName)))
+	},
+
+	getTaskIdbyNames: (state) => (taskName, userStoryName) => {
+        return state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)._id
+	},
+
+	allUsers: state => (state.allUsers == undefined || state.allUsers.length == 0 ? testing ? testSearch : [] : state.allUsers),
+	
+	getTaskbyNames: (state) => (taskName, userStoryName) => {
+        return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))
+	},
 }
 

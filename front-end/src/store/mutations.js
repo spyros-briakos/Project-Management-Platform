@@ -11,6 +11,7 @@ export default {
 
 	// store client
 	STORE_CLIENT(state, payload) {
+		Vue.set(state, "_id", payload._id)
 		Vue.set(state, "userName", payload.username)
 		Vue.set(state, "firstName", payload.firstName)
 		Vue.set(state, "lastName", payload.lastName)
@@ -33,13 +34,10 @@ export default {
 	// __proto__: Object
 	// store project
 	STORE_PROJECT(state, payload) {
-		console.log("PROJECT IS HERE STORED")
-		console.log(payload)
-		console.log(payload._id)
-
+		console.log("PROJECT IS HERE STORED", payload)
 		var project = {_id:null, name:null, description:null, plan_in_use:null, status:null, 
 						productOwner:{_id:null, username:null}, scrumMaster:{_id:null, username:null}, 
-						members:[], }						
+						members:[], sprints:[], userStories:[] }						
 		state.project = project
 
 		// project info
@@ -58,17 +56,162 @@ export default {
 
 		// members, userStories, sprints
 		Vue.set(state.project, "members", [...payload.members])
-		Vue.set(state.project, "userStories", [...payload.userStories])
-		Vue.set(state.project, "sprints", [...payload.sprints])
+		// Vue.set(state.project, "userStories", [...payload.userStories])
+		// Vue.set(state.project, "sprints", [...payload.sprints])
 
 	},
 
 	STORE_PROJECTS(state, payload) {
 		Vue.set(state, "projects", [...payload])
 	},
+
+	STORE_SPRINTS(state, payload) {
+		console.log("SPRIIIIIIINTS", payload)
+		Vue.set(state, "sprints", [...payload])
+	},
+
+	STORE_SPRINT(state, payload) {
+		// store as a taskList
+		const board = state.boards.find(b => b.id == "SCRUM_BOARD")
+		const list = board.lists.find(l => l.id == payload._id)
+		const listIdx = board.lists.findIndex(l => l.id == payload._id)
+
+		// For existing item
+		if (listIdx > -1) {
+			list.name = payload.name
+			Vue.set(board.lists, listIdx, list)
+		}
+		// For new item
+		else {
+			const list = {
+				id: payload._id,
+				name: payload.name,
+				headerColor: "#607d8b",
+				archived: false,
+				items: []
+			}
+			board.lists.push(list)
+		}
+
+		// store as a Sprint
+		// for existing Sprint
+		const sprint = state.sprints.find(s => s._id === payload._id)
+		const sprintIdx = state.sprints.findIndex(s => s._id === payload._id)
+
+		if (sprintIdx > -1) {
+			sprint.name = payload.name
+			sprint.description = payload.description
+			sprint.status = payload.status
+			sprint.estimated_duration = payload.estimated_duration
+			Vue.set(state.sprints, sprintIdx, sprint)
+		}
+		// For new Sprint
+		else {
+			state.sprints.push(payload)
+		}
+	
+	},
+
+	STORE_USER_STORIES(state, payload) {
+		Vue.set(state, "userStories", [...payload])
+	},
+
+	STORE_USER_STORY(state, payload) {
+		// save as a task item
+		const board = state.boards.find(b => b.id === "SCRUM_BOARD")
+		const list = board.lists.find(l => l.id === "Product Backlog id")
+		const itemIdx = list.items.findIndex(item => item.id == payload._id)
+
+		// For existing item
+		if (itemIdx > -1) {
+			list.items[itemIdx].title = payload.name
+			Vue.set(list.items, itemIdx, list.items[itemIdx])
+		}
+		// For new item
+		else {
+			const item = {
+				id: payload._id,
+				title: payload.name,
+				text: payload.description,
+				state: "userStory",
+			}
+			list.items.push(item)
+		}
+
+		// store as a User Story
+		// for existing user story
+		const userStory = state.userStories.find(s => s._id === payload._id)
+		const userStoryIdx = state.userStories.findIndex(s => s._id === payload._id)
+
+		if (userStoryIdx > -1) {
+			userStory.name = payload.name
+			userStory.description = payload.description
+			userStory.label = payload.label
+			userStory.status = payload.status
+			userStory.estimated_duration = payload.estimated_duration
+			Vue.set(state.userStories, userStoryIdx, userStory)
+		}
+		// For new user story
+		else {
+			state.userStories.push(payload)
+		}
+	},
+
+	STORE_TASK(state, payload) {
+		// save as a task item
+		const board = state.boards.find(b => b.id === "SCRUM_BOARD")
+		const list = board.lists.find(l => l.id === "Product Backlog id")
+		const itemIdx = list.items.findIndex(item => item.id == payload._id)
+
+		// For existing item
+		if (itemIdx > -1) {
+			list.items[itemIdx].title = payload.name
+			Vue.set(list.items, itemIdx, list.items[itemIdx])
+		}
+		// For new item
+		else {
+			const item = {
+				id: payload._id,
+				title: payload.name,
+				text: payload.description,
+				state: "hiddenTaskUnderUserStory",
+			}
+			list.items.push(item)
+		}
+		// // store as a User Story
+		// // for existing user story
+		// const userStory = state.userStories.find(s => s._id === payload._id)
+		// const userStoryIdx = state.userStories.findIndex(s => s._id === payload._id)
+
+		// if (userStoryIdx > -1) {
+		// 	userStory.name = payload.name
+		// 	userStory.description = payload.description
+		// 	userStory.label = payload.label
+		// 	userStory.status = payload.status
+		// 	userStory.estimated_duration = payload.estimated_duration
+		// 	Vue.set(state.userStories, userStoryIdx, userStory)
+		// }
+		// // For new user story
+		// else {
+		// 	state.userStories.push(payload)
+		// }
+	},
+
+	STORE_COWORKERS(state, payload) {
+		const maxCoWorkers = state.constants.maxCoWorkers
+		var coWorkersSet = new Set(state.coWorkers.map(o => JSON.stringify(o)));
+		state.projects.forEach(project => {
+			project.members.forEach(member => {
+				// exclude yourself
+				if ( String(member.username) !== String(state.userName))
+					coWorkersSet.add(JSON.stringify({_id: member._id, username: member.username}))
+			});
+		});
+		Vue.set(state, "coWorkers", [...Array.from(coWorkersSet).slice(0, maxCoWorkers).map(o => JSON.parse(o))])	
+	},
 	
 	STORE_INVITES(state, payload) {
-		console.log("INVITESSSSSSSSSSSS IS HERE STORED")
+		console.log("INVITES ARE HERE STORED")
 		// add seen
 		payload.forEach(function (element) {
 			element.seen = 0;
@@ -99,6 +242,7 @@ export default {
 	},
 
 	DELETE_CLIENT(state, payload) {
+		Vue.set(state, "_id", null)
 		Vue.set(state, "userName", null)
 		Vue.set(state, "firstName", null)
 		Vue.set(state, "lastName", null)
@@ -110,12 +254,69 @@ export default {
 	DELETE_PROJECT(state, payload) {
 		var project = {_id:null, name:null, description:null, plan_in_use:null, status:null, 
 			productOwner:{_id:null, username:null}, scrumMaster:{_id:null, username:null}, 
-			members:[], }	
+			members:[], sprints:[], userStories:[]}	
 		Vue.set(state, "project", project)
+	},
+
+	DELETE_SPRINTS(state, payload) {
+		Vue.set(state, "sprints", [])
+	},
+
+	DELETE_SPRINT(state, payload) {
+		// delete sprint as a tasklist
+		const board = state.boards.find(b => b.id === "SCRUM_BOARD")
+		const list = board.lists.find(l => l.id === payload)
+		const listIdx = board.lists.findIndex(l => l.id === payload)
+		list.archived = true
+		// Vue.set(board.lists, listIdx, list)
+		Vue.delete(board.lists, listIdx)
+
+		// delete sprint
+		var sprintIndex = state.sprints.findIndex(spr => spr._id === payload)
+		Vue.delete(state.sprints, sprintIndex)
+	},
+
+	DELETE_USER_STORIES(state, payload) {
+		Vue.set(state, "userStories", [])
+	},
+
+	DELETE_USER_STORY(state, payload) {
+		const board = state.boards.find(b => b.id === "SCRUM_BOARD")
+		const list = board.lists.find(l => l.id == "Product Backlog id")
+		const itemIdx = list.items.findIndex(item => item.id == payload)
+
+		// delete tasks of user story at scrum board
+		var userStory = state.userStories.find(us => us._id === payload)
+		var tasks = userStory.tasks.map(o => o._id)
+		for (const [i, item] of list.items.entries()){
+			if (tasks.includes(item.id)) {
+				Vue.delete(list.items, i)
+			}
+		}
+		Vue.delete(list.items, itemIdx)
+
+		// delete user story
+		var userSotryIndex = state.userStories.findIndex(us => us._id === payload)
+		Vue.delete(state.userStories, userSotryIndex)
+	},
+
+	DELETE_TASK(state, payload) {
+		const board = state.boards.find(b => b.id === "SCRUM_BOARD")
+		const list = board.lists.find(l => l.id == "Product Backlog id")
+		const itemIdx = list.items.findIndex(item => item.id == payload)
+		Vue.delete(list.items, itemIdx)
+
+		// // delete task
+		// var userSotryIndex = state.userStories.findIndex(us => us._id === payload)
+		// Vue.delete(state.userStories, userSotryIndex)
 	},
 
 	DELETE_PROJECTS(state, payload) {
 		Vue.set(state, "projects", [])
+	},
+
+	DELETE_COWORKERS(state, payload) {
+		Vue.set(state, "coWorkers", [])
 	},
 
 	DELETE_INVITES(state, payload) {
@@ -127,8 +328,117 @@ export default {
 	},
 
 	// Set Initial Data
-	SET_INITIAL_DATA(state, payload) {
-		Vue.set(state, "boards", payload)
+	STORE_EMULATED_BOARD_DATA(state, payload) {
+		var myEmulatedBoard = payload
+		var sprints = state.sprints
+		var userStories = state.userStories
+		console.log("EDOOOOOO", sprints)
+
+		// SCRUM BOARD
+		myEmulatedBoard[0].name = state.project.name
+
+		// add User Stories
+		if (userStories) {
+			// find Product Backlog 
+			var productBacklog = myEmulatedBoard[0].lists.find(list => list.id === "Product Backlog id") 
+			userStories.forEach(userStory => {
+				productBacklog.items.push( {id: userStory._id,
+											title: userStory.name,
+											text: userStory.description,
+											state: "userStory",
+											})
+				// add tasks at user stories
+				userStory.tasks.forEach(task => {
+					productBacklog.items.push( {id: task._id,
+						title: task.name,
+						text: task.description,
+						state: "hiddenTaskUnderUserStory",
+						})
+				})
+			});
+		}
+		
+		// add Sprints
+		if (sprints) {
+			sprints.forEach(sprint => {
+				myEmulatedBoard[0].lists.push( {id: sprint._id,
+											name: sprint.name,
+											headerColor: "#607d8b",
+											archived: false,
+											items: [],})
+			});
+		}
+
+		Vue.set(state, "boards", myEmulatedBoard)
+	},
+
+	STORE_EMULATED_KANBAN_BOARD(state, payload) {
+		// add my tasks to kanban board
+		var myEmulatedBoard = state.boards
+		var myTasks = payload
+
+		myEmulatedBoard[1].name = state.project.name
+
+		myTasks.forEach(task => {
+
+			var itemTask = {
+				id: task._id,
+				title: task.name,
+				text: task.description,
+				state: "taskInKanban"}
+				
+			if (task.status === "toDo") {				
+				// if not already inside
+				if (!myEmulatedBoard[1].lists[0].items.find(item => item.id === itemTask.id))
+					myEmulatedBoard[1].lists.find(list => list.id === "To do Id").items.push(itemTask)
+			} else if (task.status === "inProgress") {
+				// if not already inside
+				if (!myEmulatedBoard[1].lists[1].items.find(item => item.id === itemTask.id))
+					myEmulatedBoard[1].lists.find(list => list.id === "Doing Id").items.push(itemTask)
+			} else if (task.status === "done") {
+				// if not already inside
+				if (!myEmulatedBoard[1].lists[2].items.find(item => item.id === itemTask.id))
+					myEmulatedBoard[1].lists.find(list => list.id === "Done Id").items.push(itemTask)
+			}
+		})
+
+		Vue.set(state, "boards", myEmulatedBoard)
+	},
+
+	CHANGE_TASKS_STATE(state, payload) {
+		// find board
+		const board = state.boards.find(b => b.id === "SCRUM_BOARD")
+		const list = board.lists.find(l => l.id === "Product Backlog id")
+
+		// find tasks belonging in the user story id
+		var userStory = state.userStories.find(us => us._id === payload)
+		var tasks = userStory.tasks.map(o => o._id)
+		for (const [i, item] of list.items.entries()){
+			if (item.state === "hiddenTaskUnderUserStory" && tasks.includes(item.id)) {
+				item.state = "visibleTaskUnderUserStory"
+				Vue.set(list.items, i, item)
+			}
+			else if (item.state === "visibleTaskUnderUserStory" && tasks.includes(item.id)) {
+				item.state = "hiddenTaskUnderUserStory"
+				Vue.set(list.items, i, item)
+			}
+		} 
+	},
+
+	CHANGE_TASKS_HIDDEN(state, payload) {
+		// find board
+		const board = state.boards.find(b => b.id === "SCRUM_BOARD")
+		const list = board.lists.find(l => l.id === "Product Backlog id")
+
+		// find tasks belonging in the user story id
+		var userStory = state.userStories.find(us => us._id === payload)
+		var tasks = userStory.tasks.map(o => o._id)
+		for (const [i, item] of list.items.entries()){
+			if (item.state === "visibleTaskUnderUserStory" && tasks.includes(item.id)) {
+				item.state = "hiddenTaskUnderUserStory"
+				Vue.set(list.items, i, item)
+			}
+		} 
 	},
 
 	// Set Loading State
@@ -190,7 +500,7 @@ export default {
 		// // For new item
 		else {
 		const list = {
-			id: guid(),
+			id: payload.listId,
 			name: payload.name,
 			headerColor: "#607d8b",
 			archived: false,
@@ -206,7 +516,8 @@ export default {
 		const list = board.lists.find(l => l.id == payload.listId)
 		const listIdx = board.lists.findIndex(l => l.id == payload.listId)
 		list.archived = true
-		Vue.set(board.lists, listIdx, list)
+		// Vue.set(board.lists, listIdx, list)
+		Vue.delete(board.lists, listIdx)
 	},
 
 	// Restore Task List
@@ -221,6 +532,12 @@ export default {
 	// Reorder TaskBoad Lists
 	REORDER_TASKLISTS(state, payload) {
 		const board = state.boards.find(b => b.id == payload.boardId)
+		// find the backlog and keep it in 1st position
+		const backLogIndex = payload.lists.findIndex(b => b.name === "Product Backlog")
+		// swap posistion
+		var temp = payload.lists[0]
+		payload.lists[0] = payload.lists[backLogIndex]
+		payload.lists[backLogIndex] = temp
 		Vue.set(board, "lists", payload.lists)
 	},
 

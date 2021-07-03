@@ -51,7 +51,8 @@ export default {
     defaultItem() {
       return {
         id: "",
-        text: ""
+        text: "",
+        state: "defaultItem"
       }
     },
     dragOptions() {

@@ -22,6 +22,7 @@ import profProjects from "../components/profile/prof_projects.vue";
 import profCoWorkers from "../components/profile/prof_coworkers.vue";
 import profLogout from "../components/profile/prof_logout.vue";
 import profUpgrade from "../components/profile/prof_upgrade.vue"
+import getters from "../store/getters";
 // import "custom-var.scss"
 
 Vue.use(VueRouter);
@@ -45,12 +46,13 @@ const routes = [
   },
   {
     path: "/projects",
-    redirect:"/projects/boards/d033c156-5972-4767-ceb0-8a91a5c282db",
+    redirect:"/projects/boards/SCRUM_BOARD",
     name: "Projects",
     component: Projects,
     children: [
       {
         path: "boards/:id",
+        // redirect:"/projects/boards/SCRUM_BOARD",
         name: "Task-board",
         component: TaskBoard
       },
@@ -61,7 +63,7 @@ const routes = [
       },
       {
         path: "kanban",
-        redirect:"/projects/boards/0319aa8a-e1f4-6e8a-9717-c6f93e7d68b2",
+        redirect:"/projects/boards/KANBAN_BOARD",
         name: "Kanban",
         component: Kanban,
       },
@@ -137,5 +139,22 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  let allow = ['SignIn', 'SignUp', 'ForgotPassword', 'Home', 'How_It_Works', 'Prices'];
+
+  let loged = getters.isLogedIn;
+
+  // if(loged){
+    // loged
+  // }
+
+  if( !allow.includes(to.name) || loged==false ){
+    console.log(to.name);
+    console.log(loged);
+    next({name: 'SignIn'});
+  }
+  else next();
+})
 
 export default router;

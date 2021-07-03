@@ -152,6 +152,15 @@ export const actions = {
     .catch(function(error) { client = initClient(); console.log(error); throw error })  
   },
 
+  // Get all users
+  async getUsers() {
+    return requests.getUsersRequest()
+    .then(function(response) {
+      return response;
+    })
+    .catch(function(error) { console.log(error); throw error })
+  },
+
   // // Get specific user
   // async getUser(token) {
   //   return requests.getUserRequest(token)
@@ -288,6 +297,16 @@ export const actions = {
     })
     .catch(function(error) { client = initClient(); throw error })    
   },
+
+    // Get a specific project
+    async getProjectById(projectId) {
+  
+      return requests.getProjectRequest(projectId, client.tokenObject.token)
+      .then(function(response) {
+        client.project = response.project;
+      })
+      .catch(function(error) { client = initClient(); throw error })    
+    },
 
   async addProject(project) {
     return requests.addProjectRequest(project, client.tokenObject.token)
@@ -516,12 +535,23 @@ export const actions = {
   },
 
   getMyTasks() {
-    var myTasks = client.project.userStories.filter(userStory =>
-       { return userStory.tasks.filter(task =>
-         { return task.members.filter(member =>
-            { return member._id === client.user._id })
-         }) 
-       })
+    var myTasks = [];
+
+    // If client is not the product owner of the project
+    if(client.user._id === client.project.productOwner._id) {
+      for (let us of client.project.userStories) {
+        for (let task of us.tasks) {
+          if (task.member._id === client.user._id) {
+            myTasks.push(task)
+          }
+        }
+      }
+    } else {
+      // If it is the product owner, return all the tasks in the project
+      for (let us of client.project.userStories) {
+        myTasks.push(...us.tasks)
+      }
+    }
 
     return myTasks;
   }

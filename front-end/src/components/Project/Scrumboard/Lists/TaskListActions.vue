@@ -7,10 +7,12 @@
     </template>
     <template v-slot:content>
       <label class="content-item" @click="showListEditPopup">Edit</label>
-      <label class="content-item" @click="showArchiveListPopup">Delete</label>
+      <label class="content-item" style="position:absolute; top:35px; left:0px;" @click="showArchiveListPopup">Delete</label>
     </template>
   </DetailsDropdown>
 </template>
+
+
 <script>
 import DetailsDropdown from "../Details/DetailsDropdown.vue"
 import { Bus } from "@/utils/bus"

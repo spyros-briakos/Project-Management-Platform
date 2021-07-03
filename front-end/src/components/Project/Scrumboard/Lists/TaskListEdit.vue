@@ -1,7 +1,7 @@
 <template>
   <DetailsPopup ref="newListPopup" v-show="this.activeBoard" @popup-toggled="handlePopupToggled">
     <template v-slot:handle>
-      <span class="nav-item btn btn-sm btn-app mr-2">+ New List</span>
+      <span class="nav-item btn btn-sm btn-app mr-2">+ New Sprint</span>
     </template>
     <template v-slot:content>
       <form>
@@ -17,7 +17,7 @@
         />
         <small class="text-danger" style="display:block">{{ errors.first("listName") }}</small>
         <button class="btn btn-sm btn-app mt-2" @click.prevent="handleTaskListSave">
-          Save List
+          Save Sprint
         </button>
       </form>
     </template>
@@ -48,7 +48,7 @@ export default {
       return this.activeBoard ? this.activeBoard.name : ""
     },
     heading() {
-      return this.listForm.id ? "Update list name" : "Create new list"
+      return this.listForm.id ? "Here needs a new form for editing Sprints" : "Here needs a new form for Sprints"
     }
   },
   mounted() {
@@ -56,7 +56,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      saveTaskList: "saveTaskList"
+      saveTaskList: "saveTaskList",
+      addSprint: "addSprint",
+      editSprint: "editSprint",
     }),
     handlePopupToggled(isOpen) {
       if (!isOpen) {
@@ -68,9 +70,23 @@ export default {
     handleTaskListEditing(list) {
       this.listForm.id = list.id
       this.listForm.name = list.name
+      // here needs an edit form
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {
+
+      // here needs a create form
+      // just add the form elemnts in this object
+      let sprint = {
+                // like this
+                name: this.listForm.name,
+                description: "testaroume edoo",
+                status: "toDo",
+                estimated_duration: "10"
+            }
+      // and call this method @click
+      this.addSprint(sprint)
+
       this.$validator.validateAll().then(async result => {
         if (result) {
           await this.saveTaskList({
@@ -84,4 +100,30 @@ export default {
     },
   }
 }
+            // let sprint = {
+            //     name: "Sprint testy",
+            //     description: "testaroume edoo",
+            //     status: "toDo",
+            //     estimated_duration: "10"
+            // }
+
+            // let userStory = {
+            //     name: "Test Story",
+            //     description: "testaroume pali edoo",
+            //     label: "issue",
+            //     status: "toDo",
+            //     estimated_duration: "10"
+            // }
+
+            // // let task = {
+            // //     name: "proto taskoo",
+            // //     description: "malakizomaste edo",
+            // //     status: "toDo",
+            // //     estimated_duration: "3",
+            // //     userStory: "Test Story"
+            // // }
+            
+            // this.addSprint(sprint)
+            // this.addUserStory(userStory)
+            // // .then(this.addTask(task))
 </script>

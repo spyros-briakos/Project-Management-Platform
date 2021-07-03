@@ -65,7 +65,7 @@
 
             <li v-for="project in projects" :key="project._id" :class="{ 'selectedProject' : selected_prj == project._id}">
                 
-                <div :class="{'projectTitle': true}">
+                <div :class="{'projectTitle': true}" @click="goToProject(project.name)">
                     <font-awesome-icon class="icon" :icon="!project.icon ? project.icon=icon_roulete() : project.icon"
                     :style="{
                             'color' : !project.color ? project.color=color_roulete() : project.color,
@@ -146,7 +146,7 @@
         this.getInvites()
     },
     methods:{
-        ...mapActions(["getProjects", "getInvites", "answerInvitation"]),
+        ...mapActions(["getProjects", "getProject", "getInvites", "answerInvitation", "getEmulatedData"]),
         mpou(){
             alert("on-click");
         },
@@ -161,20 +161,22 @@
         ,
         accept_inv(invitationCode){
             this.answerInvitation({answer: "accept", invitationCode: invitationCode})
-            .then( response => {console.log("AXCEEEEEEEEEEPTTT")
-                this.getProjects()})
+            .then( response => {console.log("ACCEPT INVITE"); this.getProjects()})
             
         },
         reject_inv(invitationCode){
             this.answerInvitation({answer: "reject", invitationCode: invitationCode})
-            .then( response => {console.log("REEEEJEEEEEEECT")
-                this.getProjects()})
+            .then( response => {console.log("REJECT INVITE"); this.getProjects()})
         },
         mouse_on(invitationCode, invite){
             this.invites_mouse_over=invitationCode;
             invite.seen = 1;
             this.$emit('update-seen', invitationCode);
             this.$store.commit("UPDATE_SEEN_INVITE", invitationCode)
+        },
+        goToProject(projectName) {
+            this.getProject(projectName)
+            .then( response => {this.$router.push({name:"Projects"});}) 
         }
     },
     computed:{
