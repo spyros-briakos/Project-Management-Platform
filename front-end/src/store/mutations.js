@@ -556,9 +556,23 @@ export default {
 
 	// Reorder Task List Items
 	REORDER_TASKLIST_ITEMS(state, payload) {
+
+		// get items that have changed
+
+		// // reorder behaviour in kanban
+		// if (payload.boardId === "KANBAN_BOARD") {
+
+		// } 
+		// // reorder behaviour in scrum board
+		// else if (payload.boardId === "SCRUM_BOARD") {
+
+		// }
+
 		const board = state.boards.find(b => b.id == payload.boardId)
 		const listIdx = board.lists.findIndex(l => l.id == payload.listId)
+		// console.log("REORDER BEFORE",JSON.parse(JSON.stringify(board.lists[listIdx])))
 		Vue.set(board.lists[listIdx], "items", payload.items)
+		// console.log("REORDER AFTER",payload)
 	},
 
 	// Set Active Board
@@ -581,6 +595,7 @@ export default {
 		payload.item.id = guid()
 		list.items.push(payload.item)
 		}
+		console.log("SAVE",payload)
 	},
 
 	// Delete Task List Item
@@ -592,5 +607,6 @@ export default {
 		if (itemIdx > -1) {
 		Vue.delete(list.items, itemIdx)
 		}
+		console.log("DELETE",payload)
 	}
 }

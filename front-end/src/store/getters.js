@@ -143,6 +143,8 @@ export default {
 	projectSprints: state => (state.sprints === undefined || state.sprints.length == 0 ? [] : state.sprints),
 	projectUserStories: state => (state.userStories === undefined || state.userStories.length == 0 ? [] : state.userStories),
 
+	getUserStoriesNames: state => (state.userStories === undefined || state.userStories.length == 0 ? [] : state.userStories.map(us => us.name)),
+
 
 	projects: state => (state.projects === undefined || state.projects.length == 0 ? testing ? projectsTest : [] : state.projects),
 	invites: state => (state.invites === undefined || state.invites.length == 0 ? testing ? invitesTest : [] : state.invites),
@@ -172,6 +174,17 @@ export default {
 
 	getTaskbyNames: (state) => (taskName, userStoryName) => {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))
+	},
+
+	getTaskbyId: (state) => (id) => {
+		for(let us of state.userStories) {
+			for(let task of us.tasks) {
+				if (task._id === id) {
+					return JSON.parse(JSON.stringify(task))
+				}
+			}
+		}
+        
 	},
 }
 
