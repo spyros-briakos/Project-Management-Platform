@@ -424,7 +424,7 @@ export default {
 				commit("STORE_SPRINTS", client.project.sprints)
 				commit("STORE_USER_STORIES", client.project.userStories)
 				commit("STORE_EMULATED_BOARD_DATA", cloneDeep(emulatedBoard))
-				commit("STORE_EMULATED_KANBAN_BOARD", actions.getMyTasks())
+				commit("STORE_EMULATED_KANBAN_BOARD", {myTasks:actions.getMyTasks(), boards:cloneDeep(emulatedBoard)})
 				commit("SET_ACTIVE_TASKBOARD", { board: getters.allBoards[0]}) //set active scrum boeard
 				commit("SET_LOADING_STATE", false)
 			})
@@ -442,6 +442,28 @@ export default {
 
 	},
 
+	getScrumBoard({ commit, getters }) {
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = projectLs
+		client.user.projects = projectsLs
+
+		client.project.userStories = getters.projectUserStories
+		client.project.sprints = getters.projectSprints
+		client.user._id = getters._id
+
+		commit("SET_LOADING_STATE", true) 
+		commit("STORE_SPRINTS", client.project.sprints)
+		commit("STORE_USER_STORIES", client.project.userStories)
+		commit("STORE_EMULATED_BOARD_DATA", cloneDeep(emulatedBoard))
+		commit("SET_LOADING_STATE", false)
+		
+	},
+
+
 	getMyTasks({ commit, getters }) {
 		// Get token
 		var token = getters.token
@@ -455,7 +477,7 @@ export default {
 		client.user._id = getters._id
 
 		commit("SET_LOADING_STATE", true) 
-		commit("STORE_EMULATED_KANBAN_BOARD", actions.getMyTasks() )
+		commit("STORE_EMULATED_KANBAN_BOARD", {myTasks:actions.getMyTasks(), boards:cloneDeep(emulatedBoard)} )
 		console.log("MY TASKS ",actions.getMyTasks())
 		commit("SET_LOADING_STATE", false)
 
@@ -973,6 +995,7 @@ export default {
 		.then( response => {
 			console.log(response);
       		console.log(client)
+			commit("STORE_USER_STORIES", client.project.userStories)
 			commit("DELETE_TASK", taskId)
 			commit("SET_LOADING_STATE", false)
 			return response
