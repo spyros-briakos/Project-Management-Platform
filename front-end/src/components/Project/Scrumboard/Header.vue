@@ -9,7 +9,7 @@
         </label>
         <!-- Case: KanBoard -->
         <label v-else>
-          Kanban Board 
+          Personal Board 
           <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
         </label>
       </div>  
@@ -30,8 +30,8 @@
 
 <!-- Uncomment to test basic task user story functions -->
 
-<!-- 
-     <v-form
+
+     <!-- <v-form
       x-small
       ref="form"
       v-model="valid"
@@ -132,13 +132,11 @@
     >
       Edit task
     </v-btn>
-    </v-form> -->
-
-    
+    </v-form>  -->
 
         
       </div>
-    </nav>
+    </nav> 
 </template>
 
 <script>
@@ -183,7 +181,6 @@ export default {
       addSprint: "addSprint",
       editSprint: "editSprint",
       deleteSprint: "deleteSprint",
-      
     }),
 
     addSprint_() {

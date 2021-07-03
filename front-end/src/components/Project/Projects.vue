@@ -38,17 +38,12 @@ export default {
         },
         {
           href: "/projects/boards/SCRUM_BOARD",
-          title: "Πίνακας Scrum",
+          title: "Scrum Board",
           icon: "fa fa-layer-group",
         },
         {
-          href: "/projects/roadmap",
-          title: "Roadmap",
-          icon: "fa fa-map",
-        },
-        {
           href: "/projects/kanban",
-          title: "Πίνακας Kanban",
+          title: "Personal Board",
           icon: "fa fa-clipboard-list",
         },
         {
