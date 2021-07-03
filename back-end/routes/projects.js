@@ -772,7 +772,7 @@ router.post("/disconnect-task-sprint", async (req, res) => {
       let flag = false
       for (let i in userStory.tasks) {
         userStoryTask = await Task.findById(userStory.tasks[i]._id);
-        if (userStoryTask.sprint.equals(task.sprint)) {
+        if (userStoryTask.sprint === task.sprint) {
           flag = true
           break
         }
