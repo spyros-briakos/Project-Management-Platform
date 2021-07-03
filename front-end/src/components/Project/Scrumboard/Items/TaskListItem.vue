@@ -1,5 +1,7 @@
 <template>
   
+  <!-- v-if="list.name!='Product Backlog'" -->
+
   <!--  -->
   <!-- Case: Kanban Board -> taskInKanban--> 
   <!--  -->
@@ -36,7 +38,7 @@
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
         <span class="edit_2" v-else> 
-          <i class="fas fa-plus-circle" @click="startEditing"></i> 
+          <i class="fas fa-plus-circle"  @click="startEditing"></i> 
         </span> 
       </template>
 
@@ -143,24 +145,14 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div>
-    <v-btn
-      elevation="1"
-      fab
-      x-small
-      block
-      v-if="item.state==='userStory'"
-      @click="collapseTasks_()"
-    > 
-      <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
-      <i class="fas fa-chevron-down" v-else></i>
-    </v-btn>
   
   </div>
   
   <!--  -->
   <!-- Case: Scrum Board -> userStory --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="item.state=='userStory' && board.id=='SCRUM_BOARD'">   
+  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">   
+  <!-- <div class="card tasklist-item" v-else-if="item.state=='userStory' && board.id=='SCRUM_BOARD'">    -->
     
     <!--  For Product Backlog (different popup from others) -->
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
@@ -170,7 +162,7 @@
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
         <span class="edit_2" v-else> 
-          <i class="fas fa-plus-circle" @click="startEditing"></i> 
+          <i class="fas fa-plus-circle"  @click="startEditing"></i> 
         </span> 
       </template>
 
@@ -179,7 +171,7 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
+            <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
         </div>
         
@@ -216,6 +208,7 @@
           <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
           <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
           <!-- <div> -->
+          <!-- <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save"> -->
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save">
             Save
           </button> 
@@ -240,20 +233,28 @@
         <span style = "font-weight: bold; font-size:15px;" v-if="!isNewItem"> {{ displayItemState }} </span> 
         <br v-if="!isNewItem">
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
-      </div>
     </div>
-    <v-btn
-      elevation="1"
-      fab
-      x-small
-      block
-      v-if="item.state==='userStory'"
-      @click="collapseTasks_()"
-    > 
-      <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
-      <i class="fas fa-chevron-down" v-else></i>
-    </v-btn>
-    
+    <div align="center" >
+      <v-btn 
+        elevation="1"
+        fab
+        v-if="item.state==='userStory'"
+        @click="collapseTasks_()"
+        width="0px"
+        height="0px"
+        style="padding-bottom:10px"
+      > 
+        <!-- <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
+        <i class="fas fa-chevron-down" v-else></i> -->
+        <v-icon  style="font-size:18px; color:#292F2B" v-if="collapsedTasks">fas fa-chevron-circle-down</v-icon>
+        <v-icon style="font-size:18px; color:#292F2B" v-else>fas fa-chevron-circle-down</v-icon>
+        <!-- <v-icon class="fas fa-chevron-circle-down" style="color:white" v-else></v-icon> -->
+        <!-- <i class="fas fa-chevron-circle-down" style="font-size:15px; right:100px; top:345px; cursor: pointer;" v-if="collapsedTasks"></i>
+        <i class="fas fa-chevron-circle-down" style="font-size:15px; right:100px; top:345px; cursor: pointer;" v-else></i> -->
+      </v-btn>
+    </div>
+    </div>
+
   </div>
 
   <!--  -->
@@ -414,11 +415,6 @@ export default {
       return this.isNewItem ? "" : this.item.title
     },
     displayItemState() {
-      // var status = this.item.status
-      // if (status === "userStory")
-      //   return "User Story"
-      // else if (status === "taskUnderUserStory" || status === "taskUnderUserSprint" || status === "kanbanTask")
-      //   return "Task"
       return this.item.state === "userStory" ? "User Story" : "Task"
     },
     //antrikos
@@ -431,12 +427,12 @@ export default {
       getTaskIdbyNames: "getTaskIdbyNames",
       getUserStorybyName: "getUserStorybyName",
       getTaskbyNames: "getTaskbyNames",
+      getUserStoriesNames: "getUserStoriesNames"
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
     }
   },
-    
   data() {
     return {
       isEditing: false,
@@ -450,7 +446,8 @@ export default {
         storyName: '',
         taskName: '', 
       },
-      selected: 'Task',
+      default_task: 'Task',
+      default_user_story: 'User Story',
       options: ['User Story','Task'],
       collapsedTasks: false,
     }
@@ -483,6 +480,12 @@ export default {
       this.form.text = this.item.text
       this.isEditing = true
       // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
+      
+      ///experiment//
+
+
+      ///////////////
+
       this.$emit("item-editing")
     },
     clearForm() {
@@ -504,7 +507,7 @@ export default {
             item: updatedItem
           })
           this.$emit("item-edited")
-          this.$validator.reset()
+          this.$validator.reset() 
         }
         this.$refs.newItemPopup.close()
       })
@@ -534,8 +537,6 @@ export default {
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
     },
-
-    //antrikos
 
     addSprint_() {
       let sprint = {
@@ -591,8 +592,8 @@ export default {
 
       // get output from form
       let userStoryFormOutput = {
-        name: "xexexe",
-        description: "edo pali testaroume",
+        name: this.form.title,
+        description: this.form.text,
         label: "issue",
         status: "toDo",
         estimated_duration: "10",
@@ -654,4 +655,5 @@ export default {
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css">
+
 </style>
