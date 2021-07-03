@@ -9,17 +9,17 @@
       </router-link>
       <template v-for="(item, index) in items">
         <template v-if="index <= 3" >
-          <v-btn :key="index" :to="item.url" :style="{'display': hide(item.title) ? 'none' : ''}" plain> {{ item.title }} </v-btn>
+          <v-btn :key="index" :to="item.url" :style="{'display': hide_opts(item.title) ? 'none' : ''}" plain> {{ item.title }} </v-btn>
         </template>
         <template v-else>
-          <v-btn :key="index" :to="item.url" fixed right color="#FF914D">
+          <v-btn :key="index" :to="item.url" :style="{'display': hide_sign() ? 'none' : ''}" fixed right color="#FF914D">
             {{ item.title }}
           </v-btn>
         </template>
       </template>
     </v-toolbar>
     <div class="space" id="placeholder"></div>
-  </span>
+    </span>
 </template>
 
 <script>
@@ -53,12 +53,18 @@
       }),
     },
     methods:{
-      hide(val){
+      hide_opts(val){
         let to_hide = ['Projects', 'Profile'];
         if(to_hide.includes(val) && !this.isLogedIn)
           return true;
         return false;
-      }
+      },
+    hide_sign(){
+      if(this.isLogedIn)
+        return true;
+      else
+        return false;
+    }
     }
   };
 </script>

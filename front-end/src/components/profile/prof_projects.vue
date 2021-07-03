@@ -138,7 +138,6 @@
             create_prj: 0,
             selected_prj: -1,
             invites_mouse_over: '',
-            
         }
     },
     created() {

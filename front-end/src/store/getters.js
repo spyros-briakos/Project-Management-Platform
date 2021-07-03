@@ -132,17 +132,19 @@ export default {
 	
 	isLogedIn: state => state.isLogedIn,
 	token: state => state.token,
-	userName: state => state.userName,
-	name: state => state.firstName+" "+state.lastName,
+	// userName: state => state.userName,
+	// name: state => state.firstName+" "+state.lastName,
 	firstName: state => state.firstName,
 	lastName: state => state.lastName,
 	email: state => state.email,
 	image: state => state.image,
 	plan_in_use: state => state.plan_in_use,
-	isPremium: state => (state.plan_in_use === "standard") ? false : true ,
+	
+	isPremium: state => (state.plan_in_use === "standard") ? false : false,
+	
 	checkPremiumAtProjectCreation: state => (this.isPremium ? true : state.projects.length < state.constants.maxNonPremiumProjects),
-
-
+// 
+// 
 	project: state => state.project ? state.project : null,
 	projectId: state => state.project._id ? state.project._id : null,
 	projectName: state => state.project.name ? state.project.name : null,
@@ -185,7 +187,7 @@ export default {
 	},
 
 	allUsers: state => (state.allUsers == undefined || state.allUsers.length == 0 ? testing ? testSearch : [] : state.allUsers),
-	
+
 	getTaskbyNames: (state) => (taskName, userStoryName) => {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))
 	},

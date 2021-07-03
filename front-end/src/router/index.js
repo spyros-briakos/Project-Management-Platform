@@ -22,7 +22,12 @@ import profProjects from "../components/profile/prof_projects.vue";
 import profCoWorkers from "../components/profile/prof_coworkers.vue";
 import profLogout from "../components/profile/prof_logout.vue";
 import profUpgrade from "../components/profile/prof_upgrade.vue"
+
 import getters from "../store/getters";
+import store from '../store';
+
+
+import { get } from "https";
 // import "custom-var.scss"
 
 Vue.use(VueRouter);
@@ -142,12 +147,19 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   let allow = ['SignIn', 'SignUp', 'ForgotPassword', 'Home', 'How_It_Works', 'Prices'];
-  let loged = getters.isLogedIn;
+  let loged = store.getters.isLogedIn;
+  let prem = store.getters.isPremium;
 
-  if( !allow.includes(to.name) && loged==false ){
+  // console.log(to.name);
+
+  if( !allow.includes(to.name) && !loged ){
     next({name: 'SignIn'});
   }
+  else if(to.name=='Roadmap' && !prem){
+    next({name: 'Projects'});
+  }
   else next();
+    
 })
 
 export default router;

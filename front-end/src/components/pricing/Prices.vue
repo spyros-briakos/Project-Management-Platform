@@ -31,14 +31,14 @@
                 <div class="price" v-if="plan.active_plan != -1">{{ active_price(plan) }}&#8364;</div>
             </div>
             
-            <div class="mybutton_wrapper">
+            <!-- <div class="mybutton_wrapper">
                 <v-btn 
                     width=80%
                     color=var(--red-orange)
                     class="mybutton" :to="plan.buttn.link">
                     {{ plan.buttn.mssg }}
                 </v-btn>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
