@@ -1,5 +1,7 @@
 <template>
   
+  <!-- v-if="list.name!='Product Backlog'" -->
+
   <!--  -->
   <!-- Case: Kanban Board -> taskInKanban--> 
   <!--  -->
@@ -414,11 +416,6 @@ export default {
       return this.isNewItem ? "" : this.item.title
     },
     displayItemState() {
-      // var status = this.item.status
-      // if (status === "userStory")
-      //   return "User Story"
-      // else if (status === "taskUnderUserStory" || status === "taskUnderUserSprint" || status === "kanbanTask")
-      //   return "Task"
       return this.item.state === "userStory" ? "User Story" : "Task"
     },
     //antrikos
