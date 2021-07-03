@@ -140,7 +140,7 @@ export default {
 	image: state => state.image,
 	plan_in_use: state => state.plan_in_use,
 	
-	isPremium: state => (state.plan_in_use === "standard") ? false : false,
+	isPremium: state => (state.plan_in_use === "standard") ? false : true,
 	
 	checkPremiumAtProjectCreation: state => (this.isPremium ? true : state.projects.length < state.constants.maxNonPremiumProjects),
 // 
