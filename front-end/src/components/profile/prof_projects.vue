@@ -2,7 +2,7 @@
     <div class="wrap_projects">   
         <div v-if="create_prj==1" class="overlay"></div>
         <div class="create_prj" v-if="create_prj==1">
-            <createProject :coWorkers="coWorkers" :user="user" />
+            <createProject v-on:busy-form='create_prj=0' :coWorkers="coWorkers" :user="user" />
             <button class="close_form" v-on:click="create_prj=0">
                 <font-awesome-icon class="icon" :icon="['far', 'times-circle']"/>
             </button>

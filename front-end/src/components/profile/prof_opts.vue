@@ -18,7 +18,7 @@
                         <!-- </button> -->
                     </div>
                     <div class="name">
-                        {{Name}}
+                        {{this.firstName + ' ' + this.lastName}}
                     </div>
                     <div class="prof_opts">
                         <button v-for="opt in this.opts" :key="opt.id"

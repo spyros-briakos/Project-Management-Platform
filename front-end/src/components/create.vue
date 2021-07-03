@@ -220,6 +220,8 @@ export default({
                 this.badAllert = false
                 this.goodAllertMessage = response
                 this.getProjects()
+
+                setTimeout(() => {  this.$emit('busy-form', 1); }, 1500);
             })
             .catch( error => { 
                 this.badAllert = true
