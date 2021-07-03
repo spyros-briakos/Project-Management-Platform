@@ -37,7 +37,7 @@
             </div>
 
             <div class="prof_display">
-                <prof-projects v-bind:seen="invites.seen_invites" v-on:update-seen="updateSeen($event)" :coWorkers="coWorkers" :invites="invites.inv_list" :user="name" v-if="selected_id == 1"/>
+                <prof-projects v-bind:seen="invites.seen_invites" v-on:update-seen="updateSeen($event)" :coWorkers="coWorkers" :invites="invites" :user="name" v-if="selected_id == 1"/>
                 <profCoWorkers :coWorkers="coWorkers" v-if="selected_id == 2" />
                 <profSettings :Info="perInfo" v-if="selected_id == 3" />
                 <profUpgrade v-if="selected_id == 4" />
@@ -72,10 +72,6 @@
                 {id: 4, title: "Αναβάθμιση", path:"Upgrade", svg: "upgrade.svg"},
                 {id: 5, title: "Αποσύνδεση", path:"profLogout", svg: "exit.svg"},
             ],
-            invites:{
-                inv_list: this.getInvites(),
-                seen_invites: '',
-            },
             coWorkers: this.getCoWorkers(),
             perInfo: this.personalInfo(),
         }
@@ -83,7 +79,6 @@
     components:{
         profSettings,
         profProjects,
-        // Prices,
         profUpgrade,
         profCoWorkers,
         profLogout,
@@ -100,6 +95,7 @@
 		    userName: "userName",
 		    email: "email",
 		    image: "image",
+            invites: "invites"
 	    }),
     },
     methods:{
@@ -154,15 +150,17 @@
                 {_id: 9, username: "Panos Perdikos"},
             ]
         },
-        updateSeen(title){
-            for(let inv of this.invites.inv_list){
-                if(inv.title == title){
+        updateSeen(code){
+            for(let inv of this.invites){
+                if(inv.invitationCode == code){
                     inv.seen = 1;
                 }
             }
+            this.existNewInvs();
+            // alert('mpla');
         },
         existNewInvs(){
-            for(let inv of this.invites.inv_list){
+            for(let inv of this.invites){
                 if(inv.seen == 0){
                     return true;
                 }

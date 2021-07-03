@@ -4,7 +4,6 @@
             prominent
             type="success"
             :value="goodAllert"
-            dismissible
             >
             {{ this.goodAllertMessage }}
         </v-alert>
@@ -109,12 +108,13 @@
                     multiple
                     chips
                     :label="get_friends.label"
-                    :items="get_friends.people"
+                    :items="get_friends.people.concat(get_friends.searchedPeople)"
                     item-text="username"
                     item-value="_id"
                     :placeholder="get_friends.placeholder"
                     :hint="get_friends.hint"
-                    :search-input.sync="get_friends.search"
+                    :search-input.sync="search"
+                    cache-items
                     clearable
                     :menu-props="{maxHeight: 150}"
                     >
@@ -154,6 +154,7 @@ export default({
             goodAllertMessage: "",
             badAllert: false,
             badAllertMessage: "",
+            search:null,
         }
     },
     props:{
@@ -165,7 +166,7 @@ export default({
         coWorkers: Array,
     },
     methods:{
-        ...mapActions(["addProject"]),
+        ...mapActions(["addProject", "getProject", "inviteUsers", "getProjects"]),
         find(val){
             alert(val);
             this.get_friends.people.push(val);
@@ -215,10 +216,53 @@ export default({
 
             }
 
+
+            this.createProjectAndInvite(project, ["admin2", "admin3"])
+            .then( response => {console.log("PROEJCTE CREATEEEEEEEEE")
+                this.getProjects()})
+            
+
+            
+        },
+        async createProjectAndInvite(project, inviteUsernameList) {
             // create project
-            this.addProject_(project)
+            return this.addProject(project)
+                // load project
+                .then( response => {
+                    this.goodAllertMessage += response + " "
+                    this.getProject(project.name)
+                    // invites
+                    .then( response => {this.inviteUsers(inviteUsernameList)
+                        .then( response => {
+                            console.log(11111111111)
+                            console.log(response)
+                            
+                            this.goodAllert = true
+                            this.badAllert = false
+                            this.goodAllertMessage += response
+                        })
+                        .catch( error => { 
+                            console.log(22222222222)
+                            this.badAllert = true
+                            this.goodAllert = false
+                            this.badAllertMessage = error.response.data.message
+                        })
+                    })
+                    .catch( error => { 
+                        console.log(3333333333)
 
-
+                        this.badAllert = true
+                        this.goodAllert = false
+                        this.badAllertMessage = error.response.data.message
+                    })
+                })
+                .catch( error => { 
+                    console.log(44444444444)
+                
+                    this.badAllert = true
+                    this.goodAllert = false
+                    this.badAllertMessage = error.response.data.message
+                })
         },
         addProject_(project) {
             this.addProject(project)
@@ -233,6 +277,19 @@ export default({
                 this.badAllertMessage = error.response.data.message
             })
         },
+        searchAllUsers(val){
+            let found = [];
+
+            for(let user of this.allUsers){
+                if(user.username.includes(''+val)){
+                    found.push(user);
+                    // console.log('FOUND');
+                }
+                if(found.length >= 5)
+                    break;
+            }
+            return found;
+        }
     },
     computed:{
         ...mapGetters({
@@ -242,6 +299,7 @@ export default({
 		    firstName: "firstName",
 		    lastName: "lastName",
             isPremium: "isPremium",
+            allUsers: "allUsers"
 	    }),
         getNames(){
             let usernames = [];
@@ -294,7 +352,7 @@ export default({
         ]},
         get_friends() { return {
                 people: this.coWorkers,
-                search: null,
+                searchedPeople: [],
                 label: 'Διάλεξε τους Συνεργάτες σου',
                 placeholder: 'best Teammates',
                 hint: 'Διάλεξε μερικούς απο τους παλιούς συνεργάτες σου ή προσκάλεσε νέους!',
@@ -302,8 +360,12 @@ export default({
     },
     watch:{
         search (val) {
-            alert(val);
-            this.get_friends.people.push(val);
+            this.get_friends.searchedPeople = [];
+
+            let found = this.searchAllUsers(val);
+            for (let user of found){
+                this.get_friends.searchedPeople.push(user);
+            }
             // return true
             // Items have already been loaded
             // if (this.items.length > 0) return
@@ -312,22 +374,7 @@ export default({
             // if (this.isLoading) return
 
             // this.isLoading = true
-
-
-                // EXAMPLE
-            // Lazily load input items
-            // fetch('https://api.publicapis.org/entries')
-            // .then(res => res.json())
-            // .then(res => {
-            //     const { count, entries } = res
-            //     this.count = count
-            //     this.entries = entries
-            // })
-            // .catch(err => {
-            //     console.log(err)
-            // })
-            // .finally(() => (this.isLoading = false))
-      },
+        },
     }
 })
 </script>

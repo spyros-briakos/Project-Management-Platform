@@ -1,4 +1,4 @@
-import { getPremiumRequest } from '@the-ver-best-scrum-team/rest-api-client/requests';
+import { answerInvitationRequest, getPremiumRequest } from '@the-ver-best-scrum-team/rest-api-client/requests';
 import {client, actions} from '@the-ver-best-scrum-team/rest-api-client/restAPI'
 var cloneDeep = require('lodash.clonedeep');
 
@@ -59,6 +59,9 @@ export default {
 			log(response);
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("DELETE_PROJECT")
+			commit("DELETE_PROJECTS")
+			commit("DELETE_INVITES")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
 			return response
@@ -162,6 +165,9 @@ export default {
       		console.log(client)
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("DELETE_PROJECT")
+			commit("DELETE_PROJECTS")
+			commit("DELETE_INVITES")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
 			return response
@@ -208,6 +214,9 @@ export default {
       		console.log(client)
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("DELETE_PROJECT")
+			commit("DELETE_PROJECTS")
+			commit("DELETE_INVITES")
 			commit("SET_LOGEDIN_STATE", false)
 			commit("SET_LOADING_STATE", false)
 			return response
@@ -252,7 +261,7 @@ export default {
 		.then( response => {
 			console.log(response);
       		console.log(client)
-			commit("STORE_PROJECT", client.project)
+			// commit("STORE_PROJECT", client.project)
 			commit("SET_LOADING_STATE", false)
 			return response
 		})
@@ -264,17 +273,62 @@ export default {
 
 	},
 
-	async getProjects({ commit, getters }, data) {
+	async getProject({ commit, getters }, data) {
 
 		// Get token
 		var token = getters.token
 		commit("SET_LOADING_STATE", true) 
 		client.tokenObject.token = token
-		return actions.getProjects(data) 
+		return actions.getProjects() 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			actions.getProject(data)
+			commit("STORE_PROJECT", client.project)
+			commit("SET_LOADING_STATE", false)
+			// return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async getProjects({ commit, getters }) {
+
+		// Get token
+		var token = getters.token
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.getProjects() 
 		.then( response => {
 			console.log(response);
       		console.log(client)
 			commit("STORE_PROJECTS", client.user.projects)
+			commit("SET_LOADING_STATE", false)
+			// return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async getInvites({ commit, getters }) {
+
+		// Get token
+		var token = getters.token
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.getInvitations() 
+		.then( response => {
+			console.log(response);
+      		console.log("ka8aros cliebt", client)
+			commit("STORE_INVITES", client.user.invitations)
 			commit("SET_LOADING_STATE", false)
 			return response
 		})
@@ -284,6 +338,57 @@ export default {
 			throw error;
 		})
 
+	},
+
+
+	async inviteUsers({ commit, getters }, usernames) {
+
+		var data = {
+			users: usernames,
+			project: getters.projectName
+		};
+
+		// Get token
+		var token = getters.token
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.inviteUser(getters.projectId, data) 
+		.then( response => {
+			console.log("Invites sent")
+			console.log(response);
+      		console.log(client)
+			// commit("STORE_PROJECTS", client.user.projects)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log("Invites NOOOOT sent")
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async answerInvitation({commit, getters}, data) {
+
+		// Get token
+		var token = getters.token
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.answerInvitation(data.answer, data.invitationCode)
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("UPDATE_INVITE", data)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
 	},
 
 

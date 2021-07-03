@@ -64,13 +64,31 @@ export default {
 	},
 
 	STORE_PROJECTS(state, payload) {
-		console.log("PROJECTSSSSSSSSS IS HERE STORED")
-		console.log(payload)
 		Vue.set(state, "projects", [...payload])
-	
-
 	},
 	
+	STORE_INVITES(state, payload) {
+		console.log("INVITESSSSSSSSSSSS IS HERE STORED")
+		// add seen
+		payload.forEach(function (element) {
+			element.seen = 0;
+		});
+		console.log(payload)
+		Vue.set(state, "invites", [...payload])
+	},
+
+	UPDATE_SEEN_INVITE(state, payload) {
+		var inv = state.invites.find(inv => inv.invitationCode === payload)
+		var invIndex = state.invites.findIndex(inv => inv.invitationCode === payload)
+		inv.seen = 1
+		Vue.set(state.invites, invIndex, inv)
+	},
+
+	UPDATE_INVITE(state, payload) {
+		var invIndex = state.invites.findIndex(inv => inv.invitationCode === payload.invitationCode)
+		Vue.delete(state.invites, invIndex)
+	},
+
 	// store token
 	STORE_TOKEN(state, payload) {
 		Vue.set(state, "token", payload)
@@ -87,6 +105,21 @@ export default {
 		Vue.set(state, "email", null)
 		Vue.set(state, "image", null)
 		Vue.set(state, "plan_in_use", null)
+	},
+
+	DELETE_PROJECT(state, payload) {
+		var project = {_id:null, name:null, description:null, plan_in_use:null, status:null, 
+			productOwner:{_id:null, username:null}, scrumMaster:{_id:null, username:null}, 
+			members:[], }	
+		Vue.set(state, "project", project)
+	},
+
+	DELETE_PROJECTS(state, payload) {
+		Vue.set(state, "projects", [])
+	},
+
+	DELETE_INVITES(state, payload) {
+		Vue.set(state, "invites", [])
 	},
 
 	SET_LOGEDIN_STATE(state, payload) {
