@@ -119,7 +119,7 @@ var coWorkersTest = [
 	{_id: 9, username: "Panos Perdikos"},
 ]
 
-var testing = true
+var testing = false
 
 export default {
 	isLoading: state => state.isLoading,
@@ -166,92 +166,7 @@ export default {
 	invites: state => (state.invites === undefined || state.invites.length == 0 ? testing ? invitesTest : [] : state.invites),
 	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
 	coWorkers: state=>( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : []) : state.coWorkers ),
-	projectsTest: function() { return [
-                {
-                    _id: 1,
-                    name: "Deploy PPO, A2C model",
-                    status: '80%',
-                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
-                },
 
-                {
-                    _id: 2,
-                    name: "CNN's Implementation",
-                    status: '80%',
-                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
-                },
-
-                {
-                    _id: 3,
-                    name: "Mini JS Compiler",
-                    status: '80%',
-                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
-                },
-
-                {
-                    _id: 4,
-                    name: "LSH HyperCube Algorithms",
-                    status: '80%',
-                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
-                },
-
-                {
-                    _id: 5,
-                    name: "Variational Autoencoders",
-                    status: '80%',
-                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
-                },
-
-                {
-                    _id: 6,
-                    name: "Redesign Eudoxus Website",
-                    status: '80%',
-                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
-                },
-
-                {
-                    _id: 7,
-                    name: "Best DI Team Implementation",
-                    status: '80%',
-                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
-                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
-                }
-            ]
-        },
 
 	getSprintbyName: (state) => (sprintName) => {
         return JSON.parse(JSON.stringify(state.sprints.find(s => s.name === sprintName)))
@@ -277,7 +192,13 @@ export default {
         return state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)._id
 	},
 
+
+
+
 	allUsers: state => ( (state.allUsers == undefined || state.allUsers.length == 0) ? (testing ? testSearch : []) : state.allUsers),
+
+
+	
 
 	getTaskbyNames: (state) => (taskName, userStoryName) => {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))
@@ -336,5 +257,32 @@ export default {
 		}
 		return forms
 	},
+
+	getTotalSprintDates: (state, getters) => () => {
+		var totalDays = 1;
+		for(let sprint of state.sprints) {
+			totalDays += parseInt(sprint.estimated_duration)
+		}
+		return totalDays
+	},
+
+	getTotalSprintDatesArray: (state, getters) => () => {
+		var totalDaysArray = [];
+		for(let day=0; day<getters.getTotalSprintDates(); day++) {
+			totalDaysArray.push(day)
+		}
+		return totalDaysArray
+	},
+
+	getTotalSprintDatesIdealBurn: (state, getters) => () => {
+		var totalDaysArray = [];
+		for(let day=getters.getTotalSprintDates(); day>0; day--) {
+			totalDaysArray.push(day)
+		}
+		return totalDaysArray
+	},
+
+
+	
 }
 
