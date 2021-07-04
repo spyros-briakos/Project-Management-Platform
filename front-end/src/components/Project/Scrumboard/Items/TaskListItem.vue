@@ -143,7 +143,7 @@
                 sm="12"
               >
             <v-select
-              :items=getUserStoriesNames()
+              :items=getUserStoriesNames  
               label="User Story"
             ></v-select>
             </v-col>
@@ -359,7 +359,8 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
+            <!-- <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect> -->
+            <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> Task </h3>
           </div>
         </div>
         
@@ -430,7 +431,7 @@
                 sm="12"
               >
             <v-select
-              :items=getUserStoriesNames()
+              :items=getUserStoriesNames
               label="User Story"
             ></v-select>
             </v-col>
@@ -549,7 +550,7 @@ export default {
       },
       default_task: 'Task',
       default_user_story: 'User Story',
-      options: ['User Story','Task','Epic','Issue'],
+      options: ['User Story','Epic','Issue'],
       collapsedTasks: false,
       selecteditems: ['1 Μέρα', '2 Μέρες', '3 Μέρες', '4 Μέρες', '5 Μέρες', 
       '6 Μέρες', '7 Μέρες', '8 Μέρες', '9 Μέρες', '10 Μέρες', '11 Μέρες', '12 Μέρες', 
