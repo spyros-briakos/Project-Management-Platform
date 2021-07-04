@@ -165,12 +165,93 @@ export default {
 	projects: state => (state.projects === undefined || state.projects.length == 0 ? testing ? projectsTest : [] : state.projects),
 	invites: state => (state.invites === undefined || state.invites.length == 0 ? testing ? invitesTest : [] : state.invites),
 	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
+	coWorkers: state=>( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : []) : state.coWorkers ),
+	projectsTest: function() { return [
+                {
+                    _id: 1,
+                    name: "Deploy PPO, A2C model",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
 
-	coWorkers: state => ( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : [] ) : state.coWorkers ),
+                {
+                    _id: 2,
+                    name: "CNN's Implementation",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
 
-	getSprintIdbyName: (state) => (sprintName) => {
-        return state.sprints.find(s => s.name === sprintName)._id
-	},
+                {
+                    _id: 3,
+                    name: "Mini JS Compiler",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 4,
+                    name: "LSH HyperCube Algorithms",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 5,
+                    name: "Variational Autoencoders",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 6,
+                    name: "Redesign Eudoxus Website",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 7,
+                    name: "Best DI Team Implementation",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                }
+            ]
+        },
 
 	getSprintbyName: (state) => (sprintName) => {
         return JSON.parse(JSON.stringify(state.sprints.find(s => s.name === sprintName)))
