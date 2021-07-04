@@ -407,7 +407,7 @@ export default {
 
 	},
 
-	async getProject({ commit, getters }, data) {
+	async getProject({ commit, getters, dispatch }, data) {
 
 		// Get token
 		var token = getters.token
@@ -691,11 +691,13 @@ export default {
       		console.log(client)
 			// commit("STORE_PROJECT", client.project)
 			commit("STORE_SPRINT", client.project.sprints[client.project.sprints.length-1])
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			return response
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -732,6 +734,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -787,6 +790,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -815,6 +819,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -852,6 +857,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -881,6 +887,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -909,6 +916,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -942,6 +950,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -988,6 +997,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -1024,11 +1034,14 @@ export default {
 			console.log(client)
 			commit("STORE_TASK", taskData)
 			dispatch("getScrumBoard")
+			dispatch("getMyTasks")
 			commit("SET_LOADING_STATE", false)
 			return response
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
+			dispatch("getMyTasks")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -1061,6 +1074,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -1100,6 +1114,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -1139,6 +1154,7 @@ export default {
 		})
 		.catch( error => { 
 			console.log(error);
+			dispatch("getScrumBoard")
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -1215,9 +1231,12 @@ export default {
 			
 			// send edit request
 			dispatch("editTask", task)
+			.then(reaponse => {
+
+				commit("REORDER_TASKLIST_ITEMS", payload)
+			})
 			
 			
-			commit("REORDER_TASKLIST_ITEMS", payload)
 		} 
 		// reorder behaviour in scrum board
 		else if (payload.boardId === "SCRUM_BOARD") {
@@ -1259,8 +1278,11 @@ export default {
 					dispatch("disconnectSprint", {taskName:taskName})
 					.then(response => {
 						dispatch("connectSprint", {taskName:taskName, sprintName:connectSprintName})
+						.then(response => {
+
+							commit("REORDER_TASKLIST_ITEMS", payload)
+						})
 					})
-					commit("REORDER_TASKLIST_ITEMS", payload)
 				} 
 				// else if (idThatleft.length){
 				// 	console.log("DISCONNNECT", taskName, item.sprint, getters.getSprintbyId(listAfterId)._id)

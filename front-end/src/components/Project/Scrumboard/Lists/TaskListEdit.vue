@@ -76,14 +76,16 @@ export default {
       listForm: {
         id: "",
         name: "",
-        text: ""
+        text: "",
+        duration: "",
+        status: ""
       }
     }
   },
   computed: {
     ...mapGetters({
       activeBoard: "activeBoard",
-      getSprintbyName: "getSprintbyName",
+      getSprintbyId: "getSprintbyId",
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -117,20 +119,73 @@ export default {
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {  
+     
+     if(this.listForm.id) {
+        // get the current object for place holding
+        const sprint = this.getSprintbyId(this.listForm.id)
 
-      // here needs a create form
-      // just add the form elemnts in this object
+        if(this.listForm.status === 'Εκκρεμεί')
+        {
+          this.listForm.status = "toDo"
+        }
+        else if(this.listForm.status === 'Σε εξέλιξη')
+        {
+          this.listForm.status = "inProgress"
+        }
+        else if(this.listForm.status === 'Ολοκληρώθηκε')
+        {
+          this.listForm.status = "done"
+        }
+        else
+        {
+          console.log("error")
+        }
+
+        if(this.listForm.duration === '2 Εβδομάδες')
+        {
+          this.listForm.duration = "14"
+        }
+        else if(this.listForm.duration === '3 Εβδομάδες')
+        {
+          this.listForm.duration = "21"
+        }
+        else if(this.listForm.duration === '4 Εβδομάδες')
+        {
+          this.listForm.duration = "28"
+        }
+        else
+        {
+          console.log("error")
+        }
+
+        // get output from form
+        let sprintFormOutput = {
+            name: this.listForm.name,
+            description: this.listForm.text,
+            status: this.listForm.status,
+            estimated_duration: this.listForm.duration
+        }
+
+        // edit it
+        sprint.name = sprintFormOutput.name
+        sprint.description = sprintFormOutput.description
+        sprint.status = sprintFormOutput.status
+        sprint.estimated_duration = sprintFormOutput.estimated_duration
+
+        // send request
+        this.editSprint(sprint)
+      }
+      else {
       let sprint = {
-                // like this
-                id: this.listForm.id,
-                name: this.listForm.name,
-                description: this.listForm.text,
-                status: "toDo",
-                estimated_duration: "10"
-            }
-      // and call this method @click
-      // this.editSprint(sprint)
-      this.addSprint(sprint)
+              // like this
+              // id: this.listForm.id,
+              name: this.listForm.name,
+              description: this.listForm.text,
+              status: "toDo",
+              estimated_duration: "10"
+          }
+        this.addSprint(sprint)
+      }
 
       this.$validator.validateAll().then(async result => {
         if (result) {
@@ -138,7 +193,7 @@ export default {
             boardId: this.activeBoard.id,
             listId: this.listForm.id,
             name: this.listForm.name,
-            text: this.listForm.text
+            description: this.listForm.text
           })
           this.$refs.newListPopup.close()
         }
