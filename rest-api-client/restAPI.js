@@ -7,10 +7,7 @@ const fs = require('fs');
 const requests = require('./requests');
 
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
-
-// const apiUrl = 'https://127.0.0.1:3000/api-control';
 const apiUrl = 'http://127.0.0.1:3000/api-control';
-
 // const agent = new https.Agent({
 //   requestCert: true,
 //   rejectUnauthorized: false,
@@ -18,8 +15,6 @@ const apiUrl = 'http://127.0.0.1:3000/api-control';
 //   key: fs.readFileSync("../../back-end/server.key"),
 //   // passphrase: "YYY"
 // });
-
-// const agent = new https.Agent({
 const agent = new http.Agent({
   rejectUnauthorized: false, // (NOTE: this will disable client verification)
 })
