@@ -23,7 +23,7 @@ const agent = new https.Agent({
 // const agent = new http.Agent({
   rejectUnauthorized: false, // (NOTE: this will disable client verification)
 })
-// ?O THEOS EVALE TO XERI TOY?
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 axios.defaults.options = agent

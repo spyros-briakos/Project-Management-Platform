@@ -43,16 +43,19 @@
                 {{val.price}} &#8364;
             </button>
 
-            <button class="buy_btn" @click="getPremium_()">
+            <button :disabled="this.isPremium ? true : false" class="buy_btn" @click="getPremium_()">
                 {{'Αγορά'}}
             </button>
+        </div>
 
+        <div class="prem_mssg" v-if="this.isPremium">
+            {{alreadyPrem_mssg}}
         </div>
     </div>
 </template>
 
 <script>
-    import { mapActions } from "vuex"
+    import { mapActions, mapGetters } from "vuex"
 
     export default {
     name: "profUpgrade",
@@ -66,13 +69,13 @@
                 { id: 1, tag: "Ετήσιο", price: "70 " },
             ],
             values_mssg: "Επίλεξε το πρόγραμμα που βολεύει εσένα:",
+            alreadyPrem_mssg: "Είσαι ήδη ένας απο τους πολλούς Προνομοιούχους χρήστες της σελίδας μας! Συνέχισε να απολάμβάνεις στο έπακρο τις δυνατότητες του λογαριασμού σου!",
             features: [
                 "Απεριόριστες Ομάδες",
                 "3-9 Μέλη ανά Ομάδα",
                 "Απεριόριστα Projects",
                 "Απεριόριστα Tasks",
                 "Διαγράμματα",
-                "Αναφορές Χρηστών",
                 "Ιστορικό",
                 "Διαχείρηση Ομάδας",
             ],
@@ -99,6 +102,12 @@
             }) 
         },
     },
+    computed:{
+        ...mapGetters({
+		    isLogedIn: "isLogedIn",
+		    isPremium: 'isPremium',
+        }),
+    }
 };
 </script>
 

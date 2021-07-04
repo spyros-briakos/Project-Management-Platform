@@ -1,6 +1,7 @@
 <template>
   <div id="app" :class="[{'collapsed' : collapsed}]"> 
     <!-- <router-view/> -->
+  
     <!-- :class="[{'collapsed' : collapsed}, {'onmobile' : isOnMobile}]" -->
     <div class="demo">
       <sidebar-menu
@@ -25,43 +26,11 @@
 </template>
 
 <script>
-
+import {mapGetters} from "vuex";
 export default {
   name: "demo",
   data() {
     return {
-      menu: [
-        {
-          header: true,
-          title: "Όνομα Project",
-          hiddenOnCollapse: true,
-        },
-        {
-          href: "/projects/boards/SCRUM_BOARD",
-          title: "Scrum Board",
-          icon: "fa fa-layer-group",
-        },
-        {
-          href: "/projects/kanban",
-          title: "Personal Board",
-          icon: "fa fa-clipboard-list",
-        },
-        {
-          href: "/projects/chart",
-          title: "Διάγραμμα Burndown",
-          icon: "fa fa-chart-bar",
-        },
-        {
-          href: "/projects/history",
-          title: "Ιστορικό",
-          icon: "fa fa-history",
-        },
-        {
-          href: "/projects/settings",
-          title: "Ρυθμίσεις",
-          icon: "fa fa-cogs",
-        },
-      ],
       collapsed: true,
       selectedTheme: "white-theme",
       isOnMobile: false,
@@ -91,7 +60,58 @@ export default {
         this.collapsed = false;
       }
     },
+    hide(){
+      if(this.isPremium)
+        return false;
+      else
+        return true;
+    }
   },
+  computed:{
+    ...mapGetters({
+        isPremium: "isPremium",
+      }),
+
+    menu: function(){return [
+        {
+          header: true,
+          title: "Όνομα Project",
+          hiddenOnCollapse: true,
+        },
+        {
+          href: "/projects/boards/SCRUM_BOARD",
+          title: "Scrum Board",
+          icon: "fa fa-layer-group",
+        },
+        // {
+        //   href: "/projects/roadmap",
+        //   title: "Roadmap",
+        //   icon: "fa fa-map",
+        //   hidden: this.hide(),
+        // },
+        {
+          href: "/projects/kanban",
+          title: "Personal Board",
+          icon: "fa fa-clipboard-list",
+        },
+        {
+          href: "/projects/chart",
+          title: "Διάγραμμα Burndown",
+          icon: "fa fa-chart-bar",
+        },
+        {
+          href: "/projects/history",
+          title: "Ιστορικό",
+          icon: "fa fa-history",
+        },
+        {
+          href: "/projects/settings",
+          title: "Ρυθμίσεις",
+          icon: "fa fa-cogs",
+        },
+      ]
+    },
+  }
 };
 </script>
 

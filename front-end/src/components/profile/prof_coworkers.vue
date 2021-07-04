@@ -3,11 +3,12 @@
              
         <div class="mytitle">
             <font-awesome-icon class="icon" :icon="['fas', 'thumbtack']" />
-            {{welcome_mssg}}
+            {{welcome_mssg + ' ' + this.coWorkers.length}}
+
         </div>
 
         <ul class="coworkers_ul">
-            <li v-for="person in coWorkers" :key="person._id"
+            <li v-for="person in this.coWorkers" :key="person._id"
                 v-on:click="mpou()"
                 :style="{
                     'background-color' : color_roulete(),
