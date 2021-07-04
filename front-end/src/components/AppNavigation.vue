@@ -3,12 +3,7 @@
     <!-- <v-toolbar id="header" app color="#FAFFFF" dark> -->
     <v-toolbar id="header" color="#FAFFFF" dark>
     <!-- <v-toolbar id="header" app color="var(--light_green)" dark> -->
-      <router-link  v-if="!isLogedIn" to="/">
-        <v-toolbar-title :to="appurl" class="purple--text" data-cy="titleBtn">
-          {{ appTitle }}
-        </v-toolbar-title>
-      </router-link>
-      <router-link v-else to="/profile">
+      <router-link to="/">
         <v-toolbar-title :to="appurl" class="purple--text" data-cy="titleBtn">
           {{ appTitle }}
         </v-toolbar-title>
