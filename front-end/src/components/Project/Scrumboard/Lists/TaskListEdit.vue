@@ -137,7 +137,7 @@ export default {
                 id: this.listForm.id,
                 name: this.listForm.name,
                 text: this.listForm.text,
-                description: "testaroume edoo",
+                description: this.listForm.text,
                 status: "toDo",
                 estimated_duration: "10"
             }
@@ -151,7 +151,7 @@ export default {
             boardId: this.activeBoard.id,
             listId: this.listForm.id,
             name: this.listForm.name,
-            text: this.listForm.text
+            description: this.listForm.text
           })
           this.$refs.newListPopup.close()
         }
