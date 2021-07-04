@@ -8,6 +8,7 @@ export const emulatedBoard = [{
 	"lists": [{
 			"id": "Product Backlog id",
 			"name": "Product Backlog",
+			"text": "This is a stable backlog",
 			"headerColor": "#607d8b",
 			"archived": false,
 			"items": [

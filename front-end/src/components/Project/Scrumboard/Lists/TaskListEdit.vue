@@ -8,19 +8,8 @@
         <h3 class="titlospopup1"> {{ heading }} </h3>
       </div>
       
-      <form  style="position: relative; height:38px; top:80px;">
-        <!-- <h4>{{ heading }}</h4> -->
-        <!-- <input
-          name="listName"
-          type="text"
-          class="form-control my-1"
-          v-model.trim="listForm.name"
-          v-validate="'required'"
-          data-vv-as="List Name"
-          placeholder="Enter your list name"
-        /> -->
-
-
+      <form style="position: relative; height:38px; top:80px;">
+       
           <h4 class="title1"> Τίτλος </h4>
 
           <input style="position:fixed; top: 95px; width: 660px"
@@ -87,9 +76,7 @@
             </v-row>
           </h6>        
      
-
           <!-- <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small> -->
-
 
         <button class="btn btn-sm btn-app mt-2" style="position:fixed; top: 400px; left:300px;" @click.prevent="handleTaskListSave">
           Save Sprint
@@ -123,7 +110,7 @@ export default {
   computed: {
     ...mapGetters({
       activeBoard: "activeBoard",
-      getSprintbyName: "getSprintbyName",
+      getSprintbyId: "getSprintbyId",
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -161,6 +148,10 @@ export default {
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {  
+     
+     if(this.listForm.id) {
+        // get the current object for place holding
+        const sprint = this.getSprintbyId(this.listForm.id)
 
       // here needs a create form
       // just add the form elemnts in this object
