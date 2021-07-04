@@ -171,7 +171,7 @@
             this.invites_mouse_over=invitationCode;
             invite.seen = 1;
             this.$emit('update-seen', invitationCode);
-            this.$store.commit("UPDATE_SEEN_INVITE", invitationCode)
+            this.$store.commit("UPDATE_SEEN_INVITE", invitationCode);
         },
         goToProject(projectName) {
             this.getProject(projectName)
@@ -185,7 +185,7 @@
 	    }),
 
         // print old projects for front debugging without database
-        projects: function() { return (this.projectsDatabase === null ? this.projectsTest : this.projectsDatabase ) },
+        // projects: function() { return (this.projectsDatabase === null ? this.projectsTest : this.projectsDatabase ) },
 
         projectsTest: function() { return [
                 {

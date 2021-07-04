@@ -150,6 +150,12 @@ router.beforeEach((to, from, next) => {
   let loged = store.getters.isLogedIn;
   let prem = store.getters.isPremium;
 
+
+  // if(prem)
+    // console.log('prem');
+  // else
+    // console.log('not prem');
+
   // console.log(to.name);
 
   if( !allow.includes(to.name) && !loged ){

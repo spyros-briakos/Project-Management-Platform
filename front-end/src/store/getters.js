@@ -106,7 +106,7 @@ var testSearch = [
 	{_id: "873468712uwedhjs81", username: "gogo3"},
 ]
 
-var testing = true
+// var testing = true
 var coWorkersTest = [
 	{_id: 1, username: "Christina Evaggelou"},
 	{_id: 2, username: "Giwrgos Raptis"},
@@ -119,7 +119,7 @@ var coWorkersTest = [
 	{_id: 9, username: "Panos Perdikos"},
 ]
 
-var testing = false
+var testing = true
 
 export default {
 	isLoading: state => state.isLoading,
@@ -166,7 +166,7 @@ export default {
 	invites: state => (state.invites === undefined || state.invites.length == 0 ? testing ? invitesTest : [] : state.invites),
 	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
 
-	coWorkers: state => ( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : ['mpla'] ) : state.coWorkers ),
+	coWorkers: state => ( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : [] ) : state.coWorkers ),
 
 	getSprintIdbyName: (state) => (sprintName) => {
         return state.sprints.find(s => s.name === sprintName)._id
@@ -196,7 +196,7 @@ export default {
         return state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)._id
 	},
 
-	allUsers: state => (state.allUsers == undefined || state.allUsers.length == 0 ? testing ? testSearch : [] : state.allUsers),
+	allUsers: state => ( (state.allUsers == undefined || state.allUsers.length == 0) ? (testing ? testSearch : []) : state.allUsers),
 
 	getTaskbyNames: (state) => (taskName, userStoryName) => {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))
