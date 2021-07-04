@@ -160,12 +160,20 @@ export default {
         return JSON.parse(JSON.stringify(state.sprints.find(s => s.name === sprintName)))
 	},
 
+	getSprintbyId: (state) => (id) => {
+        return JSON.parse(JSON.stringify(state.sprints.find(s => s._id === id)))
+	},
+
 	getUserStoryIdbyName: (state) => (userStoryName) => {
         return state.userStories.find(us => us.name === userStoryName)._id
 	},
 
 	getUserStorybyName: (state) => (userStoryName) => {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName)))
+	},
+
+	getUserStorybyId: (state) => (id) => {
+        return JSON.parse(JSON.stringify(state.userStories.find(us => us._id === id)))
 	},
 
 	getTaskIdbyNames: (state) => (taskName, userStoryName) => {
@@ -184,7 +192,18 @@ export default {
 				}
 			}
 		}
-        
+		return null
+	},
+
+	getTaskbyName: (state) => (name) => {
+		for(let us of state.userStories) {
+			for(let task of us.tasks) {
+				if (task.name === name) {
+					return JSON.parse(JSON.stringify(task))
+				}
+			}
+		}
+		return null
 	},
 }
 

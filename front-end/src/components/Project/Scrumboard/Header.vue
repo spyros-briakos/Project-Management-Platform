@@ -26,9 +26,127 @@
       <div class="d-flex justify-content-end" v-if="this.activeBoard.id=='SCRUM_BOARD'" >
         <TaskListEdit></TaskListEdit>
         <TaskListArchive></TaskListArchive>
+
+
+<!-- Uncomment to test basic task user story functions -->
+
+
+     <!-- <v-form
+      x-small
+      ref="form"
+      v-model="valid"
+    >
+      <v-text-field
+        x-small
+        v-model="sprintName"
+        label="Name"
+      >Sprint name</v-text-field>
+      <v-btn
+        x-small
+        class="mr-4"
+        @click="addSprint_()"
+      >
+        New sprint
+      </v-btn>
+      <v-btn
+        x-small
+        color="error"
+        class="mr-4"
+        @click="deleteSprint_(sprintName)"
+      >
+      delete sprint
+    </v-btn>
+    <v-btn
+      x-small
+      color="warning"
+      @click="editSprint_()"
+    >
+      Edit sprint
+    </v-btn>
+    </v-form>
+
+
+    <v-form
+      x-small
+      ref="form"
+      v-model="valid"
+    >
+      <v-text-field
+        x-small
+        v-model="storyName"
+        label="Name"
+      >User story name</v-text-field>
+      <v-btn
+        x-small
+        class="mr-4"
+        @click="addUserStory_()"
+      >
+        New userStory
+      </v-btn>
+      <v-btn
+        x-small
+        color="error"
+        class="mr-4"
+        @click="deleteUserStory_(storyName)"
+      >
+      delete story
+    </v-btn>
+    <v-btn
+      x-small
+      color="warning"
+      @click="editUserStory_()"
+    >
+      Edit story
+    </v-btn>
+    </v-form>
+
+    <v-form
+      x-small
+      ref="form"
+      v-model="valid"
+    >
+      <v-text-field
+        x-small
+        v-model="taskName"
+        label="Name"
+      >Task name</v-text-field>
+      <v-btn
+        x-small
+        class="mr-4"
+        @click="addTaskAndConnectSprint_()"
+      >
+        New task
+      </v-btn>
+      <v-btn
+        x-small
+        color="error"
+        class="mr-4"
+        @click="deleteTask_(taskName, storyName)"
+    >
+      delete task
+    </v-btn>
+     <v-btn
+      x-small
+      color="warning"
+      @click="editTask_()"
+    >
+      Edit task
+    </v-btn>
+     <v-btn
+      x-small
+      color="success"
+      @click="connectSprint({taskName:taskName, sprintName:sprintName})"
+    >
+      Connect
+    </v-btn>
+
+    </v-form> -->
+
+    
+
         
       </div>
-    </nav> 
+    </nav>
 </template>
 
 <script>
@@ -73,7 +191,128 @@ export default {
       addSprint: "addSprint",
       editSprint: "editSprint",
       deleteSprint: "deleteSprint",
+      connectSprint: "connectSprint",
+      addTaskAndConnectSprint: "addTaskAndConnectSprint",
+      
     }),
+
+    addSprint_() {
+      let sprint = {
+        name: this.sprintName,
+        description: "testaroume edoo",
+        status: "toDo",
+        estimated_duration: "10"
+      }
+      this.addSprint(sprint)
+    },
+
+    editSprint_(){
+      // get the current object for place holding
+      const sprint = this.getSprintbyName(this.sprintName)
+
+      // get output from form
+      let sprintFormOutput = {
+        name: "xeexee",
+        description: "testaroume edoo",
+        status: "toDo",
+        estimated_duration: "10"
+      }
+
+      // edit it
+      sprint.name = sprintFormOutput.name
+      sprint.description = sprintFormOutput.description
+      sprint.status = sprintFormOutput.status
+      sprint.estimated_duration = sprintFormOutput.estimated_duration
+
+      // send request
+      this.editSprint(sprint)
+    },
+
+    deleteSprint_(sprintName){
+      this.deleteSprint(this.getSprintIdbyName(sprintName))
+    },
+
+
+    addUserStory_() {
+      let userStory = {
+        name: this.storyName,
+        description: "edo pali testaroume",
+        label: "issue",
+        status: "toDo",
+        estimated_duration: "10",
+      }
+      this.addUserStory(userStory)
+    },
+
+    editUserStory_(){
+      // get the current object for place holding
+      var userStory = this.getUserStorybyName(this.storyName)
+
+      // get output from form
+      let userStoryFormOutput = {
+        name: "xexexe",
+        description: "edo pali testaroume",
+        label: "issue",
+        status: "toDo",
+        estimated_duration: "10",
+      }
+
+      // edit it
+      userStory.name =  userStoryFormOutput.name,
+      userStory.description =  userStoryFormOutput.description,
+      userStory.label =  userStoryFormOutput.label,
+      userStory.status =  userStoryFormOutput.status,
+      userStory.estimated_duration =  userStoryFormOutput.estimated_duration,
+
+      // send request
+      this.editUserStory(userStory)
+    },
+
+    deleteUserStory_(userStoryName){
+      this.deleteUserStory(this.getUserStoryIdbyName(userStoryName))
+    },
+
+    addTaskAndConnectSprint_() {
+      let task = {
+        name: this.taskName,
+        description: "telika ftasame os edo",
+        status: "toDo",
+        estimated_duration: "10",
+        userStory: this.getUserStoryIdbyName(this.storyName)
+      }
+
+      // get the name of sprint
+      var sprintName = this.sprintName
+
+      this.addTaskAndConnectSprint({task:task, sprintName:sprintName})
+    },
+
+    editTask_() {
+      // get the current object for place holding
+      var task = this.getTaskbyNames(this.taskName, this.storyName)
+
+      // get output from form
+      let taskFormOutput = {
+        name: "xexxe",
+        description: "telika ftasame os edo",
+        status: "toDo",
+        estimated_duration: "10",
+      }
+
+      // edit it
+      task.name = taskFormOutput.name
+      task.description = taskFormOutput.description
+      task.status = taskFormOutput.status
+      task.estimated_duration = taskFormOutput.estimated_duration
+
+      // send request
+      this.editTask(task)
+    },
+
+    deleteTask_(taskName, storyName) {
+      this.deleteTask(this.getTaskIdbyNames(taskName, storyName))
+    },
+
   }
 }
 </script>

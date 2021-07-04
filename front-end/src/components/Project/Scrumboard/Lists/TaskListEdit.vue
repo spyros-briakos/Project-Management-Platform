@@ -82,7 +82,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeBoard: "activeBoard"
+      activeBoard: "activeBoard",
+      getSprintbyName: "getSprintbyName",
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -115,18 +116,20 @@ export default {
       // here needs an edit form
       this.$refs.newListPopup.open()
     },
-    handleTaskListSave() {
+    handleTaskListSave() {  
 
       // here needs a create form
       // just add the form elemnts in this object
       let sprint = {
                 // like this
+                id: this.listForm.id,
                 name: this.listForm.name,
                 description: this.listForm.text,
                 status: "toDo",
                 estimated_duration: "10"
             }
       // and call this method @click
+      // this.editSprint(sprint)
       this.addSprint(sprint)
 
       this.$validator.validateAll().then(async result => {
