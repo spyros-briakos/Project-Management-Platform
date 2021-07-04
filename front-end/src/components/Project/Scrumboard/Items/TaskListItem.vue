@@ -508,7 +508,11 @@ export default {
         sprintName: '',
         storyName: '',
         taskName: '', 
+        duration: "",
+        status: ""
       },
+      duration_: "",
+      status_: "",
       user_story_of_task: '',
       default_task: 'Task',
       default_user_story: "User Story"  ,
@@ -609,13 +613,35 @@ export default {
       else if(temp_case == 2) {
         
         console.log(this.user_story_of_task)
+        
+        if(this.form.status === 'Εκκρεμεί')
+        {
+          this.status_ = "toDo"
+        }
+        else if(this.form.status === 'Σε εξέλιξη')
+        {
+          this.status_ = "inProgress"
+        }
+        else if(this.form.status === 'Ολοκληρώθηκε')
+        {
+          this.status_ = "done"
+        }
+        else
+        {
+          console.log("error")
+        }
+        this.duration_ = this.form.duration.split(" ",1)
+        console.log(this.status_)
+        console.log(this.form.duration)
+        console.log(this.duration_)
+
         // Case: Create
         if(this.item.state=="defaultItem") {
           let task = {
             name: this.form.title,
             description: this.form.text,
-            status: this.form.status,
-            estimated_duration: this.form.duration,
+            status: this.status_,
+            estimated_duration: this.duration_,
             userStory: this.getUserStoryIdbyName(this.user_story_of_task)
           }
           this.addTaskAndConnectSprint({task:task, sprintName:this.getSprintbyId(this.list.id).name})
@@ -629,8 +655,8 @@ export default {
           let taskFormOutput = {
             name: this.form.title,
             description: this.form.text,
-            status: this.form.status,
-            estimated_duration: this.form.duration,
+            status: this.status_,
+            estimated_duration: this.duration_,
             // userStory: this.getUserStoryIdbyName(this.user_story_of_task)
           }
 
