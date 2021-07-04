@@ -109,8 +109,10 @@
                     title: "Προσωπικές Πληροφορίες",
                     form: 'perInfo',
                     items: [
-                        {id: 1, title: "Ονομα χρήστη", form_lab: 'name' , val: this.setAttr('name'), hide:false, holder: "", button: true},
-                        {id: 2, title: "E-mail", form_lab: 'email', val: this.setAttr('email'), hide:false, holder: "", button: true, hint: "Αν ενημερώσεις το e-mail σου, θα αποσυνδεθείς μέχρι να επιβεβαιώσεις την καινούργια σου διεύθυνση !!"},
+                        {id: 1, title: "Username", form_lab: 'username' , val: this.setAttr('username'), hide:false, holder: "", button: true},
+                        {id: 2, title: "Όνομα", form_lab: 'firstName' , val: this.setAttr('firstName'), hide:false, holder: "", button: true},
+                        {id: 3, title: "Επώνυμο", form_lab: 'lastName' , val: this.setAttr('lastName'), hide:false, holder: "", button: true},
+                        {id: 4, title: "E-mail", form_lab: 'email', val: this.setAttr('email'), hide:false, holder: "", button: true, hint: "Αν ενημερώσεις το e-mail σου, θα αποσυνδεθείς μέχρι να επιβεβαιώσεις την καινούργια σου διεύθυνση !!"},
                     ]
                 },
 
@@ -146,7 +148,9 @@
         },
         setAttr(target){
             var computedPerInfo = [
-                {tag: 'name', val: this.userName},
+                {tag: 'username', val: this.userName},
+                {tag: 'firstName', val: this.firstName},
+                {tag: 'lastName', val: this.lastName},
                 {tag: 'email', val: this.email},
             ]
             for(let i of computedPerInfo){
@@ -160,8 +164,10 @@
             if(form == "perInfo"){
                 let name, email;
                 for(let i of elements){
-                    if(i.name == "name")
+                    if(i.name == "username")
                         name = i.value;
+                    else if(i.firstName == "firstName")
+                        firstName = i.value;
                     else if(i.name == "email")
                         email = i.value;
                 }
@@ -268,6 +274,36 @@
         },
         updateUserName_(data){
             this.updateUserName( data ) 
+            .then( response => {
+                this.goodAllert = true
+                this.badAllert = false
+                this.emailChangeAllert = false
+                this.goodAllertMessage = response.message
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = false
+                this.emailChangeAllert = false
+                this.badAllertMessage = error.response.data.message
+            }) 
+        },
+        updatefirstName_(data){
+            this.updatefirstName( data ) 
+            .then( response => {
+                this.goodAllert = true
+                this.badAllert = false
+                this.emailChangeAllert = false
+                this.goodAllertMessage = response.message
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = false
+                this.emailChangeAllert = false
+                this.badAllertMessage = error.response.data.message
+            }) 
+        },
+        updatelastName_(data){
+            this.updatelastName( data ) 
             .then( response => {
                 this.goodAllert = true
                 this.badAllert = false
