@@ -20,12 +20,12 @@
         <div class="form-outline"  v-else>
           <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
         </div> -->
-      <div style="position:relative; top:-15px; height:30px; right:-420px;">
-        <v-row style="height:10px"
+      <div style="position:relative; top:-15px; max-height:30px; right:-430px;">
+        <v-row style="height:8px"
         align="center"
         >
         <v-col cols="12">
-          <v-autocomplete
+          <v-autocomplete 
             v-model="searchedSprintName"
             :items="getSprintNames()"
             outlined
@@ -33,14 +33,18 @@
           ></v-autocomplete>
         </v-col>
         </v-row>
-        <v-btn style="position:relative; right:-175px; top:25px"
+        <v-btn style="position:relative; right:-160px; top:25px"
           elevation="2"
+          class="mx-2"
+          fab
+          small
+          color="#7A96A3"
           @click="putSprintInFront(searchedSprintName)"
           
         >
-        <v-icon dark>
-        mdi-minus
-      </v-icon>
+          <v-icon dark>
+          fas fa-search
+        </v-icon>
       </v-btn>
       </div>
       
