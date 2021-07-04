@@ -161,7 +161,6 @@
         accept_inv(invitationCode){
             this.answerInvitation({answer: "accept", invitationCode: invitationCode})
             .then( response => {console.log("ACCEPT INVITE"); this.getProjects()})
-            
         },
         reject_inv(invitationCode){
             this.answerInvitation({answer: "reject", invitationCode: invitationCode})
@@ -169,8 +168,8 @@
         },
         mouse_on(invitationCode, invite){
             this.invites_mouse_over=invitationCode;
-            invite.seen = 1;
-            this.$emit('update-seen', invitationCode);
+            // invite.seen = 1;
+            // this.$emit('update-seen', invitationCode);
             this.$store.commit("UPDATE_SEEN_INVITE", invitationCode);
         },
         goToProject(projectName) {
