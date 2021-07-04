@@ -120,6 +120,7 @@ var coWorkersTest = [
 ]
 
 var testing = false
+var testingSearch = false
 
 export default {
 	isLoading: state => state.isLoading,
@@ -195,10 +196,10 @@ export default {
 
 
 
-	allUsers: state => ( (state.allUsers == undefined || state.allUsers.length == 0) ? (testing ? testSearch : []) : state.allUsers),
+	allUsers: state => ( (state.allUsers == undefined || state.allUsers.length == 0) ? (testingSearch ? testSearch : []) : state.allUsers),
 
 
-	
+
 
 	getTaskbyNames: (state) => (taskName, userStoryName) => {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))

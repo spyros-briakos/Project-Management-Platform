@@ -51,66 +51,15 @@
 
             </v-radio-group>
 
-                <!-- <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="dates"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                    >
-                        
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-text-field @change="isValid()" id="prDates"
-                            class="small"
-                            v-model="datesRange"
-                            label="Διάρκεια Project"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                        </v-text-field>
-                    </template>
-                    
-                    <v-date-picker
-                    v-model="dates"
-                    no-title
-                    range
-                    show-current
-                    scrollable
-                    >
-                    
-                    <v-spacer></v-spacer>
-                    
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="menu = false"
-                    >
-                        Ακύρωση
-                    </v-btn>
-
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.menu.save(dates)"
-                    >
-                        OK
-                    </v-btn>
-                    </v-date-picker>
-                </v-menu> -->
-
                 <v-autocomplete @change="isValid()" id="getFriends"
                     class="friends_picker"
-                    :v-model="form_data.autocomplete"
+                    v-model="form_data.autocomplete"
                     multiple
                     chips
                     :label="get_friends.label"
                     :items="get_friends.people.concat(get_friends.searchedPeople)"
                     item-text="username"
-                    item-value="_id"
+                    item-value="username"
                     :placeholder="get_friends.placeholder"
                     :hint="get_friends.hint"
                     :search-input.sync="search"
@@ -215,7 +164,7 @@ export default({
             }
 
 
-            this.createProjectAndInvite( {project:project, inviteUsernameList:["admin2", "admin3"]})
+            this.createProjectAndInvite( {project:project, inviteUsernameList:this.form_data.autocomplete})
             .then( response => {                            
                 this.goodAllert = true
                 this.badAllert = false

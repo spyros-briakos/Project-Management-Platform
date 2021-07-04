@@ -99,6 +99,7 @@
 
 
 .history_wrap .sprints_wrap{
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     overflow-y: scroll;

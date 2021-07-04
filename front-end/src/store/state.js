@@ -16,6 +16,7 @@ export default {
 	_id: null,
 	userName: null,
 	firstName: null,
+	allUsers: [],
 	lastName: null,
 	email: null,
 	image: null,
