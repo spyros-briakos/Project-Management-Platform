@@ -183,8 +183,8 @@ export default {
         // get the current object for place holding
         const sprint = this.getSprintbyId(this.listForm.id)
 
-        this.listForm.duration = sprint.estimated_duration
-        this.listForm.status = sprint.status
+        // this.listForm.duration = (sprint.estimated_duration === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
+        // this.listForm.status = (sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
 
         // get output from form
         let sprintFormOutput = {
