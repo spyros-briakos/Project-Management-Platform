@@ -8,43 +8,65 @@
         </v-toolbar-title>
       </router-link>
       <template v-for="(item, index) in items">
-        <template v-if="index <= 3">
-          <v-btn :key="index" :to="item.url" plain> {{ item.title }} </v-btn>
+        <template v-if="index <= 3" >
+          <v-btn :key="index" :to="item.url" :style="{'display': hide_opts(item.title) ? 'none' : ''}" plain> {{ item.title }} </v-btn>
         </template>
         <template v-else>
-          <v-btn :key="index" :to="item.url" fixed right color="#FF914D">
+          <v-btn :key="index" :to="item.url" :style="{'display': hide_sign() ? 'none' : ''}" fixed right color="#FF914D">
             {{ item.title }}
           </v-btn>
         </template>
       </template>
     </v-toolbar>
     <div class="space" id="placeholder"></div>
-  </span>
+    </span>
 </template>
 
 <script>
-export default {
-  name: "AppNavigation",
-  data() {
-    return {
-      appTitle: "ScruManiac",
-      appurl: "/",
-      drawer: false,
-      outlined: true,
-      plain: true,
-      fixed: true,
-      right: true,
 
-      items: [
-        { title: "Projects", url: "/projects" },
-        { title: "Profile", url: "/profile" },
-        { title: "Πώς δουλεύει", url: "/how_it_works" },
-        { title: "Τιμές", url: "/prices" },
-        { title: "Σύνδεση", url: "/sign/in" },
-      ],
-    };
-  },
-};
+  import {mapGetters} from "vuex";
+
+  export default {
+    name: "AppNavigation",
+    data() {
+      return {
+        appTitle: "ScruManiac",
+        appurl: "/",
+        drawer: false,
+        outlined: true,
+        plain: true,
+        fixed: true,
+        right: true,
+
+        items: [
+          { title: "Projects", url: "/projects" },
+          { title: "Profile", url: "/profile" },
+          { title: "Πώς δουλεύει", url: "/how_it_works" },
+          { title: "Τιμές", url: "/prices" },
+          { title: "Σύνδεση", url: "/sign/in" },
+        ],
+      };
+    },
+    computed:{
+      ...mapGetters({
+        isLogedIn: "isLogedIn",
+      }),
+    },
+    methods:{
+      hide_opts(val){
+        let to_hide = ['Projects', 'Profile'];
+        if(to_hide.includes(val) && !this.isLogedIn)
+          return true;
+        return false;
+      },
+    hide_sign(){
+      if(this.isLogedIn)
+        return true;
+      else
+        return false;
+    }
+    }
+  };
 </script>
 
 <style>

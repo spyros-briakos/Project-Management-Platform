@@ -18,8 +18,6 @@ const apiUrl = 'https://127.0.0.1:3000/api-control';
 //   key: fs.readFileSync("../../back-end/server.key"),
 //   // passphrase: "YYY"
 // });
-
-// const agent = new https.Agent({
 const agent = new http.Agent({
   rejectUnauthorized: false, // (NOTE: this will disable client verification)
 })

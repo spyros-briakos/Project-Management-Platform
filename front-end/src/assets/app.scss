@@ -54,7 +54,7 @@ div.scroll {
   // overflow-x: auto;
   // white-space: nowrap;
 
-  position:fixed;
+  // position:fixed;
   // border:1px solid black; 
   width: 1640px;
   // left: 10px;
@@ -444,6 +444,8 @@ div#searching {
   // width: 100%; 
   position:relative; 
   top: 115px;
+  // left: 15px;
+  // right:-10px;
   color: rgba(20, 121, 104, 0.904);
   // float: left;
   z-index: 0;
@@ -451,10 +453,11 @@ div#searching {
 
 .title4 {
   // display: inline;
-  text-align: left; 
+  text-align: right; 
   // width: 100%; 
   position:relative; 
-  top: 135px;
+  top: 35px;
+  right:230px;
   color: rgba(20, 121, 104, 0.904);
   // float: left;
   z-index: 0;

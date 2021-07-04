@@ -8,19 +8,8 @@
         <h3 class="titlospopup1"> {{ heading }} </h3>
       </div>
       
-      <form  style="position: relative; height:38px; top:80px;">
-        <!-- <h4>{{ heading }}</h4> -->
-        <!-- <input
-          name="listName"
-          type="text"
-          class="form-control my-1"
-          v-model.trim="listForm.name"
-          v-validate="'required'"
-          data-vv-as="List Name"
-          placeholder="Enter your list name"
-        /> -->
-
-
+      <form style="position: relative; height:38px; top:80px;">
+       
           <h4 class="title1"> Τίτλος </h4>
 
           <input style="position:fixed; top: 95px; width: 660px"
@@ -46,27 +35,42 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
-          <h6 class="title5">Εκτιμώμενη διάρκεια: 
-            <!-- <span class="subtitle1">4 ημέρες</span> -->
-            <select class=" custom-select custom-select-sm"  style="width: 19%;">
-              <option value="2">2 Εβδομάδες</option>
-              <option value="3">3 Εβδομάδες</option>
-              <option value="4">4 Εβδομάδες</option>
-            </select>
+          <h6 class="title5"> 
+            <v-row align="center">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="4"
+              >
+        
+            <v-select
+              :items="selecteditems"
+              label="Εκτιμώμενη Διάρκεια"
+              v-model="listForm.duration"
+              :value="selected"
+            ></v-select>
+            </v-col>
+            </v-row>
           </h6>
-          <h6 class="title4">Κατηγορία: 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
-            <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Εκκρεμεί</option>
-              <option value="3">Σε εξέλιξη</option>
-              <option value="4">Ολοκληρώθηκε</option>
-            </select>
+          
+          <h6 class="title4"> 
+           
+            <v-row align="right" style="position:fixed; left:372px; width:300px;">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="12"
+              >
+            <v-select
+              :items="selecteditems1"
+              label="Κατάσταση"
+              v-model="listForm.status"
+              :value="selected"
+            ></v-select>
+            </v-col>
+            </v-row>
           </h6>        
      
-
-          <!-- <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small> -->
-
-
         <button class="btn btn-sm btn-app mt-2" style="position:fixed; top: 400px; left:300px;" @click.prevent="handleTaskListSave">
           Save Sprint
         </button>
@@ -88,14 +92,20 @@ export default {
       listForm: {
         id: "",
         name: "",
-        text: ""
-      }
+        text: "",
+        duration: "",
+        status: ""
+      },
+      duration_: "",
+      status_: "",
+      selecteditems: ['2 Εβδομάδες', '3 Εβδομάδες', '4 Εβδομάδες'],
+      selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε']
     }
   },
   computed: {
     ...mapGetters({
       activeBoard: "activeBoard",
-      getSprintbyName: "getSprintbyName",
+      getSprintbyId: "getSprintbyId",
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -118,6 +128,8 @@ export default {
         this.listForm.id = 0
         this.listForm.name = ""
         this.listForm.text = ""
+        this.listForm.duration = ""
+        this.listForm.status = ""
         this.$validator.reset()
       }
     },
@@ -125,25 +137,82 @@ export default {
       this.listForm.id = list.id
       this.listForm.name = list.name
       this.listForm.text = list.text
+      // this.listForm.duration = list.duration
+      // this.listForm.status = list.status
       // here needs an edit form
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {  
+      
+      if(this.listForm.status === 'Εκκρεμεί')
+      {
+        this.status_ = "toDo"
+      }
+      else if(this.listForm.status === 'Σε εξέλιξη')
+      {
+        this.status_ = "inProgress"
+      }
+      else if(this.listForm.status === 'Ολοκληρώθηκε')
+      {
+        this.status_ = "done"
+      }
+      else
+      {
+        console.log("error")
+      }
 
-      // here needs a create form
-      // just add the form elemnts in this object
+      if(this.listForm.duration === '2 Εβδομάδες')
+      {
+        this.duration_ = "14"
+      }
+      else if(this.listForm.duration === '3 Εβδομάδες')
+      {
+        this.duration_ = "21"
+      }
+      else if(this.listForm.duration === '4 Εβδομάδες')
+      {
+        this.duration_ = "28"
+      }
+      else
+      {
+        console.log("error")
+      }
+  
+      // Case: Edit
+     if(this.listForm.id) {
+        // get the current object for place holding
+        const sprint = this.getSprintbyId(this.listForm.id)
+
+        // this.listForm.duration = (sprint.estimated_duration === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
+        // this.listForm.status = (sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
+
+        // get output from form
+        let sprintFormOutput = {
+            name: this.listForm.name,
+            description: this.listForm.text,
+            status: this.status_,
+            estimated_duration: this.duration_
+        }
+
+        // edit it
+        sprint.name = sprintFormOutput.name
+        sprint.description = sprintFormOutput.description
+        sprint.status = sprintFormOutput.status
+        sprint.estimated_duration = sprintFormOutput.estimated_duration
+
+        // send request
+        this.editSprint(sprint)
+      }
+      // Case: Create
+      else {
       let sprint = {
-                // like this
-                id: this.listForm.id,
-                name: this.listForm.name,
-                text: this.listForm.text,
-                description: "testaroume edoo",
-                status: "toDo",
-                estimated_duration: "10"
-            }
-      // and call this method @click
-      // this.editSprint(sprint)
-      this.addSprint(sprint)
+              name: this.listForm.name,
+              description: this.listForm.text,
+              status: this.status_,
+              estimated_duration: this.duration_
+          }
+        this.addSprint(sprint)
+      }
 
       this.$validator.validateAll().then(async result => {
         if (result) {
@@ -151,7 +220,9 @@ export default {
             boardId: this.activeBoard.id,
             listId: this.listForm.id,
             name: this.listForm.name,
-            text: this.listForm.text
+            description: this.listForm.text,
+            status: this.listForm.status,
+            estimated_duration: this.listForm.duration
           })
           this.$refs.newListPopup.close()
         }
@@ -159,30 +230,4 @@ export default {
     },
   }
 }
-            // let sprint = {
-            //     name: "Sprint testy",
-            //     description: "testaroume edoo",
-            //     status: "toDo",
-            //     estimated_duration: "10"
-            // }
-
-            // let userStory = {
-            //     name: "Test Story",
-            //     description: "testaroume pali edoo",
-            //     label: "issue",
-            //     status: "toDo",
-            //     estimated_duration: "10"
-            // }
-
-            // // let task = {
-            // //     name: "proto taskoo",
-            // //     description: "malakizomaste edo",
-            // //     status: "toDo",
-            // //     estimated_duration: "3",
-            // //     userStory: "Test Story"
-            // // }
-            
-            // this.addSprint(sprint)
-            // this.addUserStory(userStory)
-            // // .then(this.addTask(task))
 </script>
