@@ -65,10 +65,12 @@
                                     multiple
                                     chips
                                     label='Προσκάλεσε Νέα Άτομα'
-                                    :items="item.info.CoWorkers"
+                                    :items="item.info.CoWorkers.concat(item.info.searchedPeople)"
                                     item-text="username"
                                     item-value="_id"
                                     v-model="myform['addCo']"
+                                    :search-input.sync="search"
+                                    cache-items
                                     clearable
                                     :menu-props="{maxHeight: 150}"
                                     >
@@ -155,17 +157,7 @@ import { mapActions, mapGetters } from "vuex"
                             // members:["Μιχάλης", "Ανδρέας","Διον", "Αλεξανρα","Σπυρος", "Μεεεεεεεερηηηηηη","Kapoios 1", "Kapoios 2",],
                             members: this.projectMembers,
                             CoWorkers: this.coWorkers,
-                            // CoWorkers:[
-                            //     {id: 1, name: "Christina Evaggelou"},
-                            //     {id: 2, name: "Giwrgos Raptis"},
-                            //     {id: 3, name: "Melina Papadioti"},
-                            //     {id: 4, name: "Antonis Mourat"},
-                            //     {id: 5, name: "Vasilis Mpimis"},
-                            //     {id: 6, name: "Eleni Masoura"},
-                            //     {id: 7, name: "Rafail Musaj"},
-                            //     {id: 8, name: "Chris Baziotis"},
-                            //     {id: 9, name: "Panos Perdikos"},
-                            // ],
+                            searchedPeople: [],
                             toAdd:{key:"addCo", arr:[]},
                             toRemove:{key:"removeCo", arr:[]},
                         },
@@ -290,6 +282,14 @@ import { mapActions, mapGetters } from "vuex"
                 return form;
             }
         },
+        watch:{
+            search(val){
+                let found = this.searchAllUsers(val);
+                for(let user of found){
+
+                }
+            }
+        }
     };
 </script>
 
