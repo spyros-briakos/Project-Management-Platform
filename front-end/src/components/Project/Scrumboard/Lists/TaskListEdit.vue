@@ -8,19 +8,8 @@
         <h3 class="titlospopup1"> {{ heading }} </h3>
       </div>
       
-      <form  style="position: relative; height:38px; top:80px;">
-        <!-- <h4>{{ heading }}</h4> -->
-        <!-- <input
-          name="listName"
-          type="text"
-          class="form-control my-1"
-          v-model.trim="listForm.name"
-          v-validate="'required'"
-          data-vv-as="List Name"
-          placeholder="Enter your list name"
-        /> -->
-
-
+      <form style="position: relative; height:38px; top:80px;">
+       
           <h4 class="title1"> Τίτλος </h4>
 
           <input style="position:fixed; top: 95px; width: 660px"
@@ -54,6 +43,7 @@
               <option value="4">4 Εβδομάδες</option>
             </select>
           </h6>
+
           <h6 class="title4">Κατηγορία: 
             <!-- <span class="subtitle1">Εκκρεμεί</span> -->
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
@@ -63,9 +53,7 @@
             </select>
           </h6>        
      
-
           <!-- <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small> -->
-
 
         <button class="btn btn-sm btn-app mt-2" style="position:fixed; top: 400px; left:300px;" @click.prevent="handleTaskListSave">
           Save Sprint
@@ -134,8 +122,7 @@ export default {
       let sprint = {
                 // like this
                 name: this.listForm.name,
-                text: this.listForm.text,
-                description: "testaroume edoo",
+                description: this.listForm.text,
                 status: "toDo",
                 estimated_duration: "10"
             }

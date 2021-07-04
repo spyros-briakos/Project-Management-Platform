@@ -151,7 +151,8 @@
   <!--  -->
   <!-- Case: Scrum Board -> userStory --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">   
+  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog'">   
+  <!-- <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">    -->
   <!-- <div class="card tasklist-item" v-else-if="item.state=='userStory' && board.id=='SCRUM_BOARD'">    -->
     
     <!--  For Product Backlog (different popup from others) -->
