@@ -214,20 +214,20 @@ export default({
             }
 
 
-            // this.createProjectAndInvite( {project:project, inviteUsernameList:["admin2", "admin3"]})
-            // .then( response => {                            
-            //     this.goodAllert = true
-            //     this.badAllert = false
-            //     this.goodAllertMessage = response
-            //     this.getProjects()
+            this.createProjectAndInvite( {project:project, inviteUsernameList:["admin2", "admin3"]})
+            .then( response => {                            
+                this.goodAllert = true
+                this.badAllert = false
+                this.goodAllertMessage = response
+                this.getProjects()
 
-            //     setTimeout(() => {  this.$emit('busy-form', 1); }, 1500);
-            // })
-            // .catch( error => { 
-            //     this.badAllert = true
-            //     this.goodAllert = true
-            //     this.badAllertMessage = error.response.data.message
-            // })
+                setTimeout(() => {  this.$emit('busy-form', 1); }, 1500);
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = true
+                this.badAllertMessage = error.response.data.message
+            })
 
             
         },
