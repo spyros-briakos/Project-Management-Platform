@@ -196,6 +196,7 @@ export default {
       getTaskIdbyNames: "getTaskIdbyNames",
       getUserStorybyName: "getUserStorybyName",
       getTaskbyNames: "getTaskbyNames",
+      getSprintNames: "getSprintNames",
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -214,6 +215,7 @@ export default {
       deleteSprint: "deleteSprint",
       connectSprint: "connectSprint",
       addTaskAndConnectSprint: "addTaskAndConnectSprint",
+      putSprintInFront: "putSprintInFront",
       
     }),
 
