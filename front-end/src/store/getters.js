@@ -119,7 +119,7 @@ var coWorkersTest = [
 	{_id: 9, username: "Panos Perdikos"},
 ]
 
-var testing = false
+var testing = true
 
 export default {
 	isLoading: state => state.isLoading,

@@ -20,8 +20,6 @@ function addIndUser(ind, id, lname, fname, uname){
 
 function build_up(res, type){
     if(type === 'user'){
-        console.log('RES');
-        console.log(res);
         let final = [];
         for(let user of res){
             let vals = user.split(" ");

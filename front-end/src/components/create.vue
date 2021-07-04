@@ -291,8 +291,7 @@ export default({
             // }
 
             found = fts.searchUser(val);
-            console.log(found);
-
+            
             return found;
         }
     },
