@@ -63,9 +63,7 @@ passport.use('login', new localStrategy(
   }, async (username, password, done) => {
     try {
       // Find user in the db
-      console.log(username);
       const user = await User.findOne({ username: username });
-      console.log(user);
       // If no such user
       if (!user) {
         return done(null, false, { message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
