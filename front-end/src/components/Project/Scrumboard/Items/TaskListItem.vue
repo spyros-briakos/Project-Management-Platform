@@ -75,14 +75,6 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
-          <!-- <h6 class="title3">Εκτιμώμενη διάρκεια: 
-            <select class=" custom-select custom-select-sm"  style="width: 19%;">
-              <option value="2">2 Εβδομάδες</option>
-              <option value="3">3 Εβδομάδες</option>
-              <option value="4">4 Εβδομάδες</option>
-            </select>
-          </h6> -->
-
           <h6 class="title3" style="top:65px;"> 
             <v-row align="center">
               <v-col
@@ -90,11 +82,7 @@
                 cols="12"
                 sm="4"
               >
-            <!-- <select class=" custom-select custom-select-sm"  style="width: 19%;">
-              <option value="2">2 Εβδομάδες</option>
-              <option value="3">3 Εβδομάδες</option>
-              <option value="4">4 Εβδομάδες</option>
-            </select> -->
+            
             <v-select
               :items="selecteditems"
               label="Εκτιμώμενη Διάρκεια"
@@ -103,21 +91,8 @@
             </v-row>
           </h6>
 
-          <!-- <h6 class="title3">Κατηγορία: 
-            <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Εκκρεμεί</option>
-              <option value="3">Σε εξέλιξη</option>
-              <option value="4">Ολοκληρώθηκε</option>
-            </select>
-          </h6>         -->
-
           <h6 class="title3" style="position:fixed; top:297px; left:100px;"> 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
-            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Εκκρεμεί</option>
-              <option value="3">Σε εξέλιξη</option>
-              <option value="4">Ολοκληρώθηκε</option>
-            </select> -->
+            
             <v-row align="right" style="position:fixed; left:20px; width:300px;">
               <v-col
                 class="d-flex"
@@ -148,9 +123,6 @@
             </v-row>
           </h6>    
 
-            <!-- <v-list-item-title class="headline mb-1" style=" positive:fixed; right:100px; top:-117px;">
-          Headline 5
-        </v-list-item-title> -->
           <h6 class="title3" style="padding-left:480px; top:-17px; height: 0px;">Μέλη Task:
             <br>
             <i class="fas fa-user-circle" style="position:fixed; font-size:30px; right:200px; top:305px; color: #cc99ff; cursor: pointer;"></i>            
@@ -163,22 +135,15 @@
           <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div> 
 
           <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
-          <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
-          <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
-          <!-- <div> -->
-          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save">
+          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(2)">
             Save
           </button> 
           <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 400px; left:320px;"  @click.prevent="cancel">
             Cancel
           </button>
-          <!-- </div> -->
-          <!-- <div v-show="!isNewItem"> -->
           <button class="btn btn-sm text-danger"  style="position:fixed; top: 400px; left:420px;" @click.prevent="remove">
             Delete
           </button>
-          <!-- </div> -->
-        <!-- </div> -->
         </form>
         
       </template>
@@ -196,11 +161,16 @@
   </div>
   
   <!--  -->
+  <!-- Case: Scrum Board -> hiddenTaskUnderUserStory --> 
+  <!--  -->
+  <div v-else-if="list.name=='Product Backlog' && item.state=='hiddenTaskUnderUserStory'">   
+  
+  </div>
+
+  <!--  -->
   <!-- Case: Scrum Board -> userStory --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">   
-  <!-- <div class="card tasklist-item" v-else-if="list.name=='Product Backlog'">    -->
-  <!-- <div class="card tasklist-item" v-else-if="item.state=='userStory' && board.id=='SCRUM_BOARD'">    -->
+  <div class="card tasklist-item1" v-else-if="list.name=='Product Backlog'">   
     
     <!--  For Product Backlog (different popup from others) -->
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
@@ -219,7 +189,7 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
+            <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
         </div>
         
@@ -253,23 +223,15 @@
           />
 
           <small class="text-danger" style="display:block" v-if="errors.itemTitle">{{ errors.first("itemTitle") }}</small>
-          <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
-          <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
-          <!-- <div> -->
-          <!-- <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save"> -->
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(1)">
             Save
           </button> 
           <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 400px; left:320px;"  @click.prevent="cancel">
             Cancel
           </button>
-          <!-- </div> -->
-          <!-- <div v-show="!isNewItem"> -->
           <button class="btn btn-sm text-danger"  style="position:fixed; top: 400px; left:420px;" @click.prevent="remove">
             Delete
           </button>
-          <!-- </div> -->
-        <!-- </div> -->
         </form>
         
       </template>
@@ -336,17 +298,9 @@
   </div>
 
   <!--  -->
-  <!-- Case: Scrum Board -> hiddenTaskUnderUserStory --> 
-  <!--  -->
-  <div v-else-if="list.name=='Product Backlog' && item.state=='hiddenTaskUnderUserStory'">   
-
-  </div>
-
-  <!--  -->
   <!-- Case: Scrum Board -> taskInSprint --> 
   <!--  -->
   <div class="card tasklist-item" v-else>   
-  <!-- <div class="card tasklist-item" v-else-if="item.state=='taskInSprint' && board.id=='SCRUM_BOARD'">    -->
     
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
       <template v-slot:handle1>
@@ -422,6 +376,7 @@
             <v-select
               :items="selecteditems1"
               label="Κατάσταση"
+              v-model="selected"
             ></v-select>
             </v-col>
             </v-row>
@@ -444,9 +399,6 @@
             </v-row>
           </h6>
 
-            <!-- <v-list-item-title class="headline mb-1" style=" positive:fixed; right:100px; top:-117px;">
-          Headline 5
-        </v-list-item-title> -->
           <h6 class="title3" style="padding-left:480px; top:-17px; height: 0px;">Μέλη Task:
             <br>
             <i class="fas fa-user-circle" style="position:fixed; font-size:30px; right:200px; top:305px; color: #cc99ff; cursor: pointer;"></i>            
@@ -538,7 +490,8 @@ export default {
       getUserStoriesNames: "getUserStoriesNames",
       getUserStorybyId: "getUserStorybyId",
       getUserStoryIdbyName: "getUserStoryIdbyName",
-      getSprintbyId: "getSprintbyId"
+      getSprintbyId: "getSprintbyId",
+      getTaskbyId: "getTaskbyId"
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -558,7 +511,7 @@ export default {
       },
       user_story_of_task: '',
       default_task: 'Task',
-      default_user_story: 'User Story',
+      default_user_story: "User Story"  ,
       options: ['User Story','Epic','Issue'],
       collapsedTasks: false,
       selecteditems: ['1 Μέρα', '2 Μέρες', '3 Μέρες', '4 Μέρες', '5 Μέρες', 
@@ -571,6 +524,7 @@ export default {
         { title: 'Click Me' },
         { title: 'Click Me 2' },
       ],
+      selected: "Εκκρεμεί"
     }
   },
   methods: {
@@ -602,12 +556,6 @@ export default {
       this.form.text = this.item.text
       this.isEditing = true
       // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
-      
-      ///experiment//
-
-
-      ///////////////
-
       this.$emit("item-editing")
     },
     clearForm() {
@@ -674,7 +622,26 @@ export default {
         }
         // Case: Edit
         else if(this.item.state=="taskInSprint") {
-          
+          // get the current object for place holding
+          var task = this.getTaskbyId(this.item.id)
+
+          // get output from form
+          let taskFormOutput = {
+            name: this.form.title,
+            description: this.form.text,
+            status: this.form.status,
+            estimated_duration: this.form.duration,
+            // userStory: this.getUserStoryIdbyName(this.user_story_of_task)
+          }
+
+          // edit it
+          task.name = taskFormOutput.name
+          task.description = taskFormOutput.description
+          task.status = taskFormOutput.status
+          task.estimated_duration = taskFormOutput.estimated_duration
+
+          // send request
+          this.editTask(task)
         }
       }     
 
@@ -710,9 +677,10 @@ export default {
         this.deleteUserStory(this.item.id)
       }
       // Case: Task
-      // else {
-      //   this.deleteTask(this.getTaskbyId(taskName, storyName))
-      // }
+      else {
+        console.log(this.item.state)
+        this.deleteTask(this.getTaskbyId(this.item.id))
+      }
 
       this.deleteTaskListItem({
         boardId: this.board.id,
@@ -733,32 +701,6 @@ export default {
       if(!isOpen)
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
-    },
-
-    editTask_() {
-      // get the current object for place holding
-      var task = this.getTaskbyNames(this.taskName, this.storyName)
-
-      // get output from form
-      let taskFormOutput = {
-        name: "xexxe",
-        description: "telika ftasame os edo",
-        status: "toDo",
-        estimated_duration: "10",
-      }
-
-      // edit it
-      task.name = taskFormOutput.name
-      task.description = taskFormOutput.description
-      task.status = taskFormOutput.status
-      task.estimated_duration = taskFormOutput.estimated_duration
-
-      // send request
-      this.editTask(task)
-    },
-
-    deleteTask_(taskName, storyName) {
-      this.deleteTask(this.getTaskIdbyNames(taskName, storyName))
     }
   }
 }

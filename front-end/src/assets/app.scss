@@ -143,7 +143,19 @@ div.scroll {
   cursor: grab;
 }
 
+.tasklist-item1 {
+  min-height: 50px;
+  border-bottom: 0.01rem solid rgba(0, 0, 0, 0.9);
+  font-size: 13px;
+  background-color: rgba(244, 255, 251, 0.582);
+  cursor: grab;
+}
+
 .tasklist-item:hover div.edit-icon {
+  display: block;
+}
+
+.tasklist-item1:hover div.edit-icon {
   display: block;
 }
 
@@ -287,6 +299,10 @@ div#searching {
 }
 
 .card.tasklist-item:hover .edit {
+	display: block;
+}
+
+.card.tasklist-item1:hover .edit {
 	display: block;
 }
 

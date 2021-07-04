@@ -166,7 +166,7 @@ router.beforeEach((to, from, next) => {
     next({name: 'Projects'});
   }
   if(remove_when_loged.includes(to.name) && store.getters.isLogedIn){
-    next({name: 'Profile'})
+    next({name: 'profile'})
   }
   else next();
     
