@@ -42,26 +42,19 @@
                 cols="12"
                 sm="4"
               >
-            <!-- <select class=" custom-select custom-select-sm"  style="width: 19%;">
-              <option value="2">2 Εβδομάδες</option>
-              <option value="3">3 Εβδομάδες</option>
-              <option value="4">4 Εβδομάδες</option>
-            </select> -->
+        
             <v-select
               :items="selecteditems"
-              label="Εκτημώμενη Διάρκεια"
+              label="Εκτιμώμενη Διάρκεια"
+              v-model="listForm.duration"
+              :value="selected"
             ></v-select>
             </v-col>
             </v-row>
           </h6>
           
           <h6 class="title4"> 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
-            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Εκκρεμεί</option>
-              <option value="3">Σε εξέλιξη</option>
-              <option value="4">Ολοκληρώθηκε</option>
-            </select> -->
+           
             <v-row align="right" style="position:fixed; left:372px; width:300px;">
               <v-col
                 class="d-flex"
@@ -71,13 +64,13 @@
             <v-select
               :items="selecteditems1"
               label="Κατάσταση"
+              v-model="listForm.status"
+              :value="selected"
             ></v-select>
             </v-col>
             </v-row>
           </h6>        
      
-          <!-- <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small> -->
-
         <button class="btn btn-sm btn-app mt-2" style="position:fixed; top: 400px; left:300px;" @click.prevent="handleTaskListSave">
           Save Sprint
         </button>
@@ -103,6 +96,8 @@ export default {
         duration: "",
         status: ""
       },
+      duration_: "",
+      status_: "",
       selecteditems: ['2 Εβδομάδες', '3 Εβδομάδες', '4 Εβδομάδες'],
       selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε']
     }
@@ -142,57 +137,61 @@ export default {
       this.listForm.id = list.id
       this.listForm.name = list.name
       this.listForm.text = list.text
-      this.listForm.duration = list.duration
-      this.listForm.status = list.status
+      // this.listForm.duration = list.duration
+      // this.listForm.status = list.status
       // here needs an edit form
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {  
-     
+      
+      if(this.listForm.status === 'Εκκρεμεί')
+      {
+        this.status_ = "toDo"
+      }
+      else if(this.listForm.status === 'Σε εξέλιξη')
+      {
+        this.status_ = "inProgress"
+      }
+      else if(this.listForm.status === 'Ολοκληρώθηκε')
+      {
+        this.status_ = "done"
+      }
+      else
+      {
+        console.log("error")
+      }
+
+      if(this.listForm.duration === '2 Εβδομάδες')
+      {
+        this.duration_ = "14"
+      }
+      else if(this.listForm.duration === '3 Εβδομάδες')
+      {
+        this.duration_ = "21"
+      }
+      else if(this.listForm.duration === '4 Εβδομάδες')
+      {
+        this.duration_ = "28"
+      }
+      else
+      {
+        console.log("error")
+      }
+  
+      // Case: Edit
      if(this.listForm.id) {
         // get the current object for place holding
         const sprint = this.getSprintbyId(this.listForm.id)
 
-        if(this.listForm.status === 'Εκκρεμεί')
-        {
-          this.listForm.status = "toDo"
-        }
-        else if(this.listForm.status === 'Σε εξέλιξη')
-        {
-          this.listForm.status = "inProgress"
-        }
-        else if(this.listForm.status === 'Ολοκληρώθηκε')
-        {
-          this.listForm.status = "done"
-        }
-        else
-        {
-          console.log("error")
-        }
-
-        if(this.listForm.duration === '2 Εβδομάδες')
-        {
-          this.listForm.duration = "14"
-        }
-        else if(this.listForm.duration === '3 Εβδομάδες')
-        {
-          this.listForm.duration = "21"
-        }
-        else if(this.listForm.duration === '4 Εβδομάδες')
-        {
-          this.listForm.duration = "28"
-        }
-        else
-        {
-          console.log("error")
-        }
+        this.listForm.duration = sprint.estimated_duration
+        this.listForm.status = sprint.status
 
         // get output from form
         let sprintFormOutput = {
             name: this.listForm.name,
             description: this.listForm.text,
-            status: this.listForm.status,
-            estimated_duration: this.listForm.duration
+            status: this.status_,
+            estimated_duration: this.duration_
         }
 
         // edit it
@@ -204,14 +203,13 @@ export default {
         // send request
         this.editSprint(sprint)
       }
+      // Case: Create
       else {
       let sprint = {
-              // like this
-              // id: this.listForm.id,
               name: this.listForm.name,
               description: this.listForm.text,
-              status: this.listForm.status,
-              estimated_duration: this.listForm.duration
+              status: this.status_,
+              estimated_duration: this.duration_
           }
         this.addSprint(sprint)
       }
