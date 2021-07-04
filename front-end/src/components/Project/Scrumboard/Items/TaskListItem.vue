@@ -134,17 +134,52 @@
           </h6>        
           <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div>  -->
 
-          <div class="text-center" style="position:fixed; right:50px; top:300px;">
-          <v-btn
-            class="ma-2"
-            :loading="loading"
-            :disabled="loading"
-            color="#48C0A4"
-            @click="collapseMembers()"
-          >
-            Γίνε μέλος αυτού του Task
-          </v-btn>
-        </div>
+          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px">
+            <v-row justify="space-around">
+            <v-col
+              cols="1"
+              sm="10"
+              md="12"
+            >
+              <v-sheet
+                class="py-4 px-1"
+              >
+                <v-chip-group
+                  multiple
+                  active-class="primary--text"
+                >
+                  <v-chip
+                    v-for="tag in getTaskMembersbyId(item.id)"
+                    :key="tag"
+                  >
+                    {{ tag }}
+                  </v-chip>
+                </v-chip-group>
+              </v-sheet>
+            </v-col>
+            </v-row>
+
+            <!-- <div class="text-center" style="position:fixed; right:50px; top:300px;"> -->
+              <v-btn
+                class="ma-2"
+                :loading="loading"
+                :disabled="loading"
+                color="#48C0A4"
+                @click="joinTask(item.id)"
+              >
+                Join Task
+              </v-btn>
+
+               <v-btn
+                class="ma-2"
+                :loading="loading"
+                :disabled="loading"
+                color=#F78A37
+                @click="leaveTask(item.id)"
+              >
+                Leave Task
+              </v-btn>
+            </div>
 
           <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(2)">
@@ -436,7 +471,7 @@
                   active-class="primary--text"
                 >
                   <v-chip
-                    v-for="tag in tags"
+                    v-for="tag in getTaskMembersbyId(item.id)"
                     :key="tag"
                   >
                     {{ tag }}
@@ -452,7 +487,7 @@
                 :loading="loading"
                 :disabled="loading"
                 color="#48C0A4"
-                @click="collapseMembers()"
+                @click="joinTask(item.id)"
               >
                 Join Task
               </v-btn>
@@ -462,7 +497,7 @@
                 :loading="loading"
                 :disabled="loading"
                 color=#F78A37
-                @click="collapseMembers()"
+                @click="leaveTask(item.id)"
               >
                 Leave Task
               </v-btn>
@@ -552,7 +587,8 @@ export default {
       getUserStorybyId: "getUserStorybyId",
       getUserStoryIdbyName: "getUserStoryIdbyName",
       getSprintbyId: "getSprintbyId",
-      getTaskbyId: "getTaskbyId"
+      getTaskbyId: "getTaskbyId",
+      getTaskMembersbyId: "getTaskMembersbyId"
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -625,7 +661,9 @@ export default {
       addSprint: "addSprint",
       editSprint: "editSprint",
       deleteSprint: "deleteSprint",
-      addTaskAndConnectSprint: "addTaskAndConnectSprint"
+      addTaskAndConnectSprint: "addTaskAndConnectSprint",
+      joinTask: "joinTask",
+      leaveTask: "leaveTask"
     }),
 
     collapseTasks_() {
