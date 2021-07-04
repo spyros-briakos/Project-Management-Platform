@@ -143,9 +143,10 @@
     created() {
         this.getProjects()        
         this.getInvites()
+        this.getAllUsers()
     },
     methods:{
-        ...mapActions(["getProjects", "getProject", "getInvites", "answerInvitation", "getEmulatedData"]),
+        ...mapActions(["getProjects", "getProject", "getInvites", "answerInvitation", "getEmulatedData", "getAllUsers"]),
         mpou(){
             alert("on-click");
         },

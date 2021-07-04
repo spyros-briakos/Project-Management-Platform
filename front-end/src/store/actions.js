@@ -106,6 +106,7 @@ export default {
 			log(response);
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("DELETE_ALL_USERS")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
 			commit("DELETE_COWORKERS")
@@ -178,6 +179,29 @@ export default {
 		})
 
 	},
+
+	async getAllUsers({ commit, getters }) {
+
+		// Get client object
+		var token = getters.token
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.getUsers() 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_ALL_USERS", response)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
 
 	async updateUserName({ commit, getters }, data) {
 
@@ -261,6 +285,7 @@ export default {
       		console.log(client)
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("DELETE_ALL_USERS")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
 			commit("DELETE_SPRINTS")
@@ -313,6 +338,7 @@ export default {
       		console.log(client)
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("DELETE_ALL_USERS")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
 			commit("DELETE_COWORKERS")
