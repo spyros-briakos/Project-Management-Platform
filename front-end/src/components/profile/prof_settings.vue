@@ -168,10 +168,12 @@
                         name = i.value;
                     else if(i.firstName == "firstName")
                         firstName = i.value;
+                    else if(i.firstName == "lastName")
+                        lastName = i.value;
                     else if(i.name == "email")
                         email = i.value;
                 }
-                if(!name.length || !email.length)
+                if(!username.length || !firstName.length || !lastName.length || !email.length)
                     return false;
             }
             else if(form == "pass"){
@@ -216,26 +218,34 @@
             //     return false;
             // }
             if(form === "perInfo"){
-                var userName_, email_;
+                var userName_, firstName_, lastName_, email_;
                 for(let element of elements){
-                    if(element.name == "name")
+                    if(element.name == "username")
                         userName_ = element.value
+                    else if(element.name == "firstName")
+                        firstName_ = element.value
+                    else if(element.name == "lastName")
+                        lastName_ = element.value
                     else if(element.name == "email")
                         email_ = element.value
                 }
 
                 let data = {
                     username: userName_,
-                    firstName: this.firstName,
-                    lastName: this.lastName,
+                    firstName: firstName_,
+                    lastName: lastName_,
                     email: email_,
 			    };
                 // check if update username or email
                 // if email then account needs to logout
                 if (email_ !== this.email)
                     this.updateUserEmail_(data)
-                else
+                else if (userName_ !== this.username)
                     this.updateUserName_(data)
+                else if (firstName_ !== this.firstName)
+                    this.updateFirstName_(data)
+                else if (lastName_ !== this.lastName)
+                    this.updateLastName_(data)
 
             } else if (form === "pass"){
                 var old_, new_, confirm_;
@@ -287,8 +297,8 @@
                 this.badAllertMessage = error.response.data.message
             }) 
         },
-        updatefirstName_(data){
-            this.updatefirstName( data ) 
+        updateFirstName_(data){
+            this.updateFirstName( data ) 
             .then( response => {
                 this.goodAllert = true
                 this.badAllert = false
@@ -302,8 +312,8 @@
                 this.badAllertMessage = error.response.data.message
             }) 
         },
-        updatelastName_(data){
-            this.updatelastName( data ) 
+        updateLastName_(data){
+            this.updateLastName( data ) 
             .then( response => {
                 this.goodAllert = true
                 this.badAllert = false

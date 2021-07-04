@@ -7,8 +7,8 @@ const router = express.Router();
 // DIONYSIS
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-// mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect("mongodb://localhost/scrub", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect("mongodb://localhost/scrub", {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 const { User } = require("../models/User");
 // DIONYSIS

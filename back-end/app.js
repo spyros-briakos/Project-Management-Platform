@@ -80,8 +80,8 @@ const HOST = process.env.HOST || '127.0.0.1'
 
 // SERVER CONNECTS TO DATABASE
 mongoose.connect(
-  "mongodb://localhost/scrub",
-  // process.env.DB_URL, 
+  // "mongodb://localhost/scrub",
+  process.env.DB_URL, 
   { 
   	useNewUrlParser: true, 
   	useUnifiedTopology: true,
@@ -109,6 +109,6 @@ const server = https.createServer(options, app).listen(PORT, function(){
   console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
 });
 // const server = http.createServer(options, app).listen(PORT, function(){
-//   console.log(`Server listening at http://${process.env.HOSTNAME}:${PORT}/`);
+//   console.log(`Server listening at http://${process.env.HOST}:${PORT}/`);
 // });
 module.exports = server;
