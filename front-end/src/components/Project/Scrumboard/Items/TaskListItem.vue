@@ -77,30 +77,92 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
-          <h6 class="title3">Εκτιμώμενη διάρκεια: 
-            <!-- <span class="subtitle1">4 ημέρες</span> -->
+          <!-- <h6 class="title3">Εκτιμώμενη διάρκεια: 
             <select class=" custom-select custom-select-sm"  style="width: 19%;">
               <option value="2">2 Εβδομάδες</option>
               <option value="3">3 Εβδομάδες</option>
               <option value="4">4 Εβδομάδες</option>
             </select>
+          </h6> -->
+
+          <h6 class="title3" style="top:65px;"> 
+            <v-row align="center">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="4"
+              >
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 19%;">
+              <option value="2">2 Εβδομάδες</option>
+              <option value="3">3 Εβδομάδες</option>
+              <option value="4">4 Εβδομάδες</option>
+            </select> -->
+            <v-select
+              :items="selecteditems"
+              label="Εκτημώμενη Διάρκεια"
+            ></v-select>
+            </v-col>
+            </v-row>
           </h6>
-          <h6 class="title3">Κατηγορία: 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+
+          <!-- <h6 class="title3">Κατηγορία: 
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
               <option value="2">Εκκρεμεί</option>
               <option value="3">Σε εξέλιξη</option>
               <option value="4">Ολοκληρώθηκε</option>
             </select>
-          </h6>        
-          <h6 class="title3">User Story: 
-            <!-- <span class="subtitle1">Τελικό</span> -->
+          </h6>         -->
+
+          <h6 class="title3" style="position:fixed; top:297px; left:100px;"> 
+            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
+              <option value="2">Εκκρεμεί</option>
+              <option value="3">Σε εξέλιξη</option>
+              <option value="4">Ολοκληρώθηκε</option>
+            </select> -->
+            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="12"
+              >
+            <v-select
+              :items="selecteditems1"
+              label="Κατάσταση"
+            ></v-select>
+            </v-col>
+            </v-row>
+          </h6>  
+
+          <!-- <h6 class="title3">User Story: 
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
               <option value="2">Αρχικό</option>
               <option value="3">Μεσαίο</option>
               <option value="4">Τελικό</option>
             </select>
-          </h6>       
+          </h6>        -->
+
+          <h6 class="title3" style="position:fixed; top:345px; left:100px;"> 
+            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
+              <option value="2">Εκκρεμεί</option>
+              <option value="3">Σε εξέλιξη</option>
+              <option value="4">Ολοκληρώθηκε</option>
+            </select> -->
+            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="12"
+              >
+            <v-select
+              :items="selecteditems2"
+              label="User Story"
+            ></v-select>
+            </v-col>
+            </v-row>
+          </h6>    
+
             <!-- <v-list-item-title class="headline mb-1" style=" positive:fixed; right:100px; top:-117px;">
           Headline 5
         </v-list-item-title> -->
@@ -310,30 +372,93 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
-          <h6 class="title3">Εκτιμώμενη διάρκεια: 
-            <!-- <span class="subtitle1">4 ημέρες</span> -->
+          <!-- <h6 class="title3">Εκτιμώμενη διάρκεια: 
             <select class=" custom-select custom-select-sm"  style="width: 19%;">
               <option value="2">2 Εβδομάδες</option>
               <option value="3">3 Εβδομάδες</option>
               <option value="4">4 Εβδομάδες</option>
             </select>
+          </h6> -->
+
+          <h6 class="title3" style="top:75px;"> 
+            <v-row align="center">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="4"
+              >
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 19%;">
+              <option value="2">2 Εβδομάδες</option>
+              <option value="3">3 Εβδομάδες</option>
+              <option value="4">4 Εβδομάδες</option>
+            </select> -->
+            <v-select
+              :items="selecteditems"
+              label="Εκτημώμενη Διάρκεια"
+            ></v-select>
+            </v-col>
+            </v-row>
           </h6>
-          <h6 class="title3">Κατηγορία: 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+
+          <!-- <h6 class="title3">Κατηγορία: 
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
               <option value="2">Εκκρεμεί</option>
               <option value="3">Σε εξέλιξη</option>
               <option value="4">Ολοκληρώθηκε</option>
             </select>
-          </h6>        
-          <h6 class="title3">User Story: 
-            <!-- <span class="subtitle1">Τελικό</span> -->
+          </h6>    -->
+
+
+          <h6 class="title3" style="position:fixed; top:297px; left:100px;"> 
+            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
+              <option value="2">Εκκρεμεί</option>
+              <option value="3">Σε εξέλιξη</option>
+              <option value="4">Ολοκληρώθηκε</option>
+            </select> -->
+            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="12"
+              >
+            <v-select
+              :items="selecteditems1"
+              label="Κατάσταση"
+            ></v-select>
+            </v-col>
+            </v-row>
+          </h6>  
+
+          <!-- <h6 class="title3">User Story: 
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
               <option value="2">Αρχικό</option>
               <option value="3">Μεσαίο</option>
               <option value="4">Τελικό</option>
             </select>
-          </h6>       
+          </h6>  -->
+
+          <h6 class="title3" style="position:fixed; top:345px; left:100px;"> 
+            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
+              <option value="2">Εκκρεμεί</option>
+              <option value="3">Σε εξέλιξη</option>
+              <option value="4">Ολοκληρώθηκε</option>
+            </select> -->
+            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="12"
+              >
+            <v-select
+              :items="selecteditems2"
+              label="User Story"
+            ></v-select>
+            </v-col>
+            </v-row>
+          </h6>
+
             <!-- <v-list-item-title class="headline mb-1" style=" positive:fixed; right:100px; top:-117px;">
           Headline 5
         </v-list-item-title> -->
@@ -452,6 +577,9 @@ export default {
       default_user_story: 'User Story',
       options: ['User Story','Task','Epic','Issue'],
       collapsedTasks: false,
+      selecteditems: ['2 Εβδομάδες', '3 Εβδομάδες', '4 Εβδομάδες'],
+      selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε'],
+      selecteditems2: ['Arxiko', 'Messaio', 'Teliko']
     }
   },
   methods: {
