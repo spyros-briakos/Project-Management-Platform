@@ -1312,7 +1312,7 @@ export default {
 
 	async putSprintInFront({ commit, getters }, sprintName) {
 		// get Sprint id
-		var sprintId = getters.getSprintbyName(sprintName)
+		var sprintId = getters.getSprintbyName(sprintName)._id
 		commit("PUT_SPRINT_IN_FRONT", sprintId)
 	},
 

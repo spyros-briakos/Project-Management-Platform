@@ -587,14 +587,15 @@ export default {
 	},
 
 	PUT_SPRINT_IN_FRONT(state, payload) {
+		console.log(payload)
 		const board = state.boards.find(b => b.id == "SCRUM_BOARD")
 		// find the sprint and move it in 1st position
-		const backLogIndex = board.lists.findIndex(b => b.id === payload)
+		const sprintIndex = board.lists.findIndex(b => b.id === payload)
 		// swap posistion
 		var temp = board.lists[1]
-		board.lists[1] = board.lists[backLogIndex]
-		board.lists[backLogIndex] = temp
-		Vue.set(board, "lists", board.lists)
+		Vue.set(board.lists, 1, board.lists[sprintIndex])
+		Vue.set(board.lists, sprintIndex, temp)
+		console.log(sprintIndex)
 	},
 
 	// Reorder Task List Items
