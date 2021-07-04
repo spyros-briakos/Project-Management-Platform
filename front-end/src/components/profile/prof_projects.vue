@@ -2,7 +2,7 @@
     <div class="wrap_projects">   
         <div v-if="create_prj==1" class="overlay"></div>
         <div class="create_prj" v-if="create_prj==1">
-            <createProject :coWorkers="coWorkers" :user="user" />
+            <createProject v-on:busy-form='create_prj=0' :coWorkers="coWorkers" :user="user" />
             <button class="close_form" v-on:click="create_prj=0">
                 <font-awesome-icon class="icon" :icon="['far', 'times-circle']"/>
             </button>
@@ -19,7 +19,7 @@
 
             <li v-for="invite in invites" :key="invite.invitationCode" :class="{ 'selectedProject' : selected_prj == invite.invitationCode}"
                 :style="{'opacity': 1}"
-                @mouseover="mouse_on(invite.invitationCode)"
+                @mouseover="mouse_on(invite.invitationCode, invite)"
                 @mouseleave="invites_mouse_over=''">
 
                 <div :class="{'projectTitle': true, 'selectedProject' : selected_prj == invite.invitationCode}">
@@ -98,7 +98,7 @@
                     <div class="vert_div"></div>
                     
                     <div class="wrap_partners">
-                        <div class="partner" v-for="partner in project.members" :key="partner._id">
+                        <div class="partner" v-for="partner in project.members" :key="project.name+'_'+partner._id">
                             <font-awesome-icon class="icon" :icon="['far', 'user']"
                                 :style="{
                                     'background-color' : color_roulete(),
@@ -138,7 +138,6 @@
             create_prj: 0,
             selected_prj: -1,
             invites_mouse_over: '',
-            
         }
     },
     created() {
@@ -162,16 +161,16 @@
         accept_inv(invitationCode){
             this.answerInvitation({answer: "accept", invitationCode: invitationCode})
             .then( response => {console.log("ACCEPT INVITE"); this.getProjects()})
-            
         },
         reject_inv(invitationCode){
             this.answerInvitation({answer: "reject", invitationCode: invitationCode})
             .then( response => {console.log("REJECT INVITE"); this.getProjects()})
         },
-        mouse_on(invitationCode){
+        mouse_on(invitationCode, invite){
             this.invites_mouse_over=invitationCode;
-            // this.$emit('update-seen', title);
-            this.$store.commit("UPDATE_SEEN_INVITE", invitationCode)
+            // invite.seen = 1;
+            // this.$emit('update-seen', invitationCode);
+            this.$store.commit("UPDATE_SEEN_INVITE", invitationCode);
         },
         goToProject(projectName) {
             this.getProject(projectName)
@@ -184,8 +183,95 @@
             invites: "invites",
 	    }),
 
+        // print old projects for front debugging without database
+        // projects: function() { return (this.projectsDatabase === null ? this.projectsTest : this.projectsDatabase ) },
 
-        
+        projectsTest: function() { return [
+                {
+                    _id: 1,
+                    name: "Deploy PPO, A2C model",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 2,
+                    name: "CNN's Implementation",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 3,
+                    name: "Mini JS Compiler",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 4,
+                    name: "LSH HyperCube Algorithms",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 5,
+                    name: "Variational Autoencoders",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 6,
+                    name: "Redesign Eudoxus Website",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                },
+
+                {
+                    _id: 7,
+                    name: "Best DI Team Implementation",
+                    status: '80%',
+                    members: [{_id: "60c0dbd1e5bf5f10e917e0be", username: "Mike"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bf", username: "Spyros"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bg", username: "Dion"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bh", username: "Mery"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bi", username: "Andreas"},
+                    {_id: "60c0dbd1e5bf5f10e917e0bj", username: "Aleksandra"},],
+                }
+            ]
+        },
     },
     components:{
         createProject,

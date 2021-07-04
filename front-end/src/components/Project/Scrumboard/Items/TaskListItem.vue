@@ -134,21 +134,8 @@
             </v-row>
           </h6>  
 
-          <!-- <h6 class="title3">User Story: 
-            <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Αρχικό</option>
-              <option value="3">Μεσαίο</option>
-              <option value="4">Τελικό</option>
-            </select>
-          </h6>        -->
-
           <h6 class="title3" style="position:fixed; top:345px; left:100px;"> 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
-            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Εκκρεμεί</option>
-              <option value="3">Σε εξέλιξη</option>
-              <option value="4">Ολοκληρώθηκε</option>
-            </select> -->
+         
             <v-row align="right" style="position:fixed; left:20px; width:300px;">
               <v-col
                 class="d-flex"
@@ -402,14 +389,6 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
-          <!-- <h6 class="title3">Εκτιμώμενη διάρκεια: 
-            <select class=" custom-select custom-select-sm"  style="width: 19%;">
-              <option value="2">2 Εβδομάδες</option>
-              <option value="3">3 Εβδομάδες</option>
-              <option value="4">4 Εβδομάδες</option>
-            </select>
-          </h6> -->
-
           <h6 class="title3" style="top:75px;"> 
             <v-row align="center">
               <v-col
@@ -417,11 +396,7 @@
                 cols="12"
                 sm="4"
               >
-            <!-- <select class=" custom-select custom-select-sm"  style="width: 19%;">
-              <option value="2">2 Εβδομάδες</option>
-              <option value="3">3 Εβδομάδες</option>
-              <option value="4">4 Εβδομάδες</option>
-            </select> -->
+           
             <v-select
               :items="selecteditems"
               label="Εκτιμώμενη Διάρκεια"
@@ -430,22 +405,8 @@
             </v-row>
           </h6>
 
-          <!-- <h6 class="title3">Κατηγορία: 
-            <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Εκκρεμεί</option>
-              <option value="3">Σε εξέλιξη</option>
-              <option value="4">Ολοκληρώθηκε</option>
-            </select>
-          </h6>    -->
-
-
           <h6 class="title3" style="position:fixed; top:297px; left:100px;"> 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
-            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Εκκρεμεί</option>
-              <option value="3">Σε εξέλιξη</option>
-              <option value="4">Ολοκληρώθηκε</option>
-            </select> -->
+           
             <v-row align="right" style="position:fixed; left:20px; width:300px;">
               <v-col
                 class="d-flex"
@@ -460,21 +421,8 @@
             </v-row>
           </h6>  
 
-          <!-- <h6 class="title3">User Story: 
-            <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Αρχικό</option>
-              <option value="3">Μεσαίο</option>
-              <option value="4">Τελικό</option>
-            </select>
-          </h6>  -->
-
           <h6 class="title3" style="position:fixed; top:345px; left:100px;"> 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
-            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
-              <option value="2">Εκκρεμεί</option>
-              <option value="3">Σε εξέλιξη</option>
-              <option value="4">Ολοκληρώθηκε</option>
-            </select> -->
+           
             <v-row align="right" style="position:fixed; left:20px; width:300px;">
               <v-col
                 class="d-flex"
@@ -504,22 +452,19 @@
           <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div> 
 
           <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
-          <!-- <small class="text-danger" style="display:block" >{{ errors.first("itemDetails") }}</small> -->
-          <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
-          <!-- <div> -->
-          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save">
+
+          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(2)">
             Save
           </button> 
+
           <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 400px; left:320px;"  @click.prevent="cancel">
             Cancel
           </button>
-          <!-- </div> -->
-          <!-- <div v-show="!isNewItem"> -->
+
           <button class="btn btn-sm text-danger"  style="position:fixed; top: 400px; left:420px;" @click.prevent="remove">
             Delete
           </button>
-          <!-- </div> -->
-        <!-- </div> -->
+
         </form>
         
       </template>
@@ -573,7 +518,7 @@ export default {
     displayItemState() {
       return this.item.state === "userStory" ? "User Story" : "Task"
     },
-    //antrikos
+
     ...mapGetters({
       activeBoard: "activeBoard",
       isLoading: "isLoading",
@@ -597,7 +542,6 @@ export default {
         id: "",
         text: "",
         title: "",
-        // antrikos
         valid: true,
         sprintName: '',
         storyName: '',
@@ -625,7 +569,6 @@ export default {
       saveTaskListItem: "saveTaskListItem",
       deleteTaskListItem: "deleteTaskListItem",
       changeTasksState: "changeTasksState",
-      //antrikos
       addUserStory: "addUserStory",
       editUserStory: "editUserStory",
       deleteUserStory: "deleteUserStory",
@@ -703,12 +646,26 @@ export default {
           this.editUserStory(userStory)
         }
       }
-      // Case: //
+      // Case: Task
       else if(temp_case == 2) {
-
+        // Case: Create
+        if(this.item.state=="defaultItem") {
+          let task = {
+            name: this.form.title,
+            description: this.form.text,
+            status: this.form.status,
+            estimated_duration: this.form.duration,
+            // userStory: this.getUserStoryIdbyName(this.storyName)
+          }
+          this.addTask(task)
+        }
+        // Case: Edit
+        else if(this.item.state=="taskInSprint") {
+          
+        }
       }     
 
-      //Older
+      // Last
       this.$validator.validateAll().then(result => {
         if (result) {
           const updatedItem = {
@@ -761,82 +718,6 @@ export default {
       if(!isOpen)
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
-    },
-
-    addSprint_() {
-      let sprint = {
-        name: this.sprintName,
-        description: "testaroume edoo",
-        status: "toDo",
-        estimated_duration: "10"
-      }
-      this.addSprint(sprint)
-    },
-
-    editSprint_(){
-      // get the current object for place holding
-      const sprint = this.getSprintbyName(this.sprintName)
-
-      // get output from form
-      let sprintFormOutput = {
-        name: "xeexee",
-        description: "testaroume edoo",
-        status: "toDo",
-        estimated_duration: "10"
-      }
-
-      // edit it
-      sprint.name = sprintFormOutput.name
-      sprint.description = sprintFormOutput.description
-      sprint.status = sprintFormOutput.status
-      sprint.estimated_duration = sprintFormOutput.estimated_duration
-
-      // send request
-      this.editSprint(sprint)
-    },
-
-    deleteSprint_(sprintName){
-      this.deleteSprint(this.getSprintIdbyName(sprintName))
-    },
-
-
-    addUserStory_() {
-      let userStory = {
-        name: this.storyName,
-        description: "edo pali testaroume",
-        label: "issue",
-        status: "toDo",
-        estimated_duration: "10",
-      }
-      this.addUserStory(userStory)
-    },
-
-    editUserStory_(){
-      // get the current object for place holding
-      var userStory = this.getUserStorybyName(this.storyName)
-
-      // get output from form
-      let userStoryFormOutput = {
-        name: this.form.title,
-        description: this.form.text,
-        label: "issue",
-        status: "toDo",
-        estimated_duration: "10",
-      }
-
-      // edit it
-      userStory.name =  userStoryFormOutput.name,
-      userStory.description =  userStoryFormOutput.description,
-      userStory.label =  userStoryFormOutput.label,
-      userStory.status =  userStoryFormOutput.status,
-      userStory.estimated_duration =  userStoryFormOutput.estimated_duration,
-
-      // send request
-      this.editUserStory(userStory)
-    },
-
-    deleteUserStory_(userStoryName){
-      this.deleteUserStory(this.getUserStoryIdbyName(userStoryName))
     },
 
     addTask_() {

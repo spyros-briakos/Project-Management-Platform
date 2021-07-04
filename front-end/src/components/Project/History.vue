@@ -13,7 +13,7 @@
 
         </div>
         <div class="sprints_wrap">
-            <div v-for="item in menu.items" :key="item.id" class="row_divider_wrap">
+            <div v-for="item in getHistory()" :key="item.id" class="row_divider_wrap">
                 <div class="myflex_row">
                     <div class="myflex_item sprint">
                         {{'No'+item.id}}
@@ -44,12 +44,12 @@
                         </v-progress-circular>
 
                     </div>
-                    <div class="myflex_item">
+                    <!-- <div class="myflex_item">
                         {{item.start}}
                     </div>
                     <div class="myflex_item endDate">
                         {{item.end}}
-                    </div>
+                    </div> -->
                     <div class="myflex_item">
                         {{item.comments}}
                     </div>
@@ -64,6 +64,7 @@
 
 
 <script>
+import { mapGetters, mapActions } from "vuex"
     export default {
         name: "History",
         data(){
@@ -71,17 +72,16 @@
                 menu:{
                     labels_count: 6,
                     labels:[
-                        'Sprint', 'Κατάσταση', 'Πρόοδος', 'Ημ/νια Έναρξης',
-                        'Ημ/νια Ολοκλήρωσης', 'Σχόλια',
+                        'Sprint', 'Κατάσταση', 'Πρόοδος', 'Σχόλια',
                     ],
                     items_count: 6,
                     items:[
-                        {id: 6, status: 'Ολοκληρώθηκε', progress:'70', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 5, status: 'Ολοκληρώθηκε', progress:'90', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 4, status: 'Ολοκληρώθηκε', progress:'50', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 3, status: 'Ολοκληρώθηκε', progress:'10', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 2, status: 'Ολοκληρώθηκε', progress:'100', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
-                        {id: 1, status: 'Ολοκληρώθηκε', progress:'100', start:'01/02/20', end:'05/02/20', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 6, status: 'Ολοκληρώθηκε', progress:'70', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 5, status: 'Ολοκληρώθηκε', progress:'90', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 4, status: 'Ολοκληρώθηκε', progress:'50', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 3, status: 'Ολοκληρώθηκε', progress:'10', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 2, status: 'Ολοκληρώθηκε', progress:'100', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
+                        {id: 1, status: 'Ολοκληρώθηκε', progress:'100', comments:'Εύκολη και γρήγορη διεκπαιρέωση του αρχικού Sprint'},
                     ],
                 }
             }
@@ -90,6 +90,14 @@
             mpou(){
                 alert("on-click");
             },
+        },
+        // created() {
+        //     console.log(this.getHistory())
+        // },
+        computed: {
+            ...mapGetters({
+                getHistory: "getHistory",
+            }),
         },
     };
 </script>
