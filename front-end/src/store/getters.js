@@ -168,7 +168,7 @@ export default {
 	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
 	coWorkers: state=>( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : []) : state.coWorkers ),
 
-	getSprintNames: (state) => (id) => {
+	getSprintNames: (state) => () => {
 		var sprintNames = []
 		for (let sprint of state.sprints) {
 			sprintNames.push(sprint.name)
