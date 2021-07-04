@@ -8,19 +8,8 @@
         <h3 class="titlospopup1"> {{ heading }} </h3>
       </div>
       
-      <form  style="position: relative; height:38px; top:80px;">
-        <!-- <h4>{{ heading }}</h4> -->
-        <!-- <input
-          name="listName"
-          type="text"
-          class="form-control my-1"
-          v-model.trim="listForm.name"
-          v-validate="'required'"
-          data-vv-as="List Name"
-          placeholder="Enter your list name"
-        /> -->
-
-
+      <form style="position: relative; height:38px; top:80px;">
+       
           <h4 class="title1"> Τίτλος </h4>
 
           <input style="position:fixed; top: 95px; width: 660px"
@@ -54,6 +43,7 @@
               <option value="4">4 Εβδομάδες</option>
             </select>
           </h6>
+
           <h6 class="title4">Κατηγορία: 
             <!-- <span class="subtitle1">Εκκρεμεί</span> -->
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
@@ -63,9 +53,7 @@
             </select>
           </h6>        
      
-
           <!-- <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small> -->
-
 
         <button class="btn btn-sm btn-app mt-2" style="position:fixed; top: 400px; left:300px;" @click.prevent="handleTaskListSave">
           Save Sprint
@@ -94,13 +82,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeBoard: "activeBoard"
+      activeBoard: "activeBoard",
+      getSprintbyName: "getSprintbyName",
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
     },
     heading() {
-      return this.listForm.id ? "Here needs a new form for editing Sprints" : "Here needs a new form for Sprints"
+      return this.listForm.id ? "Edit Sprint" : "New Sprint"
     }
   },
   mounted() {
@@ -127,19 +116,20 @@ export default {
       // here needs an edit form
       this.$refs.newListPopup.open()
     },
-    handleTaskListSave() {
+    handleTaskListSave() {  
 
       // here needs a create form
       // just add the form elemnts in this object
       let sprint = {
                 // like this
+                id: this.listForm.id,
                 name: this.listForm.name,
-                text: this.listForm.text,
-                description: "testaroume edoo",
+                description: this.listForm.text,
                 status: "toDo",
                 estimated_duration: "10"
             }
       // and call this method @click
+      // this.editSprint(sprint)
       this.addSprint(sprint)
 
       this.$validator.validateAll().then(async result => {
@@ -148,7 +138,7 @@ export default {
             boardId: this.activeBoard.id,
             listId: this.listForm.id,
             name: this.listForm.name,
-            text: this.listForm.text
+            description: this.listForm.text
           })
           this.$refs.newListPopup.close()
         }

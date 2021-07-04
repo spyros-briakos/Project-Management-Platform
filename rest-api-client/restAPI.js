@@ -473,12 +473,12 @@ export const actions = {
     return requests.disconnectSprintRequest(client.project._id, connection, client.tokenObject.token)
     .then(function(response) {
       try {
-        const currSprint = client.project.sprints.filter((p) => {return p._id === task.sprint})[0];
-        if (!currSprint) throw { message: 'Invalid Sprint id' };
-        const currUserStory = client.project.userStories.filter((p) => {return p._id === task.userStory})[0];
-        if (!currUserStory) throw { message: 'Invalid UserStory id' };
-        Object.keys(response.userStory).forEach(key=>{ currUserStory[key]=response.userStory[key] });
-        Object.keys(response.sprint).forEach(key=>{ currSprint[key]=response.sprint[key] });
+        // const currSprint = client.project.sprints.filter((p) => {return p._id === task.sprint})[0];
+        // if (!currSprint) throw { message: 'Invalid Sprint id' };
+        // const currUserStory = client.project.userStories.filter((p) => {return p._id === task.userStory})[0];
+        // if (!currUserStory) throw { message: 'Invalid UserStory id' };
+        // Object.keys(response.userStory).forEach(key=>{ currUserStory[key]=response.userStory[key] });
+        // Object.keys(response.sprint).forEach(key=>{ currSprint[key]=response.sprint[key] });
         return response.message;
       } catch (error) {
         client = initClient(); throw error;

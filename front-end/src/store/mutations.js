@@ -112,6 +112,21 @@ export default {
 	
 	},
 
+	STORE_TASK_TO_SPRINT(state, payload) {
+		var sprint = state.sprints.find(sprint => sprint._id === payload.sprint._id)
+		var task
+		for(let us of state.userStories) {
+			for(let tsk of us.tasks) {
+				if (tsk._id === payload.task._id) {
+					task = tsk
+				}
+			}
+		}
+		
+		sprint.tasks.push(task)
+		
+	},
+
 	STORE_USER_STORIES(state, payload) {
 		Vue.set(state, "userStories", [...payload])
 	},
@@ -363,11 +378,22 @@ export default {
 		// add Sprints
 		if (sprints) {
 			sprints.forEach(sprint => {
+				// add task to sprints
+				var items = []
+				sprint.tasks.forEach(task => {
+					items.push( {id: task._id,
+								title: task.name,
+								text: task.description,
+								state: "taskInSprint",
+					})
+				})
+
+				// add sprint to task lists
 				myEmulatedBoard[0].lists.push( {id: sprint._id,
 											name: sprint.name,
 											headerColor: "#607d8b",
 											archived: false,
-											items: [],})
+											items: items,})
 			});
 		}
 

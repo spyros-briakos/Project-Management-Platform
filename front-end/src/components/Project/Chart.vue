@@ -39,7 +39,7 @@ export default {
         }
         },
         subtitle: {
-        text: 'Sprint 1',
+        text: 'Onoma Project',
         x: -20
         },
         xAxis: {
