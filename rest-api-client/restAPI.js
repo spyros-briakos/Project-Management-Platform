@@ -8,8 +8,8 @@ const requests = require('./requests');
 
 // const apiUrl = `http://${process.env.HOSTNAME}:${process.env.PORT}/api-control`;
 
-// const apiUrl = 'https://localhost:3000/api-control';
-const apiUrl = 'http://127.0.0.1:3000/api-control';
+const apiUrl = 'https://127.0.0.1:3000/api-control';
+// const apiUrl = 'http://127.0.0.1:3000/api-control';
 
 // const agent = new https.Agent({
 //   requestCert: true,
@@ -18,10 +18,12 @@ const apiUrl = 'http://127.0.0.1:3000/api-control';
 //   key: fs.readFileSync("../../back-end/server.key"),
 //   // passphrase: "YYY"
 // });
-const agent = new http.Agent({
+
+const agent = new https.Agent({
+// const agent = new http.Agent({
   rejectUnauthorized: false, // (NOTE: this will disable client verification)
 })
-// ?O THEOS EVALE TO XERI TOY?
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 axios.defaults.options = agent
