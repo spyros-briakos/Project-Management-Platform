@@ -1,6 +1,4 @@
 <template>
-  
-  <!-- v-if="list.name!='Product Backlog'" -->
 
   <!--  -->
   <!-- Case: Kanban Board -> taskInKanban--> 
@@ -99,7 +97,7 @@
             </select> -->
             <v-select
               :items="selecteditems"
-              label="Εκτημώμενη Διάρκεια"
+              label="Εκτιμώμενη Διάρκεια"
             ></v-select>
             </v-col>
             </v-row>
@@ -143,7 +141,7 @@
                 sm="12"
               >
             <v-select
-              :items="selecteditems2"
+              :items=getUserStoriesNames  
               label="User Story"
             ></v-select>
             </v-col>
@@ -200,8 +198,8 @@
   <!--  -->
   <!-- Case: Scrum Board -> userStory --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog'">   
-  <!-- <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">    -->
+  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">   
+  <!-- <div class="card tasklist-item" v-else-if="list.name=='Product Backlog'">    -->
   <!-- <div class="card tasklist-item" v-else-if="item.state=='userStory' && board.id=='SCRUM_BOARD'">    -->
     
     <!--  For Product Backlog (different popup from others) -->
@@ -284,7 +282,40 @@
         <br v-if="!isNewItem">
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
     </div>
-    <div align="center" >
+    <div style="align:center">
+       <!-- <v-menu
+          transition="slide-y-transition"
+          bottom
+        > -->
+          <!-- <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+              elevation="1"
+
+              fab
+              v-if="item.state==='userStory'"
+              @click="collapseTasks_()"
+              width="0px"
+              height="0px"
+              style="bottom: -8px"
+            >
+              <v-icon  style="font-size:18px; color:#292F2B" v-if="collapsedTasks">fas fa-chevron-circle-down</v-icon>
+              <v-icon style="font-size:18px; color:#292F2B" v-else>fas fa-chevron-circle-up</v-icon>
+          </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(dropdownlist, i) in dropdownlist"
+              :key="i"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu> -->
+
       <v-btn 
         elevation="1"
         fab
@@ -292,18 +323,22 @@
         @click="collapseTasks_()"
         width="0px"
         height="0px"
-        style="padding-bottom:10px"
+        style="bottom: -8px"
       > 
-        <!-- <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
-        <i class="fas fa-chevron-down" v-else></i> -->
-        <v-icon  style="font-size:18px; color:#292F2B" v-if="collapsedTasks">fas fa-chevron-circle-down</v-icon>
-        <v-icon style="font-size:18px; color:#292F2B" v-else>fas fa-chevron-circle-up</v-icon>
-        <!-- <v-icon class="fas fa-chevron-circle-down" style="color:white" v-else></v-icon> -->
-        <!-- <i class="fas fa-chevron-circle-down" style="font-size:15px; right:100px; top:345px; cursor: pointer;" v-if="collapsedTasks"></i>
-        <i class="fas fa-chevron-circle-down" style="font-size:15px; right:100px; top:345px; cursor: pointer;" v-else></i> -->
+
+        <v-icon  style="font-size:18px; color:#292F2B" v-if="collapsedTasks">fas fa-chevron-circle-up</v-icon>
+        <v-icon style="font-size:18px; color:#292F2B" v-else>fas fa-chevron-circle-down</v-icon>
+
       </v-btn>
     </div>
     </div>
+
+  </div>
+
+  <!--  -->
+  <!-- Case: Scrum Board -> hiddenTaskUnderUserStory --> 
+  <!--  -->
+  <div v-else-if="list.name=='Product Backlog' && item.state=='hiddenTaskUnderUserStory'">   
 
   </div>
 
@@ -329,7 +364,8 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
+            <!-- <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect> -->
+            <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> Task </h3>
           </div>
         </div>
         
@@ -400,8 +436,9 @@
                 sm="12"
               >
             <v-select
-              :items="selecteditems2"
+              :items=getUserStoriesNames
               label="User Story"
+              v-model="user_story_of_task"
             ></v-select>
             </v-col>
             </v-row>
@@ -499,7 +536,9 @@ export default {
       getUserStorybyName: "getUserStorybyName",
       getTaskbyNames: "getTaskbyNames",
       getUserStoriesNames: "getUserStoriesNames",
-      getUserStorybyId: "getUserStorybyId"
+      getUserStorybyId: "getUserStorybyId",
+      getUserStoryIdbyName: "getUserStoryIdbyName",
+      getSprintbyId: "getSprintbyId"
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -517,13 +556,21 @@ export default {
         storyName: '',
         taskName: '', 
       },
+      user_story_of_task: '',
       default_task: 'Task',
       default_user_story: 'User Story',
-      options: ['User Story','Task','Epic','Issue'],
+      options: ['User Story','Epic','Issue'],
       collapsedTasks: false,
-      selecteditems: ['2 Εβδομάδες', '3 Εβδομάδες', '4 Εβδομάδες'],
+      selecteditems: ['1 Μέρα', '2 Μέρες', '3 Μέρες', '4 Μέρες', '5 Μέρες', 
+      '6 Μέρες', '7 Μέρες', '8 Μέρες', '9 Μέρες', '10 Μέρες', '11 Μέρες', '12 Μέρες', 
+      '13 Μέρες', '14 Μέρες', '15 Μέρες'],
       selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε'],
-      selecteditems2: ['Arxiko', 'Messaio', 'Teliko']
+      dropdownlist: [
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me 2' },
+      ],
     }
   },
   methods: {
@@ -540,10 +587,12 @@ export default {
       addSprint: "addSprint",
       editSprint: "editSprint",
       deleteSprint: "deleteSprint",
+      addTaskAndConnectSprint: "addTaskAndConnectSprint"
     }),
 
     collapseTasks_() {
       this.collapsedTasks = !this.collapsedTasks
+      console.log(this.item.id)
       this.changeTasksState(this.item.id)
     },
 
@@ -610,6 +659,8 @@ export default {
       }
       // Case: Task
       else if(temp_case == 2) {
+        
+        console.log(this.user_story_of_task)
         // Case: Create
         if(this.item.state=="defaultItem") {
           let task = {
@@ -617,9 +668,9 @@ export default {
             description: this.form.text,
             status: this.form.status,
             estimated_duration: this.form.duration,
-            // userStory: this.getUserStoryIdbyName(this.storyName)
+            userStory: this.getUserStoryIdbyName(this.user_story_of_task)
           }
-          this.addTask(task)
+          this.addTaskAndConnectSprint({task:task, sprintName:this.getSprintbyId(this.list.id).name})
         }
         // Case: Edit
         else if(this.item.state=="taskInSprint") {
@@ -628,23 +679,25 @@ export default {
       }     
 
       // Last
-      this.$validator.validateAll().then(result => {
-        if (result) {
-          const updatedItem = {
-            id: this.form.id,
-            title: this.form.title,
-            text: this.form.text
-          }
-          this.saveTaskListItem({
-            boardId: this.board.id,
-            listId: this.list.id,
-            item: updatedItem
-          })
-          this.$emit("item-edited")
-          this.$validator.reset() 
-        }
-        this.$refs.newItemPopup.close()
-      })
+      // this.$validator.validateAll().then(result => {
+      //   if (result) {
+      //     const updatedItem = {
+      //       id: this.form.id,
+      //       title: this.form.title,
+      //       text: this.form.text
+      //     }
+      //     this.saveTaskListItem({
+      //       boardId: this.board.id,
+      //       listId: this.list.id,
+      //       item: updatedItem
+      //     })
+      //     this.$emit("item-edited")
+      //     this.$validator.reset() 
+      //   }
+      //   this.$refs.newItemPopup.close()
+      // })
+      this.$refs.newItemPopup.close()
+
     },
 
     cancel() {
@@ -680,17 +733,6 @@ export default {
       if(!isOpen)
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
-    },
-
-    addTask_() {
-      let task = {
-        name: this.taskName,
-        description: "telika ftasame os edo",
-        status: "toDo",
-        estimated_duration: "10",
-        userStory: this.getUserStoryIdbyName(this.storyName)
-      }
-      this.addTask(task)
     },
 
     editTask_() {
