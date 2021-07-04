@@ -37,8 +37,7 @@ function build_up(res, type){
 
 var userInd = createInd({tokenize:'full'});
 for(let user of store.getters.allUsers){
-    console.log(user);
-	addIndUser(userInd, user._id, user.firstName, user.lastName, user.username);
+    addIndUser(userInd, user._id, user.firstName, user.lastName, user.username);
 }
 
 /*var tasksInd = createInd({tokenize:'full'});
