@@ -106,6 +106,7 @@ export default {
 			log(response);
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("DELETE_ALL_USERS")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
 			commit("DELETE_COWORKERS")
@@ -178,6 +179,29 @@ export default {
 		})
 
 	},
+
+	async getAllUsers({ commit, getters }) {
+
+		// Get client object
+		var token = getters.token
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.getUsers() 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_ALL_USERS", response)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
 
 	async updateUserName({ commit, getters }, data) {
 
@@ -261,6 +285,7 @@ export default {
       		console.log(client)
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("DELETE_ALL_USERS")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
 			commit("DELETE_SPRINTS")
@@ -313,6 +338,7 @@ export default {
       		console.log(client)
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
+			commit("DELETE_ALL_USERS")
 			commit("DELETE_PROJECT")
 			commit("DELETE_PROJECTS")
 			commit("DELETE_COWORKERS")
@@ -1184,10 +1210,7 @@ export default {
 		// get task
 		var task = getters.getTaskbyName(connectData.taskName)
 
-		// get sprint
-		// var sprint = getters.getSprintbyName(connectData.sprintName)
 
-		
 		commit("SET_LOADING_STATE", true) 
 		return actions.disconnectSprint(task)
 		.then( response => {
@@ -1207,6 +1230,91 @@ export default {
 
 	},
 
+	async joinTask({ commit, getters, dispatch }, taskId) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = projectLs
+		client.user.projects = projectsLs
+		client.user._id = getters._id
+
+		// add User Story
+		client.project.userStories = getters.projectUserStories
+		client.project.sprints = getters.progectSprints
+
+		// get task
+		var task = getters.getTaskbyId(taskId)
+
+		// check if user already exists in this task
+		var taskMembers = getters.getTaskMembersbyId(taskId)
+		if (taskMembers.includes(getters.userName))
+			return
+	
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.joinTask(task)
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			dispatch("getScrumBoard")
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			dispatch("getScrumBoard")
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+
+	async leaveTask({ commit, getters, dispatch }, taskId) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = projectLs
+		client.user.projects = projectsLs
+		client.user._id = getters._id
+
+		// add User Story
+		client.project.userStories = getters.projectUserStories
+		client.project.sprints = getters.progectSprints
+
+		// get task
+		var task = getters.getTaskbyId(taskId)
+	
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.leaveTask(task)
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			dispatch("getScrumBoard")
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			dispatch("getScrumBoard")
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async putSprintInFront({ commit, getters }, sprintName) {
+		// get Sprint id
+		var sprintId = getters.getSprintbyName(sprintName)._id
+		commit("PUT_SPRINT_IN_FRONT", sprintId)
+	},
 
 
 
