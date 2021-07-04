@@ -284,7 +284,7 @@
         <br v-if="!isNewItem">
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
     </div>
-    <div align="center" >
+    <div style="align:center">
        <!-- <v-menu
           transition="slide-y-transition"
           bottom
@@ -328,8 +328,8 @@
         style="bottom: -8px"
       > 
 
-        <v-icon  style="font-size:18px; color:#292F2B" v-if="collapsedTasks">fas fa-chevron-circle-down</v-icon>
-        <v-icon style="font-size:18px; color:#292F2B" v-else>fas fa-chevron-circle-up</v-icon>
+        <v-icon  style="font-size:18px; color:#293834" v-if="collapsedTasks">fas fa-chevron-circle-down</v-icon>
+        <v-icon style="font-size:18px; color:#293834" v-else>fas fa-chevron-circle-up</v-icon>
 
       </v-btn>
     </div>
