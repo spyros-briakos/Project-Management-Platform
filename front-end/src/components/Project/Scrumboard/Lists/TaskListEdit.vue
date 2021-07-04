@@ -83,7 +83,7 @@ export default {
   computed: {
     ...mapGetters({
       activeBoard: "activeBoard",
-      getSprintbyName: "getSprintbyName",
+      getSprintbyId: "getSprintbyId",
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -117,20 +117,39 @@ export default {
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {  
+     
+     if(this.listForm.id) {
+        // get the current object for place holding
+        const sprint = this.getSprintbyId(this.listForm.id)
 
-      // here needs a create form
-      // just add the form elemnts in this object
+        // get output from form
+        let sprintFormOutput = {
+            name: this.listForm.name,
+            description: this.listForm.text,
+            status: "toDo",
+            estimated_duration: "10"
+        }
+
+        // edit it
+        sprint.name = sprintFormOutput.name
+        sprint.description = sprintFormOutput.description
+        sprint.status = sprintFormOutput.status
+        sprint.estimated_duration = sprintFormOutput.estimated_duration
+
+        // send request
+        this.editSprint(sprint)
+      }
+      else {
       let sprint = {
-                // like this
-                id: this.listForm.id,
-                name: this.listForm.name,
-                description: this.listForm.text,
-                status: "toDo",
-                estimated_duration: "10"
-            }
-      // and call this method @click
-      // this.editSprint(sprint)
-      this.addSprint(sprint)
+              // like this
+              // id: this.listForm.id,
+              name: this.listForm.name,
+              description: this.listForm.text,
+              status: "toDo",
+              estimated_duration: "10"
+          }
+        this.addSprint(sprint)
+      }
 
       this.$validator.validateAll().then(async result => {
         if (result) {
