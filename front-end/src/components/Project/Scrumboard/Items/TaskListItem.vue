@@ -170,7 +170,7 @@
   <!--  -->
   <!-- Case: Scrum Board -> userStory --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog'">   
+  <div class="card tasklist-item1" v-else-if="list.name=='Product Backlog'">   
     
     <!--  For Product Backlog (different popup from others) -->
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
@@ -189,7 +189,7 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
+            <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
         </div>
         
@@ -376,6 +376,7 @@
             <v-select
               :items="selecteditems1"
               label="Κατάσταση"
+              v-model="selected"
             ></v-select>
             </v-col>
             </v-row>
@@ -510,7 +511,7 @@ export default {
       },
       user_story_of_task: '',
       default_task: 'Task',
-      default_user_story: 'User Story',
+      default_user_story: "User Story"  ,
       options: ['User Story','Epic','Issue'],
       collapsedTasks: false,
       selecteditems: ['1 Μέρα', '2 Μέρες', '3 Μέρες', '4 Μέρες', '5 Μέρες', 
@@ -523,6 +524,7 @@ export default {
         { title: 'Click Me' },
         { title: 'Click Me 2' },
       ],
+      selected: "Εκκρεμεί"
     }
   },
   methods: {
