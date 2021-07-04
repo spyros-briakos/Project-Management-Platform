@@ -164,8 +164,10 @@
             if(form == "perInfo"){
                 let name, email;
                 for(let i of elements){
-                    if(i.name == "name")
+                    if(i.name == "username")
                         name = i.value;
+                    else if(i.firstName == "firstName")
+                        firstName = i.value;
                     else if(i.name == "email")
                         email = i.value;
                 }
@@ -272,6 +274,36 @@
         },
         updateUserName_(data){
             this.updateUserName( data ) 
+            .then( response => {
+                this.goodAllert = true
+                this.badAllert = false
+                this.emailChangeAllert = false
+                this.goodAllertMessage = response.message
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = false
+                this.emailChangeAllert = false
+                this.badAllertMessage = error.response.data.message
+            }) 
+        },
+        updatefirstName_(data){
+            this.updatefirstName( data ) 
+            .then( response => {
+                this.goodAllert = true
+                this.badAllert = false
+                this.emailChangeAllert = false
+                this.goodAllertMessage = response.message
+            })
+            .catch( error => { 
+                this.badAllert = true
+                this.goodAllert = false
+                this.emailChangeAllert = false
+                this.badAllertMessage = error.response.data.message
+            }) 
+        },
+        updatelastName_(data){
+            this.updatelastName( data ) 
             .then( response => {
                 this.goodAllert = true
                 this.badAllert = false
