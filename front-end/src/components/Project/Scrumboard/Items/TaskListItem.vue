@@ -421,7 +421,32 @@
             <i class="fas fa-plus-circle" style="position:fixed; font-size:30px; right:100px; top:345px; cursor: pointer;"></i>            
           </h6>         -->
           <!-- <v-app id="inspire"> -->
-            <div class="text-center" style="position:fixed; right:50px; top:300px;">
+          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px">
+            <v-row justify="space-around">
+            <v-col
+              cols="1"
+              sm="10"
+              md="12"
+            >
+              <v-sheet
+                class="py-4 px-1"
+              >
+                <v-chip-group
+                  multiple
+                  active-class="primary--text"
+                >
+                  <v-chip
+                    v-for="tag in tags"
+                    :key="tag"
+                  >
+                    {{ tag }}
+                  </v-chip>
+                </v-chip-group>
+              </v-sheet>
+            </v-col>
+            </v-row>
+
+            <!-- <div class="text-center" style="position:fixed; right:50px; top:300px;"> -->
               <v-btn
                 class="ma-2"
                 :loading="loading"
@@ -429,7 +454,17 @@
                 color="#48C0A4"
                 @click="collapseMembers()"
               >
-                Γίνε μέλος αυτού του Task
+                Join Task
+              </v-btn>
+
+               <v-btn
+                class="ma-2"
+                :loading="loading"
+                :disabled="loading"
+                color=#F78A37
+                @click="collapseMembers()"
+              >
+                Leave Task
               </v-btn>
             </div>
           <!-- </v-app> -->
@@ -553,6 +588,17 @@ export default {
         { title: 'Click Me 2' },
       ],
       selected: "Εκκρεμεί",
+      tags: [
+        'Work',
+        'Home Improvement',
+        'Vacation',
+        'Food',
+        'Drawers',
+        'Shopping',
+        'Art',
+        'Tech',
+        'Creative Writing',
+      ],
     }
   },
   watch: {
