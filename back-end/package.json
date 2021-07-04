@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "mocha"
+    "test": "mocha",
+    "secure": "sudo ./security/https-cert.sh"
   },
   "keywords": [],
   "author": "",
