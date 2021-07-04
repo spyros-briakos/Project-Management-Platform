@@ -1210,10 +1210,7 @@ export default {
 		// get task
 		var task = getters.getTaskbyName(connectData.taskName)
 
-		// get sprint
-		// var sprint = getters.getSprintbyName(connectData.sprintName)
 
-		
 		commit("SET_LOADING_STATE", true) 
 		return actions.disconnectSprint(task)
 		.then( response => {
@@ -1250,10 +1247,7 @@ export default {
 
 		// get task
 		var task = getters.getTaskbyId(taskId)
-
-		// get sprint
-		// var sprint = getters.getSprintbyName(connectData.sprintName)
-
+	
 		
 		commit("SET_LOADING_STATE", true) 
 		return actions.joinTask(task)
@@ -1273,6 +1267,43 @@ export default {
 
 	},
 
+
+	async leaveTask({ commit, getters, dispatch }, taskId) {
+
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = projectLs
+		client.user.projects = projectsLs
+		client.user._id = getters._id
+
+		// add User Story
+		client.project.userStories = getters.projectUserStories
+		client.project.sprints = getters.progectSprints
+
+		// get task
+		var task = getters.getTaskbyId(taskId)
+	
+		
+		commit("SET_LOADING_STATE", true) 
+		return actions.leaveTask(task)
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			dispatch("getScrumBoard")
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			dispatch("getScrumBoard")
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
 
 
 

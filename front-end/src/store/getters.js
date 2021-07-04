@@ -216,6 +216,15 @@ export default {
 		return null
 	},
 
+	getTaskMembersbyId: (state, getters) => (id) => {
+		var task = getters.getTaskbyId(id)
+		var memberUsernames = []
+		for (let user of task.members) {
+			memberUsernames.push(user.username)
+		}
+		return memberUsernames
+	},
+
 	getTaskbyName: (state) => (name) => {
 		for(let us of state.userStories) {
 			for(let task of us.tasks) {
