@@ -104,13 +104,13 @@
 
                 <v-autocomplete @change="isValid()" id="getFriends"
                     class="friends_picker"
-                    :v-model="form_data.autocomplete"
+                    v-model="form_data.autocomplete"
                     multiple
                     chips
                     :label="get_friends.label"
                     :items="get_friends.people.concat(get_friends.searchedPeople)"
                     item-text="username"
-                    item-value="_id"
+                    item-value="username"
                     :placeholder="get_friends.placeholder"
                     :hint="get_friends.hint"
                     :search-input.sync="search"
@@ -215,7 +215,7 @@ export default({
             }
 
 
-            this.createProjectAndInvite( {project:project, inviteUsernameList:["admin2", "admin3"]})
+            this.createProjectAndInvite( {project:project, inviteUsernameList:this.form_data.autocomplete})
             .then( response => {                            
                 this.goodAllert = true
                 this.badAllert = false
