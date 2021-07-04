@@ -147,6 +147,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   let allow = ['SignIn', 'SignUp', 'ForgotPassword', 'Home', 'How_It_Works', 'Prices'];
+  let remove_when_loged = ['How_It_Works', 'Prices'];
   let loged = store.getters.isLogedIn;
   let prem = store.getters.isPremium;
 
@@ -161,8 +162,11 @@ router.beforeEach((to, from, next) => {
   if( !allow.includes(to.name) && !loged ){
     next({name: 'SignIn'});
   }
-  else if(to.name=='Roadmap' && !prem){
+  if(to.name=='Roadmap' && !prem){
     next({name: 'Projects'});
+  }
+  if(remove_when_loged.includes(to.name) && store.getters.isLogedIn){
+    next({name: 'Profile'})
   }
   else next();
     

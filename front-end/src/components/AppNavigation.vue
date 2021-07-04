@@ -55,7 +55,10 @@
     methods:{
       hide_opts(val){
         let to_hide = ['Projects', 'Profile'];
+        let to_hide2 = ['How_It_Works', 'Prices'];
         if(to_hide.includes(val) && !this.isLogedIn)
+          return true;
+        if(to_hide2.includes(val) && this.isLogedIn)
           return true;
         return false;
       },
