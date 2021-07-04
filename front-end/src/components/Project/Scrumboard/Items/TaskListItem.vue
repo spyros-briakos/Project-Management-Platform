@@ -244,7 +244,7 @@
         <br v-if="!isNewItem">
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
     </div>
-    <div align="center" >
+    <div style="align:center">
        <!-- <v-menu
           transition="slide-y-transition"
           bottom
