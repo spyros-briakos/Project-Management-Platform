@@ -138,7 +138,7 @@ export default {
             boardId: this.activeBoard.id,
             listId: this.listForm.id,
             name: this.listForm.name,
-            text: this.listForm.text
+            description: this.listForm.text
           })
           this.$refs.newListPopup.close()
         }
