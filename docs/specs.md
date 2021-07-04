@@ -59,5 +59,6 @@
       - bootstrap >= 4.6.0
       - quasar >= 1.15.10
       - @fortawesome/vue-fontawesome >= 2.0.2
+      - flexsearch v0.7.2 ( FullTextSearch για users κατά τη δημιουργία Project και για την αναζήτηση Tasks )
 
 - Για οδηγίες εγκατάστασης και εκτέλεσης των επιμερούς τμημάτων του Project ανατρέξτε στο κεντρικό [README.md](https://github.com/spympr/Project-Management-Platform/blob/main/README.md).

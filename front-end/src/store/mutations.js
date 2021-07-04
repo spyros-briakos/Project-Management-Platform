@@ -19,20 +19,7 @@ export default {
 		Vue.set(state, "image", payload.image)
 		Vue.set(state, "plan_in_use", payload.plan_in_use)
 	},
-	// {_id: "60c10f5ce5bf5f10e917e0c9", name: "asdasd", description: "asdasd", productOwner: {…}, scrumMaster: {…}, …}
-	// description: "asdasd"
-	// members: [{…}]
-	// name: "asdasd"
-	// plan_in_use: "standard"
-	// productOwner: {_id: "60c0dbd1e5bf5f10e917e0be", username: "admin2"}
-	// scrumMaster: {_id: "60c0dbd1e5bf5f10e917e0be", username: "admin2"}
-	// sprints: []
-	// startingDate: "2021-06-09T18:58:36.164Z"
-	// status: "inProgress"
-	// userStories: []
-	// _id: "60c10f5ce5bf5f10e917e0c9"
-	// __proto__: Object
-	// store project
+
 	STORE_PROJECT(state, payload) {
 		console.log("PROJECT IS HERE STORED", payload)
 		var project = {_id:null, name:null, description:null, plan_in_use:null, status:null, 
@@ -68,6 +55,20 @@ export default {
 	STORE_SPRINTS(state, payload) {
 		console.log("SPRIIIIIIINTS", payload)
 		Vue.set(state, "sprints", [...payload])
+	},
+
+	STORE_ALL_USERS(state, payload) {
+		var allUsers = []
+		payload.forEach(user => {
+			if (state._id !== user._id) 
+				allUsers.push({
+					_id: user._id, 
+					firstName: user.firstName, 
+					lastName: user.lastName, 
+					username: user.username
+				})
+		})
+		Vue.set(state, "allUsers", allUsers)
 	},
 
 	STORE_SPRINT(state, payload) {
@@ -110,6 +111,21 @@ export default {
 			state.sprints.push(payload)
 		}
 	
+	},
+
+	STORE_TASK_TO_SPRINT(state, payload) {
+		var sprint = state.sprints.find(sprint => sprint._id === payload.sprint._id)
+		var task
+		for(let us of state.userStories) {
+			for(let tsk of us.tasks) {
+				if (tsk._id === payload.task._id) {
+					task = tsk
+				}
+			}
+		}
+		
+		sprint.tasks.push(task)
+		
 	},
 
 	STORE_USER_STORIES(state, payload) {
@@ -178,23 +194,25 @@ export default {
 			}
 			list.items.push(item)
 		}
-		// // store as a User Story
-		// // for existing user story
-		// const userStory = state.userStories.find(s => s._id === payload._id)
-		// const userStoryIdx = state.userStories.findIndex(s => s._id === payload._id)
 
-		// if (userStoryIdx > -1) {
-		// 	userStory.name = payload.name
-		// 	userStory.description = payload.description
-		// 	userStory.label = payload.label
-		// 	userStory.status = payload.status
-		// 	userStory.estimated_duration = payload.estimated_duration
-		// 	Vue.set(state.userStories, userStoryIdx, userStory)
-		// }
-		// // For new user story
-		// else {
-		// 	state.userStories.push(payload)
-		// }
+
+		// store task in User Story
+		// for task in User story
+		const userStory = state.userStories.find(s => s._id === payload.userStory)
+		const task = userStory.tasks.find(task => task._id === payload._id)
+		const taskIdx = userStory.tasks.findIndex(task => task._id === payload._id)
+
+		if (taskIdx > -1) {
+			task.name = payload.name
+			task.description = payload.description
+			task.status = payload.status
+			task.estimated_duration = payload.estimated_duration
+			Vue.set(userStory.tasks, taskIdx, task)
+		}
+		// For new user story
+		else {
+			userStory.tasks.push(payload)
+		}
 	},
 
 	STORE_COWORKERS(state, payload) {
@@ -249,6 +267,10 @@ export default {
 		Vue.set(state, "email", null)
 		Vue.set(state, "image", null)
 		Vue.set(state, "plan_in_use", null)
+	},
+
+	DELETE_ALL_USERS(state, payload) {
+		Vue.set(state, "allUsers", [])
 	},
 
 	DELETE_PROJECT(state, payload) {
@@ -306,7 +328,7 @@ export default {
 		const itemIdx = list.items.findIndex(item => item.id == payload)
 		Vue.delete(list.items, itemIdx)
 
-		// // delete task
+		// delete task from user story
 		// var userSotryIndex = state.userStories.findIndex(us => us._id === payload)
 		// Vue.delete(state.userStories, userSotryIndex)
 	},
@@ -361,23 +383,39 @@ export default {
 		// add Sprints
 		if (sprints) {
 			sprints.forEach(sprint => {
+				// add task to sprints
+				var items = []
+				sprint.tasks.forEach(task => {
+					items.push( {id: task._id,
+								title: task.name,
+								text: task.description,
+								state: "taskInSprint",
+					})
+				})
+
+				// add sprint to task lists
 				myEmulatedBoard[0].lists.push( {id: sprint._id,
 											name: sprint.name,
+											text: sprint.description,
 											headerColor: "#607d8b",
 											archived: false,
-											items: [],})
+											items: items,})
 			});
 		}
 
-		Vue.set(state, "boards", myEmulatedBoard)
+		Vue.set(state.boards, 0, myEmulatedBoard[0])
 	},
 
 	STORE_EMULATED_KANBAN_BOARD(state, payload) {
 		// add my tasks to kanban board
-		var myEmulatedBoard = state.boards
-		var myTasks = payload
+		var myEmulatedBoard = payload.boards
+		var myTasks = payload.myTasks
 
 		myEmulatedBoard[1].name = state.project.name
+
+		// clear tasks in lists
+		myEmulatedBoard[1].lists.forEach(list => list.items = [])
+
 
 		myTasks.forEach(task => {
 
@@ -402,7 +440,8 @@ export default {
 			}
 		})
 
-		Vue.set(state, "boards", myEmulatedBoard)
+		Vue.set(state.boards, 1, myEmulatedBoard[1])
+
 	},
 
 	CHANGE_TASKS_STATE(state, payload) {
@@ -531,21 +570,42 @@ export default {
 
 	// Reorder TaskBoad Lists
 	REORDER_TASKLISTS(state, payload) {
-		const board = state.boards.find(b => b.id == payload.boardId)
-		// find the backlog and keep it in 1st position
-		const backLogIndex = payload.lists.findIndex(b => b.name === "Product Backlog")
+
+		// if board is kanban then do not reorder
+		if (payload.boardId !== "KANBAN_BOARD") {
+			
+			const board = state.boards.find(b => b.id == payload.boardId)
+			// find the backlog and keep it in 1st position
+			const backLogIndex = payload.lists.findIndex(b => b.name === "Product Backlog")
+			// swap posistion
+			var temp = payload.lists[0]
+			payload.lists[0] = payload.lists[backLogIndex]
+			payload.lists[backLogIndex] = temp
+			Vue.set(board, "lists", payload.lists)
+
+		}
+	},
+
+	PUT_SPRINT_IN_FRONT(state, payload) {
+		console.log(payload)
+		const board = state.boards.find(b => b.id == "SCRUM_BOARD")
+		// find the sprint and move it in 1st position
+		const sprintIndex = board.lists.findIndex(b => b.id === payload)
 		// swap posistion
-		var temp = payload.lists[0]
-		payload.lists[0] = payload.lists[backLogIndex]
-		payload.lists[backLogIndex] = temp
-		Vue.set(board, "lists", payload.lists)
+		var temp = board.lists[1]
+		Vue.set(board.lists, 1, board.lists[sprintIndex])
+		Vue.set(board.lists, sprintIndex, temp)
+		console.log(sprintIndex)
 	},
 
 	// Reorder Task List Items
 	REORDER_TASKLIST_ITEMS(state, payload) {
+
 		const board = state.boards.find(b => b.id == payload.boardId)
 		const listIdx = board.lists.findIndex(l => l.id == payload.listId)
+		// console.log("REORDER BEFORE",JSON.parse(JSON.stringify(board.lists[listIdx])))
 		Vue.set(board.lists[listIdx], "items", payload.items)
+		// console.log("REORDER AFTER",payload)
 	},
 
 	// Set Active Board
@@ -568,6 +628,7 @@ export default {
 		payload.item.id = guid()
 		list.items.push(payload.item)
 		}
+		console.log("SAVE",payload)
 	},
 
 	// Delete Task List Item
@@ -579,5 +640,6 @@ export default {
 		if (itemIdx > -1) {
 		Vue.delete(list.items, itemIdx)
 		}
+		console.log("DELETE",payload)
 	}
 }

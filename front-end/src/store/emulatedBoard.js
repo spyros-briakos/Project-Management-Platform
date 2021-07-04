@@ -8,32 +8,34 @@ export const emulatedBoard = [{
 	"lists": [{
 			"id": "Product Backlog id",
 			"name": "Product Backlog",
+			"text": "This is a stable backlog",
 			"headerColor": "#607d8b",
 			"archived": false,
-			"items": [{
-					"id": "6fb2c8e6-5980-9403-f847-51407ab4597a",
-					"title": "an den blepeis",
-					"text": "We are gonna do this and that...etc1",
-					"state": "userStory",
-				},
-				{
-					"id": "c7f25d4b-6a72-d0d5-7d03-fc0b8794fb94",
-					"title": "tipota de3ia --->",
-					"text": "",
-					"state": "userStory",
-				},
-				{
-					"id": "78ab7725-ddee-ba6a-c039-b581ea10e20e",
-					"title": "tote prepei na",
-					"text": "We are gonna do this and that...etc3",
-					"state": "userStory",
-				},
-				{
-					"id": "49ad2dd1-5c3e-42e7-c2f0-5c9b193fb676",
-					"title": "anoi3eis to back end",
-					"text": "",
-					"state": "userStory",
-				}
+			"items": [
+				// {
+				// 	"id": "6fb2c8e6-5980-9403-f847-51407ab4597a",
+				// 	"title": "an den blepeis",
+				// 	"text": "We are gonna do this and that...etc1",
+				// 	"state": "userStory",
+				// },
+				// {
+				// 	"id": "c7f25d4b-6a72-d0d5-7d03-fc0b8794fb94",
+				// 	"title": "tipota de3ia --->",
+				// 	"text": "",
+				// 	"state": "userStory",
+				// },
+				// {
+				// 	"id": "78ab7725-ddee-ba6a-c039-b581ea10e20e",
+				// 	"title": "tote prepei na",
+				// 	"text": "We are gonna do this and that...etc3",
+				// 	"state": "userStory",
+				// },
+				// {
+				// 	"id": "49ad2dd1-5c3e-42e7-c2f0-5c9b193fb676",
+				// 	"title": "anoi3eis to back end",
+				// 	"text": "",
+				// 	"state": "userStory",
+				// }
 			]
 		},
 		// {

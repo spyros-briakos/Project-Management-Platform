@@ -22,6 +22,12 @@ import profProjects from "../components/profile/prof_projects.vue";
 import profCoWorkers from "../components/profile/prof_coworkers.vue";
 import profLogout from "../components/profile/prof_logout.vue";
 import profUpgrade from "../components/profile/prof_upgrade.vue"
+
+import getters from "../store/getters";
+import store from '../store';
+
+
+import { get } from "https";
 // import "custom-var.scss"
 
 Vue.use(VueRouter);
@@ -138,5 +144,32 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  let allow = ['SignIn', 'SignUp', 'ForgotPassword', 'Home', 'How_It_Works', 'Prices'];
+  let remove_when_loged = ['How_It_Works', 'Prices', 'Home'];
+  let loged = store.getters.isLogedIn;
+  let prem = store.getters.isPremium;
+
+
+  // if(prem)
+    // console.log('prem');
+  // else
+    // console.log('not prem');
+
+  // console.log(to.name);
+
+  if( !allow.includes(to.name) && !loged ){
+    next({name: 'SignIn'});
+  }
+  if(to.name=='Roadmap' && !prem){
+    next({name: 'Projects'});
+  }
+  if(remove_when_loged.includes(to.name) && store.getters.isLogedIn){
+    next({name: 'profile'})
+  }
+  else next();
+    
+})
 
 export default router;

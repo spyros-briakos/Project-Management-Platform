@@ -23,6 +23,7 @@ const authenticate = require("./middlewares/authenticate");
 const app = express();
 
 // MIDDLEWARES
+app.options('*',cors());
 app.use(cors());
 app.use(express.urlencoded({limit: '50mb', extended: true}));  // Instead of bodyParser
 app.use(express.json({limit: '50mb', extended: true}));
@@ -98,11 +99,16 @@ mongoose.connect(
 // module.exports = app;
 
 const options = {
-	key: fs.readFileSync("./server.key").toString(),
-	cert: fs.readFileSync("./server.cert").toString()
+	key: fs.readFileSync("./security/localhost+1-key.pem"),
+	cert: fs.readFileSync("./security/localhost+1.pem"),
+  requestCert: false,
+  rejectUnauthorized: false
 };
 
-const server = https.createServer(options, app).listen(PORT, function(){
-  console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
+// const server = https.createServer(options, app).listen(PORT, function(){
+//   console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
+// });
+const server = http.createServer(options, app).listen(PORT, function(){
+  console.log(`Server listening at http://${process.env.HOST}:${PORT}/`);
 });
 module.exports = server;

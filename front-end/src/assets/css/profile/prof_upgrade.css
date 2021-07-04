@@ -3,7 +3,6 @@
     flex-wrap: wrap;
     width: 100%;
     background-color: whitesmoke;
-    /* background-color: blue; */
     padding: 20px 0 5px 0;
     font-size: 25px;
     color: #79b38c;
@@ -105,4 +104,13 @@
 
 .profUpgr_wrap .values_wrap .buy_btn:hover{
     background-color:rgb(110, 189, 107);
+}
+
+.profUpgr_wrap .prem_mssg{
+    margin: 0 auto 0 auto;
+    padding: 2% 0 2% 0;
+    height: auto;
+    max-width: 70%;
+    /* border: 2px solid red; */
+    color:black;
 }

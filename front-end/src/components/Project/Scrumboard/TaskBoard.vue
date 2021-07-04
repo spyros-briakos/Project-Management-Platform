@@ -60,6 +60,7 @@ export default {
       reorderTaskLists: "reorderTaskLists",
       setActiveTaskBoard: "setActiveTaskBoard",
       getMyTasks: "getMyTasks",
+      getScrumBoard: "getScrumBoard",
     })
   },
   created() {
@@ -70,10 +71,13 @@ export default {
     }
     // this.getEmulatedData()
     // if kanban then load my tasks
-    if (this.param === "KANBAN_BOARD") {
-      this.getMyTasks()
-      console.log("CREATEDDDD KANBAAAN")
-    }
+    // if (this.param === "KANBAN_BOARD") {
+    //   this.getMyTasks()
+    //   console.log("CREATEDDDD KANBAAAN")
+    // } else if (this.param === "SCRUM_BOARD") {
+    //   this.getScrumBoard()   
+    //   console.log("CREATEDDDD SCRUMMMMM boARD")
+    // }
     console.log("CREATEDDDD ", this.$route.name)
   },
   watch:{
@@ -85,6 +89,9 @@ export default {
         if (this.param === "KANBAN_BOARD") {
           this.getMyTasks()
           console.log("CREATEDDDD KANBAAAN")
+        } else if (this.param === "SCRUM_BOARD") {
+          this.getScrumBoard()   
+          console.log("CREATEDDDD SCRUMMMMM boARD")
         }
       }
     }

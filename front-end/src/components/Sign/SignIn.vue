@@ -110,7 +110,7 @@ export default {
             })
             .catch( error => { 
                 this.badAllert = true;
-                this.badAllertMessage = error.response.data.message
+                this.badAllertMessage = error.message
                 
             }) 
             //         if(this.email != "" && this.password != "") {

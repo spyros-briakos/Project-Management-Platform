@@ -1,5 +1,5 @@
 // import { client } from "@the-ver-best-scrum-team/rest-api-client";
-
+// import {fts} from '../FullTextSearch/fts.js'
 // print old projects for front debugging without database
 var projectsTest = [
 	{
@@ -93,6 +93,20 @@ var invitesTest = [
 	{invitationCode: "33", receiver: 'invite from 3', sender: 'SOYVLAKIA O MPAMPHS', project: 'scrumProject 3', date: '23-2-2021', seen: 0},
 ]
 
+var testSearch = [
+	{_id: "873468712uwedhjs72", firstName: 'test', lastName: 'mplampla', username: "Petros"},
+	{_id: "873468712uwedhjs73", firstName: 'test1', lastName: 'mpla9mpla', username: "Punisher"},
+	{_id: "873468712uwedhjs74", firstName: 'test2', lastName: 'mpla8mpla', username: "Bannanito"},
+	{_id: "873468712uwedhjs75", firstName: 'test3', lastName: 'mpla7mpla', username: "Parasekyh"},
+	{_id: "873468712uwedhjs76", firstName: 'test4', lastName: 'mpla6mpla', username: "Giannhs"},
+	{_id: "873468712uwedhjs77", firstName: 'test5', lastName: 'mpla5mpla', username: "Gewrgia"},
+	{_id: "873468712uwedhjs78", firstName: 'test6', lastName: 'mpla4mpla', username: "gogo"},
+	{_id: "873468712uwedhjs79", firstName: 'test7', lastName: 'mpla3mpla', username: "gogo1"},
+	{_id: "873468712uwedhjs80", firstName: 'test8', lastName: 'mpla2mpla', username: "gogo2"},
+	{_id: "873468712uwedhjs81", firstName: 'test9', lastName: 'mpla1mpla', username: "gogo3"},
+]
+
+// var testing = true
 var coWorkersTest = [
 	{_id: 1, username: "Christina Evaggelou"},
 	{_id: 2, username: "Giwrgos Raptis"},
@@ -106,6 +120,7 @@ var coWorkersTest = [
 ]
 
 var testing = false
+var testingSearch = false
 
 export default {
 	isLoading: state => state.isLoading,
@@ -116,19 +131,21 @@ export default {
 	archivedLists: state => (state.activeBoard ? state.activeBoard.lists.filter(l => l.archived) : []),
 	unarchivedLists: state => (state.activeBoard ? state.activeBoard.lists.filter(l => !l.archived) : []),
 	
-	isLogedIn: state => state.isLogedIn, 
+	isLogedIn: state => state.isLogedIn,
 	token: state => state.token,
 	userName: state => state.userName,
-	name: state => state.firstName+" "+state.lastName,
+	// name: state => state.firstName+" "+state.lastName,
 	firstName: state => state.firstName,
 	lastName: state => state.lastName,
 	email: state => state.email,
 	image: state => state.image,
 	plan_in_use: state => state.plan_in_use,
-	isPremium: state => (state.plan_in_use === "standard") ? false : true ,
+
+	isPremium: state => (state.plan_in_use === "standard") ? false : true,
+
 	checkPremiumAtProjectCreation: state => (this.isPremium ? true : state.projects.length < state.constants.maxNonPremiumProjects),
-
-
+// 
+// 
 	project: state => state.project ? state.project : null,
 	projectId: state => state.project._id ? state.project._id : null,
 	projectName: state => state.project.name ? state.project.name : null,
@@ -143,19 +160,28 @@ export default {
 	projectSprints: state => (state.sprints === undefined || state.sprints.length == 0 ? [] : state.sprints),
 	projectUserStories: state => (state.userStories === undefined || state.userStories.length == 0 ? [] : state.userStories),
 
+	getUserStoriesNames: state => (state.userStories === undefined || state.userStories.length == 0 ? [] : state.userStories.map(us => us.name)),
+
 
 	projects: state => (state.projects === undefined || state.projects.length == 0 ? testing ? projectsTest : [] : state.projects),
 	invites: state => (state.invites === undefined || state.invites.length == 0 ? testing ? invitesTest : [] : state.invites),
 	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
+	coWorkers: state=>( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : []) : state.coWorkers ),
 
-	coWorkers: state => (state.coWorkers === undefined || state.coWorkers.length == 0 ? testing ? coWorkersTest : [] : state.coWorkers ),
-
-	getSprintIdbyName: (state) => (sprintName) => {
-        return state.sprints.find(s => s.name === sprintName)._id
+	getSprintNames: (state) => () => {
+		var sprintNames = []
+		for (let sprint of state.sprints) {
+			sprintNames.push(sprint.name)
+		}
+		return sprintNames
 	},
 
 	getSprintbyName: (state) => (sprintName) => {
         return JSON.parse(JSON.stringify(state.sprints.find(s => s.name === sprintName)))
+	},
+
+	getSprintbyId: (state) => (id) => {
+        return JSON.parse(JSON.stringify(state.sprints.find(s => s._id === id)))
 	},
 
 	getUserStoryIdbyName: (state) => (userStoryName) => {
@@ -166,12 +192,115 @@ export default {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName)))
 	},
 
+	getUserStorybyId: (state) => (id) => {
+        return JSON.parse(JSON.stringify(state.userStories.find(us => us._id === id)))
+	},
+
 	getTaskIdbyNames: (state) => (taskName, userStoryName) => {
         return state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)._id
 	},
 
+
+
+
+	allUsers: state => ( (state.allUsers == undefined || state.allUsers.length == 0) ? (testingSearch ? testSearch : []) : state.allUsers),
+
+
+
+
 	getTaskbyNames: (state) => (taskName, userStoryName) => {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))
 	},
+
+	getTaskbyId: (state) => (id) => {
+		for(let us of state.userStories) {
+			for(let task of us.tasks) {
+				if (task._id === id) {
+					return JSON.parse(JSON.stringify(task))
+				}
+			}
+		}
+		return null
+	},
+
+	getTaskMembersbyId: (state, getters) => (id) => {
+		var task = getters.getTaskbyId(id)
+		var memberUsernames = []
+		for (let user of task.members) {
+			memberUsernames.push(user.username)
+		}
+		return memberUsernames
+	},
+
+	getTaskbyName: (state) => (name) => {
+		for(let us of state.userStories) {
+			for(let task of us.tasks) {
+				if (task.name === name) {
+					return JSON.parse(JSON.stringify(task))
+				}
+			}
+		}
+		return null
+	},
+
+	getSprintPercentage: (state, getters) => (sprint) => {
+		var total = 0;
+		var done = 0;
+		for(let task of sprint.tasks) {
+			total += 1
+			if (task.status === "toDo") {				
+				done += 0
+			} else if (task.status === "inProgress") {
+				done += 0.5
+			} else if (task.status === "done") {
+				done += 1
+			}
+		}
+		if (total == 0)
+			return "0"
+		return 100*(done/total).toFixed(1).toString()
+	},
+
+	getHistory: (state, getters) => () => {
+		var forms = [];
+		var id = 0;
+		for(let sprint of state.sprints) {
+			forms.push({
+				id: ++id,
+				name: sprint.name,
+				status: sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε",
+				progress: getters.getSprintPercentage(sprint), 
+				comments: sprint.description
+			})
+		}
+		return forms
+	},
+
+	getTotalSprintDates: (state, getters) => () => {
+		var totalDays = 1;
+		for(let sprint of state.sprints) {
+			totalDays += parseInt(sprint.estimated_duration)
+		}
+		return totalDays
+	},
+
+	getTotalSprintDatesArray: (state, getters) => () => {
+		var totalDaysArray = [];
+		for(let day=0; day<getters.getTotalSprintDates(); day++) {
+			totalDaysArray.push(day)
+		}
+		return totalDaysArray
+	},
+
+	getTotalSprintDatesIdealBurn: (state, getters) => () => {
+		var totalDaysArray = [];
+		for(let day=getters.getTotalSprintDates(); day>0; day--) {
+			totalDaysArray.push(day)
+		}
+		return totalDaysArray
+	},
+
+
+	
 }
 

@@ -51,69 +51,19 @@
 
             </v-radio-group>
 
-                <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="dates"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                    >
-                        
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-text-field @change="isValid()" id="prDates"
-                            class="small"
-                            v-model="datesRange"
-                            label="Διάρκεια Project"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                        </v-text-field>
-                    </template>
-                    
-                    <v-date-picker
-                    v-model="dates"
-                    no-title
-                    range
-                    show-current
-                    scrollable
-                    >
-                    
-                    <v-spacer></v-spacer>
-                    
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="menu = false"
-                    >
-                        Ακύρωση
-                    </v-btn>
-
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.menu.save(dates)"
-                    >
-                        OK
-                    </v-btn>
-                    </v-date-picker>
-                </v-menu>
-
                 <v-autocomplete @change="isValid()" id="getFriends"
                     class="friends_picker"
-                    :v-model="form_data.autocomplete"
+                    v-model="form_data.autocomplete"
                     multiple
                     chips
                     :label="get_friends.label"
-                    :items="get_friends.people"
+                    :items="get_friends.people.concat(get_friends.searchedPeople)"
                     item-text="username"
-                    item-value="_id"
+                    item-value="username"
                     :placeholder="get_friends.placeholder"
                     :hint="get_friends.hint"
-                    :search-input.sync="get_friends.search"
+                    :search-input.sync="search"
+                    cache-items
                     clearable
                     :menu-props="{maxHeight: 150}"
                     >
@@ -130,6 +80,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex"
+import fts from "../FullTextSearch/fts"
 
 export default({
     name: "createProject",
@@ -153,6 +104,7 @@ export default({
             goodAllertMessage: "",
             badAllert: false,
             badAllertMessage: "",
+            search:null,
         }
     },
     props:{
@@ -212,12 +164,14 @@ export default({
             }
 
 
-            this.createProjectAndInvite( {project:project, inviteUsernameList:["admin2", "admin3"]})
+            this.createProjectAndInvite( {project:project, inviteUsernameList:this.form_data.autocomplete})
             .then( response => {                            
                 this.goodAllert = true
                 this.badAllert = false
                 this.goodAllertMessage = response
                 this.getProjects()
+
+                setTimeout(() => {  this.$emit('busy-form', 1); }, 1500);
             })
             .catch( error => { 
                 this.badAllert = true
@@ -273,6 +227,22 @@ export default({
                 this.badAllertMessage = error.response.data.message
             })
         },
+        searchAllUsers(val){
+            let found = [];
+
+            // for(let user of this.allUsers){
+            //     if(user.username.includes(''+val)){
+            //         found.push(user);
+            //         // console.log('FOUND');
+            //     }
+            //     if(found.length >= 5)
+            //         break;
+            // }
+
+            found = fts.searchUser(val);
+            
+            return found;
+        }
     },
     computed:{
         ...mapGetters({
@@ -282,6 +252,7 @@ export default({
 		    firstName: "firstName",
 		    lastName: "lastName",
             isPremium: "isPremium",
+            allUsers: "allUsers",
             coWorkers: "coWorkers",
             checkPremiumAtProjectCreation: "checkPremiumAtProjectCreation",
 
@@ -337,7 +308,7 @@ export default({
         ]},
         get_friends() { return {
                 people: this.coWorkers,
-                search: null,
+                searchedPeople: [],
                 label: 'Διάλεξε τους Συνεργάτες σου',
                 placeholder: 'best Teammates',
                 hint: 'Διάλεξε μερικούς απο τους παλιούς συνεργάτες σου ή προσκάλεσε νέους!',
@@ -345,8 +316,12 @@ export default({
     },
     watch:{
         search (val) {
-            alert(val);
-            this.get_friends.people.push(val);
+            this.get_friends.searchedPeople = [];
+
+            let found = this.searchAllUsers(val);
+            for (let user of found){
+                this.get_friends.searchedPeople.push(user);
+            }
             // return true
             // Items have already been loaded
             // if (this.items.length > 0) return
@@ -355,22 +330,7 @@ export default({
             // if (this.isLoading) return
 
             // this.isLoading = true
-
-
-                // EXAMPLE
-            // Lazily load input items
-            // fetch('https://api.publicapis.org/entries')
-            // .then(res => res.json())
-            // .then(res => {
-            //     const { count, entries } = res
-            //     this.count = count
-            //     this.entries = entries
-            // })
-            // .catch(err => {
-            //     console.log(err)
-            // })
-            // .finally(() => (this.isLoading = false))
-      },
+        },
     }
 })
 </script>

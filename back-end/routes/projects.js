@@ -103,6 +103,9 @@ router.post("/get-details", async (req, res) => {
 router.post("/add-project", async (req, res) => {
   try {
     const user = req.user;
+    if(user.plan_in_use == "standard" && user.projects.length >= 3) {
+      return res.status(400).json({ message: 'Σφάλμα: Το πακέτο σας δε σας επιτρέπει να δημιουργήσετε παραπάνω projects.' });
+    }
     const project = new Project(req.body.project);
     // If no such project found
     if(!project) {
@@ -165,7 +168,7 @@ router.post("/add-sprint", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
     }
     // Check if user is authorized for that action
-    if (!user._id.equals(project.productOwner)) {
+    if (!project.members.includes(user._id) && !user._id.equals(project.productOwner)) {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
@@ -327,7 +330,7 @@ router.post("/edit-sprint", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
     }
     // Check if user is authorized for that action
-    if (!user._id.equals(project.productOwner)) {
+    if (!project.members.includes(user._id) && !user._id.equals(project.productOwner)) {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
@@ -367,7 +370,8 @@ router.post("/edit-task", async (req, res) => {
     if(!task || !project.userStories.includes(task.userStory)) {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το task.' });
     }
-    if (req.body.task.status == 'done' && !req.body.task.status.equals(task.status)) {
+    
+    if (req.body.task.status == 'done' && req.body.task.status !== task.status) {
       req.body.task.endingDate = Date.now();
     }
 
@@ -771,7 +775,7 @@ router.post("/disconnect-task-sprint", async (req, res) => {
       let flag = false
       for (let i in userStory.tasks) {
         userStoryTask = await Task.findById(userStory.tasks[i]._id);
-        if (userStoryTask.sprint.equals(task.sprint)) {
+        if (userStoryTask.sprint === task.sprint) {
           flag = true
           break
         }

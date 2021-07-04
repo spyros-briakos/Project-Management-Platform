@@ -9,7 +9,7 @@
         </label>
         <!-- Case: KanBoard -->
         <label v-else>
-          Kanban Board 
+          Personal Board 
           <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
         </label>
       </div>  
@@ -20,6 +20,33 @@
         <div class="form-outline"  v-else>
           <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
         </div> -->
+      <div style="position:relative; top:-15px; max-height:30px; right:-430px;">
+        <v-row style="height:8px"
+        align="center"
+        >
+        <v-col cols="12">
+          <v-autocomplete 
+            v-model="searchedSprintName"
+            :items="getSprintNames()"
+            outlined
+            label="Search Sprints"
+          ></v-autocomplete>
+        </v-col>
+        </v-row>
+        <v-btn style="position:relative; right:-160px; top:25px"
+          elevation="2"
+          class="mx-2"
+          fab
+          small
+          color="#7A96A3"
+          @click="putSprintInFront(searchedSprintName)"
+          
+        >
+          <v-icon dark>
+          fas fa-search
+        </v-icon>
+      </v-btn>
+      </div>
       
       <!-- Only show above options on ScrumBoard -->
       <!-- <div class="d-flex justify-content-end" v-if="!isLoading && this.activeBoard.id==='SCRUM_BOARD'" > -->
@@ -30,8 +57,8 @@
 
 <!-- Uncomment to test basic task user story functions -->
 
-<!-- 
-     <v-form
+
+     <!-- <v-form
       x-small
       ref="form"
       v-model="valid"
@@ -113,7 +140,7 @@
       <v-btn
         x-small
         class="mr-4"
-        @click="addTask_()"
+        @click="addTaskAndConnectSprint_()"
       >
         New task
       </v-btn>
@@ -132,6 +159,14 @@
     >
       Edit task
     </v-btn>
+     <v-btn
+      x-small
+      color="success"
+      @click="connectSprint({taskName:taskName, sprintName:sprintName})"
+    >
+      Connect
+    </v-btn>
+
     </v-form> -->
 
     
@@ -155,6 +190,10 @@ export default {
     sprintName: '',
     storyName: '',
     taskName: '',
+    items: ['foo', 'bar', 'fizz', 'buzz'],
+    values: ['foo', 'bar'],
+    value: null,
+    searchedSprintName:'',
   }),
 
   computed: {
@@ -167,6 +206,7 @@ export default {
       getTaskIdbyNames: "getTaskIdbyNames",
       getUserStorybyName: "getUserStorybyName",
       getTaskbyNames: "getTaskbyNames",
+      getSprintNames: "getSprintNames",
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -183,6 +223,9 @@ export default {
       addSprint: "addSprint",
       editSprint: "editSprint",
       deleteSprint: "deleteSprint",
+      connectSprint: "connectSprint",
+      addTaskAndConnectSprint: "addTaskAndConnectSprint",
+      putSprintInFront: "putSprintInFront",
       
     }),
 
@@ -262,7 +305,7 @@ export default {
       this.deleteUserStory(this.getUserStoryIdbyName(userStoryName))
     },
 
-    addTask_() {
+    addTaskAndConnectSprint_() {
       let task = {
         name: this.taskName,
         description: "telika ftasame os edo",
@@ -270,7 +313,11 @@ export default {
         estimated_duration: "10",
         userStory: this.getUserStoryIdbyName(this.storyName)
       }
-      this.addTask(task)
+
+      // get the name of sprint
+      var sprintName = this.sprintName
+
+      this.addTaskAndConnectSprint({task:task, sprintName:sprintName})
     },
 
     editTask_() {
