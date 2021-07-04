@@ -1,5 +1,3 @@
-docker-compose.yml
-Dockerfile
 .git/
 back-end/.git/
 back-end/node_modules/
