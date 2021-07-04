@@ -2,14 +2,19 @@
   <span>
     <v-toolbar id="header" app color="#FAFFFF" dark>
     <!-- <v-toolbar id="header" app color="var(--light_green)" dark> -->
-      <router-link to="/">
+      <router-link  v-if="!this.isLogedIn" to="/">
+        <v-toolbar-title :to="appurl" class="purple--text" data-cy="titleBtn">
+          {{ appTitle }}
+        </v-toolbar-title>
+      </router-link>
+      <router-link v-else to="/profile">
         <v-toolbar-title :to="appurl" class="purple--text" data-cy="titleBtn">
           {{ appTitle }}
         </v-toolbar-title>
       </router-link>
       <template v-for="(item, index) in items">
-        <template v-if="index <= 3" >
-          <v-btn :key="index" :to="item.url" :style="{'display': hide_opts(item.title) ? 'none' : ''}" plain> {{ item.title }} </v-btn>
+        <template v-if="index <= 1" >
+          <v-btn :key="index" :to="item.url" :style="{'display': hide_opts(item.title) ? 'none' : '', 'pointer-events': disable_project(item.title) ? 'none' : ''}" plain> {{ item.title }} </v-btn>
         </template>
         <template v-else>
           <v-btn :key="index" :to="item.url" :style="{'display': hide_sign() ? 'none' : ''}" fixed right color="#FF914D">
@@ -39,8 +44,8 @@
         right: true,
 
         items: [
-          { title: "Projects", url: "/projects" },
           { title: "Profile", url: "/profile" },
+          { title: "Project", url: "/projects" },
           { title: "Πώς δουλεύει", url: "/how_it_works" },
           { title: "Τιμές", url: "/prices" },
           { title: "Σύνδεση", url: "/sign/in" },
@@ -50,6 +55,7 @@
     computed:{
       ...mapGetters({
         isLogedIn: "isLogedIn",
+        project: "project"
       }),
     },
     methods:{
@@ -59,12 +65,15 @@
           return true;
         return false;
       },
-    hide_sign(){
-      if(this.isLogedIn)
-        return true;
-      else
-        return false;
-    }
+      hide_sign(){
+        if(this.isLogedIn)
+          return true;
+        else
+          return false;
+      },
+      disable_project(title) {
+        return title === 'Project' && !this.project._id
+      }
     }
   };
 </script>
