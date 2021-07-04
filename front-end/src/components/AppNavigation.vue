@@ -50,13 +50,18 @@
     computed:{
       ...mapGetters({
         isLogedIn: "isLogedIn",
+        projects: "projects",
       }),
     },
     methods:{
       hide_opts(val){
         let to_hide = ['Projects', 'Profile'];
         let to_hide2 = ['Πώς δουλεύει', 'Τιμές'];
+        let project_guard = ['Projects'];
+
         if(to_hide.includes(val) && !this.isLogedIn)
+          return true;
+        else if(project_guard.includes(val) && this.isLogedIn && this.projects.length==0)
           return true;
         else if(to_hide2.includes(val) && this.isLogedIn)
           return true;
