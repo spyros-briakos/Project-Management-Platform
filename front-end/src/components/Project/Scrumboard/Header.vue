@@ -20,6 +20,23 @@
         <div class="form-outline"  v-else>
           <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
         </div> -->
+      <div style="position:relative; top:-15px; height:30px; right:-480px;">
+        <v-row style="height:10px"
+        align="center"
+        >
+        <v-col cols="12">
+          <v-autocomplete
+            v-model="searchedSprintName"
+            :items="items"
+            outlined
+            label="Search Sprints"
+          ></v-autocomplete>
+        </v-col>
+        </v-row>
+        <v-btn
+          elevation="2"
+        ></v-btn>
+      </div>
       
       <!-- Only show above options on ScrumBoard -->
       <!-- <div class="d-flex justify-content-end" v-if="!isLoading && this.activeBoard.id==='SCRUM_BOARD'" > -->
@@ -163,6 +180,10 @@ export default {
     sprintName: '',
     storyName: '',
     taskName: '',
+    items: ['foo', 'bar', 'fizz', 'buzz'],
+    values: ['foo', 'bar'],
+    value: null,
+    searchedSprintName:'',
   }),
 
   computed: {
