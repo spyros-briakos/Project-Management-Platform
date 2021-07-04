@@ -1,5 +1,5 @@
 // import { client } from "@the-ver-best-scrum-team/rest-api-client";
-
+// import {fts} from '../FullTextSearch/fts.js'
 // print old projects for front debugging without database
 var projectsTest = [
 	{
@@ -94,16 +94,16 @@ var invitesTest = [
 ]
 
 var testSearch = [
-	{_id: "873468712uwedhjs72", username: "Petros"},
-	{_id: "873468712uwedhjs73", username: "Punisher"},
-	{_id: "873468712uwedhjs74", username: "Bannanito"},
-	{_id: "873468712uwedhjs75", username: "Parasekyh"},
-	{_id: "873468712uwedhjs76", username: "Giannhs"},
-	{_id: "873468712uwedhjs77", username: "Gewrgia"},
-	{_id: "873468712uwedhjs78", username: "gogo"},
-	{_id: "873468712uwedhjs79", username: "gogo1"},
-	{_id: "873468712uwedhjs80", username: "gogo2"},
-	{_id: "873468712uwedhjs81", username: "gogo3"},
+	{_id: "873468712uwedhjs72", firstName: 'test', lastName: 'mplampla', username: "Petros"},
+	{_id: "873468712uwedhjs73", firstName: 'test1', lastName: 'mpla9mpla', username: "Punisher"},
+	{_id: "873468712uwedhjs74", firstName: 'test2', lastName: 'mpla8mpla', username: "Bannanito"},
+	{_id: "873468712uwedhjs75", firstName: 'test3', lastName: 'mpla7mpla', username: "Parasekyh"},
+	{_id: "873468712uwedhjs76", firstName: 'test4', lastName: 'mpla6mpla', username: "Giannhs"},
+	{_id: "873468712uwedhjs77", firstName: 'test5', lastName: 'mpla5mpla', username: "Gewrgia"},
+	{_id: "873468712uwedhjs78", firstName: 'test6', lastName: 'mpla4mpla', username: "gogo"},
+	{_id: "873468712uwedhjs79", firstName: 'test7', lastName: 'mpla3mpla', username: "gogo1"},
+	{_id: "873468712uwedhjs80", firstName: 'test8', lastName: 'mpla2mpla', username: "gogo2"},
+	{_id: "873468712uwedhjs81", firstName: 'test9', lastName: 'mpla1mpla', username: "gogo3"},
 ]
 
 // var testing = true
@@ -139,9 +139,9 @@ export default {
 	email: state => state.email,
 	image: state => state.image,
 	plan_in_use: state => state.plan_in_use,
-	
+
 	isPremium: state => (state.plan_in_use === "standard") ? false : true,
-	
+
 	checkPremiumAtProjectCreation: state => (this.isPremium ? true : state.projects.length < state.constants.maxNonPremiumProjects),
 // 
 // 
@@ -336,7 +336,5 @@ export default {
 		}
 		return forms
 	},
-
-	
 }
 

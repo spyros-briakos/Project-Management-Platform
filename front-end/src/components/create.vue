@@ -131,6 +131,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex"
+import fts from "../FullTextSearch/fts"
 
 export default({
     name: "createProject",
@@ -280,14 +281,18 @@ export default({
         searchAllUsers(val){
             let found = [];
 
-            for(let user of this.allUsers){
-                if(user.username.includes(''+val)){
-                    found.push(user);
-                    // console.log('FOUND');
-                }
-                if(found.length >= 5)
-                    break;
-            }
+            // for(let user of this.allUsers){
+            //     if(user.username.includes(''+val)){
+            //         found.push(user);
+            //         // console.log('FOUND');
+            //     }
+            //     if(found.length >= 5)
+            //         break;
+            // }
+
+            found = fts.searchUser(val);
+            console.log(found);
+
             return found;
         }
     },
