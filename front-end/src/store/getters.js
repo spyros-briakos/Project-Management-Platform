@@ -267,6 +267,7 @@ export default {
 		for(let sprint of state.sprints) {
 			forms.push({
 				id: ++id,
+				name: sprint.name,
 				status: sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε",
 				progress: getters.getSprintPercentage(sprint), 
 				comments: sprint.description
