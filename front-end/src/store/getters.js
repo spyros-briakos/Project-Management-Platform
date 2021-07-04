@@ -93,6 +93,20 @@ var invitesTest = [
 	{invitationCode: "33", receiver: 'invite from 3', sender: 'SOYVLAKIA O MPAMPHS', project: 'scrumProject 3', date: '23-2-2021', seen: 0},
 ]
 
+var testSearch = [
+	{_id: "873468712uwedhjs72", username: "Petros"},
+	{_id: "873468712uwedhjs73", username: "Punisher"},
+	{_id: "873468712uwedhjs74", username: "Bannanito"},
+	{_id: "873468712uwedhjs75", username: "Parasekyh"},
+	{_id: "873468712uwedhjs76", username: "Giannhs"},
+	{_id: "873468712uwedhjs77", username: "Gewrgia"},
+	{_id: "873468712uwedhjs78", username: "gogo"},
+	{_id: "873468712uwedhjs79", username: "gogo1"},
+	{_id: "873468712uwedhjs80", username: "gogo2"},
+	{_id: "873468712uwedhjs81", username: "gogo3"},
+]
+
+// var testing = true
 var coWorkersTest = [
 	{_id: 1, username: "Christina Evaggelou"},
 	{_id: 2, username: "Giwrgos Raptis"},
@@ -105,7 +119,7 @@ var coWorkersTest = [
 	{_id: 9, username: "Panos Perdikos"},
 ]
 
-var testing = false
+var testing = true
 
 export default {
 	isLoading: state => state.isLoading,
@@ -116,19 +130,21 @@ export default {
 	archivedLists: state => (state.activeBoard ? state.activeBoard.lists.filter(l => l.archived) : []),
 	unarchivedLists: state => (state.activeBoard ? state.activeBoard.lists.filter(l => !l.archived) : []),
 	
-	isLogedIn: state => state.isLogedIn, 
+	isLogedIn: state => state.isLogedIn,
 	token: state => state.token,
 	userName: state => state.userName,
-	name: state => state.firstName+" "+state.lastName,
+	// name: state => state.firstName+" "+state.lastName,
 	firstName: state => state.firstName,
 	lastName: state => state.lastName,
 	email: state => state.email,
 	image: state => state.image,
 	plan_in_use: state => state.plan_in_use,
-	isPremium: state => (state.plan_in_use === "standard") ? false : true ,
+	
+	isPremium: state => (state.plan_in_use === "standard") ? false : true,
+	
 	checkPremiumAtProjectCreation: state => (this.isPremium ? true : state.projects.length < state.constants.maxNonPremiumProjects),
-
-
+// 
+// 
 	project: state => state.project ? state.project : null,
 	projectId: state => state.project._id ? state.project._id : null,
 	projectName: state => state.project.name ? state.project.name : null,
@@ -150,7 +166,7 @@ export default {
 	invites: state => (state.invites === undefined || state.invites.length == 0 ? testing ? invitesTest : [] : state.invites),
 	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
 
-	coWorkers: state => (state.coWorkers === undefined || state.coWorkers.length == 0 ? testing ? coWorkersTest : [] : state.coWorkers ),
+	coWorkers: state => ( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : [] ) : state.coWorkers ),
 
 	getSprintIdbyName: (state) => (sprintName) => {
         return state.sprints.find(s => s.name === sprintName)._id
@@ -179,6 +195,8 @@ export default {
 	getTaskIdbyNames: (state) => (taskName, userStoryName) => {
         return state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)._id
 	},
+
+	allUsers: state => ( (state.allUsers == undefined || state.allUsers.length == 0) ? (testing ? testSearch : []) : state.allUsers),
 
 	getTaskbyNames: (state) => (taskName, userStoryName) => {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))

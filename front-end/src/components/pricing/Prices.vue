@@ -13,9 +13,9 @@
                         {{ feat }}
                     </li>
                 </ul>
-            </div>
-            <div class="toogle-wrapper" v-if="plan.values.length">
-                {{plan.values_mssg}}  
+            </div>    
+            <div class="toogle-wrapper">
+                {{plan.values_mssg}}
                 <div class="my-custom-toggle" >
                     <button class="button" v-for="method in plan.values" :key="method.id" :id=method.id
                         :style="{
@@ -28,18 +28,17 @@
                         {{method.tag}}
                     </button>
                 </div>
+                <div class="price" v-if="plan.active_plan != -1">{{ active_price(plan) }}&#8364;</div>
             </div>
             
-            <div class="price" v-if="plan.active_plan != -1">{{ active_price(plan) }}&#8364;</div>
-
-            <div class="mybutton_wrapper">
+            <!-- <div class="mybutton_wrapper">
                 <v-btn 
                     width=80%
                     color=var(--red-orange)
                     class="mybutton" :to="plan.buttn.link">
                     {{ plan.buttn.mssg }}
                 </v-btn>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -56,7 +55,7 @@ export default {
                     title: "Δωρεάν",
                     active_plan: -1,
                     values: [],
-                    values_mssg: "",
+                    values_mssg: "Κάνε την αρχή τωρα! Χωρίς κανένα κόστος!",
                     featuers: [
                         "2 Ομάδες",
                         "3-5 Μέλη ανά Ομάδα",
@@ -73,7 +72,7 @@ export default {
                         { id: 0, tag: "Μηνιαίο", price: "7 " },
                         { id: 1, tag: "Ετήσιο", price: "70 " },
                     ],
-                    values_mssg: "Επιλέξτε το πρόγραμμα σας:",
+                    values_mssg: "Επιλέξτε το πρόγραμμα που σας αρέσει:",
                     featuers: [
                         "Απαιριόριστες Ομάδες",
                         "3-9 Μέλη ανά Ομάδα",
