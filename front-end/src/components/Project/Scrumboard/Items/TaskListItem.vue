@@ -1,6 +1,4 @@
 <template>
-  
-  <!-- v-if="list.name!='Product Backlog'" -->
 
   <!--  -->
   <!-- Case: Kanban Board -> taskInKanban--> 
@@ -200,8 +198,8 @@
   <!--  -->
   <!-- Case: Scrum Board -> userStory --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog'">   
-  <!-- <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">    -->
+  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">   
+  <!-- <div class="card tasklist-item" v-else-if="list.name=='Product Backlog'">    -->
   <!-- <div class="card tasklist-item" v-else-if="item.state=='userStory' && board.id=='SCRUM_BOARD'">    -->
     
     <!--  For Product Backlog (different popup from others) -->
@@ -328,12 +326,19 @@
         style="bottom: -8px"
       > 
 
-        <v-icon  style="font-size:18px; color:#293834" v-if="collapsedTasks">fas fa-chevron-circle-down</v-icon>
-        <v-icon style="font-size:18px; color:#293834" v-else>fas fa-chevron-circle-up</v-icon>
+        <v-icon  style="font-size:18px; color:#292F2B" v-if="collapsedTasks">fas fa-chevron-circle-up</v-icon>
+        <v-icon style="font-size:18px; color:#292F2B" v-else>fas fa-chevron-circle-down</v-icon>
 
       </v-btn>
     </div>
     </div>
+
+  </div>
+
+  <!--  -->
+  <!-- Case: Scrum Board -> hiddenTaskUnderUserStory --> 
+  <!--  -->
+  <div v-else-if="list.name=='Product Backlog' && item.state=='hiddenTaskUnderUserStory'">   
 
   </div>
 
@@ -433,6 +438,7 @@
             <v-select
               :items=getUserStoriesNames
               label="User Story"
+              v-model="user_story_of_task"
             ></v-select>
             </v-col>
             </v-row>
@@ -531,6 +537,8 @@ export default {
       getTaskbyNames: "getTaskbyNames",
       getUserStoriesNames: "getUserStoriesNames",
       getUserStorybyId: "getUserStorybyId",
+      getUserStoryIdbyName: "getUserStoryIdbyName",
+      getSprintbyId: "getSprintbyId"
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -548,6 +556,7 @@ export default {
         storyName: '',
         taskName: '', 
       },
+      user_story_of_task: '',
       default_task: 'Task',
       default_user_story: 'User Story',
       options: ['User Story','Epic','Issue'],
@@ -556,7 +565,6 @@ export default {
       '6 Μέρες', '7 Μέρες', '8 Μέρες', '9 Μέρες', '10 Μέρες', '11 Μέρες', '12 Μέρες', 
       '13 Μέρες', '14 Μέρες', '15 Μέρες'],
       selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε'],
-      selecteditems2: ['Arxiko', 'Messaio', 'Teliko'],
       dropdownlist: [
         { title: 'Click Me' },
         { title: 'Click Me' },
@@ -579,10 +587,12 @@ export default {
       addSprint: "addSprint",
       editSprint: "editSprint",
       deleteSprint: "deleteSprint",
+      addTaskAndConnectSprint: "addTaskAndConnectSprint"
     }),
 
     collapseTasks_() {
       this.collapsedTasks = !this.collapsedTasks
+      console.log(this.item.id)
       this.changeTasksState(this.item.id)
     },
 
@@ -649,6 +659,8 @@ export default {
       }
       // Case: Task
       else if(temp_case == 2) {
+        
+        console.log(this.user_story_of_task)
         // Case: Create
         if(this.item.state=="defaultItem") {
           let task = {
@@ -656,9 +668,9 @@ export default {
             description: this.form.text,
             status: this.form.status,
             estimated_duration: this.form.duration,
-            // userStory: this.getUserStoryIdbyName(this.storyName)
+            userStory: this.getUserStoryIdbyName(this.user_story_of_task)
           }
-          this.addTask(task)
+          this.addTaskAndConnectSprint({task:task, sprintName:this.getSprintbyId(this.list.id).name})
         }
         // Case: Edit
         else if(this.item.state=="taskInSprint") {
@@ -667,23 +679,25 @@ export default {
       }     
 
       // Last
-      this.$validator.validateAll().then(result => {
-        if (result) {
-          const updatedItem = {
-            id: this.form.id,
-            title: this.form.title,
-            text: this.form.text
-          }
-          this.saveTaskListItem({
-            boardId: this.board.id,
-            listId: this.list.id,
-            item: updatedItem
-          })
-          this.$emit("item-edited")
-          this.$validator.reset() 
-        }
-        this.$refs.newItemPopup.close()
-      })
+      // this.$validator.validateAll().then(result => {
+      //   if (result) {
+      //     const updatedItem = {
+      //       id: this.form.id,
+      //       title: this.form.title,
+      //       text: this.form.text
+      //     }
+      //     this.saveTaskListItem({
+      //       boardId: this.board.id,
+      //       listId: this.list.id,
+      //       item: updatedItem
+      //     })
+      //     this.$emit("item-edited")
+      //     this.$validator.reset() 
+      //   }
+      //   this.$refs.newItemPopup.close()
+      // })
+      this.$refs.newItemPopup.close()
+
     },
 
     cancel() {
@@ -719,17 +733,6 @@ export default {
       if(!isOpen)
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
-    },
-
-    addTask_() {
-      let task = {
-        name: this.taskName,
-        description: "telika ftasame os edo",
-        status: "toDo",
-        estimated_duration: "10",
-        userStory: this.getUserStoryIdbyName(this.storyName)
-      }
-      this.addTask(task)
     },
 
     editTask_() {
