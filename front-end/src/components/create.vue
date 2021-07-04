@@ -51,7 +51,7 @@
 
             </v-radio-group>
 
-                <v-menu
+                <!-- <v-menu
                     ref="menu"
                     v-model="menu"
                     :close-on-content-click="false"
@@ -100,7 +100,7 @@
                         OK
                     </v-btn>
                     </v-date-picker>
-                </v-menu>
+                </v-menu> -->
 
                 <v-autocomplete @change="isValid()" id="getFriends"
                     class="friends_picker"
@@ -214,20 +214,20 @@ export default({
             }
 
 
-            this.createProjectAndInvite( {project:project, inviteUsernameList:["admin2", "admin3"]})
-            .then( response => {                            
-                this.goodAllert = true
-                this.badAllert = false
-                this.goodAllertMessage = response
-                this.getProjects()
+            // this.createProjectAndInvite( {project:project, inviteUsernameList:["admin2", "admin3"]})
+            // .then( response => {                            
+            //     this.goodAllert = true
+            //     this.badAllert = false
+            //     this.goodAllertMessage = response
+            //     this.getProjects()
 
-                setTimeout(() => {  this.$emit('busy-form', 1); }, 1500);
-            })
-            .catch( error => { 
-                this.badAllert = true
-                this.goodAllert = true
-                this.badAllertMessage = error.response.data.message
-            })
+            //     setTimeout(() => {  this.$emit('busy-form', 1); }, 1500);
+            // })
+            // .catch( error => { 
+            //     this.badAllert = true
+            //     this.goodAllert = true
+            //     this.badAllertMessage = error.response.data.message
+            // })
 
             
         },
