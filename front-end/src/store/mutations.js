@@ -391,6 +391,7 @@ export default {
 				// add sprint to task lists
 				myEmulatedBoard[0].lists.push( {id: sprint._id,
 											name: sprint.name,
+											text: sprint.description,
 											headerColor: "#607d8b",
 											archived: false,
 											items: items,})

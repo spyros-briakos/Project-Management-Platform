@@ -77,30 +77,92 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
-          <h6 class="title3">Εκτιμώμενη διάρκεια: 
-            <!-- <span class="subtitle1">4 ημέρες</span> -->
+          <!-- <h6 class="title3">Εκτιμώμενη διάρκεια: 
             <select class=" custom-select custom-select-sm"  style="width: 19%;">
               <option value="2">2 Εβδομάδες</option>
               <option value="3">3 Εβδομάδες</option>
               <option value="4">4 Εβδομάδες</option>
             </select>
+          </h6> -->
+
+          <h6 class="title3" style="top:65px;"> 
+            <v-row align="center">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="4"
+              >
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 19%;">
+              <option value="2">2 Εβδομάδες</option>
+              <option value="3">3 Εβδομάδες</option>
+              <option value="4">4 Εβδομάδες</option>
+            </select> -->
+            <v-select
+              :items="selecteditems"
+              label="Εκτημώμενη Διάρκεια"
+            ></v-select>
+            </v-col>
+            </v-row>
           </h6>
-          <h6 class="title3">Κατηγορία: 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+
+          <!-- <h6 class="title3">Κατηγορία: 
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
               <option value="2">Εκκρεμεί</option>
               <option value="3">Σε εξέλιξη</option>
               <option value="4">Ολοκληρώθηκε</option>
             </select>
-          </h6>        
-          <h6 class="title3">User Story: 
-            <!-- <span class="subtitle1">Τελικό</span> -->
+          </h6>         -->
+
+          <h6 class="title3" style="position:fixed; top:297px; left:100px;"> 
+            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
+              <option value="2">Εκκρεμεί</option>
+              <option value="3">Σε εξέλιξη</option>
+              <option value="4">Ολοκληρώθηκε</option>
+            </select> -->
+            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="12"
+              >
+            <v-select
+              :items="selecteditems1"
+              label="Κατάσταση"
+            ></v-select>
+            </v-col>
+            </v-row>
+          </h6>  
+
+          <!-- <h6 class="title3">User Story: 
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
               <option value="2">Αρχικό</option>
               <option value="3">Μεσαίο</option>
               <option value="4">Τελικό</option>
             </select>
-          </h6>       
+          </h6>        -->
+
+          <h6 class="title3" style="position:fixed; top:345px; left:100px;"> 
+            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
+              <option value="2">Εκκρεμεί</option>
+              <option value="3">Σε εξέλιξη</option>
+              <option value="4">Ολοκληρώθηκε</option>
+            </select> -->
+            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="12"
+              >
+            <v-select
+              :items="selecteditems2"
+              label="User Story"
+            ></v-select>
+            </v-col>
+            </v-row>
+          </h6>    
+
             <!-- <v-list-item-title class="headline mb-1" style=" positive:fixed; right:100px; top:-117px;">
           Headline 5
         </v-list-item-title> -->
@@ -151,7 +213,8 @@
   <!--  -->
   <!-- Case: Scrum Board -> userStory --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">   
+  <div class="card tasklist-item" v-else-if="list.name=='Product Backlog'">   
+  <!-- <div class="card tasklist-item" v-else-if="list.name=='Product Backlog' && item.state=='userStory'">    -->
   <!-- <div class="card tasklist-item" v-else-if="item.state=='userStory' && board.id=='SCRUM_BOARD'">    -->
     
     <!--  For Product Backlog (different popup from others) -->
@@ -176,7 +239,7 @@
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
-          <!-- <h4>{{ heading }}</h4> -->
+
           <h4 class="title1"> Τίτλος </h4>
 
           <input style="position:fixed; top: 95px; width: 660px"
@@ -209,7 +272,7 @@
           <!-- <div :class="[isNewItem ? 'text-center' : 'd-flex justify-content-between', 'form-group']"> -->
           <!-- <div> -->
           <!-- <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save"> -->
-          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save">
+          <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(1)">
             Save
           </button> 
           <button class="btn btn-outline-secondary btn-sm" style="position:fixed; top: 400px; left:320px;"  @click.prevent="cancel">
@@ -309,30 +372,93 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
-          <h6 class="title3">Εκτιμώμενη διάρκεια: 
-            <!-- <span class="subtitle1">4 ημέρες</span> -->
+          <!-- <h6 class="title3">Εκτιμώμενη διάρκεια: 
             <select class=" custom-select custom-select-sm"  style="width: 19%;">
               <option value="2">2 Εβδομάδες</option>
               <option value="3">3 Εβδομάδες</option>
               <option value="4">4 Εβδομάδες</option>
             </select>
+          </h6> -->
+
+          <h6 class="title3" style="top:75px;"> 
+            <v-row align="center">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="4"
+              >
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 19%;">
+              <option value="2">2 Εβδομάδες</option>
+              <option value="3">3 Εβδομάδες</option>
+              <option value="4">4 Εβδομάδες</option>
+            </select> -->
+            <v-select
+              :items="selecteditems"
+              label="Εκτημώμενη Διάρκεια"
+            ></v-select>
+            </v-col>
+            </v-row>
           </h6>
-          <h6 class="title3">Κατηγορία: 
-            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+
+          <!-- <h6 class="title3">Κατηγορία: 
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
               <option value="2">Εκκρεμεί</option>
               <option value="3">Σε εξέλιξη</option>
               <option value="4">Ολοκληρώθηκε</option>
             </select>
-          </h6>        
-          <h6 class="title3">User Story: 
-            <!-- <span class="subtitle1">Τελικό</span> -->
+          </h6>    -->
+
+
+          <h6 class="title3" style="position:fixed; top:297px; left:100px;"> 
+            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
+              <option value="2">Εκκρεμεί</option>
+              <option value="3">Σε εξέλιξη</option>
+              <option value="4">Ολοκληρώθηκε</option>
+            </select> -->
+            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="12"
+              >
+            <v-select
+              :items="selecteditems1"
+              label="Κατάσταση"
+            ></v-select>
+            </v-col>
+            </v-row>
+          </h6>  
+
+          <!-- <h6 class="title3">User Story: 
             <select class=" custom-select custom-select-sm"  style="width: 20%;">
               <option value="2">Αρχικό</option>
               <option value="3">Μεσαίο</option>
               <option value="4">Τελικό</option>
             </select>
-          </h6>       
+          </h6>  -->
+
+          <h6 class="title3" style="position:fixed; top:345px; left:100px;"> 
+            <!-- <span class="subtitle1">Εκκρεμεί</span> -->
+            <!-- <select class=" custom-select custom-select-sm"  style="width: 20%;">
+              <option value="2">Εκκρεμεί</option>
+              <option value="3">Σε εξέλιξη</option>
+              <option value="4">Ολοκληρώθηκε</option>
+            </select> -->
+            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="12"
+              >
+            <v-select
+              :items="selecteditems2"
+              label="User Story"
+            ></v-select>
+            </v-col>
+            </v-row>
+          </h6>
+
             <!-- <v-list-item-title class="headline mb-1" style=" positive:fixed; right:100px; top:-117px;">
           Headline 5
         </v-list-item-title> -->
@@ -427,7 +553,8 @@ export default {
       getTaskIdbyNames: "getTaskIdbyNames",
       getUserStorybyName: "getUserStorybyName",
       getTaskbyNames: "getTaskbyNames",
-      getUserStoriesNames: "getUserStoriesNames"
+      getUserStoriesNames: "getUserStoriesNames",
+      getUserStorybyId: "getUserStorybyId"
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -448,8 +575,11 @@ export default {
       },
       default_task: 'Task',
       default_user_story: 'User Story',
-      options: ['User Story','Task'],
+      options: ['User Story','Task','Epic','Issue'],
       collapsedTasks: false,
+      selecteditems: ['2 Εβδομάδες', '3 Εβδομάδες', '4 Εβδομάδες'],
+      selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε'],
+      selecteditems2: ['Arxiko', 'Messaio', 'Teliko']
     }
   },
   methods: {
@@ -493,8 +623,55 @@ export default {
       this.form.title = ""
       this.form.text = ""
     },
-    save() {
-        this.$validator.validateAll().then(result => {
+
+    save(temp_case) {
+      console.log(temp_case)
+      
+      // Case: User Story  
+      if(temp_case == 1) {
+        // Case: Create
+        if(this.item.state=="defaultItem") {
+          let userStory = {
+            name: this.form.title,
+            description: this.form.text,
+            label: "issue",
+            status: "toDo",
+            estimated_duration: "10",
+          }
+          this.addUserStory(userStory)
+        }
+        // Case: Edit
+        else if(this.item.state=="userStory") {
+          // get the current object for place holding
+          var userStory = this.getUserStorybyId(this.item.id)
+
+          // get output from form
+          let userStoryFormOutput = {
+            name: this.form.title,
+            description: this.form.text,
+            label: "issue",
+            status: "toDo",
+            estimated_duration: "10",
+          }
+
+          // edit it
+          userStory.name =  userStoryFormOutput.name,
+          userStory.description =  userStoryFormOutput.description,
+          userStory.label =  userStoryFormOutput.label,
+          userStory.status =  userStoryFormOutput.status,
+          userStory.estimated_duration =  userStoryFormOutput.estimated_duration,
+
+          // send request
+          this.editUserStory(userStory)
+        }
+      }
+      // Case: //
+      else if(temp_case == 2) {
+
+      }     
+
+      //Older
+      this.$validator.validateAll().then(result => {
         if (result) {
           const updatedItem = {
             id: this.form.id,
@@ -512,11 +689,21 @@ export default {
         this.$refs.newItemPopup.close()
       })
     },
+
     cancel() {
       this.$emit("item-cancelled")
       this.$refs.newItemPopup.close()
     },
     remove() {
+      // Case: User Story
+      if(this.item.state == "userStory") {
+        this.deleteUserStory(this.item.id)
+      }
+      // Case: Task
+      // else {
+      //   this.deleteTask(this.getTaskbyId(taskName, storyName))
+      // }
+
       this.deleteTaskListItem({
         boardId: this.board.id,
         listId: this.list.id,
