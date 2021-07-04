@@ -202,6 +202,52 @@ export default {
 
 	},
 
+	async updateFirstName({ commit, getters }, data) {
+
+		// Get token
+		var token = getters.token
+		console.log(data)
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.updateUser(data) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_CLIENT", client.user)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
+	async updateLastName({ commit, getters }, data) {
+
+		// Get token
+		var token = getters.token
+		console.log(data)
+		commit("SET_LOADING_STATE", true) 
+		client.tokenObject.token = token
+		return actions.updateUser(data) 
+		.then( response => {
+			console.log(response);
+      		console.log(client)
+			commit("STORE_CLIENT", client.user)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			console.log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+
+	},
+
 	async updateUserEmail({ commit, getters }, data) {
 
 		// Get token

@@ -3,7 +3,7 @@
 - [ ] Connect with google connection with back end
 - [ ] Secure routes (remove logon button after login etc.)
 - [ ] At profile password change needs password form 
-- [ ] Full text search at project invites during the creation of the project
+- [X] Full text search at project invites during the creation of the project
 - [X] Fix asynchronous invites at project creation
 - [ ] Full text search at project invites in project settings
 - [ ] Remove project memembers from coworkers at project invites in project settings
