@@ -223,5 +223,39 @@ export default {
 		}
 		return null
 	},
+
+	getSprintPercentage: (state, getters) => (sprint) => {
+		var total = 0;
+		var done = 0;
+		for(let task of sprint.tasks) {
+			total += 1
+			if (task.status === "toDo") {				
+				done += 0
+			} else if (task.status === "inProgress") {
+				done += 0.5
+			} else if (task.status === "done") {
+				done += 1
+			}
+		}
+		if (total == 0)
+			return "0"
+		return 100*(done/total).toFixed(1).toString()
+	},
+
+	getHistory: (state, getters) => () => {
+		var forms = [];
+		var id = 0;
+		for(let sprint of state.sprints) {
+			forms.push({
+				id: ++id,
+				status: sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε",
+				progress: getters.getSprintPercentage(sprint), 
+				comments: sprint.description
+			})
+		}
+		return forms
+	},
+
+	
 }
 
