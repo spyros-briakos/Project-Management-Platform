@@ -105,7 +105,7 @@ const options = {
 // const server = https.createServer(options, app).listen(PORT, function(){
 //   console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
 // });
-const server = https.createServer(options, app).listen(PORT, function(){
+const server = http.createServer(options, app).listen(PORT, function(){
   console.log(`Server listening at https://${HOST}:${PORT}/`);
 });
 module.exports = server;
