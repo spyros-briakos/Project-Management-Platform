@@ -123,7 +123,7 @@
             </v-row>
           </h6>    
 
-          <h6 class="title3" style="padding-left:480px; top:-17px; height: 0px;">Μέλη Task:
+          <!-- <h6 class="title3" style="padding-left:480px; top:-17px; height: 0px;">Μέλη Task:
             <br>
             <i class="fas fa-user-circle" style="position:fixed; font-size:30px; right:200px; top:305px; color: #cc99ff; cursor: pointer;"></i>            
             <i class="fas fa-id-card" style="position:fixed; font-size:30px; right:150px; top:305px; cursor: pointer;"></i>            
@@ -132,7 +132,19 @@
             <i class="fas fa-user-circle" style="position:fixed; font-size:30px; right:150px; top:345px; color:blue; cursor: pointer;"></i>            
             <i class="fas fa-plus-circle" style="position:fixed; font-size:30px; right:100px; top:345px; cursor: pointer;"></i>            
           </h6>        
-          <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div> 
+          <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div>  -->
+
+          <div class="text-center" style="position:fixed; right:50px; top:300px;">
+          <v-btn
+            class="ma-2"
+            :loading="loading"
+            :disabled="loading"
+            color="#48C0A4"
+            @click="collapseMembers()"
+          >
+            Γίνε μέλος αυτού του Task
+          </v-btn>
+        </div>
 
           <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(2)">
@@ -399,7 +411,7 @@
             </v-row>
           </h6>
 
-          <h6 class="title3" style="padding-left:480px; top:-17px; height: 0px;">Μέλη Task:
+          <!-- <h6 class="title3" style="padding-left:480px; top:-17px; height: 0px;">Μέλη Task:
             <br>
             <i class="fas fa-user-circle" style="position:fixed; font-size:30px; right:200px; top:305px; color: #cc99ff; cursor: pointer;"></i>            
             <i class="fas fa-id-card" style="position:fixed; font-size:30px; right:150px; top:305px; cursor: pointer;"></i>            
@@ -407,8 +419,57 @@
             <i class="fas fa-user-circle" style="position:fixed; font-size:30px; right:200px; top:345px; color: red; cursor: pointer;"></i>            
             <i class="fas fa-user-circle" style="position:fixed; font-size:30px; right:150px; top:345px; color:blue; cursor: pointer;"></i>            
             <i class="fas fa-plus-circle" style="position:fixed; font-size:30px; right:100px; top:345px; cursor: pointer;"></i>            
-          </h6>        
-          <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div> 
+          </h6>         -->
+          <!-- <v-app id="inspire"> -->
+          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px">
+            <v-row justify="space-around">
+            <v-col
+              cols="1"
+              sm="10"
+              md="12"
+            >
+              <v-sheet
+                class="py-4 px-1"
+              >
+                <v-chip-group
+                  multiple
+                  active-class="primary--text"
+                >
+                  <v-chip
+                    v-for="tag in tags"
+                    :key="tag"
+                  >
+                    {{ tag }}
+                  </v-chip>
+                </v-chip-group>
+              </v-sheet>
+            </v-col>
+            </v-row>
+
+            <!-- <div class="text-center" style="position:fixed; right:50px; top:300px;"> -->
+              <v-btn
+                class="ma-2"
+                :loading="loading"
+                :disabled="loading"
+                color="#48C0A4"
+                @click="collapseMembers()"
+              >
+                Join Task
+              </v-btn>
+
+               <v-btn
+                class="ma-2"
+                :loading="loading"
+                :disabled="loading"
+                color=#F78A37
+                @click="collapseMembers()"
+              >
+                Leave Task
+              </v-btn>
+            </div>
+          <!-- </v-app> -->
+
+          <!-- <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div>  -->
 
           <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
 
@@ -508,6 +569,8 @@ export default {
         sprintName: '',
         storyName: '',
         taskName: '', 
+        loader: null,
+        loading: false,
       },
       user_story_of_task: '',
       default_task: 'Task',
@@ -524,8 +587,29 @@ export default {
         { title: 'Click Me' },
         { title: 'Click Me 2' },
       ],
-      selected: "Εκκρεμεί"
+      selected: "Εκκρεμεί",
+      tags: [
+        'Work',
+        'Home Improvement',
+        'Vacation',
+        'Food',
+        'Drawers',
+        'Shopping',
+        'Art',
+        'Tech',
+        'Creative Writing',
+      ],
     }
+  },
+  watch: {
+    loader () {
+      const l = this.loader
+      this[l] = !this[l]
+
+      setTimeout(() => (this[l] = false), 3000)
+
+      this.loader = null
+    },
   },
   methods: {
     ...mapActions({
@@ -707,5 +791,6 @@ export default {
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css">
+
 
 </style>

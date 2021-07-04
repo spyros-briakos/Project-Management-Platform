@@ -65,7 +65,7 @@
               :items="selecteditems1"
               label="Κατάσταση"
               v-model="listForm.status"
-              :value="selected"
+              :value="selectedsprint"
             ></v-select>
             </v-col>
             </v-row>
@@ -99,7 +99,8 @@ export default {
       duration_: "",
       status_: "",
       selecteditems: ['2 Εβδομάδες', '3 Εβδομάδες', '4 Εβδομάδες'],
-      selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε']
+      selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε'],
+      selectedsprint: "Σε εξέλιξη",
     }
   },
   computed: {
