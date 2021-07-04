@@ -360,7 +360,9 @@
             <v-select
               :items="selecteditems"
               label="Εκτιμώμενη Διάρκεια"
+              v-model="form.duration"
             ></v-select>
+              <!-- :value=" getTaskbyId(item.id).estimated_duration ? selecteditems[getTaskbyId(item.id).estimated_duration-1] : ''" -->
             </v-col>
             </v-row>
           </h6>
@@ -376,8 +378,9 @@
             <v-select
               :items="selecteditems1"
               label="Κατάσταση"
-              v-model="selected"
+              v-model="form.status"
             ></v-select>
+              <!-- :value=" this.getTaskbyId(this.item.id).status ? this.getTaskbyId(this.item.id).status : ''" -->
             </v-col>
             </v-row>
           </h6>  
@@ -555,11 +558,21 @@ export default {
     },
 
     startEditing() {
+      console.log(this.selecteditems[this.getTaskbyId(this.item.id).estimated_duration-1])
+      console.log(this.getTaskbyId(this.item.id).estimated_duration)
+      console.log(typeof this.getTaskbyId(this.item.id).estimated_duration)
       this.form.id = this.item.id
       this.form.title = this.item.title
       this.form.text = this.item.text
+      this.form.duration = this.getTaskbyId(this.item.id).estimated_duration-1
       this.isEditing = true
       // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
+
+      if(this.item.state == "visibleTaskUnderUserStory" || this.item.state == "taskInSprint") {
+        var temp = this.getTaskbyId(this.item.id)
+        this.form.duration = temp.estimated_duration
+        this.form.status = temp.status
+      }
       this.$emit("item-editing")
     },
     clearForm() {
@@ -613,6 +626,7 @@ export default {
       else if(temp_case == 2) {
         
         console.log(this.user_story_of_task)
+        console.log(this.form.status)
         
         if(this.form.status === 'Εκκρεμεί')
         {
@@ -630,7 +644,7 @@ export default {
         {
           console.log("error")
         }
-        this.duration_ = this.form.duration.split(" ",1)
+        this.duration_ = this.form.duration.split(" ",1)[0]
         console.log(this.status_)
         console.log(this.form.duration)
         console.log(this.duration_)
@@ -727,7 +741,7 @@ export default {
       if(!isOpen)
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
-    }
+      }
   }
 }
 </script>
