@@ -99,8 +99,8 @@ mongoose.connect(
 // module.exports = app;
 
 const options = {
-	key: fs.readFileSync("./localhost+1-key.pem"),
-	cert: fs.readFileSync("./localhost+1.pem"),
+	key: fs.readFileSync("./security/localhost+1-key.pem"),
+	cert: fs.readFileSync("./security/localhost+1.pem"),
   requestCert: false,
   rejectUnauthorized: false
 };
