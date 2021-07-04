@@ -337,6 +337,31 @@ export default {
 		return forms
 	},
 
+	getTotalSprintDates: (state, getters) => () => {
+		var totalDays = 1;
+		for(let sprint of state.sprints) {
+			totalDays += parseInt(sprint.estimated_duration)
+		}
+		return totalDays
+	},
+
+	getTotalSprintDatesArray: (state, getters) => () => {
+		var totalDaysArray = [];
+		for(let day=0; day<getters.getTotalSprintDates(); day++) {
+			totalDaysArray.push(day)
+		}
+		return totalDaysArray
+	},
+
+	getTotalSprintDatesIdealBurn: (state, getters) => () => {
+		var totalDaysArray = [];
+		for(let day=getters.getTotalSprintDates(); day>0; day--) {
+			totalDaysArray.push(day)
+		}
+		return totalDaysArray
+	},
+
+
 	
 }
 
