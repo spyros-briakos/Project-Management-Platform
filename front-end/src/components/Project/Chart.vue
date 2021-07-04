@@ -22,6 +22,9 @@ export default {
         //     data: [1, 2, 3]
         //   }
         // ]
+        credits: {
+            enabled: false
+        },
         title: {
         text: 'Burndown Chart',
         x: -20 //center
@@ -84,7 +87,9 @@ export default {
 
 <style>
 .hc {
-  padding-left: 50px;
+  padding-left: 90px;
   padding-top: 50px;
+  width: 1690px;
+  height: 700px;
 }
 </style>

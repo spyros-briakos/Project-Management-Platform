@@ -102,7 +102,10 @@ const options = {
 	cert: fs.readFileSync("./server.cert").toString()
 };
 
+// const server = https.createServer(options, app).listen(PORT, function(){
+//   console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
+// });
 const server = http.createServer(options, app).listen(PORT, function(){
-  console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
+  console.log(`Server listening at http://${process.env.HOSTNAME}:${PORT}/`);
 });
 module.exports = server;

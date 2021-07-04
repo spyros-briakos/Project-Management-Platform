@@ -367,9 +367,10 @@ router.post("/edit-task", async (req, res) => {
     if(!task || !project.userStories.includes(task.userStory)) {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το task.' });
     }
-    if (req.body.task.status == 'done' && !req.body.task.status.equals(task.status)) {
-      req.body.task.endingDate = Date.now();
-    }
+    
+    // if (req.body.task.status == 'done' && !req.body.task.status.equals(task.status)) {
+    //   req.body.task.endingDate = Date.now();
+    // }
 
     if (req.body.sprint && !req.body.sprint.equals(task.sprint)) {
       const sprint = await Sprint.findById(req.body.sprint);

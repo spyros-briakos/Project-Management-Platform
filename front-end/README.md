@@ -12,9 +12,9 @@
 - [X] Scrum board create test Sprints and store in state
 - [X] Scrum board create test User stories and store in state
 - [X] Scrum board create test Tasks and store in state
-- [ ] Scrum board horizontal scroll (Quasar has that module)
-- [ ] Scrum board create Sprint form
-- [ ] Scrum board edit Sprint form integration
+- [X] Scrum board horizontal scroll (Quasar has that module)
+- [X] Scrum board create Sprint form
+- [X] Scrum board edit Sprint form integration
 - [ ] Scrum board task forms need the correct integration
 - [ ] Scrum board user story forms need the correct integration
 - [ ] Scrum board multiple state forms of TaskListItem (UserStory, hiddenUnderUserStoryTask, task)

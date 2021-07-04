@@ -178,23 +178,25 @@ export default {
 			}
 			list.items.push(item)
 		}
-		// // store as a User Story
-		// // for existing user story
-		// const userStory = state.userStories.find(s => s._id === payload._id)
-		// const userStoryIdx = state.userStories.findIndex(s => s._id === payload._id)
 
-		// if (userStoryIdx > -1) {
-		// 	userStory.name = payload.name
-		// 	userStory.description = payload.description
-		// 	userStory.label = payload.label
-		// 	userStory.status = payload.status
-		// 	userStory.estimated_duration = payload.estimated_duration
-		// 	Vue.set(state.userStories, userStoryIdx, userStory)
-		// }
-		// // For new user story
-		// else {
-		// 	state.userStories.push(payload)
-		// }
+
+		// store task in User Story
+		// for task in User story
+		const userStory = state.userStories.find(s => s._id === payload.userStory)
+		const task = userStory.tasks.find(task => task._id === payload._id)
+		const taskIdx = userStory.tasks.findIndex(task => task._id === payload._id)
+
+		if (taskIdx > -1) {
+			task.name = payload.name
+			task.description = payload.description
+			task.status = payload.status
+			task.estimated_duration = payload.estimated_duration
+			Vue.set(userStory.tasks, taskIdx, task)
+		}
+		// For new user story
+		else {
+			userStory.tasks.push(payload)
+		}
 	},
 
 	STORE_COWORKERS(state, payload) {
@@ -306,7 +308,7 @@ export default {
 		const itemIdx = list.items.findIndex(item => item.id == payload)
 		Vue.delete(list.items, itemIdx)
 
-		// // delete task
+		// delete task from user story
 		// var userSotryIndex = state.userStories.findIndex(us => us._id === payload)
 		// Vue.delete(state.userStories, userSotryIndex)
 	},
@@ -369,15 +371,19 @@ export default {
 			});
 		}
 
-		Vue.set(state, "boards", myEmulatedBoard)
+		Vue.set(state.boards, 0, myEmulatedBoard[0])
 	},
 
 	STORE_EMULATED_KANBAN_BOARD(state, payload) {
 		// add my tasks to kanban board
-		var myEmulatedBoard = state.boards
-		var myTasks = payload
+		var myEmulatedBoard = payload.boards
+		var myTasks = payload.myTasks
 
 		myEmulatedBoard[1].name = state.project.name
+
+		// clear tasks in lists
+		myEmulatedBoard[1].lists.forEach(list => list.items = [])
+
 
 		myTasks.forEach(task => {
 
@@ -402,7 +408,8 @@ export default {
 			}
 		})
 
-		Vue.set(state, "boards", myEmulatedBoard)
+		Vue.set(state.boards, 1, myEmulatedBoard[1])
+
 	},
 
 	CHANGE_TASKS_STATE(state, payload) {
@@ -531,21 +538,41 @@ export default {
 
 	// Reorder TaskBoad Lists
 	REORDER_TASKLISTS(state, payload) {
-		const board = state.boards.find(b => b.id == payload.boardId)
-		// find the backlog and keep it in 1st position
-		const backLogIndex = payload.lists.findIndex(b => b.name === "Product Backlog")
-		// swap posistion
-		var temp = payload.lists[0]
-		payload.lists[0] = payload.lists[backLogIndex]
-		payload.lists[backLogIndex] = temp
-		Vue.set(board, "lists", payload.lists)
+
+		// if board is kanban then do not reorder
+		if (payload.boardId !== "KANBAN_BOARD") {
+			
+			const board = state.boards.find(b => b.id == payload.boardId)
+			// find the backlog and keep it in 1st position
+			const backLogIndex = payload.lists.findIndex(b => b.name === "Product Backlog")
+			// swap posistion
+			var temp = payload.lists[0]
+			payload.lists[0] = payload.lists[backLogIndex]
+			payload.lists[backLogIndex] = temp
+			Vue.set(board, "lists", payload.lists)
+
+		}
 	},
 
 	// Reorder Task List Items
 	REORDER_TASKLIST_ITEMS(state, payload) {
+
+		// get items that have changed
+
+		// // reorder behaviour in kanban
+		// if (payload.boardId === "KANBAN_BOARD") {
+
+		// } 
+		// // reorder behaviour in scrum board
+		// else if (payload.boardId === "SCRUM_BOARD") {
+
+		// }
+
 		const board = state.boards.find(b => b.id == payload.boardId)
 		const listIdx = board.lists.findIndex(l => l.id == payload.listId)
+		// console.log("REORDER BEFORE",JSON.parse(JSON.stringify(board.lists[listIdx])))
 		Vue.set(board.lists[listIdx], "items", payload.items)
+		// console.log("REORDER AFTER",payload)
 	},
 
 	// Set Active Board
@@ -568,6 +595,7 @@ export default {
 		payload.item.id = guid()
 		list.items.push(payload.item)
 		}
+		console.log("SAVE",payload)
 	},
 
 	// Delete Task List Item
@@ -579,5 +607,6 @@ export default {
 		if (itemIdx > -1) {
 		Vue.delete(list.items, itemIdx)
 		}
+		console.log("DELETE",payload)
 	}
 }

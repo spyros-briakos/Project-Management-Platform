@@ -49,13 +49,13 @@ div.scroll {
 .row.flex-nowrap.mt-1 {
 //   position: fixed;
 //   display: flex;
-//   z-index: 0;
+  z-index: -100;
   // display: block;
   // overflow-x: auto;
   // white-space: nowrap;
 
   position: fixed;
-  border:1px solid black; 
+  // border:1px solid black; 
   width: 1640px;
   // left: 10px;
   height:690px;
@@ -98,7 +98,7 @@ div.scroll {
   top: 63px;
   left: 70px;
   width: 95%;
-  z-index: 2;
+  z-index: -9;
   // zoom: 1;
   // transform: scale(2);
   // transform-origin: 0 0;
@@ -216,7 +216,7 @@ div.scroll {
   max-width: 100%;
   background: rgba(0, 0, 0, 0.158);
   // background-color: #FD8D37;
-  // z-index: -1;
+  z-index: -1;
   // position: fixed;
 }
 
@@ -305,10 +305,10 @@ div#searching {
 }
 
 .edit_2 {
-  padding-top: 7px;	
+  padding-top: 10px;	
 	padding-right: 7px;
 	position: absolute;
-	right: 43%;
+	right: 44.5%;
 	top: 10%;
 	// display: none;
   font-size: large;
@@ -320,6 +320,10 @@ div#searching {
 
 .fas.fa-plus-circle {
   color:#27463c;
+}
+
+.fas.fa-chevron-circle-down {
+  // color:#27463c;
 }
 
 .form-outline {
@@ -391,6 +395,17 @@ div#searching {
   z-index: 0;
 }
 
+.titlospopup1 {
+  position: fixed;
+  top:10px;
+  // right: 30px;
+  color: #3d5852;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  z-index: 0;
+}
+
 #drop1 {
   position: fixed;
   text-align: left;
@@ -418,6 +433,28 @@ div#searching {
   // width: 100%; 
   position:relative; 
   top: 100px;
+  color: rgba(20, 121, 104, 0.904);
+  // float: left;
+  z-index: 0;
+}
+
+.title5 {
+  // display: inline;
+  text-align: left; 
+  // width: 100%; 
+  position:relative; 
+  top: 115px;
+  color: rgba(20, 121, 104, 0.904);
+  // float: left;
+  z-index: 0;
+}
+
+.title4 {
+  // display: inline;
+  text-align: left; 
+  // width: 100%; 
+  position:relative; 
+  top: 135px;
   color: rgba(20, 121, 104, 0.904);
   // float: left;
   z-index: 0;

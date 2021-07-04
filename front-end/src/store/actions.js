@@ -424,7 +424,7 @@ export default {
 				commit("STORE_SPRINTS", client.project.sprints)
 				commit("STORE_USER_STORIES", client.project.userStories)
 				commit("STORE_EMULATED_BOARD_DATA", cloneDeep(emulatedBoard))
-				commit("STORE_EMULATED_KANBAN_BOARD", actions.getMyTasks())
+				commit("STORE_EMULATED_KANBAN_BOARD", {myTasks:actions.getMyTasks(), boards:cloneDeep(emulatedBoard)})
 				commit("SET_ACTIVE_TASKBOARD", { board: getters.allBoards[0]}) //set active scrum boeard
 				commit("SET_LOADING_STATE", false)
 			})
@@ -442,6 +442,28 @@ export default {
 
 	},
 
+	getScrumBoard({ commit, getters }) {
+		// Get token
+		var token = getters.token
+		var projectLs = getters.project
+		var projectsLs = getters.projects
+		client.tokenObject.token = token
+		client.project = projectLs
+		client.user.projects = projectsLs
+
+		client.project.userStories = getters.projectUserStories
+		client.project.sprints = getters.projectSprints
+		client.user._id = getters._id
+
+		commit("SET_LOADING_STATE", true) 
+		commit("STORE_SPRINTS", client.project.sprints)
+		commit("STORE_USER_STORIES", client.project.userStories)
+		commit("STORE_EMULATED_BOARD_DATA", cloneDeep(emulatedBoard))
+		commit("SET_LOADING_STATE", false)
+
+	},
+
+
 	getMyTasks({ commit, getters }) {
 		// Get token
 		var token = getters.token
@@ -455,7 +477,7 @@ export default {
 		client.user._id = getters._id
 
 		commit("SET_LOADING_STATE", true) 
-		commit("STORE_EMULATED_KANBAN_BOARD", actions.getMyTasks() )
+		commit("STORE_EMULATED_KANBAN_BOARD", {myTasks:actions.getMyTasks(), boards:cloneDeep(emulatedBoard)} )
 		console.log("MY TASKS ",actions.getMyTasks())
 		commit("SET_LOADING_STATE", false)
 
@@ -973,6 +995,7 @@ export default {
 		.then( response => {
 			console.log(response);
       		console.log(client)
+			commit("STORE_USER_STORIES", client.project.userStories)
 			commit("DELETE_TASK", taskId)
 			commit("SET_LOADING_STATE", false)
 			return response
@@ -1015,7 +1038,50 @@ export default {
 	async reorderTaskLists({ commit }, payload) { // maybe usefull for the backlog
 		commit("REORDER_TASKLISTS", payload)
 	},
-	async reorderTaskListItems({ commit }, payload) {
+	async reorderTaskListItems({ commit, getters, dispatch }, payload) {
+		
+		const board = getters.allBoards.find(b => b.id == payload.boardId)
+		const listIdx = board.lists.findIndex(l => l.id == payload.listId)
+		
+		// get items that have changed
+		var listBefore = board.lists[listIdx].items
+		var listAfter  = payload.items
+		const listId = payload.listId
+
+		var listBeforeIds = listBefore.map(o => o.id)
+		var listAfterIds  = listAfter.map(o => o.id)
+		// console.log(listBeforeIds)
+		// console.log(listAfterIds)
+
+		var idThatMoved = listAfterIds.filter(x => !listBeforeIds.includes(x))
+		
+		// check if it is a task in sprints ar in kanban todo
+		// reorder behaviour in kanban
+		if (payload.boardId === "KANBAN_BOARD" && idThatMoved.length) {
+			// find the task
+			var task = getters.getTaskbyId(idThatMoved[0])
+
+			// edit to do task
+			if (listId === "To do Id") {				
+				task.status = "toDo"
+			} else if (listId ===  "Doing Id") {
+				task.status = "inProgress"
+			} else if (listId ===  "Done Id") {
+				task.status = "done"
+			}
+			
+			// send edit request
+			dispatch("editTask", task)
+
+
+		} 
+		// reorder behaviour in scrum board
+		else if (payload.boardId === "SCRUM_BOARD" && idThatMoved.length) {
+			console.log("EEEEEEOOOOO",idThatMoved)
+
+
+		}
+
 		commit("REORDER_TASKLIST_ITEMS", payload)
 	},
 	async saveTaskListItem({ commit }, payload) {
