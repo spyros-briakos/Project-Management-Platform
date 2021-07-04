@@ -99,13 +99,13 @@ mongoose.connect(
 
 const options = {
 	key: fs.readFileSync("./server.key").toString(),
-	cert: fs.readFileSync("./server.cert").toString()
+	cert: fs.readFileSync("./server.crt").toString()
 };
 
 // const server = https.createServer(options, app).listen(PORT, function(){
 //   console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
 // });
-const server = http.createServer(options, app).listen(PORT, function(){
-  console.log(`Server listening at http://${process.env.HOSTNAME}:${PORT}/`);
+const server = https.createServer(options, app).listen(PORT, function(){
+  console.log(`Server listening at https://${process.env.HOST}:${PORT}/`);
 });
 module.exports = server;

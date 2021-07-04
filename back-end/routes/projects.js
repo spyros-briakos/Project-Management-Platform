@@ -103,6 +103,9 @@ router.post("/get-details", async (req, res) => {
 router.post("/add-project", async (req, res) => {
   try {
     const user = req.user;
+    if(user.plan_in_use == "standard" && user.projects.length >= 3) {
+      return res.status(400).json({ message: 'Σφάλμα: Το πακέτο σας δε σας επιτρέπει να δημιουργήσετε παραπάνω projects.' });
+    }
     const project = new Project(req.body.project);
     // If no such project found
     if(!project) {
