@@ -1247,6 +1247,11 @@ export default {
 
 		// get task
 		var task = getters.getTaskbyId(taskId)
+
+		// check if user already exists in this task
+		var taskMembers = getters.getTaskMembersbyId(taskId)
+		if (taskMembers.includes(getters.userName))
+			return
 	
 		
 		commit("SET_LOADING_STATE", true) 
