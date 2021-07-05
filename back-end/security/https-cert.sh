@@ -17,4 +17,6 @@ mkcert -install
 # Create local certificates
 mkcert localhost 127.0.0.1
 
+cd ..
+
 echo -e '\nServer will run on https using trusted, self-signed certificate!\n'
