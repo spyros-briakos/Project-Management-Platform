@@ -247,13 +247,13 @@ export default {
 		var total = 0;
 		var done = 0;
 		for(let task of sprint.tasks) {
-			total += 1
+			total += parseFloat(task.estimated_duration)
 			if (task.status === "toDo") {				
-				done += 0
+				done += 0 * parseFloat(task.estimated_duration)
 			} else if (task.status === "inProgress") {
-				done += 0.5
+				done += 0.5 * parseFloat(task.estimated_duration)
 			} else if (task.status === "done") {
-				done += 1
+				done += 1 * parseFloat(task.estimated_duration)
 			}
 		}
 		if (total == 0)
