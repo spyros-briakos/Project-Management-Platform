@@ -611,8 +611,9 @@ export default {
 		client.user._id = getters._id
 
 		commit("SET_LOADING_STATE", true) 
-		commit("STORE_EMULATED_KANBAN_BOARD", {myTasks:actions.getMyTasks(), boards:cloneDeep(emulatedBoard)} )
-		console.log("MY TASKS ",actions.getMyTasks())
+		var myTasks = actions.getMyTasks()
+		commit("STORE_EMULATED_KANBAN_BOARD", {myTasks:myTasks, boards:cloneDeep(emulatedBoard)} )
+		console.log("MY TASKS ",myTasks)
 		commit("SET_LOADING_STATE", false)
 
 	},
