@@ -20,8 +20,8 @@ const apiUrl = 'http://127.0.0.1:3000/api-control';
 //   // passphrase: "YYY"
 // });
 
-// const agent = new https.Agent({
-const agent = new http.Agent({
+const agent = new https.Agent({
+// const agent = new http.Agent({
   rejectUnauthorized: false, // (NOTE: this will disable client verification)
 })
 
@@ -258,6 +258,16 @@ export const actions = {
     return requests.loginGoogleRequest()
     .then(function(response) {
       return response.url;
+    })
+    .catch(function(error) { client = initClient(); throw error })
+  },
+
+  async loginGoogleAuthenticated(code) {
+    return requests.loginGoogleAuthenticatedRequest(code)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+      return response.message;
     })
     .catch(function(error) { client = initClient(); throw error })
   },

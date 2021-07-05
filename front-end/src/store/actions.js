@@ -114,6 +114,25 @@ export default {
 		})
 	},
 
+	async loginGoogleAuthenticated({ commit }, code) {
+		commit("SET_LOADING_STATE", true) 
+		return actions.loginGoogleAuthenticated(code) 
+		.then( response => {
+			// console.log(response);
+      		console.log(client);
+			commit("STORE_CLIENT", client.user)
+			commit("STORE_TOKEN", client.tokenObject.token)
+			commit("SET_LOGEDIN_STATE", true)
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			log(error);
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+	},
+
 	async logout({ commit, getters }, payload) {
 		// Get client object
 		var token = getters.token

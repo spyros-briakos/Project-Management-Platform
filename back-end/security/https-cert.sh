@@ -12,10 +12,10 @@ cp mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
 chmod +x /usr/local/bin/mkcert
 
 # Mkcert will add valid certificates to Chrome & Firefox
-mkcert -install
+sudo -u "$USER" mkcert -install
 
 # Create local certificates
-mkcert localhost 127.0.0.1
+sudo -u "$USER" mkcert localhost 127.0.0.1
 
 chmod 755 localhost+1.pem
 chmod 755 localhost+1-key.pem
