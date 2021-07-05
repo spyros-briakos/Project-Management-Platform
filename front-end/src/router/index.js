@@ -170,6 +170,11 @@ router.beforeEach((to, from, next) => {
   if(to.path.includes('google')){
     // console.log("EDWWW");
     console.log(to.query.code);
+    store.dispatch("loginGoogleAuthenticated", to.query.code)
+    .then( response=> {
+      // next({name:"myProjects"})
+      router.push({name:"myProjects"})
+    })
   }
 
 })
