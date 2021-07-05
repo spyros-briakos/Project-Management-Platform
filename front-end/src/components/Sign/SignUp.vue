@@ -7,7 +7,7 @@
     >
       <v-row align="center">
         <v-col class="grow">
-          Η δημιουργία του λογαριασμού σας ολοκληρώθηκε με επιτυχία. 
+          Η δημιουργία του λογαριασμού σας{{googleMsg}} ολοκληρώθηκε με επιτυχία. 
           Παρακαλώ επιβεβαιώστε το email σας και μεταβείτε στην σελίδα σύνδεσης για να συνδεθείτε.
         </v-col>
         <v-col class="shrink">
@@ -104,6 +104,33 @@
           Εγγραφή
         </button>
 
+        <div class="social-icons">
+          <h1></h1>
+          <h6>ή συνδέσου με το Google Account σου</h6>
+          <!-- <ul> -->
+              
+              <!-- <li>  -->
+                  <a href="#" @click="signupGoogle_()">
+                      <v-btn
+                          class="mx-2"
+                          fab
+                          dark
+                          small
+                          color="teal"
+                          >
+                          <v-icon dark>
+                              fab fa-google
+                          </v-icon>
+                      </v-btn>
+                  </a>
+                  <!-- <a href="#" @click="loginGoogle_"><i class="fab fa-google" style="color:dodgerblue"></i></a> -->
+                  
+                  <!-- <a class="fb-ic mr-3" role="button"><mdb-icon fab icon="facebook-f" size="lg" /></a> -->
+                  <!-- <mdb-btn tag="a" size="lg" floating class="btn-fb" icon="facebook-f" fab></mdb-btn> -->
+              <!-- </li> -->
+          <!-- </ul>  -->
+      </div>
+
         <p class="forgot-password text-right">
           Ήδη εγγεγραμμένος;
           <router-link :to="{ name: 'SignIn' }">Συνδέσου!</router-link>
@@ -128,11 +155,12 @@ export default {
       email: "",
       password: "",
       password2: "",
+      googleMsg: ""
     };
   },
   
   methods: {
-    ...mapActions(["signup"]),
+    ...mapActions(["signup", "signupGoogle"]),
     goToSignIn(){
       this.$router.push({name:"SignIn"})
     },
@@ -168,7 +196,24 @@ export default {
         alert("Τα password δεν είναι όμοια");
       }
     },
-  },
+
+  signupGoogle_() {
+      this.signupGoogle() 
+      .then( response => {
+        this.badSignUpAllert = false
+        this.goodSignUpAllert = true
+        this.googleMsg = " με τον λογαριασμό Google"
+        window.location.href = response
+      })
+      .catch( error => { 
+        this.goodSignUpAllert = false
+        this.badSignUpAllert = true
+        this.badSignUpAllertMessage = error.response.data.message
+      }) 
+    },
+
+
+  }
 };
 </script>
 

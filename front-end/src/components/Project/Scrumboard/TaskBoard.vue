@@ -71,10 +71,11 @@ export default {
     }
     // this.getEmulatedData()
     // if kanban then load my tasks
-    // if (this.param === "KANBAN_BOARD") {
-    //   this.getMyTasks()
-    //   console.log("CREATEDDDD KANBAAAN")
-    // } else if (this.param === "SCRUM_BOARD") {
+    if (this.param === "KANBAN_BOARD") {
+      this.getMyTasks()
+      console.log("CREATEDDDD KANBAAAN")
+    } 
+    // else if (this.param === "SCRUM_BOARD") {
     //   this.getScrumBoard()   
     //   console.log("CREATEDDDD SCRUMMMMM boARD")
     // }

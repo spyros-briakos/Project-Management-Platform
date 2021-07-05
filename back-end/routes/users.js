@@ -145,7 +145,7 @@ router.get('/oauth2callback/signup', async(req, res) => {
         lastName: userInfo.family_name,
         email: userInfo.email,
         status: 'Active',
-        plan_in_use: 'standard'
+        plan_in_use: "standard"
       });
 
       user.image.url = userInfo.picture;

@@ -74,15 +74,15 @@ app.get("/", (req, res) => {
 });
 
 // SERVER CONFIG
-// const PORT = process.env.PORT || 5000
-const PORT = 3000
+const PORT = process.env.PORT || 5000
+// const PORT = 3000
 const HOST = process.env.HOST || '127.0.0.1'
 // const DB_URL = process.env.DB_CONNECTION || "mongodb://localhost/scrub";
 
 // SERVER CONNECTS TO DATABASE
 mongoose.connect(
-  "mongodb://localhost/scrub",
-  // process.env.DB_URL, 
+  // "mongodb://localhost/scrub",
+  process.env.DB_URL, 
   { 
   	useNewUrlParser: true, 
   	useUnifiedTopology: true,
@@ -107,9 +107,12 @@ const options = {
 };
 
 // const server = https.createServer(options, app).listen(PORT, function(){
-//   console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
+  // console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
+// });
+// const server = http.createServer(options, app).listen(PORT, function(){
+  // console.log(`Server listening at http://${HOST}:${PORT}/`);
 // });
 const server = http.createServer(options, app).listen(PORT, function(){
-  console.log(`Server listening at http://${HOST}:${PORT}/`);
+  console.log(`Server listening at https://${process.env.HOST}:${PORT}/`);
 });
 module.exports = server;
