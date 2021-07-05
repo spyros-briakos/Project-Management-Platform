@@ -273,7 +273,8 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
-          <v-card
+          
+          <!-- <v-card
             class="mx-auto"
             max-width="400"
           >
@@ -281,20 +282,20 @@
             <span class="subheading">Select size</span>
 
             <v-chip-group
-              v-model="selection"
+              v-model="selectionsss"
               active-class="deep-purple--text text--accent-4"
               mandatory
             >
             <v-chip
-              v-for="size in sizes"
-              :key="size"
-              :value="size"
+              v-for="siz in sizesss"
+              :key="siz"
+              :value="siz"
             >
-                {{ size }}
+                {{ siz }}
               </v-chip>
             </v-chip-group>
           </v-card-text>
-          </v-card>
+          </v-card> -->
 
           <small class="text-danger" style="display:block" v-if="errors.itemTitle">{{ errors.first("itemTitle") }}</small>
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(1)">
@@ -637,10 +638,10 @@ export default {
         status: "",
         loader: null,
         loading: false,
-        sizes: [
-        '04', '06', '08', '10', '12', '14',
+        sizesss: [
+        'Epic', 'Issue'
         ],
-        selection: '08',
+        selectionsss: 'Epic',
       },
       temp_status:"",
       temp_duration:"",

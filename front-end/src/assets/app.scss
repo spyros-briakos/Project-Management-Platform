@@ -47,8 +47,8 @@ div.scroll {
 
 ///////////////////////
 .row.flex-nowrap.mt-1 {
-//   position: fixed;
-//   display: flex;
+  // position: fixed;
+  // display: flex;
   // z-index: 0;
   // display: block;
   // overflow-x: auto;
@@ -65,12 +65,12 @@ div.scroll {
   // padding-left: 10px;
   // z-index: 0;
 
-  width: 96%;
+  width: 100%;
 }
 
-.scrolling-wrapper::-webkit-scrollbar {
-  display: none;
-}
+// .scrolling-wrapper::-webkit-scrollbar {
+//   display: none;
+// }
 
 .btn-app {
   background-color: rgba(96, 125, 139, 0.8) !important;
