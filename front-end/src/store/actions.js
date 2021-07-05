@@ -116,9 +116,10 @@ export default {
 
 	async loginGoogleAuthenticated({ commit }, code) {
 		commit("SET_LOADING_STATE", true) 
+		console.log("NAIIIII", code)
 		return actions.loginGoogleAuthenticated(code) 
 		.then( response => {
-			// console.log(response);
+			console.log(response);
       		console.log(client);
 			commit("STORE_CLIENT", client.user)
 			commit("STORE_TOKEN", client.tokenObject.token)
@@ -128,6 +129,7 @@ export default {
 		})
 		.catch( error => { 
 			log(error);
+			console.log("error");
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
