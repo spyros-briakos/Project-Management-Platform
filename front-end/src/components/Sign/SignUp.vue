@@ -132,7 +132,7 @@ export default {
   },
   
   methods: {
-    ...mapActions(["signup"]),
+    ...mapActions(["signup", "signupGoogle"]),
     goToSignIn(){
       this.$router.push({name:"SignIn"})
     },
