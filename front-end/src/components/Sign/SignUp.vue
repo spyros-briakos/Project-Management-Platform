@@ -104,6 +104,33 @@
           Εγγραφή
         </button>
 
+        <div class="social-icons">
+          <h1></h1>
+          <h6>ή συνδέσου με το Google Account σου</h6>
+          <!-- <ul> -->
+              
+              <!-- <li>  -->
+                  <a href="#" @click="signupGoogle()">
+                      <v-btn
+                          class="mx-2"
+                          fab
+                          dark
+                          small
+                          color="teal"
+                          >
+                          <v-icon dark>
+                              fab fa-google
+                          </v-icon>
+                      </v-btn>
+                  </a>
+                  <!-- <a href="#" @click="loginGoogle_"><i class="fab fa-google" style="color:dodgerblue"></i></a> -->
+                  
+                  <!-- <a class="fb-ic mr-3" role="button"><mdb-icon fab icon="facebook-f" size="lg" /></a> -->
+                  <!-- <mdb-btn tag="a" size="lg" floating class="btn-fb" icon="facebook-f" fab></mdb-btn> -->
+              <!-- </li> -->
+          <!-- </ul>  -->
+      </div>
+
         <p class="forgot-password text-right">
           Ήδη εγγεγραμμένος;
           <router-link :to="{ name: 'SignIn' }">Συνδέσου!</router-link>
