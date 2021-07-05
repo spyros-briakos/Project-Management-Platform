@@ -156,9 +156,6 @@ router.beforeEach((to, from, next) => {
     // console.log('prem');
   // else
     // console.log('not prem');
-  console.log(to);
-  console.log(to.name);
-
   if( !allow.includes(to.name) && !loged ){
     next({name: 'SignIn'});
   }
@@ -171,7 +168,7 @@ router.beforeEach((to, from, next) => {
   else next();
 
   if(to.path.includes('google')){
-    console.log("EDWWW");
+    // console.log("EDWWW");
     console.log(to.query.code);
     store.dispatch("loginGoogleAuthenticated", to.query.code)
     .then(next({name:"myProjects"}))

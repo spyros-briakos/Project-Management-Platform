@@ -64,6 +64,7 @@
                             <!-- <input id="friends" v-model="myform['addCo']"> -->
                             <v-autocomplete style="width:80%;margin:0 auto 0 auto;" @change="updateForm(item, 'CoWorkers', null)" id="getFriends"
                                 class="friends_picker"
+                                :disabled="planRestrictions.membersPerPrj<=projectMembers.length ? true:false"
                                 multiple
                                 chips
                                 label='Προσκάλεσε Νέα Άτομα'
@@ -142,6 +143,7 @@ import fts from "../../FullTextSearch/fts"
                 projectScrumMaster: "projectScrumMaster",
                 projectStatus: "projectStatus",
                 projectMembers: "projectMembers",
+                planRestrictions: "planRestrictions",
                 
             }),
             menu: function() { return [

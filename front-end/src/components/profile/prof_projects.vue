@@ -3,7 +3,7 @@
         <div v-if="create_prj==1" class="overlay"></div>
         <div class="create_prj" v-if="create_prj==1">
             <createProject v-on:busy-form='create_prj=0' :coWorkers="coWorkers" :user="user" />
-            <button class="close_form" v-on:click="create_prj=0">
+            <button class="close_form" :disabled="planRestrictions.maxPrj<=projects.length ? true:false" v-on:click="create_prj=0">
                 <font-awesome-icon class="icon" :icon="['far', 'times-circle']"/>
             </button>
         </div>
@@ -183,6 +183,7 @@
         ...mapGetters({
 		    projects: "projects",
             invites: "invites",
+            planRestrictions: "planRestrictions",
 	    }),
 
         // print old projects for front debugging without database

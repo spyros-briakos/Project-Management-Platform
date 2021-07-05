@@ -20,8 +20,8 @@ const apiUrl = 'http://127.0.0.1:3081/api-control';
 //   // passphrase: "YYY"
 // });
 
-// const agent = new https.Agent({
-const agent = new http.Agent({
+const agent = new https.Agent({
+// const agent = new http.Agent({
   rejectUnauthorized: false, // (NOTE: this will disable client verification)
 })
 
