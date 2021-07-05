@@ -32,27 +32,50 @@ function build_up(res, type){
     }else return [];
 }
 
-
-//  INITIALIZE USERS & TASKS INDEXES
-
-var userInd = createInd({tokenize:'full'});
-for(let user of store.getters.allUsers){
-    addIndUser(userInd, user._id, user.firstName, user.lastName, user.username);
+function fillUsers(userInd){
+    if(store.getters.allUsers.length==0) return 0;
+    for(let user of store.getters.allUsers){
+        addIndUser(userInd, user._id, user.firstName, user.lastName, user.username);
+    }
+    return 1;
 }
 
-/*var tasksInd = createInd({tokenize:'full'});
-for(user of testSearch){
-	addInd(userInd, user._id, user.firstName, user.lastName, user.username);
+/*function fillTasks(tasksInd){
+    if(store.getters.????????????.length==0) return 0;
+    for(user of testSearch){
+        addInd(userInd, user._id, user.firstName, user.lastName, user.username);
+    }
+    return 1;
 }*/
 
+function fillAll(uInd, fU, tInd, fT){
+    if (fU==0){fU=fillUsers(uInd);}
+    //if (fT==0){fT=fillTasks(tInd);}
+}
+
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+var userInd = createInd({tokenize:'full'}), filledUsers=0;
+var taskInd = createInd({tokenize:'full'}), filledTasks=0;
+
+fillAll(userInd, filledUsers, taskInd, filledTasks);
+
+///////////////////////////////////////////
+///////////////////////////////////////////
 
 export default{
     searchUser: function (val){
         // sayhi();
+        if(filledUsers==0)
+            fillAll(userInd, filledUsers, taskInd, filledTasks);
         return build_up(userInd.search(val), 'user');
     },
 
     searchTask: function (val){
+        if(filledTasks==0)
+            fillAll(userInd, filledUsers, taskInd, filledTasks);
         return build_up(taskInd.search(val), 'task');
     }
 

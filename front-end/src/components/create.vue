@@ -316,12 +316,18 @@ export default({
     },
     watch:{
         search (val) {
+            if(val == undefined){
+                console.log("KATI PAEI LA8OS");
+                return;
+            }
+            else console.log("SXEDON KALA");
             this.get_friends.searchedPeople = [];
 
             let found = this.searchAllUsers(val);
             for (let user of found){
                 this.get_friends.searchedPeople.push(user);
             }
+            console.log(found);
             // return true
             // Items have already been loaded
             // if (this.items.length > 0) return
