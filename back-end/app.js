@@ -81,8 +81,8 @@ const HOST = process.env.HOST || '127.0.0.1'
 
 // SERVER CONNECTS TO DATABASE
 mongoose.connect(
-  "mongodb://localhost/scrub",
-  // process.env.DB_URL, 
+  // "mongodb://localhost/scrub",
+  process.env.DB_URL, 
   { 
   	useNewUrlParser: true, 
   	useUnifiedTopology: true,
