@@ -147,7 +147,7 @@ export default {
 
         },
 
-        loginGoogleAuthenticated_() {
+        loginGoogleAuthenticated_(code) {
             this.loginGoogleAuthenticated( code ) 
             .then( response => {
                 this.$router.push({name:"myProjects"})
