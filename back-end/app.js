@@ -102,12 +102,13 @@ mongoose.connect(
 const options = {
 	key: fs.readFileSync("./security/localhost+1-key.pem"),
 	cert: fs.readFileSync("./security/localhost+1.pem"),
+  ca: fs.readFileSync("./security/mkcert_rootCA.crt"),
   requestCert: false,
   rejectUnauthorized: false
 };
 
 // const server = https.createServer(options, app).listen(PORT, function(){
-  // console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
+//   console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
 // });
 const server = http.createServer(options, app).listen(PORT, function(){
   console.log(`Server listening at http://${HOST}:${PORT}/`);
