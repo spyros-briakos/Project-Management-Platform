@@ -119,6 +119,7 @@ export default {
 		console.log("NAIIIII", code)
 		return actions.loginGoogleAuthenticated(code) 
 		.then( response => {
+			console.log("WORKEEED", code)
 			console.log(response);
       		console.log(client);
 			commit("STORE_CLIENT", client.user)
@@ -128,7 +129,7 @@ export default {
 			return response
 		})
 		.catch( error => { 
-			log(error);
+			console.log(error);
 			console.log("error");
 			commit("SET_LOADING_STATE", false)
 			throw error;
@@ -143,7 +144,7 @@ export default {
 		client.tokenObject.token = token
 		return actions.logout() 
 		.then( response => {
-			log(response);
+			console.log(response);
 			commit("DELETE_TOKEN")
 			commit("DELETE_CLIENT")
 			commit("DELETE_ALL_USERS")
@@ -158,7 +159,7 @@ export default {
 			return response
 		})
 		.catch( error => { 
-			log(error);
+			console.log(error);
 			commit("SET_LOADING_STATE", false)
 			throw error;
 		})
@@ -168,14 +169,14 @@ export default {
 		commit("SET_LOADING_STATE", true) 
 		return actions.signup(payload) 
 		.then( response => {
-			log(response)
+			console.log(response)
 			log("USER HAS SIGNED IN!");
 			commit("SET_LOADING_STATE", false)
 			return response
 		})
 		.catch( error => { 
-			log(error);
-			log("ERROR IN SIGNUP");
+			console.log(error);
+			console.log("ERROR IN SIGNUP");
 			commit("SET_LOADING_STATE", false)
 			throw error
 		}) 
@@ -186,14 +187,14 @@ export default {
 		commit("SET_LOADING_STATE", true) 
 		return actions.signupGoogle(payload) 
 		.then( response => {
-			log(response)
-			log("USER HAS SIGNED IN!");
+			console.log(response)
+			console.log("USER HAS SIGNED IN!");
 			commit("SET_LOADING_STATE", false)
 			return response
 		})
 		.catch( error => { 
-			log(error);
-			log("ERROR IN SIGNUP");
+			console.log(error);
+			console.log("ERROR IN SIGNUP");
 			commit("SET_LOADING_STATE", false)
 			throw error
 		}) 
