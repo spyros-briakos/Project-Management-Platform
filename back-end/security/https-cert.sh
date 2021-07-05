@@ -15,12 +15,12 @@ apt install libnss3-tools
 # --------------
 wget https://github.com/FiloSottile/mkcert/archive/v1.0.0.tar.gz
 # Extract tar.gz file
-tar -xf  v1.0.0.tar.gz
-cd v1.0.0/mkcert-1.0.0/
+tar -xf v1.0.0.tar.gz
+cd ./mkcert-1.0.0/
 make
 cd bin/
 sudo cp mkcert /usr/bin/
-cd ../../../
+cd ../../
 # Mkcert will add valid certificates to Chrome & Firefox
 mkcert -install
 
