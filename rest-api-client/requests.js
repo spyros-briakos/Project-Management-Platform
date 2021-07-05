@@ -190,7 +190,7 @@ export const loginGoogleRequest = async () => {
 }
 
 export const loginGoogleAuthenticatedRequest = async (code) => {
-  return restAPI.send('GET', `users/oauth2callback/login?=${code}`, {})
+  return restAPI.send('GET', `users/oauth2callback/login?code=${code}`, {})
   .then(function(response) { return response })
   .catch(function(error) { throw error })
 }
