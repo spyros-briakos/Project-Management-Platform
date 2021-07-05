@@ -138,8 +138,8 @@ export default {
       this.listForm.id = list.id
       this.listForm.name = list.name
       this.listForm.text = list.text
-      // this.listForm.duration = list.duration
-      // this.listForm.status = list.status
+      this.listForm.duration = list.duration
+      this.listForm.status = list.status
       // here needs an edit form
       this.$refs.newListPopup.open()
     },

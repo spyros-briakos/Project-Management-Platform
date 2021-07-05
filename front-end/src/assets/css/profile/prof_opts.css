@@ -7,7 +7,7 @@
     width: 100%;
     display: flex;
     position: static;
-    height: 91.5vh;
+    /* height: 91.5vh; */
     justify-content: space-around;
     font-size: 110%;
     background-color: rgba(230, 230, 230, 0.815);
@@ -15,6 +15,7 @@
 }
 
 .big_wrap{
+    height: 91.5vh;
     display: flex;
     width: calc(1.5 * var(--pict_size));
     max-width: 25%;
@@ -133,7 +134,7 @@
     width: calc(100% - calc(1.5 * var(--pict_size)px));
     max-width: 75%;
     padding: 20px 20px 10px 10px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .pressed{
