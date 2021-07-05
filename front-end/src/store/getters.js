@@ -168,6 +168,13 @@ export default {
 	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
 	coWorkers: state=>( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : []) : state.coWorkers ),
 
+	getSprintNames: (state) => () => {
+		var sprintNames = []
+		for (let sprint of state.sprints) {
+			sprintNames.push(sprint.name)
+		}
+		return sprintNames
+	},
 
 	getSprintbyName: (state) => (sprintName) => {
         return JSON.parse(JSON.stringify(state.sprints.find(s => s.name === sprintName)))
@@ -216,6 +223,15 @@ export default {
 		return null
 	},
 
+	getTaskMembersbyId: (state, getters) => (id) => {
+		var task = getters.getTaskbyId(id)
+		var memberUsernames = []
+		for (let user of task.members) {
+			memberUsernames.push(user.username)
+		}
+		return memberUsernames
+	},
+
 	getTaskbyName: (state) => (name) => {
 		for(let us of state.userStories) {
 			for(let task of us.tasks) {
@@ -251,6 +267,7 @@ export default {
 		for(let sprint of state.sprints) {
 			forms.push({
 				id: ++id,
+				name: sprint.name,
 				status: sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε",
 				progress: getters.getSprintPercentage(sprint), 
 				comments: sprint.description

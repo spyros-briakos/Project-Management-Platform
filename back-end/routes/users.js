@@ -318,6 +318,10 @@ router.get('/answer-invitation/:invitationCode', async(req, res) => {
       if(req.query.answer === 'accept') {
         // Add current user to the project's members
         const members = project.members;
+        if(project.plan_in_use == "standard" && members.length >= 5) {
+          return res.status(400).json({ message: 'Σφάλμα: Το πακέτο του project δεν επιτρέπει περισσότερα μέλη.' });
+        }
+
         members.push(user._id);
         await Project.updateOne({ _id: project._id }, { $set: { members: members } }, { runValidators: true });
 

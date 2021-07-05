@@ -103,6 +103,9 @@ router.post("/get-details", async (req, res) => {
 router.post("/add-project", async (req, res) => {
   try {
     const user = req.user;
+    if(user.plan_in_use == "standard" && user.projects.length >= 3) {
+      return res.status(400).json({ message: 'Σφάλμα: Το πακέτο σας δε σας επιτρέπει να δημιουργήσετε παραπάνω projects.' });
+    }
     const project = new Project(req.body.project);
     // If no such project found
     if(!project) {
@@ -165,7 +168,7 @@ router.post("/add-sprint", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
     }
     // Check if user is authorized for that action
-    if (!user._id.equals(project.productOwner)) {
+    if (!project.members.includes(user._id) && !user._id.equals(project.productOwner)) {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 
@@ -327,7 +330,7 @@ router.post("/edit-sprint", async (req, res) => {
       return res.status(400).json({ message: 'Σφάλμα: Δε βρέθηκε το project.' });
     }
     // Check if user is authorized for that action
-    if (!user._id.equals(project.productOwner)) {
+    if (!project.members.includes(user._id) && !user._id.equals(project.productOwner)) {
       return res.status(400).json({ message: 'Σφάλμα: Ο χρήστης δεν έχει δικαίωμα να προβεί σε αυτή την ενέργεια.' });
     }
 

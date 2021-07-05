@@ -209,17 +209,15 @@ describe('API Test', () => {
       }
     })
     .set('Authorization', token)
-    // .expect(200)
+    .expect(200)
     .then(async (res) => {
-      console.log(res.body)
-      // expect(res.body.status).to.be.eql('OK');
-      // expect(res.body.message).to.be.eql(test_data.message.edit_sprint);
+      // console.log(res.body)
+      expect(res.body.status).to.be.eql('OK');
+      expect(res.body.message).to.be.eql(test_data.message.edit_sprint);
     })
-    .catch(err => {
-      console.log('=====================================')
-      console.log(err)
-      console.log('=====================================')
-    })
+    // .catch(err => {
+    //   console.log(err)
+    // })
   });
 
   it('Add new UserStory to Project', async () => {

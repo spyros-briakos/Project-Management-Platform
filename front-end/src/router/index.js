@@ -147,7 +147,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   let allow = ['SignIn', 'SignUp', 'ForgotPassword', 'Home', 'How_It_Works', 'Prices'];
-  let remove_when_loged = ['How_It_Works', 'Prices'];
+  let remove_when_loged = ['How_It_Works', 'Prices', 'Home'];
   let loged = store.getters.isLogedIn;
   let prem = store.getters.isPremium;
 

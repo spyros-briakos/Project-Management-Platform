@@ -65,7 +65,7 @@
               :items="selecteditems1"
               label="Κατάσταση"
               v-model="listForm.status"
-              :value="selected"
+              :value="selectedsprint"
             ></v-select>
             </v-col>
             </v-row>
@@ -99,7 +99,8 @@ export default {
       duration_: "",
       status_: "",
       selecteditems: ['2 Εβδομάδες', '3 Εβδομάδες', '4 Εβδομάδες'],
-      selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε']
+      selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε'],
+      selectedsprint: "Σε εξέλιξη",
     }
   },
   computed: {
@@ -137,8 +138,8 @@ export default {
       this.listForm.id = list.id
       this.listForm.name = list.name
       this.listForm.text = list.text
-      // this.listForm.duration = list.duration
-      // this.listForm.status = list.status
+      this.listForm.duration = list.duration
+      this.listForm.status = list.status
       // here needs an edit form
       this.$refs.newListPopup.open()
     },
@@ -160,7 +161,7 @@ export default {
       {
         console.log("error")
       }
-
+      
       if(this.listForm.duration === '2 Εβδομάδες')
       {
         this.duration_ = "14"
@@ -183,8 +184,8 @@ export default {
         // get the current object for place holding
         const sprint = this.getSprintbyId(this.listForm.id)
 
-        // this.listForm.duration = (sprint.estimated_duration === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
-        // this.listForm.status = (sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
+        this.listForm.duration = (sprint.estimated_duration === "14" ? "2 Εβδομάδες" : sprint.estimated_duration === "21" ? "3 Ββδομάδες" : "4 Ββδομάδες")
+        this.listForm.status = (sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
 
         // get output from form
         let sprintFormOutput = {

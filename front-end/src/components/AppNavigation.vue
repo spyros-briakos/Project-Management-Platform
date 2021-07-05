@@ -1,6 +1,7 @@
 <template>
   <span>
-    <v-toolbar id="header" app color="#FAFFFF" dark>
+    <!-- <v-toolbar id="header" app color="#FAFFFF" dark> -->
+    <v-toolbar id="header" color="#FAFFFF" dark>
     <!-- <v-toolbar id="header" app color="var(--light_green)" dark> -->
       <router-link to="/">
         <v-toolbar-title :to="appurl" class="purple--text" data-cy="titleBtn">
@@ -9,7 +10,7 @@
       </router-link>
       <template v-for="(item, index) in items">
         <template v-if="index <= 3" >
-          <v-btn :key="index" :to="item.url" :style="{'display': hide_opts(item.title) ? 'none' : ''}" plain> {{ item.title }} </v-btn>
+          <v-btn :key="index" :to="item.url" :style="{'display': hide_opts(item.title) ? 'none' : '', 'pointer-events': disable_project(item.title) ? 'none' : ''}" plain> {{ item.title }} </v-btn>
         </template>
         <template v-else>
           <v-btn :key="index" :to="item.url" :style="{'display': hide_sign() ? 'none' : ''}" fixed right color="#FF914D">
@@ -39,8 +40,8 @@
         right: true,
 
         items: [
-          { title: "Projects", url: "/projects" },
           { title: "Profile", url: "/profile" },
+          { title: "Project", url: "/projects" },
           { title: "Πώς δουλεύει", url: "/how_it_works" },
           { title: "Τιμές", url: "/prices" },
           { title: "Σύνδεση", url: "/sign/in" },
@@ -50,29 +51,26 @@
     computed:{
       ...mapGetters({
         isLogedIn: "isLogedIn",
-        projects: "projects",
+        project: "project"
       }),
     },
     methods:{
       hide_opts(val){
-        let to_hide = ['Projects', 'Profile'];
-        let to_hide2 = ['Πώς δουλεύει', 'Τιμές'];
-        let project_guard = ['Projects'];
-
-        if(to_hide.includes(val) && !this.isLogedIn)
-          return true;
-        else if(project_guard.includes(val) && this.isLogedIn && this.projects.length==0)
-          return true;
-        else if(to_hide2.includes(val) && this.isLogedIn)
+        let hide_beforelogedIn = ['Project', 'Profile'];
+        let hide_onlogedIn = ['Πώς δουλεύει', 'Τιμές'];
+        if ((hide_beforelogedIn.includes(val) && !this.isLogedIn) || (hide_onlogedIn.includes(val) && this.isLogedIn))
           return true;
         return false;
       },
-    hide_sign(){
-      if(this.isLogedIn)
-        return true;
-      else
-        return false;
-    }
+      hide_sign(){
+        if(this.isLogedIn)
+          return true;
+        else
+          return false;
+      },
+      disable_project(title) {
+        return title === 'Project' && (!this.project || !this.project._id)
+      }
     }
   };
 </script>
