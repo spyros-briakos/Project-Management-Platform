@@ -126,7 +126,6 @@ export default {
 			commit("STORE_TOKEN", client.tokenObject.token)
 			commit("SET_LOGEDIN_STATE", true)
 			commit("SET_LOADING_STATE", false)
-			return response
 		})
 		.catch( error => { 
 			console.log(error);

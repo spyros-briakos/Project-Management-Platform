@@ -171,7 +171,10 @@ router.beforeEach((to, from, next) => {
     // console.log("EDWWW");
     console.log(to.query.code);
     store.dispatch("loginGoogleAuthenticated", to.query.code)
-    .then(next({name:"myProjects"}))
+    .then( response=> {
+      // next({name:"myProjects"})
+      router.push({name:"myProjects"})
+    })
   }
 
 })
