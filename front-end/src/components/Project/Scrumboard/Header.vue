@@ -13,14 +13,6 @@
           <span class="text-uppercase" v-show="this.activeBoard"> : {{ boardName }} </span>
         </label>
       </div>  
-
-        <!-- <div class="form-outline"  v-if="this.activeBoard.id=='SCRUM_BOARD'">
-          <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
-        </div>
-        <div class="form-outline"  v-else>
-          <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
-        </div> -->
-      
       
       <div style="position:relative; top:-15px; max-height:30px; right:-430px;">
         <v-row style="height:8px"
@@ -51,129 +43,9 @@
       </div>
       
       <!-- Only show above options on ScrumBoard -->
-      <!-- <div class="d-flex justify-content-end" v-if="!isLoading && this.activeBoard.id==='SCRUM_BOARD'" > -->
       <div class="d-flex justify-content-end" v-if="this.activeBoard.id=='SCRUM_BOARD'" >
         <TaskListEdit></TaskListEdit>
         <TaskListArchive></TaskListArchive>
-
-
-<!-- Uncomment to test basic task user story functions -->
-
-
-     <!-- <v-form
-      x-small
-      ref="form"
-      v-model="valid"
-    >
-      <v-text-field
-        x-small
-        v-model="sprintName"
-        label="Name"
-      >Sprint name</v-text-field>
-      <v-btn
-        x-small
-        class="mr-4"
-        @click="addSprint_()"
-      >
-        New sprint
-      </v-btn>
-      <v-btn
-        x-small
-        color="error"
-        class="mr-4"
-        @click="deleteSprint_(sprintName)"
-      >
-      delete sprint
-    </v-btn>
-    <v-btn
-      x-small
-      color="warning"
-      @click="editSprint_()"
-    >
-      Edit sprint
-    </v-btn>
-    </v-form>
-
-
-    <v-form
-      x-small
-      ref="form"
-      v-model="valid"
-    >
-      <v-text-field
-        x-small
-        v-model="storyName"
-        label="Name"
-      >User story name</v-text-field>
-      <v-btn
-        x-small
-        class="mr-4"
-        @click="addUserStory_()"
-      >
-        New userStory
-      </v-btn>
-      <v-btn
-        x-small
-        color="error"
-        class="mr-4"
-        @click="deleteUserStory_(storyName)"
-      >
-      delete story
-    </v-btn>
-    <v-btn
-      x-small
-      color="warning"
-      @click="editUserStory_()"
-    >
-      Edit story
-    </v-btn>
-    </v-form>
-
-    <v-form
-      x-small
-      ref="form"
-      v-model="valid"
-    >
-      <v-text-field
-        x-small
-        v-model="taskName"
-        label="Name"
-      >Task name</v-text-field>
-      <v-btn
-        x-small
-        class="mr-4"
-        @click="addTaskAndConnectSprint_()"
-      >
-        New task
-      </v-btn>
-      <v-btn
-        x-small
-        color="error"
-        class="mr-4"
-        @click="deleteTask_(taskName, storyName)"
-    >
-      delete task
-    </v-btn>
-     <v-btn
-      x-small
-      color="warning"
-      @click="editTask_()"
-    >
-      Edit task
-    </v-btn>
-     <v-btn
-      x-small
-      color="success"
-      @click="connectSprint({taskName:taskName, sprintName:sprintName})"
-    >
-      Connect
-    </v-btn>
-
-    </v-form> -->
-
-    
-
-        
       </div>
     </nav>
 </template>
