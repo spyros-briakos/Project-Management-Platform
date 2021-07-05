@@ -18,9 +18,9 @@
 
         >
           <v-chip 
-            @click="selectedSprint"
             v-for="tag in getSprintNames()"
             :key="tag"
+            @click="selectedSprint(tag)"
           >
             {{ tag }}
           </v-chip>
@@ -46,8 +46,9 @@ export default {
     chart: Chart
   },
   methods: {
-    selectedSprint() {
-    alert('Turning on alarm...')
+    selectedSprint(tag) {
+    // alert('Turning on alarm...')
+      this.sprintId = this.getSprintbyName(tag)._id
     },
   },
   data() {
@@ -68,8 +69,7 @@ export default {
     };
   },
   created() {
-    console.log("DDAAYSS", this.getTotalSprintDates())
-    console.log("DDAAYSS", this.getTotalSprintDatesArray())
+    this.sprintId = this.getSprintbyName(this.getSprintNames()[0])._id
     
   },
   computed: {
@@ -83,7 +83,8 @@ export default {
         getTotalSprintTaskDates: "getTotalSprintTaskDates",
         getTotalSprintTaskDatesArray: "getTotalSprintTaskDatesArray",
         getBurnDownIdealChartbySprintId: "getBurnDownIdealChartbySprintId",
-        getBurnDownActualChartbySprintId: "getBurnDownActualChartbySprintId"
+        getBurnDownActualChartbySprintId: "getBurnDownActualChartbySprintId",
+        getSprintbyName: "getSprintbyName"
     }),
 
     chartOptions: function() {
