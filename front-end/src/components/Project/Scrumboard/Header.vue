@@ -20,6 +20,8 @@
         <div class="form-outline"  v-else>
           <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
         </div> -->
+      
+      
       <div style="position:relative; top:-15px; max-height:30px; right:-430px;">
         <v-row style="height:8px"
         align="center"
