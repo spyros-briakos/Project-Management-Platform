@@ -7,7 +7,7 @@
     >
       <v-row align="center">
         <v-col class="grow">
-          Η δημιουργία του λογαριασμού σας ολοκληρώθηκε με επιτυχία. 
+          Η δημιουργία του λογαριασμού σας{{googleMsg}} ολοκληρώθηκε με επιτυχία. 
           Παρακαλώ επιβεβαιώστε το email σας και μεταβείτε στην σελίδα σύνδεσης για να συνδεθείτε.
         </v-col>
         <v-col class="shrink">
@@ -110,7 +110,7 @@
           <!-- <ul> -->
               
               <!-- <li>  -->
-                  <a href="#" @click="signupGoogle()">
+                  <a href="#" @click="signupGoogle_()">
                       <v-btn
                           class="mx-2"
                           fab
@@ -155,6 +155,7 @@ export default {
       email: "",
       password: "",
       password2: "",
+      googleMsg: ""
     };
   },
   
@@ -195,7 +196,23 @@ export default {
         alert("Τα password δεν είναι όμοια");
       }
     },
-  },
+
+  signupGoogle_() {
+      this.signupGoogle() 
+      .then( response => {
+        this.badSignUpAllert = false
+        this.goodSignUpAllert = true
+        this.googleMsg = " με τον λογαριασμό Google"
+      })
+      .catch( error => { 
+        this.goodSignUpAllert = false
+        this.badSignUpAllert = true
+        this.badSignUpAllertMessage = error.response.data.message
+      }) 
+    },
+
+
+  }
 };
 </script>
 
