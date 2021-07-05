@@ -1,6 +1,36 @@
 <template>
   <div>
-    <div id="app"><chart></chart></div>
+    <div id="app">
+      <div style="position:relative; top:20px; width: 450px; right:-10px;">
+      <v-row justify="space-around" >
+      <v-col
+        cols="12"
+        sm="10"
+        md="8"
+      >
+      <v-sheet
+        elevation="5"
+        class="py-4 px-1"
+      >
+        <v-chip-group 
+          mandatory
+          active-class="primary--text"
+
+        >
+          <v-chip 
+            @click="selectedSprint"
+            v-for="tag in getSprintNames()"
+            :key="tag"
+          >
+            {{ tag }}
+          </v-chip>
+          </v-chip-group>
+        </v-sheet>
+      </v-col>
+      </v-row>
+      <chart></chart>
+      </div>
+    </div>
     <highcharts class="hc" :options="chartOptions" ref="chart"></highcharts>
     <router-view></router-view> 
   </div>
@@ -15,8 +45,24 @@ export default {
   components: {
     chart: Chart
   },
+  methods: {
+    selectedSprint() {
+    alert('Turning on alarm...')
+    },
+  },
   data() {
     return {
+      tags: [
+        'Work',
+        'Home Improvement',
+        'Vacation',
+        'Food',
+        'Drawers',
+        'Shopping',
+        'Art',
+        'Tech',
+        'Creative Writing',
+      ],
       
     };
   },
@@ -32,6 +78,7 @@ export default {
         getTotalSprintDates: "getTotalSprintDates",
         getTotalSprintDatesArray: "getTotalSprintDatesArray",
         getTotalSprintDatesIdealBurn: "getTotalSprintDatesIdealBurn",
+        getSprintNames: "getSprintNames"
     }),
 
     chartOptions: function() {
