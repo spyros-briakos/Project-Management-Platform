@@ -1,15 +1,17 @@
-version: '3'
+
+version: '3.7'
 services:
-  node:
-    restart: always
-    build: .
+  nodejs:
+    container_name: nodejs
+    build:
+      context: ./
+      dockerfile: Dockerfile
     ports:
-      - 80:3000
-    volumes:
-      - ./:/code
-  mongo:
+      - "3081:3081"
+    links:
+      - mongo-db
+  mongo-db:
+    container_name: mongo-db
     image: mongo
-    volumes:
-      - mongodb:/data/db
-volumes:
-  mongodb:
+    ports:
+      - "27017:27017"
