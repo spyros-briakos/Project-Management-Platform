@@ -276,32 +276,6 @@
             data-vv-as="Item Details"
             placeholder="Γράψε μία περιγραφή"
           />
-<<<<<<< HEAD
-
-          
-          <!-- <v-card
-            class="mx-auto"
-            max-width="400"
-          >
-          <v-card-text>
-            <span class="subheading">Select size</span>
-
-            <v-chip-group
-              v-model="selectionsss"
-              active-class="deep-purple--text text--accent-4"
-              mandatory
-            >
-            <v-chip
-              v-for="siz in sizesss"
-              :key="siz"
-              :value="siz"
-            >
-                {{ siz }}
-              </v-chip>
-            </v-chip-group>
-          </v-card-text>
-          </v-card> -->
-=======
           
           <h6 class="title3" style="top:95px;"> 
             <v-row align="center">
@@ -319,7 +293,6 @@
             </v-col>
             </v-row>
           </h6>
->>>>>>> 06f9c0840e58ed88834c5a5cf17c0fae3f785d50
 
           <small class="text-danger" style="display:block" v-if="errors.itemTitle">{{ errors.first("itemTitle") }}</small>
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(1)">
