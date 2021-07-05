@@ -17,6 +17,8 @@ sudo -u "$USER" mkcert -install
 # Create local certificates
 sudo -u "$USER" mkcert localhost 127.0.0.1
 
+cp /usr/local/share/ca-certificates/mkcert_development_CA* ./mkcert_rootCA.crt
+
 chmod 755 localhost+1.pem
 chmod 755 localhost+1-key.pem
 
