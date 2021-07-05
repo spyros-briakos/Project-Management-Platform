@@ -229,12 +229,12 @@ export default {
 	},
 	
 	STORE_INVITES(state, payload) {
-		console.log("INVITES ARE HERE STORED")
+		// console.log("INVITES ARE HERE STORED")
 		// add seen
 		payload.forEach(function (element) {
 			element.seen = 0;
 		});
-		console.log(payload)
+		// console.log(payload)
 		Vue.set(state, "invites", [...payload])
 	},
 
@@ -354,7 +354,7 @@ export default {
 		var myEmulatedBoard = payload
 		var sprints = state.sprints
 		var userStories = state.userStories
-		console.log("EDOOOOOO", sprints)
+		// console.log("EDOOOOOO", sprints)
 
 		// SCRUM BOARD
 		myEmulatedBoard[0].name = state.project.name
@@ -587,7 +587,7 @@ export default {
 	},
 
 	PUT_SPRINT_IN_FRONT(state, payload) {
-		console.log(payload)
+		// console.log(payload)
 		const board = state.boards.find(b => b.id == "SCRUM_BOARD")
 		// find the sprint and move it in 1st position
 		const sprintIndex = board.lists.findIndex(b => b.id === payload)
@@ -595,7 +595,7 @@ export default {
 		var temp = board.lists[1]
 		Vue.set(board.lists, 1, board.lists[sprintIndex])
 		Vue.set(board.lists, sprintIndex, temp)
-		console.log(sprintIndex)
+		// console.log(sprintIndex)
 	},
 
 	// Reorder Task List Items
@@ -628,7 +628,7 @@ export default {
 		payload.item.id = guid()
 		list.items.push(payload.item)
 		}
-		console.log("SAVE",payload)
+		// console.log("SAVE",payload)
 	},
 
 	// Delete Task List Item
@@ -640,6 +640,6 @@ export default {
 		if (itemIdx > -1) {
 		Vue.delete(list.items, itemIdx)
 		}
-		console.log("DELETE",payload)
+		// console.log("DELETE",payload)
 	}
 }

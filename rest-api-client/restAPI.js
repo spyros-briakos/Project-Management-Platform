@@ -564,10 +564,11 @@ export const actions = {
     var myTasks = [];
 
     // If client is not the product owner of the project
-    if(client.user._id === client.project.productOwner._id) {
+    if(client.user._id !== client.project.productOwner._id) {
       for (let us of client.project.userStories) {
         for (let task of us.tasks) {
-          if (task.member._id === client.user._id) {
+          // console.log(task.members.map(o=>o._id), )
+          if (task.members.map(o=>o._id).includes(client.user._id)) {
             myTasks.push(task)
           }
         }

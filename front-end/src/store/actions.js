@@ -116,10 +116,8 @@ export default {
 
 	async loginGoogleAuthenticated({ commit }, code) {
 		commit("SET_LOADING_STATE", true) 
-		console.log("NAIIIII", code)
 		return actions.loginGoogleAuthenticated(code) 
 		.then( response => {
-			console.log("WORKEEED", code)
 			console.log(response);
       		console.log(client);
 			commit("STORE_CLIENT", client.user)
@@ -287,7 +285,6 @@ export default {
 
 		// Get token
 		var token = getters.token
-		console.log(data)
 		commit("SET_LOADING_STATE", true) 
 		client.tokenObject.token = token
 		return actions.updateUser(data) 
@@ -1507,8 +1504,8 @@ export default {
 				var disconnectSprintName = getters.getSprintbyId(item.sprint).name
 
 				if (idThatMoved.length) {
-					console.log("DISCONNNECT", taskName, disconnectSprintName)
-					console.log("CONNNECT", taskName, connectSprintName)
+					// console.log("DISCONNNECT", taskName, disconnectSprintName)
+					// console.log("CONNNECT", taskName, connectSprintName)
 
 					dispatch("disconnectSprint", {taskName:taskName})
 					.then(response => {
