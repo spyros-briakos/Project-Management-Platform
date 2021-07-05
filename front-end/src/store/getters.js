@@ -283,18 +283,51 @@ export default {
 		}
 		return totalDays
 	},
+	
+	
 
-	getTotalSprintDatesArray: (state, getters) => () => {
+	getTotalSprintDatesArray: (state, getters) => (id) => {
 		var totalDaysArray = [];
-		for(let day=0; day<getters.getTotalSprintDates(); day++) {
+		var estimated_duration = parseInt(getSprintbyId(id).estimated_duration)
+		for(let day=0; day<estimated_duration; day++) {
+			totalDaysArray.push(day)
+		}
+		return totalDaysArray
+	},
+	
+	getTotalSprintDatesIdealBurn: (state, getters) => () => {
+		var totalDaysArray = [];
+		for(let day=getters.getTotalSprintDates(); day>0; day--) {
+			totalDaysArray.push(day)
+		}
+		return totalDaysArray
+	},
+	
+
+
+	getTotalSprintTaskDates: (state, getters) => (id) => {
+		var sprintTasks = getSprintbyId(id).tasks
+
+		var totalDays = 1;
+		for(let task of sprintTasks) {
+			totalDays += parseInt(task.estimated_duration)
+		}
+		return totalDays
+	},
+
+	getTotalSprintTaskDatesArray: (state, getters) => (id) => {
+		var totalDaysArray = [];
+		var estimated_duration = getters.getTotalSprintTaskDates(id)
+		for(let day=0; day<estimated_duration; day++) {
 			totalDaysArray.push(day)
 		}
 		return totalDaysArray
 	},
 
-	getTotalSprintDatesIdealBurn: (state, getters) => () => {
+	getBurnDownIdealChartbySprintId: (state, getters) => (id) => {
+		var sprintTasks = getSprintbyId(id).tasks
 		var totalDaysArray = [];
-		for(let day=getters.getTotalSprintDates(); day>0; day--) {
+		for(let day=getters.getTotalSprintTaskDates(id); day>0; day--) {
 			totalDaysArray.push(day)
 		}
 		return totalDaysArray
