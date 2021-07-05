@@ -1,34 +1,22 @@
 #!/bin/bash
 
-# Install Go language
-apt install golang
-
-# Set up Go environment variable server-wide
-touch /etc/profile.d/goenv.sh
-source ./security/golang-env.sh
-source /etc/profile.d/goenv.sh
+cd ./security
 
 # Install Certutil
-apt install libnss3-tools
+apt install libnss3-tools -y
 
 # Install mkcert
 # --------------
-wget https://github.com/FiloSottile/mkcert/archive/v1.0.0.tar.gz
-# Extract tar.gz file
-tar -xf v1.0.0.tar.gz
-cd ./mkcert-1.0.0/
-make
-cd bin/
-sudo cp mkcert /usr/bin/
-cd ../../
+wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
+cp mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
+chmod +x /usr/local/bin/mkcert
+
 # Mkcert will add valid certificates to Chrome & Firefox
 mkcert -install
 
-# # Copy certificates to /etc/ssl
-# cp ./localhost+1.pem /etc/ssl/certs/
-# cp ./localhost+1-key.pem /etc/ssl/private/
+# Create local certificates
+mkcert localhost 127.0.0.1
 
-# Remove unnecessary files
-rm -f v1.0.0.tar.gz
+cd ..
 
 echo -e '\nServer will run on https using trusted, self-signed certificate!\n'
