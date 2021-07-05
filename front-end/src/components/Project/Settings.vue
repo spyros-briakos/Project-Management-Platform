@@ -40,7 +40,7 @@
                             :label="elem.tag"
                             hide-details="auto"
                             v-model="elem.val"
-                            :readonly="elem.key=='type' ? true : false"
+                            :readonly="'type PO SM'.includes(elem.key)  ? true : projectProductOwner == undefined ? true : projectProductOwner._id==_id ? false : true"
                             required>
                             {{elem.val}}
                         </v-text-field>
@@ -156,6 +156,9 @@ import fts from "../../FullTextSearch/fts"
                             {key:"title", tag: "Τίτλος Project", val: this.projectName},
                             {key:"descr", tag: "Περιγραφή", val: this.projectDescription},
                             {key:"type", tag: "Τυπος Project", val: this.projectPlan},
+                            {key:"PO", tag: "Product Owner", val: this.projectProductOwner!=undefined ? this.projectProductOwner.username : ''},
+                            {key:"SM", tag: "Scrum Master", val: this.projectScrumMaster!=undefined ?  this.projectScrumMaster.username : ''},
+                            
                         ],
                         disabled: this.disabled,
                     },
