@@ -113,6 +113,6 @@ const options = {
   // console.log(`Server listening at http://${HOST}:${PORT}/`);
 // });
 const server = http.createServer(options, app).listen(PORT, function(){
-  console.log(`Server listening at http://${process.env.HOST}:${PORT}/`);
+  console.log(`Server listening at https://${process.env.HOST}:${PORT}/`);
 });
 module.exports = server;
