@@ -1,5 +1,7 @@
 node_modules/
 rest.http
 .git/
-# mkcert-1.0.0
-mkcert-v1.4.3-linux-amd64
+
+security/mkcert-v1.4.3-linux-amd64
+# security/localhost+1.pem
+# security/localhost+1-key.pem

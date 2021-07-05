@@ -57,11 +57,25 @@
                     <h6>ή συνδέσου με το Google Account σου</h6>
                     <ul>
                         
-                        <li> 
-                            <a href="#" @click="loginGoogle_"><i class="fab fa-google" style="color:dodgerblue"></i></a>
+                        <!-- <li>  -->
+                            <a href="#" @click="loginGoogle_">
+                                <v-btn
+                                    class="mx-2"
+                                    fab
+                                    dark
+                                    small
+                                    color="teal"
+                                    >
+                                    <v-icon dark>
+                                        fab fa-google
+                                    </v-icon>
+                                </v-btn>
+                            </a>
+                            <!-- <a href="#" @click="loginGoogle_"><i class="fab fa-google" style="color:dodgerblue"></i></a> -->
+                            
                             <!-- <a class="fb-ic mr-3" role="button"><mdb-icon fab icon="facebook-f" size="lg" /></a> -->
                             <!-- <mdb-btn tag="a" size="lg" floating class="btn-fb" icon="facebook-f" fab></mdb-btn> -->
-                        </li>
+                        <!-- </li> -->
                     </ul> 
                 </div>
 
