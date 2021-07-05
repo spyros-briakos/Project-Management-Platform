@@ -161,7 +161,7 @@ router.get('/oauth2callback/signup', async(req, res) => {
       res.json({
         message: 'Ο λογαριασμός σου δημιουργήθηκε με επιτυχία! Είσαι πλέον συνδεδεμένος/-η στο ScruManiac.',
         user: context,
-        token: tokenObject.token
+        token: tokenObject
       });
     } catch (error) {
       console.log(error);
@@ -208,7 +208,7 @@ router.get('/oauth2callback/login', async(req, res) => {
       res.json({
         message: 'Η σύνδεσή σου ολοκληρώθηκε με επιτυχία.',
         user: context,
-        token: tokenObject.token
+        token: tokenObject
       });
     } catch (error) {
       res.status(400).json({ message: error });
