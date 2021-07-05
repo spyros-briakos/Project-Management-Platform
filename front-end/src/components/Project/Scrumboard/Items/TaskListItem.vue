@@ -235,11 +235,10 @@
 
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
-          <div class="temp">
-            <!-- <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" style="text-align:center; font-weight: bold; width:150px;"></multiselect> -->
             <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> User Story </h3>
+          <!-- <div class="temp">
+            <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
-          <!-- <v-alert
           color="purple"
           dense
           outlined
@@ -632,6 +631,10 @@ export default {
         taskName: '', 
         loader: null,
         loading: false,
+        sizes: [
+        '04', '06', '08', '10', '12', '14',
+        ],
+        selection: '08',
       },
       temp_status:"",
       temp_duration:"",
