@@ -93,7 +93,7 @@
                         style="margin-top:3vh;"
                         floating x-large
                         :loading="loading_btn">
-                            Ενημέρωση
+                            {{item.form=='team' ? 'Πρόσκληση' :'Ενημέρωση'}}
                     </v-btn>
 
                 </v-tab-item>
