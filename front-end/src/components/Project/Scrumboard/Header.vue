@@ -14,7 +14,7 @@
         </label>
       </div>  
       
-      <div style="position:relative; top:-15px; max-height:30px; right:-430px;">
+      <div style="position:relative; top:-15px; max-height:30px; margin: 0 80px 0 auto;">
         <v-row style="height:8px"
         align="center"
         >

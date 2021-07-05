@@ -17,10 +17,8 @@
   <!-- Case: Scrum Board -> VisibleTask --> 
   <!--  -->
   <div class="card tasklist-item" v-else-if="item.state=='visibleTaskUnderUserStory'">   
-    
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
       <template v-slot:handle1>
-        
         <span class="edit" v-if="!isNewItem"> 
           <i class="fas fa-pen" @click="startEditing"></i> 
         </span> 
@@ -29,6 +27,7 @@
         </span> 
       </template>
 
+  {{'sdfcdf'}}
       <template v-slot:content1>
 
         <div class="popupheader">
@@ -225,10 +224,11 @@
         
         <span class="edit" v-if="!isNewItem"> 
           <i class="fas fa-pen" @click="startEditing"></i> 
-        </span> 
-        <span class="edit_2" v-else> 
+        </span>
+        
+        <span class="edit_2" v-else-if="projectProductOwner._id==_id ? true:false"> 
           <i class="fas fa-plus-circle"  @click="startEditing"></i> 
-        </span> 
+        </span>
       </template>
 
       <template v-slot:content1>
@@ -612,7 +612,10 @@ export default {
       getUserStoryIdbyName: "getUserStoryIdbyName",
       getSprintbyId: "getSprintbyId",
       getTaskbyId: "getTaskbyId",
-      getTaskMembersbyId: "getTaskMembersbyId"
+      getTaskMembersbyId: "getTaskMembersbyId",
+      projectProductOwner: "projectProductOwner",
+      _id: "_id"
+      
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
