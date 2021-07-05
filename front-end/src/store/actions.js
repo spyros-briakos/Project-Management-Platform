@@ -160,6 +160,24 @@ export default {
 		}) 
 	},
 
+	
+	async signupGoogle({ commit }, payload) {
+		commit("SET_LOADING_STATE", true) 
+		return actions.signupGoogle(payload) 
+		.then( response => {
+			log(response)
+			log("USER HAS SIGNED IN!");
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			log(error);
+			log("ERROR IN SIGNUP");
+			commit("SET_LOADING_STATE", false)
+			throw error
+		}) 
+	},
+
 	async forgotPassword({ commit }, payload) {
 		commit("SET_LOADING_STATE", true) 
 		return actions.forgotPassword(payload)
