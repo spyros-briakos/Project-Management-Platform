@@ -55,7 +55,7 @@
 
                 <div class="social-icons">
                     <h6>ή συνδέσου με το Google Account σου</h6>
-                    <ul>
+                    <!-- <ul> -->
                         
                         <!-- <li>  -->
                             <a href="#" @click="loginGoogle_">
@@ -76,7 +76,7 @@
                             <!-- <a class="fb-ic mr-3" role="button"><mdb-icon fab icon="facebook-f" size="lg" /></a> -->
                             <!-- <mdb-btn tag="a" size="lg" floating class="btn-fb" icon="facebook-f" fab></mdb-btn> -->
                         <!-- </li> -->
-                    </ul> 
+                    <!-- </ul>  -->
                 </div>
 
                 <p class="forgot-password text-right">

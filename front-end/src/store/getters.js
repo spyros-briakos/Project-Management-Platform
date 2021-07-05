@@ -344,12 +344,19 @@ export default {
 		var xAxis = xAxisArray.length
 		var yAxis = getters.getTotalSprintTaskDates(id)
 		var yAxisArray = new Array(yAxis)
-		var load = yAxis/parseFloat(xAxis)
+		// load in Actual predicion is the slope of the % of the completition of the sprint
+		var percentage = getters.getSprintPercentage(getters.getSprintbyId(id))
+		percentage = (parseFloat(percentage)/100)*yAxis 
+		var load = percentage
 		var totalLoad = parseFloat(yAxis)
 		var totalLoadArray = [];
+		var actualLoad = 0
 		console.log("Actual", xAxis, yAxis, load)
 		for(let day=0; day<xAxis; day++) {
-			totalLoadArray.push(totalLoad -= load)
+			actualLoad = totalLoad -= load
+			if (actualLoad < 0)
+				actualLoad = 0
+			totalLoadArray.push(actualLoad)
 		}
 		return totalLoadArray
 	},

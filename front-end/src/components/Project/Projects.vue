@@ -83,12 +83,12 @@ export default {
           title: "Scrum Board",
           icon: "fa fa-layer-group",
         },
-        // {
-        //   href: "/projects/roadmap",
-        //   title: "Roadmap",
-        //   icon: "fa fa-map",
-        //   hidden: this.hide(),
-        // },
+        {
+          href: "/projects/roadmap",
+          title: "Roadmap",
+          icon: "fa fa-map",
+          hidden: this.hide(),
+        },
         {
           href: "/projects/kanban",
           title: "Personal Board",

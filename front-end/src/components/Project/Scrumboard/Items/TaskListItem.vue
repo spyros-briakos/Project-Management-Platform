@@ -231,10 +231,10 @@
 
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
-          <div class="temp">
+            <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> User Story </h3>
+          <!-- <div class="temp">
             <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
-          <!-- <v-alert
           color="purple"
           dense
           outlined
@@ -272,6 +272,29 @@
             data-vv-as="Item Details"
             placeholder="Γράψε μία περιγραφή"
           />
+
+          <v-card
+            class="mx-auto"
+            max-width="400"
+          >
+          <v-card-text>
+            <span class="subheading">Select size</span>
+
+            <v-chip-group
+              v-model="selection"
+              active-class="deep-purple--text text--accent-4"
+              mandatory
+            >
+            <v-chip
+              v-for="size in sizes"
+              :key="size"
+              :value="size"
+            >
+                {{ size }}
+              </v-chip>
+            </v-chip-group>
+          </v-card-text>
+          </v-card>
 
           <small class="text-danger" style="display:block" v-if="errors.itemTitle">{{ errors.first("itemTitle") }}</small>
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(1)">
@@ -614,6 +637,10 @@ export default {
         status: "",
         loader: null,
         loading: false,
+        sizes: [
+        '04', '06', '08', '10', '12', '14',
+        ],
+        selection: '08',
       },
       temp_status:"",
       temp_duration:"",
