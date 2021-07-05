@@ -5,7 +5,8 @@ const oauth2 = google.oauth2('v2');
 const Oauth2Client_Singup = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    `http://${process.env.HOSTNAME}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/signup`, // this must match your google api settings
+    `http://${process.env.HOST}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/signup`, // this must match your google api settings
+    // `http://${process.env.HOSTNAME}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/signup`, // this must match your google api settings
 );
 
 //  Will ask google to allow us access to the user's email & profile info
@@ -39,7 +40,8 @@ module.exports.getUserDetails_Signup = async (code) => {
 const Oauth2Client_Login = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  `http://${process.env.HOSTNAME}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/login`, // this must match your google api settings
+  `http://${process.env.HOST}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/login`, // this must match your google api settings
+  // `http://${process.env.HOSTNAME}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/login`, // this must match your google api settings
 );
 
 //  Will ask google to allow us access to the user's email

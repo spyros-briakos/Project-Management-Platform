@@ -1,6 +1,36 @@
 <template>
   <div>
-    <div id="app"><chart></chart></div>
+    <div id="app">
+      <div style="position:relative; top:20px; width: 450px; right:-10px;">
+      <v-row justify="space-around" >
+      <v-col
+        cols="12"
+        sm="10"
+        md="8"
+      >
+      <v-sheet
+        elevation="5"
+        class="py-4 px-1"
+      >
+        <v-chip-group 
+          mandatory
+          active-class="primary--text"
+
+        >
+          <v-chip 
+            v-for="tag in getSprintNames()"
+            :key="tag"
+            @click="selectedSprint(tag)"
+          >
+            {{ tag }}
+          </v-chip>
+          </v-chip-group>
+        </v-sheet>
+      </v-col>
+      </v-row>
+      <chart></chart>
+      </div>
+    </div>
     <highcharts class="hc" :options="chartOptions" ref="chart"></highcharts>
     <router-view></router-view> 
   </div>
@@ -15,14 +45,31 @@ export default {
   components: {
     chart: Chart
   },
+  methods: {
+    selectedSprint(tag) {
+    // alert('Turning on alarm...')
+      this.sprintId = this.getSprintbyName(tag)._id
+    },
+  },
   data() {
     return {
+      tags: [
+        'Work',
+        'Home Improvement',
+        'Vacation',
+        'Food',
+        'Drawers',
+        'Shopping',
+        'Art',
+        'Tech',
+        'Creative Writing',
+      ],
       
+      sprintId: "60df2991c514e12171538144"
     };
   },
   created() {
-    console.log("DDAAYSS", this.getTotalSprintDates())
-    console.log("DDAAYSS", this.getTotalSprintDatesArray())
+    this.sprintId = this.getSprintbyName(this.getSprintNames()[0])._id
     
   },
   computed: {
@@ -32,6 +79,12 @@ export default {
         getTotalSprintDates: "getTotalSprintDates",
         getTotalSprintDatesArray: "getTotalSprintDatesArray",
         getTotalSprintDatesIdealBurn: "getTotalSprintDatesIdealBurn",
+        getSprintNames: "getSprintNames",
+        getTotalSprintTaskDates: "getTotalSprintTaskDates",
+        getTotalSprintTaskDatesArray: "getTotalSprintTaskDatesArray",
+        getBurnDownIdealChartbySprintId: "getBurnDownIdealChartbySprintId",
+        getBurnDownActualChartbySprintId: "getBurnDownActualChartbySprintId",
+        getSprintbyName: "getSprintbyName"
     }),
 
     chartOptions: function() {
@@ -66,11 +119,14 @@ export default {
         //   'Day 7', 'Day 8', 'Day 9', 'Day 10', 'Day 11', 'Day 12'
         // ]
 
-        categories: this.getTotalSprintDatesArray()
+        categories: this.getTotalSprintTaskDatesArray(this.sprintId),
+        title: {
+          text: 'Estimated Days'
+        },
       },
       yAxis: {
         title: {
-          text: 'Hours'
+          text: 'Days of work'
         },
         plotLines: [{
           value: 0,
@@ -78,7 +134,7 @@ export default {
         }]
       },
       tooltip: {
-        valueSuffix: ' hrs',
+        valueSuffix: ' ds',
         crosshairs: true,
         shared: true
       },
@@ -93,7 +149,7 @@ export default {
                 color: 'rgba(255,0,0,0.25)',
                 lineWidth: 2,
                 // data: [110, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0, 10]
-                data: this.getTotalSprintDatesIdealBurn(),
+                data: this.getBurnDownIdealChartbySprintId(this.sprintId),
                 
               }, {
                 name: 'Actual Burn',
@@ -102,7 +158,7 @@ export default {
                   radius: 6
                 },
                 // data: [100, 110, 125, 95, 64, 76, 62, 44, 35, 29, 18, 2, 10]
-                data: this.getTotalSprintDatesIdealBurn()
+                data: this.getBurnDownActualChartbySprintId(this.sprintId)
                 
               }]
     }

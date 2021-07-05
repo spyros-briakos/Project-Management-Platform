@@ -95,6 +95,25 @@ export default {
 		})
 	},
 
+	async loginGoogle() {
+		// commit("SET_LOADING_STATE", true) 
+		return actions.loginGoogle() 
+		.then( response => {
+			console.log(response);
+      		// console.log(client);
+			// commit("STORE_CLIENT", client.user)
+			// commit("STORE_TOKEN", client.tokenObject.token)
+			// commit("SET_LOGEDIN_STATE", true)
+			// commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			log(error);
+			// commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+	},
+
 	async logout({ commit, getters }, payload) {
 		// Get client object
 		var token = getters.token
@@ -127,6 +146,24 @@ export default {
 	async signup({ commit }, payload) {
 		commit("SET_LOADING_STATE", true) 
 		return actions.signup(payload) 
+		.then( response => {
+			log(response)
+			log("USER HAS SIGNED IN!");
+			commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			log(error);
+			log("ERROR IN SIGNUP");
+			commit("SET_LOADING_STATE", false)
+			throw error
+		}) 
+	},
+
+	
+	async signupGoogle({ commit }, payload) {
+		commit("SET_LOADING_STATE", true) 
+		return actions.signupGoogle(payload) 
 		.then( response => {
 			log(response)
 			log("USER HAS SIGNED IN!");

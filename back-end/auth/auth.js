@@ -96,7 +96,7 @@ passport.use(new JWTstrategy(
     passReqToCallback: true
   }, async (req, payload, done) => {
     // Find user in the db
-    User.findOne({ _id: payload.sub })
+      User.findOne({ _id: payload.sub })
       .then((user) => {
         if(user) {
           // req.user will be used in '../routes/secure-routes'

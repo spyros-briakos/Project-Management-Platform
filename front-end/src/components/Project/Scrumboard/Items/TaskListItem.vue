@@ -11,23 +11,12 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div> 
-    <!-- <v-btn
-      elevation="1"
-      fab
-      x-small
-      block
-      v-if="item.state==='userStory'"
-      @click="collapseTasks_()"
-    > 
-      <i class="fas fa-chevron-up" v-if="collapsedTasks"></i> 
-      <i class="fas fa-chevron-down" v-else></i>
-    </v-btn> -->
   </div> 
 
   <!--  -->
   <!-- Case: Scrum Board -> VisibleTask --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="item.state=='visibleTaskUnderUserStory' && board.id=='SCRUM_BOARD'">   
+  <div class="card tasklist-item" v-else-if="item.state=='visibleTaskUnderUserStory'">   
     
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
       <template v-slot:handle1>
@@ -45,12 +34,20 @@
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
           <div class="temp">
-            <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
+            <!-- <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect> -->
+            <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> Task </h3>
           </div>
+        <!-- <v-alert
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:110px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert> -->
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
-          <!-- <h4>{{ heading }}</h4> -->
           <h4 class="title1"> Τίτλος </h4>
 
           <input style="position:fixed; top: 95px; width: 660px"
@@ -86,6 +83,7 @@
             <v-select
               :items="selecteditems"
               label="Εκτιμώμενη Διάρκεια"
+              v-model="temp_duration"
             ></v-select>
             </v-col>
             </v-row>
@@ -102,6 +100,7 @@
             <v-select
               :items="selecteditems1"
               label="Κατάσταση"
+              v-model="temp_status"
             ></v-select>
             </v-col>
             </v-row>
@@ -118,6 +117,7 @@
             <v-select
               :items=getUserStoriesNames  
               label="User Story"
+              v-model="user_story_of_task"
             ></v-select>
             </v-col>
             </v-row>
@@ -211,7 +211,7 @@
   <!-- Case: Scrum Board -> hiddenTaskUnderUserStory --> 
   <!--  -->
   <div v-else-if="list.name=='Product Backlog' && item.state=='hiddenTaskUnderUserStory'">   
-  
+
   </div>
 
   <!--  -->
@@ -235,9 +235,17 @@
 
         <div class="popupheader">
           <h3 class="titlospopup"> {{ list.name }} </h3>
-          <div class="temp">
+            <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> User Story </h3>
+          <!-- <div class="temp">
             <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:110px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert> -->
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
@@ -268,6 +276,23 @@
             data-vv-as="Item Details"
             placeholder="Γράψε μία περιγραφή"
           />
+          
+          <h6 class="title3" style="top:95px;"> 
+            <v-row align="center">
+              <v-col
+                class="d-flex"
+                cols="12"
+                sm="4"
+              >
+           
+            <v-select
+              :items="user_story_options"
+              label="Είδος User Story"
+              v-model="kind_user_story"
+            ></v-select>
+            </v-col>
+            </v-row>
+          </h6>
 
           <small class="text-danger" style="display:block" v-if="errors.itemTitle">{{ errors.first("itemTitle") }}</small>
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(1)">
@@ -359,6 +384,7 @@
         <span class="edit_2" v-else> 
           <i class="fas fa-plus-circle" @click="startEditing"></i> 
         </span> 
+       
       </template>
 
       <template v-slot:content1>
@@ -369,6 +395,14 @@
             <!-- <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect> -->
             <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> Task </h3>
           </div>
+          <!-- <v-alert
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:110px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert> -->
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
@@ -408,9 +442,8 @@
             <v-select
               :items="selecteditems"
               label="Εκτιμώμενη Διάρκεια"
-              v-model="form.duration"
+              v-model="temp_duration"
             ></v-select>
-              <!-- :value=" getTaskbyId(item.id).estimated_duration ? selecteditems[getTaskbyId(item.id).estimated_duration-1] : ''" -->
             </v-col>
             </v-row>
           </h6>
@@ -426,9 +459,8 @@
             <v-select
               :items="selecteditems1"
               label="Κατάσταση"
-              v-model="form.status"
+              v-model="temp_status"
             ></v-select>
-              <!-- :value=" this.getTaskbyId(this.item.id).status ? this.getTaskbyId(this.item.id).status : ''" -->
             </v-col>
             </v-row>
           </h6>  
@@ -460,7 +492,9 @@
             <i class="fas fa-plus-circle" style="position:fixed; font-size:30px; right:100px; top:345px; cursor: pointer;"></i>            
           </h6>         -->
           <!-- <v-app id="inspire"> -->
-          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px">
+
+
+          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px" v-if="!isNewItem">
             <v-row justify="space-around">
             <v-col
               cols="1"
@@ -485,7 +519,6 @@
             </v-col>
             </v-row>
 
-            <!-- <div class="text-center" style="position:fixed; right:50px; top:300px;"> -->
               <v-btn
                 class="ma-2"
                 :loading="loading"
@@ -505,7 +538,8 @@
               >
                 Leave Task
               </v-btn>
-            </div>
+          </div>
+            
           <!-- </v-app> -->
 
           <!-- <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div>  -->
@@ -537,18 +571,6 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div>
-    <!-- <v-btn
-      elevation="1"
-      fab
-      x-small
-      block
-      v-if="item.state==='userStory'"
-      @click="collapseTasks_()"
-    > 
-      <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
-      <i class="fas fa-chevron-down" v-else></i>
-    </v-btn> -->
-  
   </div>
 
 </template>
@@ -556,12 +578,10 @@
 <script>
 import { mapGetters, mapActions } from "vuex"
 import BacklogPopup from '../Details/BacklogPopup.vue'
-import Multiselect from 'vue-multiselect'
 
 export default {
   components: { 
     BacklogPopup,
-    Multiselect,
     },
   props: ["item", "list", "board"],
   computed: {
@@ -609,22 +629,27 @@ export default {
         sprintName: '',
         storyName: '',
         taskName: '', 
-        duration: "",
-        status: "",
         loader: null,
         loading: false,
+        sizes: [
+        '04', '06', '08', '10', '12', '14',
+        ],
+        selection: '08',
       },
+      temp_status:"",
+      temp_duration:"",
       duration_: "",
       status_: "",
-      user_story_of_task: '',
+      user_story_of_task: "",
+      kind_user_story: "",
       default_task: 'Task',
       default_user_story: "User Story"  ,
-      options: ['User Story','Epic','Issue'],
+      options: ['Epic','Issue'],
       collapsedTasks: false,
-      selecteditems: ['1 Μέρα', '2 Μέρες', '3 Μέρες', '4 Μέρες', '5 Μέρες', 
-      '6 Μέρες', '7 Μέρες', '8 Μέρες', '9 Μέρες', '10 Μέρες', '11 Μέρες', '12 Μέρες', 
-      '13 Μέρες', '14 Μέρες', '15 Μέρες'],
+      selecteditems: ['1 Μέρα', '2 Μέρες', '3 Μέρες', '4 Μέρες', '5 Μέρες', '6 Μέρες', '7 Μέρες', '8 Μέρες', 
+                      '9 Μέρες','10 Μέρες', '11 Μέρες', '12 Μέρες', '13 Μέρες', '14 Μέρες', '15 Μέρες'],
       selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε'],
+      user_story_options: ["Epic","Issue"],
       dropdownlist: [
         { title: 'Click Me' },
         { title: 'Click Me' },
@@ -681,20 +706,32 @@ export default {
     },
 
     startEditing() {
-      console.log(this.selecteditems[this.getTaskbyId(this.item.id).estimated_duration-1])
-      console.log(this.getTaskbyId(this.item.id).estimated_duration)
-      console.log(typeof this.getTaskbyId(this.item.id).estimated_duration)
       this.form.id = this.item.id
       this.form.title = this.item.title
       this.form.text = this.item.text
-      this.form.duration = this.getTaskbyId(this.item.id).estimated_duration-1
       this.isEditing = true
-      // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
+      
+      console.log("START EDITING ",this.item.state)
 
-      if(this.item.state == "visibleTaskUnderUserStory" || this.item.state == "taskInSprint") {
-        var temp = this.getTaskbyId(this.item.id)
-        this.form.duration = temp.estimated_duration
-        this.form.status = temp.status
+      if(this.item.state === "visibleTaskUnderUserStory" || this.item.state === "taskInSprint") {
+        
+        var f = this.getTaskbyId(this.item.id)
+        this.user_story_of_task=this.getUserStorybyId(f.userStory).name
+        this.temp_status = (f.status === "toDo" ? "Εκκρεμεί" : f.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
+
+        if(f.estimated_duration==1) {
+          this.temp_duration = f.estimated_duration.toString()
+          this.temp_duration = this.temp_duration.concat(" Μέρα")
+        }
+        else {
+          this.temp_duration = f.estimated_duration.toString()
+          this.temp_duration = this.temp_duration.concat(" Μέρες")
+        }
+      }
+      else if(this.item.state === "userStory") {
+        var f = this.getUserStorybyId(this.item.id)
+        
+        this.kind_user_story = (f.label == "issue" ? "Issue" : "Epic")
       }
       this.$emit("item-editing")
     },
@@ -706,6 +743,7 @@ export default {
 
     save(temp_case) {
       console.log(temp_case)
+      console.log(this.item.state)
       
       // Case: User Story  
       if(temp_case == 1) {
@@ -714,7 +752,7 @@ export default {
           let userStory = {
             name: this.form.title,
             description: this.form.text,
-            label: "issue",
+            label: this.kind_user_story  == "Issue" ? "issue" : "epic",
             status: "toDo",
             estimated_duration: "10",
           }
@@ -729,7 +767,7 @@ export default {
           let userStoryFormOutput = {
             name: this.form.title,
             description: this.form.text,
-            label: "issue",
+            label: this.kind_user_story  == "Issue" ? "issue" : "epic",
             status: "toDo",
             estimated_duration: "10",
           }
@@ -747,31 +785,11 @@ export default {
       }
       // Case: Task
       else if(temp_case == 2) {
-        
-        console.log(this.user_story_of_task)
-        console.log(this.form.status)
-        
-        if(this.form.status === 'Εκκρεμεί')
-        {
-          this.status_ = "toDo"
-        }
-        else if(this.form.status === 'Σε εξέλιξη')
-        {
-          this.status_ = "inProgress"
-        }
-        else if(this.form.status === 'Ολοκληρώθηκε')
-        {
-          this.status_ = "done"
-        }
-        else
-        {
-          console.log("error")
-        }
-        this.duration_ = this.form.duration.split(" ",1)[0]
-        console.log(this.status_)
-        console.log(this.form.duration)
-        console.log(this.duration_)
 
+        this.status_ = (this.temp_status === "Εκκρεμεί" ? "toDo" : this.temp_status === "Σε εξέλιξη" ? "inProgress" : "done")
+        this.duration_ = this.temp_duration.split(" ",1)[0]
+        console.log("bug")
+        console.log(this.duration_)
         // Case: Create
         if(this.item.state=="defaultItem") {
           let task = {
@@ -781,6 +799,8 @@ export default {
             estimated_duration: this.duration_,
             userStory: this.getUserStoryIdbyName(this.user_story_of_task)
           }
+          console.log("KOKO")
+          console.log(task)
           this.addTaskAndConnectSprint({task:task, sprintName:this.getSprintbyId(this.list.id).name})
         }
         // Case: Edit
@@ -864,7 +884,12 @@ export default {
       if(!isOpen)
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
+
+      if(this.item.state=="defaultItem") {
+        this.temp_status = ""
+        this.temp_duration = ""
       }
+    }
   }
 }
 </script>
