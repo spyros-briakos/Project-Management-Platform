@@ -6,14 +6,14 @@
     <template v-slot:content>
       <div class="popupheader">
         <h3 class="titlospopup1"> {{ heading }} </h3>
-        <v-alert
+        <!-- <v-alert
           color="purple"
           dense
           outlined
           text
           type="info"
           style="top:53px; right:-20px; height:39px"
-        >Συμπλήρωσε όλα τα στοιχεία</v-alert>
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert> -->
       </div>
       
       <form style="position: relative; height:38px; top:80px;">
@@ -54,8 +54,7 @@
             <v-select
               :items="selecteditems"
               label="Εκτιμώμενη Διάρκεια"
-              v-model="listForm.duration"
-              :value="selected"
+              v-model="temp_duration"
             ></v-select>
             </v-col>
             </v-row>
@@ -72,8 +71,7 @@
             <v-select
               :items="selecteditems1"
               label="Κατάσταση"
-              v-model="listForm.status"
-              :value="selectedsprint"
+              v-model="temp_status"
             ></v-select>
             </v-col>
             </v-row>
@@ -106,6 +104,8 @@ export default {
       },
       duration_: "",
       status_: "",
+      temp_duration: "",
+      temp_status: "",
       selecteditems: ['2 Εβδομάδες', '3 Εβδομάδες', '4 Εβδομάδες'],
       selecteditems1: ['Εκκρεμεί', 'Σε εξέλιξη', 'Ολοκληρώθηκε'],
       selectedsprint: "Σε εξέλιξη",
@@ -146,9 +146,11 @@ export default {
       this.listForm.id = list.id
       this.listForm.name = list.name
       this.listForm.text = list.text
-      this.listForm.duration = list.duration
-      this.listForm.status = list.status
-      // here needs an edit form
+
+      var f = this.getSprintbyId(list.id)
+      this.temp_duration = (f.estimated_duration === 14 ? "2 Εβδομάδες" : f.estimated_duration === 21 ? "3 Ββδομάδες" : "4 Ββδομάδες")
+      this.temp_status = (f.status === "toDo" ? "Εκκρεμεί" : f.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
+
       this.$refs.newListPopup.open()
     },
     handleTaskListSave() {  
@@ -191,9 +193,6 @@ export default {
      if(this.listForm.id) {
         // get the current object for place holding
         const sprint = this.getSprintbyId(this.listForm.id)
-
-        this.listForm.duration = (sprint.estimated_duration === "14" ? "2 Εβδομάδες" : sprint.estimated_duration === "21" ? "3 Ββδομάδες" : "4 Ββδομάδες")
-        this.listForm.status = (sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
 
         // get output from form
         let sprintFormOutput = {
