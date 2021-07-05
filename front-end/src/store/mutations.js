@@ -68,7 +68,7 @@ export default {
 					username: user.username
 				})
 		})
-		Vue.set(state, "allUsers", allUsers)
+		Vue.set(state, "allUsers", [...allUsers])
 	},
 
 	STORE_SPRINT(state, payload) {
