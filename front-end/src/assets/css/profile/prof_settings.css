@@ -113,7 +113,7 @@
 .display_val .mywarning{
     display: flex;
     max-width: 70%;
-    color: rgb(221, 75, 75);
+    color: red;
 }
 
 .warn_btn_wrap{
