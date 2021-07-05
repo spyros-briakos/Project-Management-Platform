@@ -255,10 +255,12 @@ export default {
 			} else if (task.status === "done") {
 				done += 1 * parseFloat(task.estimated_duration)
 			}
+			console.log(parseFloat(task.estimated_duration)*0.5)
 		}
 		if (total == 0)
 			return "0"
-		return 100*(done/total).toFixed(1).toString()
+		// console.log(done, total, (100*(parseFloat(done)/total)).toFixed(1).toString())
+		return (100*(parseFloat(done)/total)).toFixed(1).toString()
 	},
 
 	getHistory: (state, getters) => () => {
