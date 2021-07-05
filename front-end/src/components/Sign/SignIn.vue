@@ -107,7 +107,7 @@ export default {
 	    }),
     },
     methods: {
-        ...mapActions(["login", "loginGoogle"]),
+        ...mapActions(["login", "loginGoogle", "loginGoogleAuthenticated"]),
         login_() {
             // this.$actions.login_(this.username, this.password) 
             this.login( { username: this.username, password: this.password } ) 
@@ -145,6 +145,18 @@ export default {
                 
             }) 
 
+        },
+
+        loginGoogleAuthenticated_(code) {
+            this.loginGoogleAuthenticated( code ) 
+            .then( response => {
+                this.$router.push({name:"myProjects"})
+            })
+            .catch( error => { 
+                this.badAllert = true;
+                this.badAllertMessage = error.message
+                
+            })
         },
     },
 };

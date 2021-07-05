@@ -203,6 +203,7 @@ export default {
         this.badSignUpAllert = false
         this.goodSignUpAllert = true
         this.googleMsg = " με τον λογαριασμό Google"
+        window.location.href = response
       })
       .catch( error => { 
         this.goodSignUpAllert = false

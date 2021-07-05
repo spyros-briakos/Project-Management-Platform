@@ -51,7 +51,7 @@
                 <li  v-for="item in elem.items" :key="item.id">
                     <div class="display_val">
                         <label :for="item.title" class="mytitle" :style="{'color': elem.id==3 ? 'red' : ''}">{{item.title}}</label>
-                        <input v-if="elem.id!=3" type="text" :id="item.form_lab" :name="item.form_lab" :value="item.hide==false ? item.val : ''" :placeholder="item.holder" class="val" >
+                        <input v-if="elem.id!=3" :type="elem.form=='pass'? 'password' : 'text'" :id="item.form_lab" :name="item.form_lab" :value="item.hide==false ? item.val : ''" :placeholder="item.holder" class="val" >
                         <div class="mywarning" v-else>
                             {{item.val}}
                         </div>
@@ -122,8 +122,8 @@
                     form: 'pass',
                     items: [
                         {id: 1, title: "Τρέχων Κωδικός", form_lab: 'original_pass', val: "", hide:true, holder: "Πληκτρολόγησε τον κωδικό σου", button: false},
-                        {id: 2, title: "Νέος Κωδικός",  form_lab: 'pass_new', val: "", hide:false, holder: "Πληκτρολόγησε τον νέο σου κωδικό", button: false},
-                        {id: 3, title: "Επαλήθευση Νέου Κωδικού", form_lab: 'pass_new_val', val: "", hide:false, holder: "Επαλήθευση Νέου Κωδικού", button: true},
+                        {id: 2, title: "Νέος Κωδικός",  form_lab: 'pass_new', val: "", hide:true, holder: "Πληκτρολόγησε τον νέο σου κωδικό", button: false},
+                        {id: 3, title: "Επαλήθευση Νέου Κωδικού", form_lab: 'pass_new_val', val: "", hide:true, holder: "Επαλήθευση Νέου Κωδικού", button: true},
                     ]
                 },
 

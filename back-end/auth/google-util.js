@@ -5,7 +5,8 @@ const oauth2 = google.oauth2('v2');
 const Oauth2Client_Singup = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    `http://${process.env.HOST}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/signup`, // this must match your google api settings
+    // `${process.env.GOOGLE_REDIRECT}`, // this must match your google api settings
+    `http://${process.env.HOST}:${process.env.PORT}${process.env.GOOGLE_REDIRECT_SIGNUP}/signup`, // this must match your google api settings
     // `http://${process.env.HOSTNAME}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/signup`, // this must match your google api settings
 );
 
@@ -40,7 +41,8 @@ module.exports.getUserDetails_Signup = async (code) => {
 const Oauth2Client_Login = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  `http://${process.env.HOST}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/login`, // this must match your google api settings
+    `${process.env.GOOGLE_REDIRECT_LOGIN}`, // this must match your google api settings
+    // `http://${process.env.HOST}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/login`, // this must match your google api settings
   // `http://${process.env.HOSTNAME}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/login`, // this must match your google api settings
 );
 

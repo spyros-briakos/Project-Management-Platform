@@ -247,18 +247,20 @@ export default {
 		var total = 0;
 		var done = 0;
 		for(let task of sprint.tasks) {
-			total += 1
+			total += parseFloat(task.estimated_duration)
 			if (task.status === "toDo") {				
-				done += 0
+				done += 0 * parseFloat(task.estimated_duration)
 			} else if (task.status === "inProgress") {
-				done += 0.5
+				done += 0.5 * parseFloat(task.estimated_duration)
 			} else if (task.status === "done") {
-				done += 1
+				done += 1 * parseFloat(task.estimated_duration)
 			}
+			console.log(parseFloat(task.estimated_duration)*0.5)
 		}
 		if (total == 0)
 			return "0"
-		return 100*(done/total).toFixed(1).toString()
+		// console.log(done, total, (100*(parseFloat(done)/total)).toFixed(1).toString())
+		return (100*(parseFloat(done)/total)).toFixed(1).toString()
 	},
 
 	getHistory: (state, getters) => () => {
@@ -332,9 +334,11 @@ export default {
 		var load = yAxis/parseFloat(xAxis)
 		var totalLoad = parseFloat(yAxis)
 		var totalLoadArray = [];
+		var actualLoad = 0.0
 		console.log("Ideal", xAxis, yAxis, load)
 		for(let day=0; day<xAxis; day++) {
-			totalLoadArray.push(totalLoad -= load)
+			actualLoad = totalLoad -= load
+			totalLoadArray.push(parseFloat(actualLoad.toFixed(1)))
 		}
 		return totalLoadArray
 	},
@@ -350,13 +354,13 @@ export default {
 		var load = percentage
 		var totalLoad = parseFloat(yAxis)
 		var totalLoadArray = [];
-		var actualLoad = 0
+		var actualLoad = 0.0
 		console.log("Actual", xAxis, yAxis, load)
 		for(let day=0; day<xAxis; day++) {
 			actualLoad = totalLoad -= load
 			if (actualLoad < 0)
-				actualLoad = 0
-			totalLoadArray.push(actualLoad)
+				actualLoad = 0.0
+			totalLoadArray.push(parseFloat(actualLoad.toFixed(1)))
 		}
 		return totalLoadArray
 	},
