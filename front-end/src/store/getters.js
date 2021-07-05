@@ -133,6 +133,7 @@ export default {
 	
 	isLogedIn: state => state.isLogedIn,
 	token: state => state.token,
+	_id: state=> state._id,
 	userName: state => state.userName,
 	// name: state => state.firstName+" "+state.lastName,
 	firstName: state => state.firstName,
@@ -145,6 +146,8 @@ export default {
 	planRestrictions: state=>(state.plan_in_use == "standard") ?
 		{membersPerPrj: 5, maxPrj: 3, }
 		:{membersPerPrj: 9, maxPrj: 100, },
+
+	
 
 	checkPremiumAtProjectCreation: state => (this.isPremium ? true : state.projects.length < state.constants.maxNonPremiumProjects),
 // 
@@ -162,6 +165,14 @@ export default {
 	// projectUserStories: state => state.project ? state.projectuserStories : null ,
 	projectSprints: state => (state.sprints === undefined || state.sprints.length == 0 ? [] : state.sprints),
 	projectUserStories: state => (state.userStories === undefined || state.userStories.length == 0 ? [] : state.userStories),
+
+	prjRestrictions: state => (state.project ?
+			(state.project.plan_in_use ?
+			
+				{membersPerPrj: 5, boards: false} : {membersPerPrj: 9, boards: true}
+			)
+		:null),
+
 
 	getUserStoriesNames: state => (state.userStories === undefined || state.userStories.length == 0 ? [] : state.userStories.map(us => us.name)),
 

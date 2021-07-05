@@ -27,7 +27,7 @@
 
             <v-tabs vertical>
 
-                <v-tab v-for="item in menu" :key="item.tab + '_btn'" style="justify-content:left;">
+                <v-tab v-for="item in menu" :key="item.tab + '_btn'" :disabled="projectProductOwner == undefined ? '':projectProductOwner._id!=_id && item.key=='deletePrj'" style="justify-content:left;">
                     <v-icon left> mdi-account </v-icon>
                     {{item.tab}}
                 </v-tab>
@@ -50,11 +50,11 @@
                         <v-card flat style="margin-bottom:3vh;">
                             <v-card-subtitle style="display:flex;">Τα Μέλη του Project:</v-card-subtitle>
                             <v-chip-group style="width:80%;margin:0 auto 0 auto;padding:0 10px 0 10px;display:flex;" multiple column>
-                                <v-chip v-for="co in item.info.members" :key="co+'_'+co.usename">
+                                <v-chip v-for="co in item.info.members" :key="co+'_'+co.username">
                                     {{co.username}}
                                 </v-chip>
                             </v-chip-group>
-                            <v-btn style="margin-top:2vh;" @click="_leaveProject">
+                            <v-btn v-if="projectProductOwner == undefined ? '':projectProductOwner._id!=_id" style="margin-top:2vh;" @click="_leaveProject">
                                 Θέλω να αποχωρήσω
                             </v-btn>
                         </v-card>
@@ -64,11 +64,11 @@
                             <!-- <input id="friends" v-model="myform['addCo']"> -->
                             <v-autocomplete style="width:80%;margin:0 auto 0 auto;" @change="updateForm(item, 'CoWorkers', null)" id="getFriends"
                                 class="friends_picker"
-                                :disabled="planRestrictions.membersPerPrj<=projectMembers.length ? true:false"
+                                :disabled="prjRestrictions.membersPerPrj<=projectMembers.length ? true:false"
                                 multiple
                                 chips
                                 label='Προσκάλεσε Νέα Άτομα'
-                                :items="item.info.searchedPeople.concat(item.info.CoWorkers)"
+                                :items="filterInvites(item.info.searchedPeople.concat(item.info.CoWorkers))"
                                 item-text="username"
                                 item-value="username"
                                 v-model="myform['addCo']"
@@ -143,7 +143,9 @@ import fts from "../../FullTextSearch/fts"
                 projectScrumMaster: "projectScrumMaster",
                 projectStatus: "projectStatus",
                 projectMembers: "projectMembers",
-                planRestrictions: "planRestrictions",
+                prjRestrictions: "prjRestrictions",
+                projectProductOwner: "projectProductOwner",
+                _id: "_id"
                 
             }),
             menu: function() { return [
@@ -287,6 +289,26 @@ import fts from "../../FullTextSearch/fts"
                 // console.log(document.forms['prj_form'].elements);
                 document.body.appendChild(form);
                 return form;
+            },
+
+            filterInvites(to_be){
+                // return to_be;
+                if(to_be==undefined || to_be.length==0)
+                    return [];
+                let final = [];
+                for(let user of to_be){
+                    for(let i of this.projectMembers){
+                        console.log("I:")
+                        console.log(i.username);
+                        if(i.username != user.username){
+                            final.push(user);
+                            console.log("User:")
+                            console.log(user.username);
+                            break;
+                        }
+                    }
+                }
+                return final;
             }
         },
         watch:{

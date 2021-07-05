@@ -159,7 +159,7 @@ router.beforeEach((to, from, next) => {
   if( !allow.includes(to.name) && !loged ){
     next({name: 'SignIn'});
   }
-  if(to.name=='Roadmap' && !prem){
+  if(to.name=='Roadmap' || to.name=='History' && !prem){
     next({name: 'Projects'});
   }
   if(remove_when_loged.includes(to.name) && store.getters.isLogedIn){

@@ -4,6 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const multer = require("multer");
 const utils = require("../auth/utils");
 const send_email = require("../auth/send_email");
 const serializer = require("../serializers/users");
@@ -22,6 +23,19 @@ const Sprint = require('../models/Sprint');
 const UserStory = require('../models/UserStory');
 // Import Task model
 const Task = require('../models/Task');
+
+
+// Handling of image upload
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, '../uploads')
+  },
+  filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+var upload = multer({ storage: storage });
+
 
 // Get specific user
 router.get('/user', async (req, res) => {
@@ -96,6 +110,12 @@ router.patch('/edit-user', async (req, res) => {
       // The account will be pending until the new email is verified
       req.body['status'] = 'Pending';
       req.body['verificationCode'] = verificationCode;
+  
+      // // If an image was uploaded, save it locally
+      // if(req.file) {
+      //   req.body.image.data = fs.readFileSync(path.join(__dirname + '../uploads' + req.file.filename));
+      //   req.body.image.contentType = 'image/png';
+      // }
 
       // Update user
       const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
@@ -119,6 +139,13 @@ router.patch('/edit-user', async (req, res) => {
       });
     }
     else {
+      // // If an image was uploaded, save it locally
+      // if(req.file) {
+      //   req.body.image.data = fs.readFileSync(path.join(__dirname + '../uploads' + req.file.filename));
+      //   req.body.image.contentType = 'image/png';
+      // }
+      console.log(req.file);
+
       // Update user
       const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { runValidators: true, new: true });
 
