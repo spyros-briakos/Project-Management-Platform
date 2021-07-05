@@ -11,7 +11,7 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div> 
-    <v-btn
+    <!-- <v-btn
       elevation="1"
       fab
       x-small
@@ -21,7 +21,7 @@
     > 
       <i class="fas fa-chevron-up" v-if="collapsedTasks"></i> 
       <i class="fas fa-chevron-down" v-else></i>
-    </v-btn>
+    </v-btn> -->
   </div> 
 
   <!--  -->
@@ -350,6 +350,7 @@
   <div class="card tasklist-item" v-else>   
     
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
+      
       <template v-slot:handle1>
         
         <span class="edit" v-if="!isNewItem"> 
@@ -536,7 +537,7 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div>
-    <v-btn
+    <!-- <v-btn
       elevation="1"
       fab
       x-small
@@ -546,7 +547,7 @@
     > 
       <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
       <i class="fas fa-chevron-down" v-else></i>
-    </v-btn>
+    </v-btn> -->
   
   </div>
 
