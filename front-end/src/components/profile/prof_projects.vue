@@ -82,18 +82,19 @@
                 </font-awesome-icon>
                 
                 <div :class="{'partners_box': true, 'show_box': selected_prj==project._id}">
-                    
-                    <div class="prof_progress">
-                        Κατάσταση:&#9;
-                        <v-progress-circular style="margin-left:5px"
+                    <!-- {{project.startingDate}} -->
+                    <!-- <div class="vert_div"></div> -->
+                    <div class="prof_progress" style="margin:0 auto 0 auto;font-size:17px;color:teal;">
+                        <!-- Κατάσταση:&#9; -->
+                        <!-- <v-progress-circular style="margin-left:5px"
                                 :rotate="-45"
                                 :size="50"
                                 :width="4"
                                 :value="project.status"
                                 color="teal"
-                        >
+                        > -->
                             {{project.status }}
-                        </v-progress-circular>
+                        <!-- </v-progress-circular> -->
                     </div>
                     <div class="vert_div"></div>
                     
