@@ -26,72 +26,77 @@
             </v-toolbar>
 
             <v-tabs vertical>
-                <v-tab v-for="item in menu" :key="item.tab" style="justify-content:left;">
+
+                <v-tab v-for="item in menu" :key="item.tab + '_btn'" style="justify-content:left;">
                     <v-icon left> mdi-account </v-icon>
                     {{item.tab}}
                 </v-tab>
-                    <v-tab-item style="padding-bottom:10px;" v-for="item in menu" :key="item.tab + '_info'">
-                    
-                        <v-card flat  v-if="item.form=='general'">
-                            <v-card-subtitle style="display:flex;">Γενικές Ρυθμίσεις</v-card-subtitle>
-                            <v-text-field style="width:80%;margin:0 auto 3vh auto;" @change="updateForm(item, elem.key, elem.val)" v-for="elem in item.info" :id="elem.key" :key="elem.key"
-                                :label="elem.tag"
-                                hide-details="auto"
-                                v-model="elem.val"
-                                :readonly="elem.key=='type' ? true : false"
-                                required>
-                                {{elem.val}}
-                            </v-text-field>
-                        </v-card>
 
-                        <v-card flat v-else-if="item.form=='team'">
-                            <v-card flat style="margin-bottom:3vh;">
-                                <v-card-subtitle style="display:flex;">Τα Μέλη του Project:</v-card-subtitle>
-                                <v-chip-group style="width:80%;margin:0 auto 0 auto;padding:0 10px 0 10px;display:flex;" multiple column>
-                                    <v-chip v-for="co in item.info.members" :key="co">
-                                        {{co.username}}
-                                    </v-chip>
-                                </v-chip-group>
-                                <v-btn style="margin-top:2vh;" @click="_leaveProject">
-                                    Θέλω να αποχωρήσω
-                                </v-btn>
-                            </v-card>
+                <v-tab-item style="padding-bottom:10px;" v-for="item in menu" :key="item.tab + '_info'">
+                
+                    <v-card flat  v-if="item.form=='general'">
+                        <v-card-subtitle style="display:flex;">Γενικές Ρυθμίσεις</v-card-subtitle>
+                        <v-text-field style="width:80%;margin:0 auto 3vh auto;" @change="updateForm(item, elem.key, elem.val)" v-for="elem in item.info" :id="elem.key" :key="elem.key"
+                            :label="elem.tag"
+                            hide-details="auto"
+                            v-model="elem.val"
+                            :readonly="elem.key=='type' ? true : false"
+                            required>
+                            {{elem.val}}
+                        </v-text-field>
+                    </v-card>
 
-                            <v-card flat max-width="100%" style="margin:0 auto 0 auto;">
-                                <v-card-subtitle style="display:flex;">Προσκάλεσε Νέα Άτομα</v-card-subtitle>
-                                <input id="friends" v-model="myform['addCo']">
-                                <v-autocomplete style="width:80%;margin:0 auto 0 auto;" @change="updateForm(item, 'CoWorkers', null)" id="getFriends"
-                                    class="friends_picker"
-                                    multiple
-                                    chips
-                                    label='Προσκάλεσε Νέα Άτομα'
-                                    :items="item.info.CoWorkers"
-                                    item-text="username"
-                                    item-value="_id"
-                                    v-model="myform['addCo']"
-                                    clearable
-                                    :menu-props="{maxHeight: 150}"
-                                    >
-                                </v-autocomplete>
-                            </v-card>
-                        </v-card>
-
-                        <v-card flat v-else>
-                            <v-card-subtitle style="display:flex;">Διαγραφή Project</v-card-subtitle>
-                            <v-btn type="submit" x-large color="error" @click="updateForm(item, item.key, '1'); mySubmit();">
-                                {{item.tag}}
+                    <v-card flat v-else-if="item.form=='team'">
+                        <v-card flat style="margin-bottom:3vh;">
+                            <v-card-subtitle style="display:flex;">Τα Μέλη του Project:</v-card-subtitle>
+                            <v-chip-group style="width:80%;margin:0 auto 0 auto;padding:0 10px 0 10px;display:flex;" multiple column>
+                                <v-chip v-for="co in item.info.members" :key="co+'_'+co.usename">
+                                    {{co.username}}
+                                </v-chip>
+                            </v-chip-group>
+                            <v-btn style="margin-top:2vh;" @click="_leaveProject">
+                                Θέλω να αποχωρήσω
                             </v-btn>
                         </v-card>
 
-                        <v-btn @click="mySubmit()" v-if="item.form!='deletePrj'"
-                            :disabled="item.disabled"
-                            style="margin-top:3vh;"
-                            floating x-large
-                            :loading="loading_btn">
-                                Ενημέρωση
+                        <v-card flat max-width="100%" style="margin:0 auto 0 auto;">
+                            <v-card-subtitle style="display:flex;">Προσκάλεσε Νέα Άτομα</v-card-subtitle>
+                            <input id="friends" v-model="myform['addCo']">
+                            <v-autocomplete style="width:80%;margin:0 auto 0 auto;" @change="updateForm(item, 'CoWorkers', null)" id="getFriends"
+                                class="friends_picker"
+                                multiple
+                                chips
+                                label='Προσκάλεσε Νέα Άτομα'
+                                :items="item.info.CoWorkers.concat(item.info.searchedPeople)"
+                                item-text="username"
+                                item-value="_id"
+                                v-model="myform['addCo']"
+                                :search-input.sync="search"
+                                cache-items
+                                clearable
+                                :menu-props="{maxHeight: 150}"
+                                >
+                            </v-autocomplete>
+                        </v-card>
+                    </v-card>
+
+                    <v-card flat v-else>
+                        <v-card-subtitle style="display:flex;">Διαγραφή Project</v-card-subtitle>
+                        <v-btn type="submit" x-large color="error" @click="updateForm(item, item.key, '1'); mySubmit();">
+                            {{item.tag}}
                         </v-btn>
-                    
-                    </v-tab-item>
+                    </v-card>
+
+                    <v-btn @click="mySubmit()" v-if="item.form!='deletePrj'"
+                        :disabled="item.disabled"
+                        style="margin-top:3vh;"
+                        floating x-large
+                        :loading="loading_btn">
+                            Ενημέρωση
+                    </v-btn>
+                
+                </v-tab-item>
+
             </v-tabs>
         <!-- <div>
             {{myform.title}}<br>
@@ -108,6 +113,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex"
+import fts from "../../FullTextSearch/fts"
     export default {
         name: "Settings",
         data(){
@@ -120,6 +126,7 @@ import { mapActions, mapGetters } from "vuex"
                 goodAllertMessage: "",
                 badAllert: false,
                 badAllertMessage: "",
+                search:null,
             }
         },
         computed:{
@@ -155,17 +162,7 @@ import { mapActions, mapGetters } from "vuex"
                             // members:["Μιχάλης", "Ανδρέας","Διον", "Αλεξανρα","Σπυρος", "Μεεεεεεεερηηηηηη","Kapoios 1", "Kapoios 2",],
                             members: this.projectMembers,
                             CoWorkers: this.coWorkers,
-                            // CoWorkers:[
-                            //     {id: 1, name: "Christina Evaggelou"},
-                            //     {id: 2, name: "Giwrgos Raptis"},
-                            //     {id: 3, name: "Melina Papadioti"},
-                            //     {id: 4, name: "Antonis Mourat"},
-                            //     {id: 5, name: "Vasilis Mpimis"},
-                            //     {id: 6, name: "Eleni Masoura"},
-                            //     {id: 7, name: "Rafail Musaj"},
-                            //     {id: 8, name: "Chris Baziotis"},
-                            //     {id: 9, name: "Panos Perdikos"},
-                            // ],
+                            searchedPeople: [],
                             toAdd:{key:"addCo", arr:[]},
                             toRemove:{key:"removeCo", arr:[]},
                         },
@@ -290,6 +287,22 @@ import { mapActions, mapGetters } from "vuex"
                 return form;
             }
         },
+        watch:{
+            search(val){
+                let item;
+                for(let m of this.menu){
+                    if(m.form=='team'){
+                        item = m;
+                        break;
+                    }
+                }
+                item.searchedPeople = [];
+                let found = fts.searchUser(val);
+                for(let user of found){
+                    item.searchedPeople.push(user);
+                }
+            }
+        }
     };
 </script>
 
