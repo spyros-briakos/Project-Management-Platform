@@ -95,6 +95,25 @@ export default {
 		})
 	},
 
+	async loginGoogle() {
+		// commit("SET_LOADING_STATE", true) 
+		return actions.loginGoogle() 
+		.then( response => {
+			console.log(response);
+      		// console.log(client);
+			// commit("STORE_CLIENT", client.user)
+			// commit("STORE_TOKEN", client.tokenObject.token)
+			// commit("SET_LOGEDIN_STATE", true)
+			// commit("SET_LOADING_STATE", false)
+			return response
+		})
+		.catch( error => { 
+			log(error);
+			// commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+	},
+
 	async logout({ commit, getters }, payload) {
 		// Get client object
 		var token = getters.token
@@ -1247,6 +1266,11 @@ export default {
 
 		// get task
 		var task = getters.getTaskbyId(taskId)
+
+		// check if user already exists in this task
+		var taskMembers = getters.getTaskMembersbyId(taskId)
+		if (taskMembers.includes(getters.userName))
+			return
 	
 		
 		commit("SET_LOADING_STATE", true) 
@@ -1305,6 +1329,11 @@ export default {
 
 	},
 
+	async putSprintInFront({ commit, getters }, sprintName) {
+		// get Sprint id
+		var sprintId = getters.getSprintbyName(sprintName)._id
+		commit("PUT_SPRINT_IN_FRONT", sprintId)
+	},
 
 
 

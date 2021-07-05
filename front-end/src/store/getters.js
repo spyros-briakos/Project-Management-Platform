@@ -168,6 +168,13 @@ export default {
 	invitesSeen: state => ( (state.invites === undefined || state.invites.length == 0) ? false : (state.invites.map(o => o.seen).reduce((accumulator, currentValue) => accumulator + currentValue) === state.invites.length) ? false : true),
 	coWorkers: state=>( (state.coWorkers === undefined || state.coWorkers.length == 0) ? (testing ? coWorkersTest : []) : state.coWorkers ),
 
+	getSprintNames: (state) => () => {
+		var sprintNames = []
+		for (let sprint of state.sprints) {
+			sprintNames.push(sprint.name)
+		}
+		return sprintNames
+	},
 
 	getSprintbyName: (state) => (sprintName) => {
         return JSON.parse(JSON.stringify(state.sprints.find(s => s.name === sprintName)))
@@ -260,6 +267,7 @@ export default {
 		for(let sprint of state.sprints) {
 			forms.push({
 				id: ++id,
+				name: sprint.name,
 				status: sprint.status === "toDo" ? "Εκκρεμεί" : sprint.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε",
 				progress: getters.getSprintPercentage(sprint), 
 				comments: sprint.description
@@ -275,21 +283,75 @@ export default {
 		}
 		return totalDays
 	},
+	
+	
 
-	getTotalSprintDatesArray: (state, getters) => () => {
+	getTotalSprintDatesArray: (state, getters) => (id) => {
 		var totalDaysArray = [];
-		for(let day=0; day<getters.getTotalSprintDates(); day++) {
+		var estimated_duration = parseInt(getSprintbyId(id).estimated_duration)
+		for(let day=0; day<estimated_duration; day++) {
 			totalDaysArray.push(day)
 		}
 		return totalDaysArray
 	},
-
+	
 	getTotalSprintDatesIdealBurn: (state, getters) => () => {
 		var totalDaysArray = [];
 		for(let day=getters.getTotalSprintDates(); day>0; day--) {
 			totalDaysArray.push(day)
 		}
 		return totalDaysArray
+	},
+	
+
+
+	getTotalSprintTaskDates: (state, getters) => (id) => {
+		var sprintTasks = getters.getSprintbyId(id).tasks
+
+		var totalDays = 1;
+		for(let task of sprintTasks) {
+			totalDays += parseInt(task.estimated_duration)
+		}
+		return totalDays
+	},
+
+	getTotalSprintTaskDatesArray: (state, getters) => (id) => {
+		var totalDaysArray = [];
+		var estimated_duration = parseInt(getters.getSprintbyId(id).estimated_duration)
+		for(let day=1; day<=estimated_duration; day++) {
+			totalDaysArray.push(day)
+		}
+		return totalDaysArray
+	},
+
+	getBurnDownIdealChartbySprintId: (state, getters) => (id) => {
+		var xAxisArray = getters.getTotalSprintTaskDatesArray(id)
+		var xAxis = xAxisArray.length
+		var yAxis = getters.getTotalSprintTaskDates(id)
+		var yAxisArray = new Array(yAxis)
+		var load = yAxis/parseFloat(xAxis)
+		var totalLoad = parseFloat(yAxis)
+		var totalLoadArray = [];
+		console.log(xAxis, yAxis, load)
+		for(let day=0; day<xAxis; day++) {
+			totalLoadArray.push(totalLoad -= load)
+		}
+		return totalLoadArray
+	},
+
+	getBurnDownActualChartbySprintId: (state, getters) => (id) => {
+		var xAxisArray = getters.getTotalSprintTaskDatesArray(id)
+		var xAxis = xAxisArray.length
+		var yAxis = getters.getTotalSprintTaskDates(id)
+		var yAxisArray = new Array(yAxis)
+		var load = yAxis/parseFloat(xAxis)
+		var totalLoad = parseFloat(yAxis)
+		var totalLoadArray = [];
+		console.log(xAxis, yAxis, load)
+		for(let day=0; day<xAxis; day++) {
+			totalLoadArray.push(totalLoad -= load)
+		}
+		return totalLoadArray
 	},
 
 

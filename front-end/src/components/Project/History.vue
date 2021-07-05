@@ -16,7 +16,7 @@
             <div v-for="item in getHistory()" :key="item.id" class="row_divider_wrap">
                 <div class="myflex_row">
                     <div class="myflex_item sprint">
-                        {{'No'+item.id}}
+                        {{item.name}}
                     </div>
                     <div class="myflex_item">
                         {{item.status}}

@@ -54,22 +54,14 @@
                 </p>
 
                 <div class="social-icons">
-                    <h6>ή συνδέσου με...</h6>
+                    <h6>ή συνδέσου με το Google Account σου</h6>
                     <ul>
                         
                         <li> 
+                            <a href="#" @click="loginGoogle_"><i class="fab fa-google" style="color:dodgerblue"></i></a>
                             <!-- <a class="fb-ic mr-3" role="button"><mdb-icon fab icon="facebook-f" size="lg" /></a> -->
                             <!-- <mdb-btn tag="a" size="lg" floating class="btn-fb" icon="facebook-f" fab></mdb-btn> -->
                         </li>
-
-                        <li>
-                            <!-- <mdb-btn tag="a" size="lg" floating class="btn-fb" icon="facebook-f" fab></mdb-btn> -->
-                        </li>
-
-                        <li>
-                            <!-- <mdbBtn tag="a" size="lg" floating class="btn-fb" icon="facebook-f" fab></mdbBtn> -->
-                        </li>
-
                     </ul> 
                 </div>
 
@@ -101,7 +93,7 @@ export default {
 	    }),
     },
     methods: {
-        ...mapActions(["login"]),
+        ...mapActions(["login", "loginGoogle"]),
         login_() {
             // this.$actions.login_(this.username, this.password) 
             this.login( { username: this.username, password: this.password } ) 
@@ -123,6 +115,21 @@ export default {
             //         } else {
             //                 console.log("A username and password must be present");
             // username, password
+
+        },
+
+        loginGoogle_() {
+            this.loginGoogle() 
+            .then( response => {
+                // alert(response)
+                // this.$router.push({name:"myProjects"})
+                window.location.href = response
+            })
+            .catch( error => { 
+                this.badAllert = true;
+                this.badAllertMessage = error.message
+                
+            }) 
 
         },
     },

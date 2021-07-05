@@ -21,6 +21,35 @@
           <input type="search" id="form1" class="form-control"  placeholder="Search title.."/>
         </div> -->
       
+      
+      <div style="position:relative; top:-15px; max-height:30px; right:-430px;">
+        <v-row style="height:8px"
+        align="center"
+        >
+        <v-col cols="12">
+          <v-autocomplete 
+            v-model="searchedSprintName"
+            :items="getSprintNames()"
+            outlined
+            label="Search Sprints"
+          ></v-autocomplete>
+        </v-col>
+        </v-row>
+        <v-btn style="position:relative; right:-160px; top:25px"
+          elevation="2"
+          class="mx-2"
+          fab
+          small
+          color="#7A96A3"
+          @click="putSprintInFront(searchedSprintName)"
+          
+        >
+          <v-icon dark>
+          fas fa-search
+        </v-icon>
+      </v-btn>
+      </div>
+      
       <!-- Only show above options on ScrumBoard -->
       <!-- <div class="d-flex justify-content-end" v-if="!isLoading && this.activeBoard.id==='SCRUM_BOARD'" > -->
       <div class="d-flex justify-content-end" v-if="this.activeBoard.id=='SCRUM_BOARD'" >
@@ -163,6 +192,10 @@ export default {
     sprintName: '',
     storyName: '',
     taskName: '',
+    items: ['foo', 'bar', 'fizz', 'buzz'],
+    values: ['foo', 'bar'],
+    value: null,
+    searchedSprintName:'',
   }),
 
   computed: {
@@ -175,6 +208,7 @@ export default {
       getTaskIdbyNames: "getTaskIdbyNames",
       getUserStorybyName: "getUserStorybyName",
       getTaskbyNames: "getTaskbyNames",
+      getSprintNames: "getSprintNames",
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -193,6 +227,7 @@ export default {
       deleteSprint: "deleteSprint",
       connectSprint: "connectSprint",
       addTaskAndConnectSprint: "addTaskAndConnectSprint",
+      putSprintInFront: "putSprintInFront",
       
     }),
 

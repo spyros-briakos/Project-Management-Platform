@@ -63,9 +63,7 @@ passport.use('login', new localStrategy(
   }, async (username, password, done) => {
     try {
       // Find user in the db
-      console.log(username);
       const user = await User.findOne({ username: username });
-      console.log(user);
       // If no such user
       if (!user) {
         return done(null, false, { message: 'Δεν βρέθηκε τέτοιος χρήστης.' });
@@ -98,7 +96,7 @@ passport.use(new JWTstrategy(
     passReqToCallback: true
   }, async (req, payload, done) => {
     // Find user in the db
-    User.findOne({ _id: payload.sub })
+      User.findOne({ _id: payload.sub })
       .then((user) => {
         if(user) {
           // req.user will be used in '../routes/secure-routes'

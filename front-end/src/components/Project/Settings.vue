@@ -110,6 +110,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex"
+import fts from "../../FullTextSearch/fts"
     export default {
         name: "Settings",
         data(){
@@ -122,6 +123,7 @@ import { mapActions, mapGetters } from "vuex"
                 goodAllertMessage: "",
                 badAllert: false,
                 badAllertMessage: "",
+                search:null,
             }
         },
         computed:{
@@ -284,7 +286,7 @@ import { mapActions, mapGetters } from "vuex"
         },
         watch:{
             search(val){
-                let found = this.searchAllUsers(val);
+                let found = fts.searchUser(val);
                 for(let user of found){
 
                 }

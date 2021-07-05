@@ -11,7 +11,7 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div> 
-    <v-btn
+    <!-- <v-btn
       elevation="1"
       fab
       x-small
@@ -21,13 +21,13 @@
     > 
       <i class="fas fa-chevron-up" v-if="collapsedTasks"></i> 
       <i class="fas fa-chevron-down" v-else></i>
-    </v-btn>
+    </v-btn> -->
   </div> 
 
   <!--  -->
   <!-- Case: Scrum Board -> VisibleTask --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="item.state=='visibleTaskUnderUserStory' && board.id=='SCRUM_BOARD'">   
+  <div class="card tasklist-item" v-else-if="item.state=='visibleTaskUnderUserStory'">   
     
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
       <template v-slot:handle1>
@@ -47,10 +47,17 @@
           <div class="temp">
             <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
+        <v-alert
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:110px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert>
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
-          <!-- <h4>{{ heading }}</h4> -->
           <h4 class="title1"> Τίτλος </h4>
 
           <input style="position:fixed; top: 95px; width: 660px"
@@ -134,17 +141,52 @@
           </h6>        
           <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div>  -->
 
-          <div class="text-center" style="position:fixed; right:50px; top:300px;">
-          <v-btn
-            class="ma-2"
-            :loading="loading"
-            :disabled="loading"
-            color="#48C0A4"
-            @click="collapseMembers()"
-          >
-            Γίνε μέλος αυτού του Task
-          </v-btn>
-        </div>
+          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px">
+            <v-row justify="space-around">
+            <v-col
+              cols="1"
+              sm="10"
+              md="12"
+            >
+              <v-sheet
+                class="py-4 px-1"
+              >
+                <v-chip-group
+                  multiple
+                  active-class="primary--text"
+                >
+                  <v-chip
+                    v-for="tag in getTaskMembersbyId(item.id)"
+                    :key="tag"
+                  >
+                    {{ tag }}
+                  </v-chip>
+                </v-chip-group>
+              </v-sheet>
+            </v-col>
+            </v-row>
+
+            <!-- <div class="text-center" style="position:fixed; right:50px; top:300px;"> -->
+              <v-btn
+                class="ma-2"
+                :loading="loading"
+                :disabled="loading"
+                color="#48C0A4"
+                @click="joinTask(item.id)"
+              >
+                Join Task
+              </v-btn>
+
+               <v-btn
+                class="ma-2"
+                :loading="loading"
+                :disabled="loading"
+                color=#F78A37
+                @click="leaveTask(item.id)"
+              >
+                Leave Task
+              </v-btn>
+            </div>
 
           <small class="text-danger" style="display:block">{{ errors.first("itemTitle") }}</small>
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(2)">
@@ -176,7 +218,7 @@
   <!-- Case: Scrum Board -> hiddenTaskUnderUserStory --> 
   <!--  -->
   <div v-else-if="list.name=='Product Backlog' && item.state=='hiddenTaskUnderUserStory'">   
-  
+
   </div>
 
   <!--  -->
@@ -315,6 +357,7 @@
   <div class="card tasklist-item" v-else>   
     
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
+      
       <template v-slot:handle1>
         
         <span class="edit" v-if="!isNewItem"> 
@@ -323,6 +366,7 @@
         <span class="edit_2" v-else> 
           <i class="fas fa-plus-circle" @click="startEditing"></i> 
         </span> 
+       
       </template>
 
       <template v-slot:content1>
@@ -333,6 +377,14 @@
             <!-- <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect> -->
             <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> Task </h3>
           </div>
+          <v-alert
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:110px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert>
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
@@ -372,7 +424,9 @@
             <v-select
               :items="selecteditems"
               label="Εκτιμώμενη Διάρκεια"
+              v-model="form.duration"
             ></v-select>
+              <!-- :value=" getTaskbyId(item.id).estimated_duration ? selecteditems[getTaskbyId(item.id).estimated_duration-1] : ''" -->
             </v-col>
             </v-row>
           </h6>
@@ -388,8 +442,9 @@
             <v-select
               :items="selecteditems1"
               label="Κατάσταση"
-              v-model="selected"
+              v-model="form.status"
             ></v-select>
+              <!-- :value=" this.getTaskbyId(this.item.id).status ? this.getTaskbyId(this.item.id).status : ''" -->
             </v-col>
             </v-row>
           </h6>  
@@ -421,7 +476,9 @@
             <i class="fas fa-plus-circle" style="position:fixed; font-size:30px; right:100px; top:345px; cursor: pointer;"></i>            
           </h6>         -->
           <!-- <v-app id="inspire"> -->
-          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px">
+
+
+          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px" v-if="!isNewItem">
             <v-row justify="space-around">
             <v-col
               cols="1"
@@ -436,7 +493,7 @@
                   active-class="primary--text"
                 >
                   <v-chip
-                    v-for="tag in tags"
+                    v-for="tag in getTaskMembersbyId(item.id)"
                     :key="tag"
                   >
                     {{ tag }}
@@ -446,13 +503,12 @@
             </v-col>
             </v-row>
 
-            <!-- <div class="text-center" style="position:fixed; right:50px; top:300px;"> -->
               <v-btn
                 class="ma-2"
                 :loading="loading"
                 :disabled="loading"
                 color="#48C0A4"
-                @click="collapseMembers()"
+                @click="joinTask(item.id)"
               >
                 Join Task
               </v-btn>
@@ -462,11 +518,12 @@
                 :loading="loading"
                 :disabled="loading"
                 color=#F78A37
-                @click="collapseMembers()"
+                @click="leaveTask(item.id)"
               >
                 Leave Task
               </v-btn>
-            </div>
+          </div>
+            
           <!-- </v-app> -->
 
           <!-- <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div>  -->
@@ -498,7 +555,7 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div>
-    <v-btn
+    <!-- <v-btn
       elevation="1"
       fab
       x-small
@@ -508,7 +565,7 @@
     > 
       <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
       <i class="fas fa-chevron-down" v-else></i>
-    </v-btn>
+    </v-btn> -->
   
   </div>
 
@@ -552,7 +609,8 @@ export default {
       getUserStorybyId: "getUserStorybyId",
       getUserStoryIdbyName: "getUserStoryIdbyName",
       getSprintbyId: "getSprintbyId",
-      getTaskbyId: "getTaskbyId"
+      getTaskbyId: "getTaskbyId",
+      getTaskMembersbyId: "getTaskMembersbyId"
     }),
     boardName() {
       return this.activeBoard ? this.activeBoard.name : ""
@@ -569,9 +627,13 @@ export default {
         sprintName: '',
         storyName: '',
         taskName: '', 
+        duration: "",
+        status: "",
         loader: null,
         loading: false,
       },
+      duration_: "",
+      status_: "",
       user_story_of_task: '',
       default_task: 'Task',
       default_user_story: "User Story"  ,
@@ -625,7 +687,9 @@ export default {
       addSprint: "addSprint",
       editSprint: "editSprint",
       deleteSprint: "deleteSprint",
-      addTaskAndConnectSprint: "addTaskAndConnectSprint"
+      addTaskAndConnectSprint: "addTaskAndConnectSprint",
+      joinTask: "joinTask",
+      leaveTask: "leaveTask"
     }),
 
     collapseTasks_() {
@@ -635,11 +699,21 @@ export default {
     },
 
     startEditing() {
+      console.log(this.selecteditems[this.getTaskbyId(this.item.id).estimated_duration-1])
+      console.log(this.getTaskbyId(this.item.id).estimated_duration)
+      console.log(typeof this.getTaskbyId(this.item.id).estimated_duration)
       this.form.id = this.item.id
       this.form.title = this.item.title
       this.form.text = this.item.text
+      this.form.duration = this.getTaskbyId(this.item.id).estimated_duration-1
       this.isEditing = true
       // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
+
+      if(this.item.state == "visibleTaskUnderUserStory" || this.item.state == "taskInSprint") {
+        var temp = this.getTaskbyId(this.item.id)
+        this.form.duration = temp.estimated_duration
+        this.form.status = temp.status
+      }
       this.$emit("item-editing")
     },
     clearForm() {
@@ -693,13 +767,36 @@ export default {
       else if(temp_case == 2) {
         
         console.log(this.user_story_of_task)
+        console.log(this.form.status)
+        
+        if(this.form.status === 'Εκκρεμεί')
+        {
+          this.status_ = "toDo"
+        }
+        else if(this.form.status === 'Σε εξέλιξη')
+        {
+          this.status_ = "inProgress"
+        }
+        else if(this.form.status === 'Ολοκληρώθηκε')
+        {
+          this.status_ = "done"
+        }
+        else
+        {
+          console.log("error")
+        }
+        this.duration_ = this.form.duration.split(" ",1)[0]
+        console.log(this.status_)
+        console.log(this.form.duration)
+        console.log(this.duration_)
+
         // Case: Create
         if(this.item.state=="defaultItem") {
           let task = {
             name: this.form.title,
             description: this.form.text,
-            status: this.form.status,
-            estimated_duration: this.form.duration,
+            status: this.status_,
+            estimated_duration: this.duration_,
             userStory: this.getUserStoryIdbyName(this.user_story_of_task)
           }
           this.addTaskAndConnectSprint({task:task, sprintName:this.getSprintbyId(this.list.id).name})
@@ -713,8 +810,8 @@ export default {
           let taskFormOutput = {
             name: this.form.title,
             description: this.form.text,
-            status: this.form.status,
-            estimated_duration: this.form.duration,
+            status: this.status_,
+            estimated_duration: this.duration_,
             // userStory: this.getUserStoryIdbyName(this.user_story_of_task)
           }
 
@@ -785,7 +882,7 @@ export default {
       if(!isOpen)
         this.$emit("item-cancelled")
       // console.log("TaskListItem handle: ", this.isEditing, " and isOpen here: ", isOpen)
-    }
+      }
   }
 }
 </script>
