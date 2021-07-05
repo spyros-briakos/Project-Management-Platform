@@ -109,10 +109,10 @@ const options = {
 // const server = https.createServer(options, app).listen(PORT, function(){
   // console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
 // });
-// const server = http.createServer(options, app).listen(PORT, function(){
-  // console.log(`Server listening at http://${HOST}:${PORT}/`);
-// });
 const server = http.createServer(options, app).listen(PORT, function(){
-  console.log(`Server listening at https://${process.env.HOST}:${PORT}/`);
+  console.log(`Server listening at http://${HOST}:${PORT}/`);
 });
+// const server = http.createServer(options, app).listen(PORT, function(){
+  // console.log(`Server listening at https://${process.env.HOST}:${PORT}/`);
+// });
 module.exports = server;
