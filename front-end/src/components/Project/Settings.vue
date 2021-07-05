@@ -67,7 +67,7 @@
                                 multiple
                                 chips
                                 label='Προσκάλεσε Νέα Άτομα'
-                                :items="item.info.CoWorkers.concat(item.info.searchedPeople)"
+                                :items="item.info.searchedPeople.concat(item.info.CoWorkers)"
                                 item-text="username"
                                 item-value="_id"
                                 v-model="myform['addCo']"
@@ -94,7 +94,7 @@
                         :loading="loading_btn">
                             Ενημέρωση
                     </v-btn>
-                
+
                 </v-tab-item>
 
             </v-tabs>
@@ -142,7 +142,7 @@ import fts from "../../FullTextSearch/fts"
                 projectScrumMaster: "projectScrumMaster",
                 projectStatus: "projectStatus",
                 projectMembers: "projectMembers",
-
+                
             }),
             menu: function() { return [
                     {
@@ -161,7 +161,7 @@ import fts from "../../FullTextSearch/fts"
                         info: {
                             // members:["Μιχάλης", "Ανδρέας","Διον", "Αλεξανρα","Σπυρος", "Μεεεεεεεερηηηηηη","Kapoios 1", "Kapoios 2",],
                             members: this.projectMembers,
-                            CoWorkers: this.coWorkers,
+                            CoWorkers: this.coWorkers==undefined ? [] : this.coWorkers,
                             searchedPeople: [],
                             toAdd:{key:"addCo", arr:[]},
                             toRemove:{key:"removeCo", arr:[]},
@@ -296,10 +296,10 @@ import fts from "../../FullTextSearch/fts"
                         break;
                     }
                 }
-                item.searchedPeople = [];
+                item.info.searchedPeople = [];
                 let found = fts.searchUser(val);
                 for(let user of found){
-                    item.searchedPeople.push(user);
+                    item.info.searchedPeople.push(user);
                 }
             }
         }
