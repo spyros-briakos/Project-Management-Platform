@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      
+      sprintId: "60df2991c514e12171538144"
     };
   },
   created() {
@@ -32,6 +32,10 @@ export default {
         getTotalSprintDates: "getTotalSprintDates",
         getTotalSprintDatesArray: "getTotalSprintDatesArray",
         getTotalSprintDatesIdealBurn: "getTotalSprintDatesIdealBurn",
+        getTotalSprintTaskDates: "getTotalSprintTaskDates",
+        getTotalSprintTaskDatesArray: "getTotalSprintTaskDatesArray",
+        getBurnDownIdealChartbySprintId: "getBurnDownIdealChartbySprintId",
+        getBurnDownActualChartbySprintId: "getBurnDownActualChartbySprintId"
     }),
 
     chartOptions: function() {
@@ -66,11 +70,14 @@ export default {
         //   'Day 7', 'Day 8', 'Day 9', 'Day 10', 'Day 11', 'Day 12'
         // ]
 
-        categories: this.getTotalSprintDatesArray()
+        categories: this.getTotalSprintTaskDatesArray(this.sprintId),
+        title: {
+          text: 'Estimated Days'
+        },
       },
       yAxis: {
         title: {
-          text: 'Hours'
+          text: 'Days of work'
         },
         plotLines: [{
           value: 0,
@@ -78,7 +85,7 @@ export default {
         }]
       },
       tooltip: {
-        valueSuffix: ' hrs',
+        valueSuffix: ' ds',
         crosshairs: true,
         shared: true
       },
@@ -93,7 +100,7 @@ export default {
                 color: 'rgba(255,0,0,0.25)',
                 lineWidth: 2,
                 // data: [110, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0, 10]
-                data: this.getTotalSprintDatesIdealBurn(),
+                data: this.getBurnDownIdealChartbySprintId(this.sprintId),
                 
               }, {
                 name: 'Actual Burn',
@@ -102,7 +109,7 @@ export default {
                   radius: 6
                 },
                 // data: [100, 110, 125, 95, 64, 76, 62, 44, 35, 29, 18, 2, 10]
-                data: this.getTotalSprintDatesIdealBurn()
+                data: this.getBurnDownActualChartbySprintId(this.sprintId)
                 
               }]
     }
