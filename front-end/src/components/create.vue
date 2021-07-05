@@ -137,7 +137,7 @@ export default({
             var project = {
                 name: null,
                 description: null,
-                plan: null,
+                plan_in_use: null,
                 status: "inProgress"
             }
             var elements = document.getElementById("prj_form").elements;
@@ -150,10 +150,10 @@ export default({
                     project.description = element.value
                 } else if (element.id === "standardSelector"){
                     // console.log(element.checked)
-                    project.plan = element.checked ? "standard" : "premium"
+                    project.plan_in_use = element.checked ? "standard" : "premium"
                 } else if (element.id === "premiumSelector"){
                     // console.log(element.checked)
-                    project.plan = element.checked ? "premium" : "standard"
+                    project.plan_in_use = element.checked ? "premium" : "standard"
                 } else if (element.id === "prDates"){
                     // console.log(element.value)
                 } else if (element.id === "getFriends"){
