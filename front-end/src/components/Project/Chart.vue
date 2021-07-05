@@ -65,12 +65,11 @@ export default {
         'Creative Writing',
       ],
       
-      sprintId: ""
+      sprintId: "60df2991c514e12171538144"
     };
   },
   created() {
-    // console.log("DDAAYSS", this.getTotalSprintDates())
-    // console.log("DDAAYSS", this.getTotalSprintDatesArray())
+    this.sprintId = this.getSprintbyName(this.getSprintNames()[0])._id
     
   },
   computed: {

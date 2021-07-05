@@ -332,7 +332,7 @@ export default {
 		var load = yAxis/parseFloat(xAxis)
 		var totalLoad = parseFloat(yAxis)
 		var totalLoadArray = [];
-		console.log(xAxis, yAxis, load)
+		console.log("Ideal", xAxis, yAxis, load)
 		for(let day=0; day<xAxis; day++) {
 			totalLoadArray.push(totalLoad -= load)
 		}
@@ -347,7 +347,7 @@ export default {
 		var load = yAxis/parseFloat(xAxis)
 		var totalLoad = parseFloat(yAxis)
 		var totalLoadArray = [];
-		console.log(xAxis, yAxis, load)
+		console.log("Actual", xAxis, yAxis, load)
 		for(let day=0; day<xAxis; day++) {
 			totalLoadArray.push(totalLoad -= load)
 		}
