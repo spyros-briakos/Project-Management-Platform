@@ -160,7 +160,7 @@ export default {
   },
   
   methods: {
-    ...mapActions(["signup", "signupGoogle"]),
+    ...mapActions(["signup", "signupGoogle", "signupGoogleAuthenticated"]),
     goToSignIn(){
       this.$router.push({name:"SignIn"})
     },
@@ -212,6 +212,16 @@ export default {
       }) 
     },
 
+    signupGoogleAuthenticated_(code) {
+      this.signupGoogleAuthenticated( code ) 
+      .then( response => {
+        this.$router.push({name:"myProjects"})
+      })
+      .catch( error => { 
+        this.badAllert = true;
+        this.badAllertMessage = error.message                
+      })
+    },
 
   }
 };

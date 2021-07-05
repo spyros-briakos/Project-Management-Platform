@@ -177,6 +177,16 @@ router.beforeEach((to, from, next) => {
     })
   }
 
+  if(to.path.includes('gAccountSignup')){
+    // console.log("EDWWW");
+    console.log(to.query.code);
+    store.dispatch("signupGoogleAuthenticated", to.query.code)
+    .then( response=> {
+      // next({name:"myProjects"})
+      router.push({name:"myProjects"})
+    })
+  }
+
 })
 
 export default router;

@@ -199,6 +199,28 @@ export default {
 		}) 
 	},
 
+	async signupGoogleAuthenticated({ commit }, code) {
+		commit("SET_LOADING_STATE", true) 
+		console.log("NAIIIII", code)
+		return actions.signupGoogleAuthenticated(code) 
+		.then( response => {
+			console.log("WORKEEED", code)
+			console.log(response);
+      		console.log(client);
+			commit("STORE_CLIENT", client.user)
+			commit("STORE_TOKEN", client.tokenObject.token)
+			commit("SET_LOGEDIN_STATE", true)
+			commit("SET_LOADING_STATE", false)
+		})
+		.catch( error => { 
+			console.log(error);
+			console.log("error");
+			commit("SET_LOADING_STATE", false)
+			throw error;
+		})
+	},
+
+
 	async forgotPassword({ commit }, payload) {
 		commit("SET_LOADING_STATE", true) 
 		return actions.forgotPassword(payload)

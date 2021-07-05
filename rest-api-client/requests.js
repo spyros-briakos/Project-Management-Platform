@@ -195,6 +195,12 @@ export const loginGoogleAuthenticatedRequest = async (code) => {
   .catch(function(error) { throw error })
 }
 
+export const signupGoogleAuthenticatedRequest = async (code) => {
+  return restAPI.send('GET', `users/oauth2callback/signup?code=${code}`, {})
+  .then(function(response) { return response })
+  .catch(function(error) { throw error })
+}
+
 
 // PROJECT -----------------------------------------------
 

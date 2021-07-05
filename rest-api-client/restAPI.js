@@ -272,6 +272,16 @@ export const actions = {
     .catch(function(error) { client = initClient(); throw error })
   },
 
+  async signupGoogleAuthenticated(code) {
+    return requests.signupGoogleAuthenticatedRequest(code)
+    .then(function(response) {
+      // Set client object
+      actions.setClient(response);
+      return response.message;
+    })
+    .catch(function(error) { client = initClient(); throw error })
+  },
+
   // PROJECT -----------------------------------------------
 
   // Get user's projects

@@ -190,10 +190,10 @@ router.get('/oauth2callback/login', async(req, res) => {
 
       // Exchange 'code' with the user's email
       const userInfo = await googleUtil.getUserDetails_Login(code);
-
+      console.log(userInfo.email)
       // Find user in db
       const [ user ] = await User.find({ email: userInfo.email });
-
+      console.log(user);
       // If no such user in the db
       if(!user) {
         return res.status(500).json({ message: 'Σφάλμα: Δεν βρέθηκε τέτοιος χρήστης.' });
