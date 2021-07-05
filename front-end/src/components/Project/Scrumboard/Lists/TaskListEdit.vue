@@ -6,6 +6,14 @@
     <template v-slot:content>
       <div class="popupheader">
         <h3 class="titlospopup1"> {{ heading }} </h3>
+        <v-alert
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:-20px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert>
       </div>
       
       <form style="position: relative; height:38px; top:80px;">

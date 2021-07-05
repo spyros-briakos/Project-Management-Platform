@@ -27,7 +27,7 @@
   <!--  -->
   <!-- Case: Scrum Board -> VisibleTask --> 
   <!--  -->
-  <div class="card tasklist-item" v-else-if="item.state=='visibleTaskUnderUserStory' && board.id=='SCRUM_BOARD'">   
+  <div class="card tasklist-item" v-else-if="item.state=='visibleTaskUnderUserStory'">   
     
     <BacklogPopup ref="newItemPopup" @popuptoggled1="handlePopupToggled1">
       <template v-slot:handle1>
@@ -47,10 +47,17 @@
           <div class="temp">
             <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
+        <v-alert
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:110px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert>
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
-          <!-- <h4>{{ heading }}</h4> -->
           <h4 class="title1"> Τίτλος </h4>
 
           <input style="position:fixed; top: 95px; width: 660px"
@@ -211,7 +218,7 @@
   <!-- Case: Scrum Board -> hiddenTaskUnderUserStory --> 
   <!--  -->
   <div v-else-if="list.name=='Product Backlog' && item.state=='hiddenTaskUnderUserStory'">   
-  
+
   </div>
 
   <!--  -->
@@ -238,6 +245,14 @@
           <div class="temp">
             <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
+          <v-alert
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:110px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert>
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
@@ -359,6 +374,7 @@
         <span class="edit_2" v-else> 
           <i class="fas fa-plus-circle" @click="startEditing"></i> 
         </span> 
+       
       </template>
 
       <template v-slot:content1>
@@ -369,6 +385,14 @@
             <!-- <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect> -->
             <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> Task </h3>
           </div>
+          <v-alert
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:110px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert>
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
@@ -460,7 +484,9 @@
             <i class="fas fa-plus-circle" style="position:fixed; font-size:30px; right:100px; top:345px; cursor: pointer;"></i>            
           </h6>         -->
           <!-- <v-app id="inspire"> -->
-          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px">
+
+
+          <div class="text-center" style="position:fixed; right:50px; top:260px; max-width:300px" v-if="!isNewItem">
             <v-row justify="space-around">
             <v-col
               cols="1"
@@ -485,7 +511,6 @@
             </v-col>
             </v-row>
 
-            <!-- <div class="text-center" style="position:fixed; right:50px; top:300px;"> -->
               <v-btn
                 class="ma-2"
                 :loading="loading"
@@ -505,7 +530,8 @@
               >
                 Leave Task
               </v-btn>
-            </div>
+          </div>
+            
           <!-- </v-app> -->
 
           <!-- <div class="vl" style="color:grey; border-left: 2px solid; height: 110px; top:270px; position:fixed; right:330px"></div>  -->
