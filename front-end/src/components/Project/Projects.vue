@@ -61,7 +61,9 @@ export default {
       }
     },
     hide(){
-      if(this.isPremium)
+      if(this.prjRestrictions==undefined)
+        return true;
+      if(this.prjRestrictions.boards)
         return false;
       else
         return true;
@@ -70,6 +72,7 @@ export default {
   computed:{
     ...mapGetters({
         isPremium: "isPremium",
+        prjRestrictions: "prjRestrictions"
       }),
 
     menu: function(){return [
@@ -103,6 +106,7 @@ export default {
           href: "/projects/history",
           title: "Ιστορικό",
           icon: "fa fa-history",
+          hidden: this.hide(),
         },
         {
           href: "/projects/settings",
