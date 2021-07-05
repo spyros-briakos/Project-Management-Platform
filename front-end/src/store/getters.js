@@ -288,7 +288,7 @@ export default {
 
 	getTotalSprintDatesArray: (state, getters) => (id) => {
 		var totalDaysArray = [];
-		var estimated_duration = parseInt(getSprintbyId(id).estimated_duration)
+		var estimated_duration = parseInt(getters.getSprintbyId(id).estimated_duration)
 		for(let day=0; day<estimated_duration; day++) {
 			totalDaysArray.push(day)
 		}

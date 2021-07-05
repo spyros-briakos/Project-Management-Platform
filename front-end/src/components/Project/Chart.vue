@@ -18,9 +18,9 @@
 
         >
           <v-chip 
-            @click="selectedSprint"
             v-for="tag in getSprintNames()"
             :key="tag"
+            @click="selectedSprint(tag)"
           >
             {{ tag }}
           </v-chip>
@@ -46,8 +46,9 @@ export default {
     chart: Chart
   },
   methods: {
-    selectedSprint() {
-    alert('Turning on alarm...')
+    selectedSprint(tag) {
+    // alert('Turning on alarm...')
+      this.sprintId = this.getSprintbyName(tag)._id
     },
   },
   data() {
@@ -64,12 +65,12 @@ export default {
         'Creative Writing',
       ],
       
-      sprintId: "60df2991c514e12171538144"
+      sprintId: ""
     };
   },
   created() {
-    console.log("DDAAYSS", this.getTotalSprintDates())
-    console.log("DDAAYSS", this.getTotalSprintDatesArray())
+    // console.log("DDAAYSS", this.getTotalSprintDates())
+    // console.log("DDAAYSS", this.getTotalSprintDatesArray())
     
   },
   computed: {
@@ -83,7 +84,8 @@ export default {
         getTotalSprintTaskDates: "getTotalSprintTaskDates",
         getTotalSprintTaskDatesArray: "getTotalSprintTaskDatesArray",
         getBurnDownIdealChartbySprintId: "getBurnDownIdealChartbySprintId",
-        getBurnDownActualChartbySprintId: "getBurnDownActualChartbySprintId"
+        getBurnDownActualChartbySprintId: "getBurnDownActualChartbySprintId",
+        getSprintbyName: "getSprintbyName"
     }),
 
     chartOptions: function() {
