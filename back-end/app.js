@@ -102,7 +102,6 @@ mongoose.connect(
 const options = {
 	key: fs.readFileSync("./security/localhost+1-key.pem"),
 	cert: fs.readFileSync("./security/localhost+1.pem"),
-  ca: fs.readFileSync("./security/mkcert_rootCA.crt"),
   requestCert: false,
   rejectUnauthorized: false
 };
