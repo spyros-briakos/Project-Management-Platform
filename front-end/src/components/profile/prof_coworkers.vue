@@ -43,7 +43,9 @@
     },
     methods:{
         mpou(){
-            alert('on-click');
+            alert('O KALYTEROS SYNARGATHS TOU KOSMOU');
+            alert('GIA EMENA');
+            alert('EISAI ESYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY');
         },
         color_roulete(){
             let c_arr=["red", "orange", "lightblue", "plum", "green", "purple"];
