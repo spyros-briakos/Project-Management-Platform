@@ -99,16 +99,16 @@ mongoose.connect(
 // module.exports = app;
 
 const options = {
-	key: fs.readFileSync("./localhost+1-key.pem"),
-	cert: fs.readFileSync("./localhost+1.pem"),
+	key: fs.readFileSync("./security/localhost+1-key.pem"),
+	cert: fs.readFileSync("./security/localhost+1.pem"),
   requestCert: false,
   rejectUnauthorized: false
 };
 
-// const server = https.createServer(options, app).listen(PORT, function(){
-  // console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
-// });
-const server = http.createServer(options, app).listen(PORT, function(){
-  console.log(`Server listening at http://${process.env.HOST}:${PORT}/`);
+const server = https.createServer(options, app).listen(PORT, function(){
+  console.log('Server listening at https://' + HOST + ':'+ PORT + '/');
 });
+// const server = http.createServer(options, app).listen(PORT, function(){
+  // console.log(`Server listening at http://${process.env.HOST}:${PORT}/`);
+// });
 module.exports = server;

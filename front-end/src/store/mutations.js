@@ -19,20 +19,7 @@ export default {
 		Vue.set(state, "image", payload.image)
 		Vue.set(state, "plan_in_use", payload.plan_in_use)
 	},
-	// {_id: "60c10f5ce5bf5f10e917e0c9", name: "asdasd", description: "asdasd", productOwner: {…}, scrumMaster: {…}, …}
-	// description: "asdasd"
-	// members: [{…}]
-	// name: "asdasd"
-	// plan_in_use: "standard"
-	// productOwner: {_id: "60c0dbd1e5bf5f10e917e0be", username: "admin2"}
-	// scrumMaster: {_id: "60c0dbd1e5bf5f10e917e0be", username: "admin2"}
-	// sprints: []
-	// startingDate: "2021-06-09T18:58:36.164Z"
-	// status: "inProgress"
-	// userStories: []
-	// _id: "60c10f5ce5bf5f10e917e0c9"
-	// __proto__: Object
-	// store project
+
 	STORE_PROJECT(state, payload) {
 		console.log("PROJECT IS HERE STORED", payload)
 		var project = {_id:null, name:null, description:null, plan_in_use:null, status:null, 
@@ -68,6 +55,20 @@ export default {
 	STORE_SPRINTS(state, payload) {
 		console.log("SPRIIIIIIINTS", payload)
 		Vue.set(state, "sprints", [...payload])
+	},
+
+	STORE_ALL_USERS(state, payload) {
+		var allUsers = []
+		payload.forEach(user => {
+			if (state._id !== user._id) 
+				allUsers.push({
+					_id: user._id, 
+					firstName: user.firstName, 
+					lastName: user.lastName, 
+					username: user.username
+				})
+		})
+		Vue.set(state, "allUsers", allUsers)
 	},
 
 	STORE_SPRINT(state, payload) {
@@ -266,6 +267,10 @@ export default {
 		Vue.set(state, "email", null)
 		Vue.set(state, "image", null)
 		Vue.set(state, "plan_in_use", null)
+	},
+
+	DELETE_ALL_USERS(state, payload) {
+		Vue.set(state, "allUsers", [])
 	},
 
 	DELETE_PROJECT(state, payload) {

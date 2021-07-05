@@ -119,7 +119,8 @@ var coWorkersTest = [
 	{_id: 9, username: "Panos Perdikos"},
 ]
 
-var testing = true
+var testing = false
+var testingSearch = false
 
 export default {
 	isLoading: state => state.isLoading,
@@ -195,10 +196,10 @@ export default {
 
 
 
-	allUsers: state => ( (state.allUsers == undefined || state.allUsers.length == 0) ? (testing ? testSearch : []) : state.allUsers),
+	allUsers: state => ( (state.allUsers == undefined || state.allUsers.length == 0) ? (testingSearch ? testSearch : []) : state.allUsers),
 
 
-	
+
 
 	getTaskbyNames: (state) => (taskName, userStoryName) => {
         return JSON.parse(JSON.stringify(state.userStories.find(us => us.name === userStoryName).tasks.find(task => task.name === taskName)))
@@ -213,6 +214,15 @@ export default {
 			}
 		}
 		return null
+	},
+
+	getTaskMembersbyId: (state, getters) => (id) => {
+		var task = getters.getTaskbyId(id)
+		var memberUsernames = []
+		for (let user of task.members) {
+			memberUsernames.push(user.username)
+		}
+		return memberUsernames
 	},
 
 	getTaskbyName: (state) => (name) => {
