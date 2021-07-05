@@ -110,7 +110,7 @@
           <!-- <ul> -->
               
               <!-- <li>  -->
-                  <a href="#" @click="loginGoogle_">
+                  <a href="#" @click="signupGoogle()">
                       <v-btn
                           class="mx-2"
                           fab

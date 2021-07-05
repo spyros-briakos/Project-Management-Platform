@@ -273,6 +273,10 @@
             placeholder="Γράψε μία περιγραφή"
           />
 
+          <v-card
+            class="mx-auto"
+            max-width="400"
+          >
           <v-card-text>
             <span class="subheading">Select size</span>
 
@@ -290,6 +294,7 @@
               </v-chip>
             </v-chip-group>
           </v-card-text>
+          </v-card>
 
           <small class="text-danger" style="display:block" v-if="errors.itemTitle">{{ errors.first("itemTitle") }}</small>
           <button class="btn btn-outline-secondary btn-sm mr-2" style="position:fixed; top: 400px; left:230px;" @click.prevent="save(1)">
