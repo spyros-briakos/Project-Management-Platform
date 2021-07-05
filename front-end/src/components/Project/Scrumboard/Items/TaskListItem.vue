@@ -11,17 +11,6 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div> 
-    <!-- <v-btn
-      elevation="1"
-      fab
-      x-small
-      block
-      v-if="item.state==='userStory'"
-      @click="collapseTasks_()"
-    > 
-      <i class="fas fa-chevron-up" v-if="collapsedTasks"></i> 
-      <i class="fas fa-chevron-down" v-else></i>
-    </v-btn> -->
   </div> 
 
   <!--  -->
@@ -47,14 +36,14 @@
           <div class="temp">
             <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
           </div>
-        <v-alert
+        <!-- <v-alert
           color="purple"
           dense
           outlined
           text
           type="info"
           style="top:53px; right:110px; height:39px"
-        >Συμπλήρωσε όλα τα στοιχεία</v-alert>
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert> -->
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
@@ -245,7 +234,14 @@
             <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> User Story </h3>
           <!-- <div class="temp">
             <multiselect v-model="default_user_story" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" style="text-align:center; font-weight: bold; width:150px;"></multiselect>
-          </div> -->
+          </div>
+          color="purple"
+          dense
+          outlined
+          text
+          type="info"
+          style="top:53px; right:110px; height:39px"
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert> -->
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
@@ -396,14 +392,14 @@
             <!-- <multiselect v-model="selected" :options="options" :close-on-select="true" :searchable="false" :show-labels="false" placeholder="Kind" style="text-align:center; font-weight: bold; width:150px;"></multiselect> -->
             <h3 class="titlospopup" style="text-align:left; padding-left: 40px;"> Task </h3>
           </div>
-          <v-alert
+          <!-- <v-alert
           color="purple"
           dense
           outlined
           text
           type="info"
           style="top:53px; right:110px; height:39px"
-        >Συμπλήρωσε όλα τα στοιχεία</v-alert>
+        >Συμπλήρωσε όλα τα στοιχεία</v-alert> -->
         </div>
         
         <form style="position: relative; height:38px; top:80px;">
@@ -443,9 +439,8 @@
             <v-select
               :items="selecteditems"
               label="Εκτιμώμενη Διάρκεια"
-              v-model="form.duration"
+              v-model="temp_duration"
             ></v-select>
-              <!-- :value=" getTaskbyId(item.id).estimated_duration ? selecteditems[getTaskbyId(item.id).estimated_duration-1] : ''" -->
             </v-col>
             </v-row>
           </h6>
@@ -461,9 +456,8 @@
             <v-select
               :items="selecteditems1"
               label="Κατάσταση"
-              v-model="form.status"
+              v-model="temp_status"
             ></v-select>
-              <!-- :value=" this.getTaskbyId(this.item.id).status ? this.getTaskbyId(this.item.id).status : ''" -->
             </v-col>
             </v-row>
           </h6>  
@@ -574,18 +568,6 @@
         <span v-if="!isNewItem"> {{ displayTitle }} </span>
       </div>
     </div>
-    <!-- <v-btn
-      elevation="1"
-      fab
-      x-small
-      block
-      v-if="item.state==='userStory'"
-      @click="collapseTasks_()"
-    > 
-      <i class="fas fa-chevron-up" v-if="collapsedTasks"></i>
-      <i class="fas fa-chevron-down" v-else></i>
-    </v-btn> -->
-  
   </div>
 
 </template>
@@ -655,9 +637,11 @@ export default {
         ],
         selection: '08',
       },
+      temp_status:"",
+      temp_duration:"",
       duration_: "",
       status_: "",
-      user_story_of_task: '',
+      user_story_of_task: "",
       default_task: 'Task',
       default_user_story: "User Story"  ,
       options: ['User Story','Epic','Issue'],
@@ -722,20 +706,26 @@ export default {
     },
 
     startEditing() {
-      console.log(this.selecteditems[this.getTaskbyId(this.item.id).estimated_duration-1])
-      console.log(this.getTaskbyId(this.item.id).estimated_duration)
-      console.log(typeof this.getTaskbyId(this.item.id).estimated_duration)
       this.form.id = this.item.id
       this.form.title = this.item.title
       this.form.text = this.item.text
-      this.form.duration = this.getTaskbyId(this.item.id).estimated_duration-1
       this.isEditing = true
       // console.log("\n\nTaskListItem.startEditing ", this.isEditing)
-
+      
       if(this.item.state == "visibleTaskUnderUserStory" || this.item.state == "taskInSprint") {
-        var temp = this.getTaskbyId(this.item.id)
-        this.form.duration = temp.estimated_duration
-        this.form.status = temp.status
+        var f = this.getTaskbyId(this.item.id)
+        
+        this.user_story_of_task=this.getUserStorybyId(f.userStory).name
+        this.temp_status = (f.status === "toDo" ? "Εκκρεμεί" : f.status === "inProgress" ? "Σε εξέλιξη" : "Ολοκληρώθηκε")
+
+        if(f.estimated_duration==1) {
+          this.temp_duration = f.estimated_duration.toString()
+          this.temp_duration = this.temp_duration.concat(" Μέρα")
+        }
+        else {
+          this.temp_duration = f.estimated_duration.toString()
+          this.temp_duration = this.temp_duration.concat(" Μέρες")
+        }
       }
       this.$emit("item-editing")
     },
