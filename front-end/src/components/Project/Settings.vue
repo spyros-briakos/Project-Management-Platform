@@ -61,7 +61,7 @@
 
                         <v-card flat max-width="100%" style="margin:0 auto 0 auto;">
                             <v-card-subtitle style="display:flex;">Προσκάλεσε Νέα Άτομα</v-card-subtitle>
-                            <input id="friends" v-model="myform['addCo']">
+                            <!-- <input id="friends" v-model="myform['addCo']"> -->
                             <v-autocomplete style="width:80%;margin:0 auto 0 auto;" @change="updateForm(item, 'CoWorkers', null)" id="getFriends"
                                 class="friends_picker"
                                 multiple
@@ -69,7 +69,7 @@
                                 label='Προσκάλεσε Νέα Άτομα'
                                 :items="item.info.searchedPeople.concat(item.info.CoWorkers)"
                                 item-text="username"
-                                item-value="_id"
+                                item-value="username"
                                 v-model="myform['addCo']"
                                 :search-input.sync="search"
                                 cache-items
@@ -211,10 +211,10 @@ import fts from "../../FullTextSearch/fts"
                 }
 
                 // invite more people
-                // this.inviteUsers_(["admin4", "admin5"])
-
-                // form.submit(); 
-
+                // console.log(this.myform['addCo'])
+                if (this.myform['addCo'] !== "")
+                    this.inviteUsers_(this.myform['addCo'])
+ 
             },
             getProjectDataFromForm(form){
                 var projectData = {
