@@ -75,14 +75,14 @@ app.get("/", (req, res) => {
 
 // SERVER CONFIG
 const PORT = process.env.PORT || 5000
-const PORT = 3000
-// const HOST = process.env.HOST || '127.0.0.1'
+// const PORT = 3000
+const HOST = process.env.HOST || '127.0.0.1'
 // const DB_URL = process.env.DB_CONNECTION || "mongodb://localhost/scrub";
 
 // SERVER CONNECTS TO DATABASE
 mongoose.connect(
-  "mongodb://localhost/scrub",
-  // process.env.DB_URL, 
+  // "mongodb://localhost/scrub",
+  process.env.DB_URL, 
   { 
   	useNewUrlParser: true, 
   	useUnifiedTopology: true,
