@@ -6,7 +6,7 @@ const Oauth2Client_Singup = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
     // `${process.env.GOOGLE_REDIRECT}`, // this must match your google api settings
-    `http://${process.env.HOST}:${process.env.PORT}${process.env.GOOGLE_REDIRECT_SIGNUP}/signup`, // this must match your google api settings
+    `http://${process.env.HOST}:${process.env.PORT}${process.env.GOOGLE_REDIRECT_SIGNUP}`, // this must match your google api settings
     // `http://${process.env.HOSTNAME}:${process.env.PORT}${process.env.GOOGLE_REDIRECT}/signup`, // this must match your google api settings
 );
 
