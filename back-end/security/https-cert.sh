@@ -5,7 +5,7 @@ apt install golang
 
 # Set up Go environment variable server-wide
 touch /etc/profile.d/goenv.sh
-source ./golang-env.sh
+source ./security/golang-env.sh
 source /etc/profile.d/goenv.sh
 
 # Install Certutil

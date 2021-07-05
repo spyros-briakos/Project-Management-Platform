@@ -30,7 +30,7 @@ module.exports.changePassword = (name, email, verificationCode) => {
     subject: 'ScruManiac: Ανανέωση κωδικού πρόσβασης',
     // html: `Hi ${name}! Press <a href=http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/set-password/${verificationCode}> here </a> to set your new password in ScruManiac.`
     html: `<h3>Ανανέωσε τον κωδικό πρόσβασής σου στο ScruManiac</h3>
-          <form action="http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/set-password/${verificationCode}" method="POST">
+          <form action="https://${process.env.HOST}:${process.env.PORT}/api-control/users/set-password/${verificationCode}" method="POST">
             <label for='newPsw'>Νέος κωδικός πρόσβασης</label>
             <input id='newPsw' type="password" name="new">
             <label for='confPsw'>Επιβεβαίωση νέου κωδικού πρόσβασης</label>
@@ -56,8 +56,8 @@ module.exports.sendInvitation = (email, sender, project, invitationCode) => {
     //       Επίλεξε αν θες να κάνεις <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/?answer=accept'>ΑΠΟΔΟΧΗ</a> 
     //        ή <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/?answer=reject'>ΑΠΟΡΡΙΨΗ</a> της πρόσκλησης.`
     html: `<h3>Ο χρήστης ${sender} σε προσκαλεί να συμμετέχεις στο project του με όνομα ${project}!</h3>
-          Επίλεξε αν θες να κάνεις <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/answer-invitation/${invitationCode}?answer=accept'>ΑΠΟΔΟΧΗ</a> 
-          ή <a href='http://${process.env.HOSTNAME}:${process.env.PORT}/api-control/users/answer-invitation/${invitationCode}?answer=reject'>ΑΠΟΡΡΙΨΗ</a> της πρόσκλησης.`
+          Επίλεξε αν θες να κάνεις <a href='https://${process.env.HOST}:${process.env.PORT}/api-control/users/answer-invitation/${invitationCode}?answer=accept'>ΑΠΟΔΟΧΗ</a> 
+          ή <a href='https://${process.env.HOST}:${process.env.PORT}/api-control/users/answer-invitation/${invitationCode}?answer=reject'>ΑΠΟΡΡΙΨΗ</a> της πρόσκλησης.`
     // headers: { "Authorization": `Bearer ${token}` }
     // html: `<h3>Ο χρήστης ${sender} σε προσκαλεί να συμμετέχεις στο project του με όνομα ${project}!</h3>
     //       Επίλεξε αν θες να κάνεις <button onclick=xmlRequest()>ΑΠΟΔΟΧΗ</button> 
