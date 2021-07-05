@@ -317,10 +317,10 @@ export default({
     watch:{
         search (val) {
             if(val == undefined){
-                console.log("KATI PAEI LA8OS");
+                // console.log("KATI PAEI LA8OS");
                 return;
             }
-            else console.log("SXEDON KALA");
+            // else console.log("SXEDON KALA");
             this.get_friends.searchedPeople = [];
 
             let found = this.searchAllUsers(val);
