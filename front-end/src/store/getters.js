@@ -308,7 +308,7 @@ export default {
 	getTotalSprintTaskDates: (state, getters) => (id) => {
 		var sprintTasks = getters.getSprintbyId(id).tasks
 
-		var totalDays = 0;
+		var totalDays = 1;
 		for(let task of sprintTasks) {
 			totalDays += parseInt(task.estimated_duration)
 		}
@@ -317,8 +317,8 @@ export default {
 
 	getTotalSprintTaskDatesArray: (state, getters) => (id) => {
 		var totalDaysArray = [];
-		var estimated_duration = pasrseInt(getters.getSprintbyId(id).estimated_duration)
-		for(let day=0; day<estimated_duration; day++) {
+		var estimated_duration = parseInt(getters.getSprintbyId(id).estimated_duration)
+		for(let day=1; day<=estimated_duration; day++) {
 			totalDaysArray.push(day)
 		}
 		return totalDaysArray
@@ -329,8 +329,23 @@ export default {
 		var xAxis = xAxisArray.length
 		var yAxis = getters.getTotalSprintTaskDates(id)
 		var yAxisArray = new Array(yAxis)
-		var load = yAxis/yAxis
-		var totalLoad = yAxis/yAxis
+		var load = yAxis/parseFloat(xAxis)
+		var totalLoad = parseFloat(yAxis)
+		var totalLoadArray = [];
+		console.log(xAxis, yAxis, load)
+		for(let day=0; day<xAxis; day++) {
+			totalLoadArray.push(totalLoad -= load)
+		}
+		return totalLoadArray
+	},
+
+	getBurnDownActualChartbySprintId: (state, getters) => (id) => {
+		var xAxisArray = getters.getTotalSprintTaskDatesArray(id)
+		var xAxis = xAxisArray.length
+		var yAxis = getters.getTotalSprintTaskDates(id)
+		var yAxisArray = new Array(yAxis)
+		var load = yAxis/parseFloat(xAxis)
+		var totalLoad = parseFloat(yAxis)
 		var totalLoadArray = [];
 		console.log(xAxis, yAxis, load)
 		for(let day=0; day<xAxis; day++) {
