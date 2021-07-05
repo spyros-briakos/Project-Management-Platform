@@ -3,7 +3,7 @@
         <div v-if="create_prj==1" class="overlay"></div>
         <div class="create_prj" v-if="create_prj==1">
             <createProject v-on:busy-form='create_prj=0' :coWorkers="coWorkers" :user="user" />
-            <button class="close_form" v-on:click="create_prj=0">
+            <button class="close_form" :disabled="planRestrictions.maxPrj<=projects.length ? true:false" v-on:click="create_prj=0">
                 <font-awesome-icon class="icon" :icon="['far', 'times-circle']"/>
             </button>
         </div>
@@ -82,18 +82,19 @@
                 </font-awesome-icon>
                 
                 <div :class="{'partners_box': true, 'show_box': selected_prj==project._id}">
-                    
-                    <div class="prof_progress">
-                        Κατάσταση:&#9;
-                        <v-progress-circular style="margin-left:5px"
+                    <!-- {{project.startingDate}} -->
+                    <!-- <div class="vert_div"></div> -->
+                    <div class="prof_progress" style="margin:0 auto 0 auto;font-size:17px;color:teal;">
+                        <!-- Κατάσταση:&#9; -->
+                        <!-- <v-progress-circular style="margin-left:5px"
                                 :rotate="-45"
                                 :size="50"
                                 :width="4"
                                 :value="project.status"
                                 color="teal"
-                        >
+                        > -->
                             {{project.status }}
-                        </v-progress-circular>
+                        <!-- </v-progress-circular> -->
                     </div>
                     <div class="vert_div"></div>
                     
@@ -182,6 +183,7 @@
         ...mapGetters({
 		    projects: "projects",
             invites: "invites",
+            planRestrictions: "planRestrictions",
 	    }),
 
         // print old projects for front debugging without database

@@ -35,8 +35,8 @@
 
                         <v-progress-circular
                             :rotate="-45"
-                            :size="80"
-                            :width="15"
+                            :size="90"
+                            :width="12"
                             :value="item.progress"
                             color="teal"
                             >

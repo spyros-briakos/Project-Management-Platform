@@ -142,6 +142,9 @@ export default {
 	plan_in_use: state => state.plan_in_use,
 
 	isPremium: state => (state.plan_in_use === "standard") ? false : true,
+	planRestrictions: state=>(state.plan_in_use == "standard") ?
+		{membersPerPrj: 5, maxPrj: 3, }
+		:{membersPerPrj: 9, maxPrj: 100, },
 
 	checkPremiumAtProjectCreation: state => (this.isPremium ? true : state.projects.length < state.constants.maxNonPremiumProjects),
 // 
@@ -364,8 +367,5 @@ export default {
 		}
 		return totalLoadArray
 	},
-
-
-	
 }
 
