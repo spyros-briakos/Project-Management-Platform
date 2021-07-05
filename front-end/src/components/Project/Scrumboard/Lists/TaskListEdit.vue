@@ -137,8 +137,8 @@ export default {
         this.listForm.id = 0
         this.listForm.name = ""
         this.listForm.text = ""
-        this.listForm.duration = ""
-        this.listForm.status = ""
+        this.temp_duration = ""
+        this.temp_status = ""
         this.$validator.reset()
       }
     },
@@ -155,42 +155,11 @@ export default {
     },
     handleTaskListSave() {  
       
-      if(this.listForm.status === 'Εκκρεμεί')
-      {
-        this.status_ = "toDo"
-      }
-      else if(this.listForm.status === 'Σε εξέλιξη')
-      {
-        this.status_ = "inProgress"
-      }
-      else if(this.listForm.status === 'Ολοκληρώθηκε')
-      {
-        this.status_ = "done"
-      }
-      else
-      {
-        console.log("error")
-      }
-      
-      if(this.listForm.duration === '2 Εβδομάδες')
-      {
-        this.duration_ = "14"
-      }
-      else if(this.listForm.duration === '3 Εβδομάδες')
-      {
-        this.duration_ = "21"
-      }
-      else if(this.listForm.duration === '4 Εβδομάδες')
-      {
-        this.duration_ = "28"
-      }
-      else
-      {
-        console.log("error")
-      }
+      this.status_ = (this.temp_status === "Εκκρεμεί" ? "toDo" : this.temp_status === "Σε εξέλιξη" ? "inProgress" : "done")
+      this.duration_ = (this.temp_duration === "2 Εβδομάδες" ? "14" : this.temp_duration === "3 Εβδομάδες" ? "21" : "28")
   
       // Case: Edit
-     if(this.listForm.id) {
+      if(this.listForm.id) {
         // get the current object for place holding
         const sprint = this.getSprintbyId(this.listForm.id)
 
