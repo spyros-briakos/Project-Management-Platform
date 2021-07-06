@@ -167,7 +167,7 @@ export default {
 	projectUserStories: state => (state.userStories === undefined || state.userStories.length == 0 ? [] : state.userStories),
 
 	prjRestrictions: state => (state.project ?
-			(state.project.plan_in_use ?
+			(state.project.plan_in_use === "standard" ?
 			
 				{membersPerPrj: 5, boards: false} : {membersPerPrj: 9, boards: true}
 			)

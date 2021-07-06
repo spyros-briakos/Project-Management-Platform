@@ -116,13 +116,12 @@ router.post("/add-project", async (req, res) => {
     project.members = [user._id];
     project.sprints = [];
     project.userStories = [];
-    project.plan_in_use = req.body.plan_in_use == 'premium' && user.plan_in_use == 'premium' ? req.body.plan_in_use : 'standard';
+    project.plan_in_use = req.body.project.plan_in_use == 'premium' && user.plan_in_use == 'premium' ? req.body.project.plan_in_use : 'standard';
     const savedProject = await project.save();
-    
     // Add new project to user's projects
     user.projects.push(savedProject._id);
     await User.findByIdAndUpdate(user._id, user, { runValidators: true });
-    
+
     const context = await serializer.projectDetailsSerializer(savedProject);
     res.json({status: 'OK', message: 'Το Project δημιουργήθηκε με επιτυχία.', project: context});
   } catch (error) {
@@ -280,7 +279,7 @@ router.post('/edit-project', async (req, res) => {
     }
     delete req.body.sprints;
     delete req.body.userStories;
-    const updatedProject = await Project.findByIdAndUpdate(project._id, req.body.project, { runValidators: true });
+    const updatedProject = await Project.findByIdAndUpdate(project._id, req.body.project, { runValidators: true, new: true });
 
     const context = await serializer.projectDetailsSerializer(updatedProject);
     res.json({status: 'OK', message: 'Το Project τροποποιήθηκε με επιτυχία.', project: context});
@@ -312,7 +311,7 @@ router.post("/edit-userstory", async (req, res) => {
     }
     delete req.body.userStory.tasks
     delete req.body.userStory.sprints
-    const updatedUserStory = await UserStory.findByIdAndUpdate(req.body.userStory._id, req.body.userStory, { runValidators: true });
+    const updatedUserStory = await UserStory.findByIdAndUpdate(req.body.userStory._id, req.body.userStory, { runValidators: true, new: true });
 
     const context = await serializer.userStorySerializer(updatedUserStory);
     res.json({status: 'OK', message: 'Το UserStory τροποποιήθηκε με επιτυχία.', userStory: context});
@@ -343,7 +342,7 @@ router.post("/edit-sprint", async (req, res) => {
       req.body.sprint.endingDate = Date.now();
     }
     delete req.body.sprint.tasks
-    const updatedSprint = await Sprint.findByIdAndUpdate(req.body.sprint._id, req.body.sprint, { runValidators: true });
+    const updatedSprint = await Sprint.findByIdAndUpdate(req.body.sprint._id, req.body.sprint, { runValidators: true, new: true });
 
     const context = await serializer.sprintSerializer(updatedSprint);
     res.json({status: 'OK', message: 'Το Sprint τροποποιήθηκε με επιτυχία.', sprint: context});
@@ -395,7 +394,7 @@ router.post("/edit-task", async (req, res) => {
     delete req.body.task.members;
     delete req.body.task.beforeTasks;
     delete req.body.task.afterTasks;
-    const updatedTask = await Task.findByIdAndUpdate(req.body.task._id, req.body.task, { runValidators: true });
+    const updatedTask = await Task.findByIdAndUpdate(req.body.task._id, req.body.task, { runValidators: true, new: true  });
 
     const context = await serializer.taskSerializer(updatedTask);
     res.json({status: 'OK', message: 'Το Task τροποποιήθηκε με επιτυχία.', task: context});
@@ -607,7 +606,7 @@ router.post("/join-task", async (req, res) => {
     }
 
     task.members.push(user._id)
-    const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true });
+    const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true, new: true });
 
     const context = await serializer.taskSerializer(updatedTask);
     res.json({status: 'OK', message: 'Ο χρήστης έγινε μέλος του Task.', task: context});
@@ -637,7 +636,7 @@ router.post("/leave-task", async (req, res) => {
     if (task.members.includes(user._id)) {
       task.members = task.members.filter((mID) => { return !mID.equals(user._id) });
     }
-    const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true });
+    const updatedTask = await Task.findByIdAndUpdate(task._id, task, { runValidators: true, new: true });
 
     const context = await serializer.taskSerializer(updatedTask);
     res.json({status: 'OK', message: 'Ο χρήστης αποχώρησε από το Task.', task: context});
@@ -676,7 +675,7 @@ router.post("/leave-project", async (req, res) => {
       }
     }
 
-    const updatedProject = await Project.findByIdAndUpdate(project._id, project, { runValidators: true });
+    const updatedProject = await Project.findByIdAndUpdate(project._id, project, { runValidators: true, new: true });
 
     user.projects = user.projects.filter((pID) => { return !pID.equals(project._id) });
     await User.findByIdAndUpdate(user._id, user, { runValidators: true });

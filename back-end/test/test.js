@@ -8,6 +8,7 @@ const fs = require('fs');
 const test_data = require('./scrumMasterTest.json');
 const baseURL = 'https://127.0.0.1:3080/api-control';
 
+
 describe('API Test', () => {
   // it('Reset database for tests', function (done) {
   //   request(server)
@@ -644,4 +645,5 @@ describe('API Test', () => {
   });
 
   server.close();
+
 });
