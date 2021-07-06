@@ -1,26 +1,15 @@
 # Back-End
 
 ## Requirements - Packages
-Every package was install with npm locally.
+Every package is install with npm locally.
 * **dotenv**
 * **mangoose**
 * **nodemon**
 * **express**
-* **...**
-
 * **docker**
 * **docker-compose**
 
 ## Implementation
-
-### Create ssl certificate69
-
-```
-openssl genrsa -des3 -out server.key 2048
-openssl rsa -in server.key -out server.key
-openssl req -sha256 -new -key server.key -out server.csr -subj "/CN=localhost"
-openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
-```
 
 ### For Docker and Docker-Compose installation on Linux
 ```
@@ -39,11 +28,6 @@ echo \
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 docker–compose –version
-```
-
-### For self-signed certificate
-```
-openssl req -nodes -new -x509 -keyout server.key -out server.cert
 ```
 
 ### API URL
