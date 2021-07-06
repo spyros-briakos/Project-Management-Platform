@@ -90,7 +90,7 @@ export default {
           href: "/projects/roadmap",
           title: "Roadmap",
           icon: "fa fa-map",
-          hidden: this.hide(),
+          hidden: true,
         },
         {
           href: "/projects/kanban",
