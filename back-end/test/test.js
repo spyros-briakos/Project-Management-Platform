@@ -9,19 +9,19 @@ const test_data = require('./scrumMasterTest.json');
 const baseURL = 'https://127.0.0.1:3080/api-control';
 
 describe('API Test', () => {
-  it('Reset database for tests', async () => {
-    await request(server)
-    .get('/api-control/db/set-test-db-many-users')
-    .trustLocalhost()
-    .expect(200)
-    .then((res) => {
-      // console.log(res.body)
-      expect(res.body.status).to.be.eql('OK');
-    });
-  });
+  // it('Reset database for tests', function (done) {
+  //   request(server)
+  //   .get('/api-control/db/set-test-db-many-users')
+  //   .trustLocalhost()
+  //   .expect(200)
+  //   .then((res) => {
+  //     // console.log(res.body)
+  //     expect(res.body.status).to.be.eql('OK');
+  //   });
+  // });
 
-  it('Sign Up new user', async () => {
-    await request(server)
+  it('Sign Up new user', function (done) {
+    request(server)
     .post('/api-control/users/signup')
     .trustLocalhost()
     .send({
@@ -32,14 +32,16 @@ describe('API Test', () => {
       email: 'test@testmail.gr',
     })
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body.user)
       expect(res.body.message).to.be.eql(test_data.message.signup);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Admin login', async () => {
-    await request(server)
+  it('Admin login', function (done) {
+    request(server)
     .post('/api-control/users/login')
     .trustLocalhost()
     .send({
@@ -47,9 +49,9 @@ describe('API Test', () => {
       password: test_data.user.password
     })
     .expect(200)
-    .then(async (res) => {
-      // console.log(res.body.user)
-      await fs.writeFile('/tmp/admin-user-token.json', res.body.token.token, function(err){});
+    .then((res) => {
+      // console.log(res.body)
+      fs.writeFile('/tmp/admin-user-token.json', res.body.token.token, function(err){});
       expect(res.body.message).to.be.eql(test_data.message.login);
       expect(res.body.user.username).to.be.eql(test_data.user.username);
       expect(res.body.user.firstName).to.be.eql(test_data.user.firstName);
@@ -57,27 +59,31 @@ describe('API Test', () => {
       expect(res.body.user.email).to.be.eql(test_data.user.email);
       expect(res.body.user.plan_in_use).to.be.eql(test_data.user.plan_in_use);
       expect(res.body.user.status).to.be.eql(test_data.user.status);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Get User\'s Projects', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    await request(server)
+  it('Get User\'s Projects', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    request(server)
     .post('/api-control/get-projects')
     .trustLocalhost()
     .set('Accept', 'application/json')
     .send()
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Create a new Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    await request(server)
+  it('Create a new Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    request(server)
     .post('/api-control/add-project')
     .trustLocalhost()
     .send({
@@ -88,18 +94,20 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.add_project);
-      await fs.writeFile('/tmp/project-id.txt', res.body.project._id, function(err){});
+      fs.writeFile('/tmp/project-id.txt', res.body.project._id, function(err){});
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Choose a Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    await request(server)
+  it('Choose a Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    request(server)
     .post('/api-control/get-details')
     .trustLocalhost()
     .send({
@@ -107,16 +115,18 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Edit Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    await request(server)
+  it('Edit Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    request(server)
     .post('/api-control/edit-project')
     .trustLocalhost()
     .send({
@@ -128,17 +138,19 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body);
       expect(res.body.message).to.be.eql(test_data.message.edit_project);
       expect(res.body.status).to.be.eql('OK');
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Get Sprints of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    await request(server)
+  it('Get Sprints of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    request(server)
     .post('/api-control/get-sprints')
     .trustLocalhost()
     .send({
@@ -146,16 +158,18 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Get UserStories of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    await request(server)
+  it('Get UserStories of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    request(server)
     .post('/api-control/get-userstories')
     .trustLocalhost()
     .send({
@@ -163,17 +177,18 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  // it('Get Tasks of Project', async () => {});
-  it('Add new Sprint to Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    await request(server)
+  it('Add new Sprint to Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    request(server)
     .post('/api-control/add-sprint')
     .trustLocalhost()
     .send({
@@ -185,19 +200,21 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.add_sprint);
-      await fs.writeFile('/tmp/sprint-id.txt', res.body.sprint._id, function(err){});
+      fs.writeFile('/tmp/sprint-id.txt', res.body.sprint._id, function(err){});
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Edit Sprint of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const sprint_id = await fs.readFileSync('/tmp/sprint-id.txt', 'utf8');
-    await request(server)
+  it('Edit Sprint of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const sprint_id = fs.readFileSync('/tmp/sprint-id.txt', 'utf8');
+    request(server)
     .post('/api-control/edit-sprint')
     .trustLocalhost()
     .send({
@@ -210,20 +227,19 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.edit_sprint);
-    })
-    // .catch(err => {
-    //   console.log(err)
-    // })
+      done();
+    });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Add new UserStory to Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    await request(server)
+  it('Add new UserStory to Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    request(server)
     .post('/api-control/add-userstory')
     .trustLocalhost()
     .send({
@@ -235,19 +251,21 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.add_userStory);
-      await fs.writeFile('/tmp/userStory-id.txt', res.body.userStory._id, function(err){});
+      fs.writeFile('/tmp/userStory-id.txt', res.body.userStory._id, function(err){});
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Edit UserStory of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const userStory_id = await fs.readFileSync('/tmp/userStory-id.txt', 'utf8');
-    await request(server)
+  it('Edit UserStory of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const userStory_id = fs.readFileSync('/tmp/userStory-id.txt', 'utf8');
+    request(server)
     .post('/api-control/edit-userstory')
     .trustLocalhost()
     .send({
@@ -260,18 +278,20 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.edit_userStory);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Add new Task to Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const userStory_id = await fs.readFileSync('/tmp/userStory-id.txt', 'utf8');
-    await request(server)
+  it('Add new Task to Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const userStory_id = fs.readFileSync('/tmp/userStory-id.txt', 'utf8');
+    request(server)
     .post('/api-control/add-task')
     .trustLocalhost()
     .send({
@@ -284,19 +304,21 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.add_task);
-      await fs.writeFile('/tmp/task-id1.txt', res.body.task._id, function(err){});
+      fs.writeFile('/tmp/task-id1.txt', res.body.task._id, function(err){});
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Add second Task to Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const userStory_id = await fs.readFileSync('/tmp/userStory-id.txt', 'utf8');
-    await request(server)
+  it('Add second Task to Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const userStory_id = fs.readFileSync('/tmp/userStory-id.txt', 'utf8');
+    request(server)
     .post('/api-control/add-task')
     .trustLocalhost()
     .send({
@@ -309,19 +331,21 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.add_task);
-      await fs.writeFile('/tmp/task-id2.txt', res.body.task._id, function(err){});
+      fs.writeFile('/tmp/task-id2.txt', res.body.task._id, function(err){});
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  // it('Join first Task of Project', async () => {
-  //   const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-  //   const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-  //   const task_id = await fs.readFileSync('/tmp/task-id1.txt', 'utf8');
-  //   await request(server)
+  // it('Join first Task of Project', function (done) {
+  //   const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+  //   const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+  //   const task_id = fs.readFileSync('/tmp/task-id1.txt', 'utf8');
+  //   request(server)
   //   .post('/api-control/join-task')
   //   .trustLocalhost()
   //   .send({
@@ -330,18 +354,18 @@ describe('API Test', () => {
   //   })
   //   .set('Authorization', token)
   //   .expect(200)
-  //   .then(async (res) => {
+  //   .then((res) => {
   //     // console.log(res.body)
   //     expect(res.body.status).to.be.eql('OK');
   //     expect(res.body.message).to.be.eql(test_data.message.join_task);
   //   });
   // });
 
-  it('Edit first Task of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const task_id = await fs.readFileSync('/tmp/task-id1.txt', 'utf8');
-    await request(server)
+  it('Edit first Task of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const task_id = fs.readFileSync('/tmp/task-id1.txt', 'utf8');
+    request(server)
     .post('/api-control/edit-task')
     .trustLocalhost()
     .send({
@@ -354,19 +378,21 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.edit_task);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Set second Task after first Task of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const task_id1 = await fs.readFileSync('/tmp/task-id1.txt', 'utf8');
-    const task_id2 = await fs.readFileSync('/tmp/task-id2.txt', 'utf8');
-    await request(server)
+  it('Set second Task after first Task of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const task_id1 = fs.readFileSync('/tmp/task-id1.txt', 'utf8');
+    const task_id2 = fs.readFileSync('/tmp/task-id2.txt', 'utf8');
+    request(server)
     .post('/api-control/connect-task-task')
     .trustLocalhost()
     .send({
@@ -377,19 +403,21 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.connect_task_task);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Unlink the two Tasks of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const task_id1 = await fs.readFileSync('/tmp/task-id1.txt', 'utf8');
-    const task_id2 = await fs.readFileSync('/tmp/task-id2.txt', 'utf8');
-    await request(server)
+  it('Unlink the two Tasks of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const task_id1 = fs.readFileSync('/tmp/task-id1.txt', 'utf8');
+    const task_id2 = fs.readFileSync('/tmp/task-id2.txt', 'utf8');
+    request(server)
     .post('/api-control/disconnect-task-task')
     .trustLocalhost()
     .send({
@@ -400,19 +428,21 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.disconnect_task_task);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Set second Task before first Task of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const task_id1 = await fs.readFileSync('/tmp/task-id1.txt', 'utf8');
-    const task_id2 = await fs.readFileSync('/tmp/task-id2.txt', 'utf8');
-    await request(server)
+  it('Set second Task before first Task of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const task_id1 = fs.readFileSync('/tmp/task-id1.txt', 'utf8');
+    const task_id2 = fs.readFileSync('/tmp/task-id2.txt', 'utf8');
+    request(server)
     .post('/api-control/connect-task-task')
     .trustLocalhost()
     .send({
@@ -423,19 +453,21 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.connect_task_task);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Set first Task to first Sprint of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const task_id = await fs.readFileSync('/tmp/task-id1.txt', 'utf8');
-    const sprint_id = await fs.readFileSync('/tmp/sprint-id.txt', 'utf8');
-    await request(server)
+  it('Set first Task to first Sprint of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const task_id = fs.readFileSync('/tmp/task-id1.txt', 'utf8');
+    const sprint_id = fs.readFileSync('/tmp/sprint-id.txt', 'utf8');
+    request(server)
     .post('/api-control/connect-task-sprint')
     .trustLocalhost()
     .send({
@@ -445,18 +477,20 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.connect_task_sprint);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Unlink first Task from Sprint of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const task_id = await fs.readFileSync('/tmp/task-id1.txt', 'utf8');
-    await request(server)
+  it('Unlink first Task from Sprint of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const task_id = fs.readFileSync('/tmp/task-id1.txt', 'utf8');
+    request(server)
     .post('/api-control/disconnect-task-sprint')
     .trustLocalhost()
     .send({
@@ -465,18 +499,20 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.disconnect_task_sprint);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Leave first Task of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const task_id = await fs.readFileSync('/tmp/task-id1.txt', 'utf8');
-    await request(server)
+  it('Leave first Task of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const task_id = fs.readFileSync('/tmp/task-id1.txt', 'utf8');
+    request(server)
     .post('/api-control/leave-task')
     .trustLocalhost()
     .send({
@@ -485,18 +521,20 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.leave_task);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Delete Sprint of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const sprint_id = await fs.readFileSync('/tmp/sprint-id.txt', 'utf8');
-    await request(server)
+  it('Delete Sprint of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const sprint_id = fs.readFileSync('/tmp/sprint-id.txt', 'utf8');
+    request(server)
     .post('/api-control/delete-sprint')
     .trustLocalhost()
     .send({
@@ -505,18 +543,20 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.delete_sprint);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Delete Task of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const task_id = await fs.readFileSync('/tmp/task-id1.txt', 'utf8');
-    await request(server)
+  it('Delete Task of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const task_id = fs.readFileSync('/tmp/task-id1.txt', 'utf8');
+    request(server)
     .post('/api-control/delete-task')
     .trustLocalhost()
     .send({
@@ -525,18 +565,20 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.delete_task);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Delete UserStory of Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    const userStory_id = await fs.readFileSync('/tmp/userStory-id.txt', 'utf8');
-    await request(server)
+  it('Delete UserStory of Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    const userStory_id = fs.readFileSync('/tmp/userStory-id.txt', 'utf8');
+    request(server)
     .post('/api-control/delete-userstory')
     .trustLocalhost()
     .send({
@@ -545,17 +587,19 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.delete_userStory);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Delete Project', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    const project_id = await fs.readFileSync('/tmp/project-id.txt', 'utf8');
-    await request(server)
+  it('Delete Project', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    const project_id = fs.readFileSync('/tmp/project-id.txt', 'utf8');
+    request(server)
     .post('/api-control/delete-project')
     .trustLocalhost()
     .send({
@@ -563,37 +607,41 @@ describe('API Test', () => {
     })
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       // console.log(res.body);
       expect(res.body.status).to.be.eql('OK');
       expect(res.body.message).to.be.eql(test_data.message.delete_project);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Admin logout', async () => {
-    const token = await fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
-    await request(server)
+  it('Admin logout', function (done) {
+    const token = fs.readFileSync('/tmp/admin-user-token.json', 'utf8');
+    request(server)
     .get('/api-control/secure-routes/logout')
     .trustLocalhost()
     .set('Authorization', token)
     .expect(200)
-    .then(async (res) => {
+    .then((res) => {
       expect(res.body.message).to.be.eql(test_data.message.logout);
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  it('Reset database for tests', async () => {
-    await request(server)
+  it('Reset database for tests', function (done) {
+    request(server)
     .get('/api-control/db/reset')
     .trustLocalhost()
     .expect(200)
     .then((res) => {
       // console.log(res.body)
       expect(res.body.status).to.be.eql('OK');
+      done();
     });
+    setTimeout(()=>{}, 10);
   });
 
-  // afterAll(async done => {
-  // })
   server.close();
 });

@@ -72,7 +72,7 @@
           />
 
           <h6 class="title3" style="top:65px;"> 
-            <v-row align="center">
+            <v-row>
               <v-col
                 class="d-flex"
                 cols="12"
@@ -90,7 +90,7 @@
 
           <h6 class="title3" style="position:fixed; top:297px; left:100px;"> 
             
-            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+            <v-row style="position:fixed; left:20px; width:300px;">
               <v-col
                 class="d-flex"
                 cols="12"
@@ -107,7 +107,7 @@
 
           <h6 class="title3" style="position:fixed; top:345px; left:100px;"> 
          
-            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+            <v-row style="position:fixed; left:20px; width:300px;">
               <v-col
                 class="d-flex"
                 cols="12"
@@ -161,8 +161,8 @@
             <!-- <div class="text-center" style="position:fixed; right:50px; top:300px;"> -->
               <v-btn
                 class="ma-2"
-                :loading="loading"
-                :disabled="loading"
+                :loading="form.loading"
+                :disabled="form.loading"
                 color="#48C0A4"
                 @click="joinTask(item.id)"
               >
@@ -171,8 +171,8 @@
 
                <v-btn
                 class="ma-2"
-                :loading="loading"
-                :disabled="loading"
+                :loading="form.loading"
+                :disabled="form.loading"
                 color=#F78A37
                 @click="leaveTask(item.id)"
               >
@@ -278,7 +278,7 @@
           />
           
           <h6 class="title3" style="top:95px;"> 
-            <v-row align="center">
+            <v-row>
               <v-col
                 class="d-flex"
                 cols="12"
@@ -432,7 +432,7 @@
           />
 
           <h6 class="title3" style="top:75px;"> 
-            <v-row align="center">
+            <v-row>
               <v-col
                 class="d-flex"
                 cols="12"
@@ -450,7 +450,7 @@
 
           <h6 class="title3" style="position:fixed; top:297px; left:100px;"> 
            
-            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+            <v-row style="position:fixed; left:20px; width:300px;">
               <v-col
                 class="d-flex"
                 cols="12"
@@ -467,7 +467,7 @@
 
           <h6 class="title3" style="position:fixed; top:345px; left:100px;"> 
            
-            <v-row align="right" style="position:fixed; left:20px; width:300px;">
+            <v-row style="position:fixed; left:20px; width:300px;">
               <v-col
                 class="d-flex"
                 cols="12"
@@ -521,8 +521,8 @@
 
               <v-btn
                 class="ma-2"
-                :loading="loading"
-                :disabled="loading"
+                :loading="form.loading"
+                :disabled="form.loading"
                 color="#48C0A4"
                 @click="joinTask(item.id)"
               >
@@ -531,8 +531,8 @@
 
                <v-btn
                 class="ma-2"
-                :loading="loading"
-                :disabled="loading"
+                :loading="form.loading"
+                :disabled="form.loading"
                 color=#F78A37
                 @click="leaveTask(item.id)"
               >
@@ -709,6 +709,7 @@ export default {
     },
 
     startEditing() {
+      console.log(this.item)
       this.form.id = this.item.id
       this.form.title = this.item.title
       this.form.text = this.item.text

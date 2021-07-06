@@ -354,6 +354,7 @@ router.post("/edit-sprint", async (req, res) => {
 
 router.post("/edit-task", async (req, res) => {
   try {
+    condolr.log(req.body.task)
     const user = req.user;
     const project = await Project.findById(req.body.projectID);
     const task = await Task.findById(req.body.task._id);
