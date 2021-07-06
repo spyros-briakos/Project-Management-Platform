@@ -8,17 +8,18 @@ const fs = require('fs');
 const test_data = require('./scrumMasterTest.json');
 const baseURL = 'https://127.0.0.1:3080/api-control';
 
+
 describe('API Test', () => {
-  it('Reset database for tests', async () => {
-    await request(server)
-    .get('/api-control/db/set-test-db-many-users')
-    .trustLocalhost()
-    .expect(200)
-    .then((res) => {
-      // console.log(res.body)
-      expect(res.body.status).to.be.eql('OK');
-    });
-  });
+  // it('Reset database for tests', async () => {
+  //   await request(server)
+  //   .get('/api-control/db/set-test-db-many-users')
+  //   .trustLocalhost()
+  //   .expect(200)
+  //   .then((res) => {
+  //     // console.log(res.body)
+  //     expect(res.body.status).to.be.eql('OK');
+  //   });
+  // });
 
   it('Sign Up new user', async () => {
     await request(server)
@@ -596,4 +597,5 @@ describe('API Test', () => {
   // afterAll(async done => {
   // })
   server.close();
+
 });
