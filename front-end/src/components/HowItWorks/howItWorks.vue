@@ -137,10 +137,10 @@
                     title: "Διάγραμμα Burndown",
                     content:[
                         {
-                            mssg: {title: "sub_con0", comment: "mpla"},
-                            opts: {title: "mpla", list:[
-                                                {title: "mpla", comment: "mpla"}
-                                                ]
+                            mssg: {title: "Ας δούμε το Διάγραμμα Burndown", comment: ""},
+                            opts: {title: "Ορίστε τι μπορείς να δεις με αυτό το διάγραμμα:", list:[
+                            {title: "Έλεγξε την προσεγγιστικό χρόνο ολοκλήρωσης ενός Sprint", comment: "Μπορείς να δεις τον προσεγγιστικό χρόνο ολοκλήρωσης ενός Sprint σύμφωνα με την πρόοδο των Task που υπάρχουν στο Sprint!"},
+                            ]
                             }
                         }
                     ],
@@ -148,13 +148,13 @@
                 },
                 {
                     id: 7,
-                    title: "Διαχείριση Ομάδας",
+                    title: "Ιστορικό",
                     content:[
                         {
-                            mssg: {title: "sub_con0", comment: "mpla"},
-                            opts: {title: "mpla", list:[
-                                                {title: "mpla", comment: "mpla"}
-                                            ]
+                            mssg: {title: "Ας δούμε το Ιστορικό", comment: ""},
+                            opts: {title: "Ορίστε τι μπορείς να δεις με Ιστορικό", list:[
+                            {title: "Έλεγξε το ποσοστό ολοκλήρωσης του κάθε Sprint", comment: "Μπορείς να δεις το ποσοστό ολοκλήρωσης του κάθε Sprint του Project!"},
+                            ]
                             }
                         }
                     ],
