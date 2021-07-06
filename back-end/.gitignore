@@ -3,5 +3,6 @@ rest.http
 .git/
 
 security/mkcert-v1.4.3-linux-amd64
+mkcert-1.0.0
 # security/localhost+1.pem
 # security/localhost+1-key.pem
