@@ -116,13 +116,12 @@ router.post("/add-project", async (req, res) => {
     project.members = [user._id];
     project.sprints = [];
     project.userStories = [];
-    project.plan_in_use = req.body.plan_in_use == 'premium' && user.plan_in_use == 'premium' ? req.body.plan_in_use : 'standard';
+    project.plan_in_use = req.body.project.plan_in_use == 'premium' && user.plan_in_use == 'premium' ? req.body.project.plan_in_use : 'standard';
     const savedProject = await project.save();
-    
     // Add new project to user's projects
     user.projects.push(savedProject._id);
     await User.findByIdAndUpdate(user._id, user, { runValidators: true });
-    
+
     const context = await serializer.projectDetailsSerializer(savedProject);
     res.json({status: 'OK', message: 'Το Project δημιουργήθηκε με επιτυχία.', project: context});
   } catch (error) {
