@@ -133,7 +133,7 @@
                     topics: []
                 },
                 {
-                    id: 5,
+                    id: 4,
                     title: "Διάγραμμα Burndown",
                     content:[
                         {
@@ -147,8 +147,8 @@
                     topics: []
                 },
                 {
-                    id: 7,
-                    title: "Διαχείριση Ομάδας",
+                    id: 5,
+                    title: "Ιστορικό",
                     content:[
                         {
                             mssg: {title: "sub_con0", comment: "mpla"},
