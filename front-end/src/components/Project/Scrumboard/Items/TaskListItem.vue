@@ -709,7 +709,6 @@ export default {
     },
 
     startEditing() {
-      console.log(this.item)
       this.form.id = this.item.id
       this.form.title = this.item.title
       this.form.text = this.item.text

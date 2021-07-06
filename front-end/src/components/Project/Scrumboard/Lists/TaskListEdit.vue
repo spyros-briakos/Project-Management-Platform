@@ -44,7 +44,7 @@
           />
 
           <h6 class="title5"> 
-            <v-row align="center">
+            <v-row>
               <v-col
                 class="d-flex"
                 cols="12"
@@ -62,7 +62,7 @@
           
           <h6 class="title4"> 
            
-            <v-row align="right" style="position:fixed; left:372px; width:300px;">
+            <v-row style="position:fixed; left:372px; width:300px;">
               <v-col
                 class="d-flex"
                 cols="12"

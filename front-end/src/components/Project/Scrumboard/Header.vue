@@ -15,9 +15,7 @@
       </div>  
       
       <div style="position:relative; top:-15px; max-height:30px; margin: 0 80px 0 auto;">
-        <v-row style="height:8px"
-        align="center"
-        >
+        <v-row style="height:8px">
         <v-col cols="12">
           <v-autocomplete 
             v-model="searchedSprintName"
