@@ -29,34 +29,31 @@ git clone https://github.com/spympr/Project-Management-Platform.git
 cd Project-Management-Platform
 ```
 
-### Backend Installation
+### Install all modules & build backend
 ```bash
-npm install
-npm start
-curl --request GET --url http://127.0.0.1:3081/db/initialize-db 
+ sudo ./install-build.sh
+```
+### Test Project
+```bash
+cd ./back-end
+docker-compose run nodejs npm run test
+test-client run
 ```
 
-### Frontend Installation
-```
-quasar 
-vuetify 
-```
-
-### Test project
+### Run Backend
+```bash
+sudo docker-compose up
 ```
 
+### Run Frontend
+```bash
+cd ../front-end
+npm run serve
 ```
 
-### Run Backend & Frontend
-```
-
-```
-
-### CLI Installation and Run
-```
-npm install -g
-npm link
-control-center
+### CLI Run
+```bash
+control-center <command>
 ```
 
 ## External links
